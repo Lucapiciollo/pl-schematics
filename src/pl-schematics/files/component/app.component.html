@@ -1,0 +1,14 @@
+<!-- 
+      @author l.piciollo
+      inizializzazione di barre progressive, utile per indicare all'utento sia il cambio di rotta, che 
+      le chiamate di rete in esecuzione. 
+ -->
+<ngx-ui-loader [loaderId]="'routerLoader'"></ngx-ui-loader>
+<ngx-ui-loader [loaderId]="'httpLoader'"></ngx-ui-loader>
+<ngx-ui-loader></ngx-ui-loader>
+
+<!-- 
+      @author l.piciollo
+      inizializzazione del routing space
+-->
+<router-outlet></router-outlet>
