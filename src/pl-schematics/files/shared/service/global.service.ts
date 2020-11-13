@@ -90,26 +90,26 @@ export class GlobalService implements OnDestroy {
        * registrazione all'evento di errore da parte delle chiamate ajax.. in caso viene rilevato qualsiasi errore,
        * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
        */
-       PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) => {
-      <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> 
+        PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) => {
+          <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
           /**
            * @author l.piciollo
            * inserimento del controllo per azure directry della corretta autenticazione, in caso di 401 si va alla login
            */
            if ([401].indexOf(error.detail.status) > -1) {
-             this.injector.get(<%=classify(prefixClass)%>AuthService).login().subscribe();
-           }
-      <% } else { %>
-          console.log(error.detail);
-      <% } %>   
-      /**
-       * @author l.piciollo
-       * ascoltatore di evento di errore generico, qui è possibile gestire in autonomia il suo flusso
-       */
-		PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean) => { 
-		  console.error("PlCoreUtils error found >> ",errorBean);
-		});       
-    })
+              this.injector.get(<%=classify(prefixClass) %> AuthService).login().subscribe();
+            }
+            <% } else { %>
+              console.log(error.detail);
+            <% } %>   
+          })
+          /**
+           * @author l.piciollo
+           * ascoltatore di evento di errore generico, qui è possibile gestire in autonomia il suo flusso
+           */
+          PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean) => {
+            console.error("PlCoreUtils error found >> ", errorBean);
+          });  
   }
 /***************************************************************************************************************************** */
   
