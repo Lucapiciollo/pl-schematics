@@ -204,8 +204,8 @@ export default function (options: any): Rule {
     addClass(options, "./files/component", "/"),
     addClass(options, "./files/customInterface", "../"),
     addClass(options, "./files/properties", "../environments/"),
+    addClass(options, "./files/public", "../assets/"), 
     addClass(options, "./documentation", "../../pl-schematics/document"),
-    
     options && options.enableSonarQube == "Y" ? addClass(options, "./files/application", "../../") : () => { },
     options && options.addSupportBootstrap == "Y" ? updateAngularJsonForBootstrap() : () => { },
     options && options.enableSonarQube == "Y" ? updatePackageJsonForSonar() : () => { },

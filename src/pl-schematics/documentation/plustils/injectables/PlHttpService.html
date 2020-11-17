@@ -94,6 +94,9 @@
                                 <a href="#GET">GET</a>
                             </li>
                             <li>
+                                <a href="#PATCH">PATCH</a>
+                            </li>
+                            <li>
                                 <a href="#POST">POST</a>
                             </li>
                             <li>
@@ -177,7 +180,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DELETE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
+<code>DELETE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -197,6 +200,7 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -210,6 +214,8 @@
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -222,6 +228,8 @@
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -234,6 +242,8 @@
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -246,6 +256,8 @@
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -258,6 +270,8 @@
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -270,6 +284,23 @@
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
 
                                 </tr>
                             </tbody>
@@ -303,7 +334,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DOWNLOAD(streamData, headers)</code>
+<code>DOWNLOAD(streamData, headers: <a href="https://angular.io/api/common/http/HttpHeaders" target="_blank">HttpHeaders</a>, fileName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -321,12 +352,15 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
+                                    <td>Type</td>
                                     <td>Optional</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>streamData</td>
+                                    <td>
+                                    </td>
 
                                     <td>
                                         No
@@ -336,9 +370,24 @@
                                 </tr>
                                 <tr>
                                     <td>headers</td>
+                                    <td>
+                                                <code><a href="https://angular.io/api/common/http/HttpHeaders" target="_blank" >HttpHeaders</a></code>
+                                    </td>
 
                                     <td>
                                         No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>fileName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
                                     </td>
 
 
@@ -385,7 +434,8 @@
                 <td class="col-md-4">
                     <div class="io-description"><p>l.piciollo
 si occupa di effettuare il download di un file contenuta nel blob creato con le altre funzionalità
-funzionalità utilizzabile in combinazione con le funzione di creazione image o file</p>
+funzionalità utilizzabile in combinazione con le funzione di creazione image o file
+è possibile effettuare anche il download di un file in rete, passando il link al file</p>
 </div>
 
                     <div class="io-description">
@@ -469,7 +519,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>FORKJOIN(serviceUrls: string[], params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, interrupt?: Subject<boolean>)</code>
+<code>FORKJOIN(serviceUrls: string[], params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, interrupt?: Subject<boolean>, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -489,6 +539,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -502,6 +553,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -514,6 +567,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -526,6 +581,23 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
 
                                 </tr>
                             </tbody>
@@ -559,7 +631,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GET(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
+<code>GET(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -579,6 +651,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -592,6 +665,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -604,6 +679,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -616,6 +693,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -628,6 +707,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -640,6 +721,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -652,6 +735,177 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PATCH"></a>
+                    <span class="name">
+                        <b>
+                            PATCH
+                        </b>
+                        <a href="#PATCH"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PATCH(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>url</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>params</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#RESPONSE_TYPE" target="_self" >RESPONSE_TYPE</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>interrupt</td>
+                                    <td>
+                                            <code>Subject&lt;boolean&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/enumerations.html#CONTENT_TYPE" target="_self" >CONTENT_TYPE | string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
 
                                 </tr>
                             </tbody>
@@ -685,7 +939,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POST(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
+<code>POST(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -705,6 +959,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -718,6 +973,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -730,6 +987,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -742,6 +1001,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -754,6 +1015,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -766,6 +1029,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -778,6 +1043,23 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
 
                                 </tr>
                             </tbody>
@@ -811,7 +1093,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>PUT(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
+<code>PUT(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                 </td>
             </tr>
 
@@ -831,6 +1113,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
+                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
@@ -844,6 +1127,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -856,6 +1141,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         No
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -868,6 +1155,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -880,6 +1169,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -892,6 +1183,8 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
 
                                 </tr>
                                 <tr>
@@ -904,6 +1197,23 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>mocked</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>false</code>
+                                    </td>
 
                                 </tr>
                             </tbody>

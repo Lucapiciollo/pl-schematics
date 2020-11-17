@@ -28,7 +28,7 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content class">
+               <div class="content interceptor">
                    <div class="content-data">
 
 
@@ -38,12 +38,9 @@
 
 
 
-
-
-
 <ol class="breadcrumb">
-  <li>Classes</li>
-  <li>PlCoreUtils</li>
+  <li>Interceptors</li>
+  <li>PlHttpInterceptorMockService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -58,17 +55,8 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>projects/pl-core-utils-library/src/lib/pl-core-utils-library.service.ts</code>
+            <code>projects/pl-core-utils-library/src/lib/interceptor/pl-interceptor-mock.service.ts</code>
         </p>
-
-            <p class="comment">
-                <h3>Description</h3>
-            </p>
-            <p class="comment">
-                <p>classe di utilità, è possibile risalire alla lista delle progressbar e alla registrazione di eventi</p>
-
-            </p>
-
 
 
 
@@ -76,21 +64,6 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <h6><b>Properties</b></h6>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="col-md-4">
-                        <ul class="index-list">
-                            <li>
-                                    <span class="modifier">Static</span>
-                                <a href="#progressBars">progressBars</a>
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
 
                 <tr>
                     <td class="col-md-4">
@@ -101,8 +74,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                    <span class="modifier">Static</span>
-                                <a href="#Broadcast">Broadcast</a>
+                                <a href="#intercept">intercept</a>
                             </li>
                         </ul>
                     </td>
@@ -122,51 +94,42 @@
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor()</code>
+<code>constructor(pathMock: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                     </td>
                 </tr>
 
-            </tbody>
-        </table>
-</section>
-
-            <section>
-    
-        <h3 id="inputs">
-            Properties
-        </h3>
-        <table class="table table-sm table-bordered">
-            <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="progressBars"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Static</span>
-                            progressBars</b>
-                            <a href="#progressBars"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../interfaces/progressBarsInterface.html" target="_self" >progressBarsInterface</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{}</code>
-                        </td>
-                    </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <div class="io-description"><p>variabile contenente le progress di ajax down e upload </p>
+                            <div class="io-description"><hr>
 </div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>pathMock</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
                     </td>
                 </tr>
-
             </tbody>
         </table>
 </section>
@@ -180,20 +143,18 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="Broadcast"></a>
+                    <a name="intercept"></a>
                     <span class="name">
                         <b>
-                            <span class="modifier">Static</span>
-                            Broadcast
+                            intercept
                         </b>
-                        <a href="#Broadcast"><span class="icon ion-ios-link"></span></a>
+                        <a href="#intercept"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>Broadcast()</code>
+<code>intercept(request: HttpRequest<any>, next: <a href="https://angular.io/api/common/http/HttpHandler" target="_blank">HttpHandler</a>)</code>
                 </td>
             </tr>
 
@@ -202,12 +163,55 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><p>metodi per il lancio di eventi , registrazione e cancellazione degli seìtesi .. </p>
+                    <div class="io-description"><hr>
 </div>
 
                     <div class="io-description">
-                        <b>Returns : </b>    <code>{ execEvent(event: any, object: any): void; listenEvent(event: any, callBack: any): void; removeL...</code>
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>request</td>
+                                    <td>
+                                            <code>HttpRequest&lt;any&gt;</code>
+                                    </td>
 
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>next</td>
+                                    <td>
+                                                <code><a href="https://angular.io/api/common/http/HttpHandler" target="_blank" >HttpHandler</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpEvent&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
                     </div>
                 </td>
             </tr>
@@ -215,14 +219,13 @@
     </table>
 </section>
 
-
-
-
-
     </div>
 
 
 </div>
+
+
+
 
 
 
@@ -247,8 +250,8 @@
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
-            var COMPODOC_CURRENT_PAGE_URL = 'PlCoreUtils.html';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interceptor';
+            var COMPODOC_CURRENT_PAGE_URL = 'PlHttpInterceptorMockService.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

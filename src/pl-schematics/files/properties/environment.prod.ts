@@ -56,7 +56,6 @@ export const environment = {
        */
       exampleApi: `@cacable@/example/cacable/api?param1={0}&param2={1}`,
       exampleApeNoCache: `example/no/cache/api?param1={0}&param2={1}`,
-      ,
       /**
        *  @author l.piciollo
        *  è possibile dichiarare una chiamata ad un mock, si consiglia di rispettare il seguente formato dichiarativo
@@ -74,5 +73,5 @@ export const environment = {
         mock: true
       }
     }
-  }
+  
 };
