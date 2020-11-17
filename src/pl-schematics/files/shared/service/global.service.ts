@@ -142,9 +142,9 @@ export class GlobalService implements OnDestroy {
    * @author l.piciollo
    * esempio di chiamata http
    */
-  callMock(p1:any,p2:any): Observable<any> {
+  callMock(p1: any, p2: any): Observable<any> {
     return new Observable<any>(obs => {
-      this.httpService.GET(environment.http.api.exampleApi.format(p1, p2), {}).subscribe(sb => {
+      this.httpService.POST(environment.http.api.mock.url, {}, null, null, null, environment.http.api.mock.mock).subscribe(sb => {
         obs.next(sb);
         obs.complete()
       }, error => {

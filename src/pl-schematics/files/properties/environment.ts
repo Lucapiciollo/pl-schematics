@@ -55,7 +55,24 @@ export const environment = {
        *  exampleApi: `@cacable@/example/cacable/api?param1={0}&param2={1}`
        */
       exampleApi: `@cacable@/example/cache/api?param1={0}&param2={1}`,
-      exampleApeNoCache: `example/no/cache/api?param1={0}&param2={1}`
+      exampleApeNoCache: `example/no/cache/api?param1={0}&param2={1}`,
+      ,
+      /**
+       *  @author l.piciollo
+       *  è possibile dichiarare una chiamata ad un mock, si consiglia di rispettare il seguente formato dichiarativo
+       *  E.S. 
+       *    mock:{
+       *            url: "/example/no/cache/api/122?param1={0}&param2={1}" ,
+       *            mock: true
+       *    }  
+       *    il mock a true, impone al sistema di risalire alla folder assets/public/mock/example/no/cache/api/122 e prelevare il 
+       *    json relativo al metodo utilizzato.. quindi post||get||put||delete||patch .json
+       *  
+       */
+      mock: {
+        url: "/example/no/cache/api/122?param1={0}&param2={1}",
+        mock: true
+      }
     }
   }
 };
