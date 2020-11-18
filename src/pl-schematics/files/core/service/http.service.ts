@@ -53,7 +53,7 @@ export class <%=classify(prefixClass)%>HttpService {
    * logtrace per visualizzare di default lo stato di avanzamento delle http
    * @param IDAjax 
    */
-    private logTraceHttp(IDAjax: any)  {
+    private logTraceHttp(IDAjax: any) {
       let trace = this.TAILAJXCALL(IDAjax).subscribe(object => {
         console.log(object)
       }, () => { }, () => { trace.unsubscribe(); })
@@ -119,8 +119,8 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GET(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<JSON> {
-    return new Observable<JSON>(observer => {
+  GET(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), JSON.changeValues(params,null,""),responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
         observer.next(res)
         observer.complete();
@@ -136,12 +136,12 @@ export class <%=classify(prefixClass)%>HttpService {
    * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background
    * @param url          :Url BE
    * @param params       :params
-   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param responseType :tipo di risposta RESPONSE_TYPE 
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GETBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<JSON> {
-    return new Observable<JSON>(observer => {
+  GETBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), JSON.changeValues(params,null,""), responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
         observer.next(res)
         observer.complete();
@@ -163,10 +163,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  PATCH(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  PATCH(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.PATCH(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -183,10 +183,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  PATCHBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  PATCHBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.PATCH(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -205,10 +205,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POST(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  POST(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -225,10 +225,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POSTBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  POSTBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -245,10 +245,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POSTFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  POSTFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType, null, contentType, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -266,10 +266,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GETFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  GETFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), JSON.changeValues(params,null,""), responseType, null, contentType, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -287,10 +287,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  PUT(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  PUT(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.PUT(this.injector.get(BASE_URL_API).concat(url), params, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -307,10 +307,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  PUTBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  PUTBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.PUT(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -327,10 +327,10 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  DELETE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<any> {
-    return new Observable<any>(observer => {
+  DELETE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, mocked?: boolean): Observable<HttpResponse<any>> {
+    return new Observable<HttpResponse<any>>(observer => {
       this.plHttpService.DELETE(this.injector.get(BASE_URL_API).concat(url), params, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack|| this.logTraceHttp.bind(this),mocked).subscribe(res => {
-        observer.next(<JSON>res)
+        observer.next( res)
         observer.complete();
       }, err => {
         observer.error(this.checkError(err));
@@ -344,11 +344,11 @@ export class <%=classify(prefixClass)%>HttpService {
    * @param serviceUrls  :lista di url da richiamare in parallelo
    * @param params       :params 
    */
-  FORKJOIN(serviceUrls: string[]  , params: any, mocked?: boolean): Observable<any[]> { 
+  FORKJOIN(serviceUrls: string[]  , params: any, mocked?: boolean): Observable<Array<HttpResponse<any>>> { 
     serviceUrls = serviceUrls.map(URL => {
       return this.injector.get(BASE_URL_API).concat(URL);
     })
-    return new Observable<any>(observer => {
+    return new Observable<Array<HttpResponse<any>>> (observer => {
       this.plHttpService.FORKJOIN(serviceUrls, params, null,mocked).subscribe(res => {
         observer.next(res)
         observer.complete();
