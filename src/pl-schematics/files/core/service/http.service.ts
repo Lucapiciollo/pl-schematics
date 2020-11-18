@@ -53,7 +53,7 @@ export class <%=classify(prefixClass)%>HttpService {
    * logtrace per visualizzare di default lo stato di avanzamento delle http
    * @param IDAjax 
    */
-    private logTraceHttp(IDAjax: any) {
+    private logTraceHttp(IDAjax: any)  {
       let trace = this.TAILAJXCALL(IDAjax).subscribe(object => {
         console.log(object)
       }, () => { }, () => { trace.unsubscribe(); })
@@ -66,7 +66,7 @@ export class <%=classify(prefixClass)%>HttpService {
    * in modalità realtime. utile per costruire barre di progressione a runtime.
    * @param IDAjax : id della chiamata ajax precedentemente chiamata, l'id viene restituido dalla callback in ingresso alle chiamate
    */
-  TAILAJXCALL(IDAjax:string): any { 
+  TAILAJXCALL(IDAjax:string): Subject<any> { 
     try {
       return PlCoreUtils.progressBars[IDAjax].changed;
     } catch (error) { 
