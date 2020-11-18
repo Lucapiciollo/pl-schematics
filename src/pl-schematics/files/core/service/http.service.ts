@@ -42,7 +42,6 @@ export const BASE_URL_API = new InjectionToken<any>("Puntamento all'indirizzo de
 * QUAL'ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
 */  
 export class <%=classify(prefixClass)%>HttpService {
-
   /********************************************************************************************************************/
   constructor(private injector: Injector, public plHttpService: PlHttpService) {
 
@@ -71,7 +70,7 @@ export class <%=classify(prefixClass)%>HttpService {
     try {
       return PlCoreUtils.progressBars[IDAjax].changed;
     } catch (error) { 
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
   /********************************************************************************************************************/
@@ -85,7 +84,7 @@ export class <%=classify(prefixClass)%>HttpService {
     try {
       PlCoreUtils.progressBars[IDAjax].interrupt.next(true);
     } catch (error) { 
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
   /********************************************************************************************************************/
@@ -365,12 +364,12 @@ export class <%=classify(prefixClass)%>HttpService {
    * funzione di utilita per la cattura delle eccezioni o errori riscontrati durante le chiamte al BE
    * @param error 
    */
-  private checkError(error): <%=classify(prefixClass)%>ErrorBean {
+  private checkError(error): ErrorBean {
     try {
-      return new <%=classify(prefixClass)%>ErrorBean(error.error.errorResponse.description, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      return new ErrorBean(error.error.errorResponse.description, ErrorCode.SYSTEMERRORCODE, false, true)
     } catch (e) {
       if (error.message)
-        return new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+        return new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
   /********************************************************************************************************************/
