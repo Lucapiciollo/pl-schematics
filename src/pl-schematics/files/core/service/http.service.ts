@@ -16,6 +16,7 @@ import { Injectable, InjectionToken, Injector } from '@angular/core';
 import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE ,PlCoreUtils} from 'pl-core-utils-library';
 import { Observable, Subject  } from 'rxjs';
 import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
+import { HttpResponse } from '@angular/common/http';
 
 /** 
  * @author l.piciollo
