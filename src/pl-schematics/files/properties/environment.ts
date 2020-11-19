@@ -69,8 +69,9 @@ export const environment = {
        *  
        */
       mock: {
-        url: "/example/api?param1={0}&param2={1}",
-        mock: true
+        url: "/example/:api/:files",
+        mocked: true,
+        method:"GET"
       }
     }
   }

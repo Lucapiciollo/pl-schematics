@@ -11,7 +11,7 @@
 import { Injectable, OnDestroy,Injector } from "@angular/core";
 import {<%=classify(prefixClass)%>ErrorBean,  <%=classify(prefixClass)%>ErrorCode } from "src/app/<%=namePackage%>/core/bean/error-bean";
 import {<%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
-import { PLUnsubscribe } from 'pl-core-utils-library';
+import { CONTENT_TYPE, PlHttpRequest, PLUnsubscribe, RESPONSE_TYPE  } from 'pl-core-utils-library';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
@@ -144,12 +144,13 @@ export class GlobalService implements OnDestroy {
    */
   callMock(p1: any, p2: any): Observable<any> {
     return new Observable<any>(obs => {
-      this.httpService.POST(environment.http.api.mock.url, {}, null, null, null, environment.http.api.mock.mock).subscribe(sb => {
+      let plHttpRequest: PlHttpRequest = new PlHttpRequest(environment.http.api.mock , Object({ api: "api", files: "files" }), null, null);
+      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, null, null).subscribe(sb => {
         obs.next(sb);
         obs.complete()
       }, error => {
         obs.error(error);
       }, () => { })
-    })
+    }) 
   }
 }
