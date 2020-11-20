@@ -11,7 +11,7 @@ function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
       { type: NodeDependencyType.Default, version: '^1.1.1', name: String("rxjs-operators") },
-      { type: NodeDependencyType.Default, version: '~1.2.0', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '~1.2.2', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '^6.5.3', name: String("rxjs-compat") },
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },

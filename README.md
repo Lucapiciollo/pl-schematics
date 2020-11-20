@@ -1,15 +1,18 @@
 
+
   
 
 # Portable Library Schematics
 
   
-Portable Library Schematics *pl-schematics è una libreria nata allo scopo di velocizzare e standardizzare il processo di startup di un progetto angular > 2 imponendo un patter di sviluppo ottimizzato e facilmente comprensibile.
+Portable Library Schematics *pl-schematics è una libreria nata allo scopo di velocizzare e standardizzare il processo di startup di un progetto angular, imponendo un pattern di sviluppo ottimizzato e facilmente comprensibile.
 
-Questa libreria, vuole aiutare lo sviluppatore a seguire un patter di sviluppo ben preciso e consolidato, evitando il piu possibile di inserire errori applicativi e soprattutto dare la possibilità di velocizzare lo startup del progetto, fornendo funzionalità gia implementate e collaudate.
+Questa libreria, vuole aiutare lo sviluppatore a seguire un pattern di sviluppo ben preciso e consolidato, evitando il piu possibile di inserire errori applicativi e soprattutto dare la possibilità di velocizzare lo startup del progetto, fornendo funzionalità gia implementate e collaudate.
   
-Realizzare un applicativo Angular, comporta sviluppare sia componenti grafici, che servizi e flussi logici, quindi la parte core. E' proprio qui che interviene pl-schematics, con il supporto della pl-core-utils-library, la quale mette a disposizione moltissime funzioni come servizi di rete, intercettori di rotta, decoratori di funzione e tanto altro.
-Questo metodo garantisce uno standard di sviluppo in tutti i progetti che ne fanno uso, quindi tutti, conoscendo il pattern imposto, sapranno poi metterci mano piu velocemente .
+Realizzare un applicativo Angular, comporta sviluppare sia componenti grafici, che servizi e flussi logici, quindi la parte core. E' proprio qui che interviene pl-schematics, con il supporto della pl-core-utils-library, la quale mette a disposizione moltissime funzioni come servizi di rete, intercettori di rotta, decoratori di funzione e tanto altro
+> per informazioni sulla pl-core-utils-library, è possibile fare riferimento alla documentazione.
+
+Questo metodo garantisce uno standard di sviluppo in tutti i progetti che ne fanno uso, quindi standardizzando il pattern su tutti i progetti, è piu immediato lo sviluppo.
   
 
 ## Uso
@@ -57,7 +60,7 @@ In caso di un progetto gia avviato, è possibile comunque usufruire delle funzio
   
 Verra creata un'alberatura predisposta ad accogliere classi e oggetti, viene creata una sezione shared dove è possibile introdurre e condividere con tutto il resto del progetto nuove funzionalita custom non previste dal core, come componenti grafici utilità ed altro.
 
-Questo per imporre allo sviluppatore di seguire precise linee guida durante lo sviluppo. La parte core non deve essere manutenuta, in quanto autonoma.. per interaggire con le utità da lei esposte, è possibile restare in ascolto ad eventi da lei lanciati e registrati di default nella global.service.ts,  classe di servizio globale all'aplicazione e viene creata ed inizializzata dal templmate.
+Questo per imporre allo sviluppatore di seguire precise linee guida durante lo sviluppo. La parte core non deve essere manutenuta, in quanto autonoma.. per interaggire con le utilità  esposte, è possibile restare in ascolto ad eventi lanciati e registrati di default nella global.service.ts, servizio globale all'aplicazione e viene creata ed inizializzata dal template.
 
 In questo modo si evita di dover modificare servizi o classi core.
 
@@ -69,7 +72,7 @@ Il sistema è alle prime versioni ne seguiranno degli aggiornamenti futuri
 
 ## Funzionalità  ErrorCatch
 
-come gia detto sono molte le funzionalità esposte dalla libreria, ne viene presentata qualcuna giusto per capire come interagire con essa.
+pl-schematics mette a disposizione molte funzionalità CORE, alcune autonome alcune messe a disposione dello sviuppatore. 
 
 E' possibile ascoltare qualsiasi evento di errore, e gestirlo di conseguenza. Tutti gli eventi di errore passano per un intercettore e lancia un evento di allerta. alla creazione di un errore, è possibile specificare se  occorre aprire una modale di allerta, o fare redirect in una pagina. creando quindi un errore in questo modo 
 
@@ -110,14 +113,57 @@ allo stesso modo è possibile lanciare un evento
 
 
 ## Funzioni di rete
-pl-schematics introduce un importante gestione delle chiamate di rete, mette a disposizione tutte le possibili chiamate, come la GET, POST,PUT, DELETE, PATCH oltre a queste mette a disposizione funzionalità utili per il download e upload dei file. 
-le prime elencate, sono state implementate con un sistema di interrupt.. ovvero sono sensibili al cambio di rotta applicativo o ad un comando di interruzione manuale.. questo significa che al momento di una chiamata GET, se questa ad esempio impiega 5 secondi a rispondere, ma nel frattempo siamo andati in un altra pagina.. la stessa chiamata viene interrota in modo da liberare le risorse di rete, migliorando il flusso di navigazione e le prestazioni dell'applicativo.
+pl-schematics introduce un importante gestione delle chiamate di rete, mette a disposizione tutte le possibili chiamate, come la GET, POST, PUT, DELETE, PATCH oltre a queste mette a disposizione funzionalità utili per il download e upload dei file. 
+Le prime elencate, sono state implementate con un sistema di interrupt.. ovvero sono sensibili al cambio di rotta applicativo o ad un comando di interruzione manuale.. questo significa che al momento di una chiamata GET, se questa ad esempio impiega 5 secondi a rispondere, ma nel frattempo siamo andati in un altra pagina.. la stessa chiamata viene interrota in modo da liberare le risorse di rete, migliorando il flusso di navigazione e le prestazioni dell'applicativo.
 
 in caso si volesse comunque eseguire na chiamata, anche se eventualmente viene cambiata la rotta, occorre chiamare le funzioni GETBG,POSTBG,PUTBG,DELETEBG,PATCHBG. Queste funzioni vengono eseguite senza interruzione di rotta, ma solo in caso di comando manuale.
 
 è possibile anche lanciare piu chiamate contemporaneamente, grazie al forkjoin esposto.
 
 ogni chiamata puo essere monitorata, in quanto la stessa lancia un evento di progressione
+
+Esempio di chiamata ad un servizio
+
+	  callMock(p1: any, p2: any): Observable<any> {
+	    return new Observable<any>(obs => {
+	      let plHttpRequest: PlHttpRequest = new PlHttpRequest(
+	                                                          environment.http.api.mock,
+	                                                          Object({ api: "api", files: "files" }),
+	                                                          Object({ api: p1, files: p2 }),
+	                                                          null);
+	      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER,null, null).subscribe(sb => {
+	        obs.next(sb);
+	        obs.complete()
+	      }, error => {
+	        obs.error(error);
+	      }, () => { })
+	    })
+	  }
+
+il servizio httpservice, contiene codice gia impachettato per effettuare chiamate alla rete, passando dai servizi esposti dalla pl-core-utils-library. sotto si riporta il metodo di invocazione messo a disposizione dalla schematics. come si puo vedere,  il codice è gia impostato per l'interruzione di chiamata, e il tracciamento della sua progressione, tramite la funzionalita, logTraceHttp, anch'essa gia messa a disposizione dal sistema.
+
+	   /**
+	   * @author l.piciollo
+	   * Servizio GET 
+	   * @param url          :Url BE
+	   * @param params       :params
+	   * @param responseType :tipo di risposta RESPONSE_TYPE
+	   * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
+	   * @param contentType  :tipo di contenuto ricevuto
+	   */
+	  GET(plHttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
+	    return new Observable<HttpResponse<any>>(observer => {
+	      plHttpRequest.url = this.injector.get(BASE_URL_API).concat(plHttpRequest.url);
+	      this.plHttpService.GET(plHttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res => {
+	        observer.next(res)
+	        observer.complete(); 
+	      }, err => {
+	        observer.error(this.checkError(err));
+	      }, () => { });
+	    });
+	  }
+>la console in questa occasione, tramite la funzione logTraceHttp, mostrerà come output l'oggetto di avanzamento della chiamata.
+ 
 
 
 ## Release

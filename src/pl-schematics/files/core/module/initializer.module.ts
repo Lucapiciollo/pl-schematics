@@ -111,7 +111,8 @@ import { filter } from 'rxjs/operators';
      * @author l.piciollo
      * impostazione tempo massimo di attesa per richieste al BE
      */
-    { provide: <%=classify(prefixClass)%>DEFAULT_TIMEOUT, useValue: 300000 },
+    { provide: <%=classify(prefixClass)%>DEFAULT_TIMEOUT, useValue: 300000 },    
+    { provide: DEFAULT_PATH_MOCK, useValue: "public/mock" },
      <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
     /**
      * @author l.piciollo
