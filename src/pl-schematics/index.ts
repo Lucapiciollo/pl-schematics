@@ -12,11 +12,15 @@ function addPackageJsonDependencies(options: any): Rule {
     const dependencies: NodeDependency[] = [
       { type: NodeDependencyType.Default, version: '^1.1.1', name: String("rxjs-operators") },
       { type: NodeDependencyType.Default, version: '~1.2.2', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '^6.5.3', name: String("rxjs-compat") },
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
       { type: NodeDependencyType.Default, version: '^6.3.3', name: String("rxjs") },
       { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
+      { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
+      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
+
     ];
 
     if (options.addSupportBootstrap == "Y") {
@@ -117,6 +121,9 @@ function updateAngularJsonForBootstrap(): Rule {
       optionsJson['scripts'].indexOf("node_modules/popper.js/dist/umd/popper.min.js") < 0 ? optionsJson['scripts'].push("node_modules/popper.js/dist/umd/popper.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/bootstrap/dist/js/bootstrap.min.js") < 0 ? optionsJson['scripts'].push("node_modules/bootstrap/dist/js/bootstrap.min.js") : null;
       optionsJson['styles'].indexOf("node_modules/bootstrap/dist/css/bootstrap.min.css") < 0 ? optionsJson['styles'].push("node_modules/bootstrap/dist/css/bootstrap.min.css") : null;
+      optionsJson['styles'].indexOf("node_modules/@fortawesome/fontawesome-free/css/all.min.css") < 0 ? optionsJson['styles'].push("node_modules/@fortawesome/fontawesome-free/css/all.min.css") : null;
+      
+
       json['projects'][json.defaultProject]['architect']['build']['options'] = optionsJson;
       host.overwrite('angular.json', JSON.stringify(json, null, 2));
     }
