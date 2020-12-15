@@ -57,7 +57,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/com/accenture/normalize/core/service/http.service.ts</code>
+            <code>src/app/com/mycompany/normalize/core/service/http.service.ts</code>
         </p>
 
 
@@ -125,6 +125,16 @@
                                 <a href="#KILLAJXCALL">KILLAJXCALL</a>
                             </li>
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#logTraceHttp">logTraceHttp</a>
+                            </li>
+                            <li>
+                                <a href="#PATCH">PATCH</a>
+                            </li>
+                            <li>
+                                <a href="#PATCHBG">PATCHBG</a>
+                            </li>
+                            <li>
                                 <a href="#POST">POST</a>
                             </li>
                             <li>
@@ -135,6 +145,9 @@
                             </li>
                             <li>
                                 <a href="#PUT">PUT</a>
+                            </li>
+                            <li>
+                                <a href="#PUTBG">PUTBG</a>
                             </li>
                             <li>
                                 <a href="#TAILAJXCALL">TAILAJXCALL</a>
@@ -162,7 +175,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="44" class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:44</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:45</a></div>
                             </td>
                         </tr>
 
@@ -243,8 +256,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="291"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:291</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="380"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:380</a></div>
                 </td>
             </tr>
 
@@ -304,15 +317,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DELETE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="254"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:254</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="341"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:341</a></div>
                 </td>
             </tr>
 
@@ -334,21 +347,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -399,7 +400,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -424,15 +425,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DOWNLOAD(streamData, headers)</code>
+<code>DOWNLOAD(streamData, contentType: CONTENT_TYPE | string, fileName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="86"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:86</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="99"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:99</a></div>
                 </td>
             </tr>
 
@@ -448,12 +449,15 @@
                             <thead>
                                 <tr>
                                     <td>Name</td>
+                                    <td>Type</td>
                                     <td>Optional</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>streamData</td>
+                                    <td>
+                                    </td>
 
                                     <td>
                                         No
@@ -462,10 +466,25 @@
 
                                 </tr>
                                 <tr>
-                                    <td>headers</td>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
 
                                     <td>
                                         No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>fileName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
                                     </td>
 
 
@@ -508,8 +527,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="97"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:97</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:110</a></div>
                 </td>
             </tr>
 
@@ -591,15 +610,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>FORKJOIN(serviceUrls: string[], params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+<code>FORKJOIN(plttpRequest: Array<PlHttpRequest>, interrupt?: Subject<boolean>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="271"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:271</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="359"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:359</a></div>
                 </td>
             </tr>
 
@@ -621,9 +640,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>serviceUrls</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                            <code>string[]</code>
+                                            <code>Array&lt;PlHttpRequest&gt;</code>
                                     </td>
 
                                     <td>
@@ -633,13 +652,13 @@
 
                                 </tr>
                                 <tr>
-                                    <td>params</td>
+                                    <td>interrupt</td>
                                     <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>Subject&lt;boolean&gt;</code>
                                     </td>
 
                                     <td>
-                                        No
+                                        Yes
                                     </td>
 
 
@@ -650,7 +669,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -675,15 +694,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GET(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>GET(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="110"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:110</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:123</a></div>
                 </td>
             </tr>
 
@@ -705,21 +724,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -770,7 +777,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;JSON&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -795,15 +802,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GETBG(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="131"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:131</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:145</a></div>
                 </td>
             </tr>
 
@@ -825,21 +832,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -890,7 +885,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;JSON&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -915,15 +910,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GETFILE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="213"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:213</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:277</a></div>
                 </td>
             </tr>
 
@@ -945,21 +940,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -1010,7 +993,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1042,8 +1025,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="72"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:72</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:84</a></div>
                 </td>
             </tr>
 
@@ -1096,26 +1079,98 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="POST"></a>
+                    <a name="logTraceHttp"></a>
                     <span class="name">
                         <b>
-                            POST
+                            <span class="modifier">Private</span>
+                            logTraceHttp
                         </b>
-                        <a href="#POST"><span class="icon ion-ios-link"></span></a>
+                        <a href="#logTraceHttp"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POST(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>logTraceHttp(IDAjax: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="152"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:152</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="57"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:57</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IDAjax</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PATCH"></a>
+                    <span class="name">
+                        <b>
+                            PATCH
+                        </b>
+                        <a href="#PATCH"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="169"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:169</a></div>
                 </td>
             </tr>
 
@@ -1137,21 +1192,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -1202,7 +1245,223 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PATCHBG"></a>
+                    <span class="name">
+                        <b>
+                            PATCHBG
+                        </b>
+                        <a href="#PATCHBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="190"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:190</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POST"></a>
+                    <span class="name">
+                        <b>
+                            POST
+                        </b>
+                        <a href="#POST"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>POST(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:213</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1227,15 +1486,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POSTBG(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>POSTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="172"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:172</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="234"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:234</a></div>
                 </td>
             </tr>
 
@@ -1257,21 +1516,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -1322,7 +1569,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1347,15 +1594,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POSTFILE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="192"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:192</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:255</a></div>
                 </td>
             </tr>
 
@@ -1377,21 +1624,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -1442,7 +1677,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1467,15 +1702,15 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>PUT(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+<code>PUT(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="234"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:234</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="299"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:299</a></div>
                 </td>
             </tr>
 
@@ -1497,21 +1732,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                            <code>PlHttpRequest</code>
                                     </td>
 
                                     <td>
@@ -1562,7 +1785,115 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PUTBG"></a>
+                    <span class="name">
+                        <b>
+                            PUTBG
+                        </b>
+                        <a href="#PUTBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="320"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:320</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1594,8 +1925,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="58"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:58</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:70</a></div>
                 </td>
             </tr>
 
@@ -1634,7 +1965,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Subject&lt;JSON&gt;</code>
+                        <b>Returns : </b>    <code>Subject&lt;any&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1671,7 +2002,7 @@
                     </tr>
                         <tr>
                             <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/com/accenture/normalize/core/service/http.service.ts:47</a></div>
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/com/mycompany/normalize/core/service/http.service.ts:47</a></div>
                             </td>
                         </tr>
 
@@ -1685,9 +2016,10 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, InjectionToken, Injector } from &#x27;@angular/core&#x27;;
-import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE ,PlCoreUtils} from &#x27;pl-core-utils-library&#x27;;
+import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE, PlCoreUtils, PlHttpRequest} from &#x27;pl-core-utils-library&#x27;;
 import { Observable, Subject  } from &#x27;rxjs&#x27;;
-import { ErrorBean, ErrorCode } from &#x27;src/app/com/accenture/normalize/core/bean/error-bean&#x27;;
+import { ErrorBean, ErrorCode } from &#x27;src/app/com/mycompany/normalize/core/bean/error-bean&#x27;;
+import { HttpResponse } from &#x27;@angular/common/http&#x27;;
 
 /** 
  * @author l.piciollo
@@ -1714,10 +2046,21 @@ export const BASE_URL_API &#x3D; new InjectionToken&lt;any&gt;(&quot;Puntamento 
 * QUAL&#x27;ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
 */  
 export class HttpService {
+   /********************************************************************************************************************/
+   constructor(private injector: Injector, public plHttpService: PlHttpService) {
 
-  /********************************************************************************************************************/
-  constructor(private injector: Injector, public plHttpService: PlHttpService) {
+  }
 
+
+  /**
+   * @author l.piciollo
+   * logtrace per visualizzare di default lo stato di avanzamento delle http
+   * @param IDAjax 
+   */
+  private logTraceHttp(IDAjax: any) {
+    let trace &#x3D; this.TAILAJXCALL(IDAjax).subscribe(object &#x3D;&gt; {
+      console.log(object)
+    }, () &#x3D;&gt; { }, () &#x3D;&gt; { trace.unsubscribe(); })
   }
   /********************************************************************************************************************/
   /**
@@ -1727,10 +2070,10 @@ export class HttpService {
    * in modalità realtime. utile per costruire barre di progressione a runtime.
    * @param IDAjax : id della chiamata ajax precedentemente chiamata, l&#x27;id viene restituido dalla callback in ingresso alle chiamate
    */
-  TAILAJXCALL(IDAjax:string): Subject&lt;JSON&gt; { 
+  TAILAJXCALL(IDAjax: string): Subject&lt;any&gt; {
     try {
       return PlCoreUtils.progressBars[IDAjax].changed;
-    } catch (error) { 
+    } catch (error) {
       throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
@@ -1741,10 +2084,10 @@ export class HttpService {
    * staccato al momento della chiamata è utile per killare upload/download file. 
    * @param IDAjax : id della chiamata ajax precedentemente chiamata, l&#x27;id viene restituido dalla callback in ingresso alle chiamate
    */
-  KILLAJXCALL(IDAjax:string) { 
+  KILLAJXCALL(IDAjax: string) {
     try {
       PlCoreUtils.progressBars[IDAjax].interrupt.next(true);
-    } catch (error) { 
+    } catch (error) {
       throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
@@ -1753,18 +2096,19 @@ export class HttpService {
   * @author l.piciollo
   * funzione per il download dello straming in formato file
   * @param streamData :buffer di byte
-  * @param nomeFile   :nome del file 
+  * @param headers   : headers  ajax
+  * @param filename : nome file
   */
-  DOWNLOAD(streamData, headers): Promise&lt;any&gt; {
-    return this.plHttpService.DOWNLOAD(streamData, headers);
+  DOWNLOAD(streamData, contentType: CONTENT_TYPE | string, fileName?: string): Promise&lt;any&gt; {
+    return this.plHttpService.DOWNLOAD(streamData, contentType, fileName);
   }
-  /********************************************************************************************************************/  
+  /********************************************************************************************************************/
   /**
    * @author l.piciollo
    * si occupa di effettuare il download dell&#x27;immagine contenuta nel blob creato con le altre funzionalità
-   * funzionalità utilizzabile in combinazione con le funzione di creazione image o file
+   * funzionalità utilizzabile in combinazione con le funzione di creazione image o file 
    * @param url : url del blob
-   * @param filename : nome file
+   * @param filename : nome file 
    */
   DOWNLOADURL(url: string, filename: string &#x3D; new Date().getTime() + &quot;txt&quot;) {
     this.plHttpService.DOWNLOADURL(url, filename);
@@ -1779,9 +2123,10 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GET(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;JSON&gt; {
-    return new Observable&lt;JSON&gt;(observer &#x3D;&gt; {
-      this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || CONTENT_TYPE.JSON, callBack).subscribe(res &#x3D;&gt; {
+  GET(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
         observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
@@ -1796,13 +2141,14 @@ export class HttpService {
    * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background
    * @param url          :Url BE
    * @param params       :params
-   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param responseType :tipo di risposta RESPONSE_TYPE 
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GETBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;JSON&gt; {
-    return new Observable&lt;JSON&gt;(observer &#x3D;&gt; {
-      this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, null, contentType || CONTENT_TYPE.JSON, callBack).subscribe(res &#x3D;&gt; {
+  GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
         observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
@@ -1810,6 +2156,52 @@ export class HttpService {
       }, () &#x3D;&gt; { });
     });
   }
+
+
+  /********************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Servizio PATCH 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio PATCHBG REST non influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
   /********************************************************************************************************************/
 
   /**
@@ -1821,10 +2213,11 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POST(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || CONTENT_TYPE.JSON, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  POST(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1834,17 +2227,18 @@ export class HttpService {
   /********************************************************************************************************************/
   /**
    * @author l.piciollo
-   * Servizio POST REST non influente al cambio di rotta.. il servizio gira in background
+   * Servizio POSTBG REST  influente al cambio di rotta.. il servizio gira in background
    * @param url          :Url BE
    * @param params       :params
    * @param responseType :tipo di risposta RESPONSE_TYPE
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POSTBG(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType || RESPONSE_TYPE.JSON, null, contentType || CONTENT_TYPE.JSON, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  POSTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1861,10 +2255,11 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  POSTFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.POST(this.injector.get(BASE_URL_API).concat(url), params, responseType, null, contentType, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1882,10 +2277,11 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  GETFILE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.GET(this.injector.get(BASE_URL_API).concat(url), params, responseType, null, contentType, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1903,10 +2299,32 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  PUT(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.PUT(this.injector.get(BASE_URL_API).concat(url), params, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  PUT(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PUT(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio PUTBG REST  influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PUT(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1923,10 +2341,11 @@ export class HttpService {
    * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
    * @param contentType  :tipo di contenuto ricevuto
    */
-  DELETE(url: string, params: any, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;any&gt; {
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.DELETE(this.injector.get(BASE_URL_API).concat(url), params, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack).subscribe(res &#x3D;&gt; {
-        observer.next(&lt;JSON&gt;res)
+  DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.DELETE(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
         observer.error(this.checkError(err));
@@ -1940,12 +2359,13 @@ export class HttpService {
    * @param serviceUrls  :lista di url da richiamare in parallelo
    * @param params       :params 
    */
-  FORKJOIN(serviceUrls: string[], params: any): Observable&lt;[]&gt; {
-    serviceUrls &#x3D; serviceUrls.map(URL &#x3D;&gt; {
-      return this.injector.get(BASE_URL_API).concat(URL);
+  FORKJOIN(plttpRequest: Array&lt;PlHttpRequest&gt;, interrupt?: Subject&lt;boolean&gt;): Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt; {
+    plttpRequest &#x3D; plttpRequest.map(request &#x3D;&gt; {
+      request.url &#x3D; this.injector.get(BASE_URL_API).concat(request.url)
+      return request;
     })
-    return new Observable&lt;any&gt;(observer &#x3D;&gt; {
-      this.plHttpService.FORKJOIN(serviceUrls, params, null).subscribe(res &#x3D;&gt; {
+    return new Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt;(observer &#x3D;&gt; {
+      this.plHttpService.FORKJOIN(plttpRequest, interrupt).subscribe(res &#x3D;&gt; {
         observer.next(res)
         observer.complete();
       }, err &#x3D;&gt; {
@@ -1954,7 +2374,7 @@ export class HttpService {
     });
   }
 
-/********************************************************************************************************************/
+  /********************************************************************************************************************/
   /**
    * @author l.piciollo
    * funzione di utilita per la cattura delle eccezioni o errori riscontrati durante le chiamte al BE

@@ -79,6 +79,10 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#checkEventHttp">checkEventHttp</a>
+                            </li>
+                            <li>
                                 <a href="#DELETE">DELETE</a>
                             </li>
                             <li>
@@ -101,6 +105,10 @@
                             </li>
                             <li>
                                 <a href="#PUT">PUT</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Private</span>
+                                <a href="#refreshProgress">refreshProgress</a>
                             </li>
                         </ul>
                     </td>
@@ -169,6 +177,95 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="checkEventHttp"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            checkEventHttp
+                        </b>
+                        <a href="#checkEventHttp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>checkEventHttp(event: HttpEvent<any>, uuid, observer: Subscriber<any>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                            <code>HttpEvent&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>uuid</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>observer</td>
+                                    <td>
+                                            <code>Subscriber&lt;any&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="DELETE"></a>
                     <span class="name">
                         <b>
@@ -180,7 +277,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DELETE(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>DELETE(plttpRequest: <a href="../classes/PlHttpRequest.html">PlHttpRequest</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
                 </td>
             </tr>
 
@@ -200,36 +297,19 @@
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >PlHttpRequest</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -242,8 +322,6 @@
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -256,8 +334,6 @@
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -270,8 +346,6 @@
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -284,23 +358,6 @@
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -309,7 +366,7 @@
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -334,7 +391,7 @@
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>DOWNLOAD(streamData, headers: <a href="https://angular.io/api/common/http/HttpHeaders" target="_blank">HttpHeaders</a>, fileName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>DOWNLOAD(streamData: ArrayBuffer, contentType: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, fileName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -360,6 +417,7 @@
                                 <tr>
                                     <td>streamData</td>
                                     <td>
+                                            <code>ArrayBuffer</code>
                                     </td>
 
                                     <td>
@@ -369,9 +427,9 @@
 
                                 </tr>
                                 <tr>
-                                    <td>headers</td>
+                                    <td>contentType</td>
                                     <td>
-                                                <code><a href="https://angular.io/api/common/http/HttpHeaders" target="_blank" >HttpHeaders</a></code>
+                                                <code><a href="../miscellaneous/enumerations.html#CONTENT_TYPE" target="_self" >CONTENT_TYPE | string</a></code>
                                     </td>
 
                                     <td>
@@ -480,7 +538,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     </td>
 
                                     <td>
-                                        <code>&quot;download_temp.txt&quot;</code>
+                                        <code>&quot;download_temp&quot;</code>
                                     </td>
 
                                     <td>
@@ -519,7 +577,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>FORKJOIN(serviceUrls: string[], params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, interrupt?: Subject<boolean>, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>FORKJOIN(plttpRequest: <a href="../classes/PlHttpRequest.html">Array<PlHttpRequest></a>, interrupt?: Subject<boolean>)</code>
                 </td>
             </tr>
 
@@ -539,36 +597,19 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>serviceUrls</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                            <code>string[]</code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >Array&lt;PlHttpRequest&gt;</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -581,23 +622,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -606,7 +630,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -631,7 +655,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>GET(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>GET(plttpRequest: <a href="../classes/PlHttpRequest.html">PlHttpRequest</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
                 </td>
             </tr>
 
@@ -651,36 +675,19 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >PlHttpRequest</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -693,8 +700,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -707,8 +712,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -721,8 +724,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -735,23 +736,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -760,7 +744,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -785,7 +769,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>PATCH(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>PATCH(plttpRequest: <a href="../classes/PlHttpRequest.html">PlHttpRequest</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
                 </td>
             </tr>
 
@@ -805,36 +789,19 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >PlHttpRequest</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -847,8 +814,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -861,8 +826,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -875,8 +838,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -889,23 +850,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -914,7 +858,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -939,7 +883,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>POST(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>POST(plttpRequest: <a href="../classes/PlHttpRequest.html">PlHttpRequest</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
                 </td>
             </tr>
 
@@ -959,36 +903,19 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >PlHttpRequest</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1001,8 +928,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1015,8 +940,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1029,8 +952,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1043,23 +964,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -1068,7 +972,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
 
                     </div>
                     <div class="io-description">
@@ -1093,7 +997,7 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>PUT(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, params: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void, mocked: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
+<code>PUT(plttpRequest: <a href="../classes/PlHttpRequest.html">PlHttpRequest</a>, responseType?: <a href="../undefineds/RESPONSE_TYPE.html">RESPONSE_TYPE</a>, interrupt?: Subject<boolean>, contentType?: <a href="../undefineds/CONTENT_TYPE.html">CONTENT_TYPE | string</a>, callBack?: (undefined) => void)</code>
                 </td>
             </tr>
 
@@ -1113,36 +1017,19 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                     <td>Name</td>
                                     <td>Type</td>
                                     <td>Optional</td>
-                                    <td>Default value</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>url</td>
+                                    <td>plttpRequest</td>
                                     <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                <code><a href="../classes/PlHttpRequest.html" target="_self" >PlHttpRequest</a></code>
                                     </td>
 
                                     <td>
                                         No
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>params</td>
-                                    <td>
-                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1155,8 +1042,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1169,8 +1054,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1183,8 +1066,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
 
                                 </tr>
                                 <tr>
@@ -1197,23 +1078,6 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                                         Yes
                                     </td>
 
-                                    <td>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td>mocked</td>
-                                    <td>
-                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
-
-                                    <td>
-                                        <code>false</code>
-                                    </td>
 
                                 </tr>
                             </tbody>
@@ -1222,7 +1086,85 @@ funzionalità utilizzabile in combinazione con le funzione di creazione image o 
                     <div>
                     </div>
                     <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;any&gt;</code>
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshProgress"></a>
+                    <span class="name">
+                        <b>
+                            <span class="modifier">Private</span>
+                            refreshProgress
+                        </b>
+                        <a href="#refreshProgress"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>refreshProgress(uuid: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, event?: <a href="https://angular.io/api/common/http/HttpProgressEvent" target="_blank">HttpProgressEvent</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>uuid</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>event</td>
+                                    <td>
+                                                <code><a href="https://angular.io/api/common/http/HttpProgressEvent" target="_blank" >HttpProgressEvent</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Subject&lt;any&gt;</code>
 
                     </div>
                     <div class="io-description">

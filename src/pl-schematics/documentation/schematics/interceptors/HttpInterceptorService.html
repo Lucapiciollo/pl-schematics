@@ -58,7 +58,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/com/accenture/normalize/core/interceptor/http-interceptor.service.ts</code>
+            <code>src/app/com/mycompany/normalize/core/interceptor/http-interceptor.service.ts</code>
         </p>
 
 
@@ -111,7 +111,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/com/accenture/normalize/core/interceptor/http-interceptor.service.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/com/mycompany/normalize/core/interceptor/http-interceptor.service.ts:46</a></div>
                             </td>
                         </tr>
 
@@ -215,7 +215,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="74"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/interceptor/http-interceptor.service.ts:74</a></div>
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/interceptor/http-interceptor.service.ts:74</a></div>
                 </td>
             </tr>
 
@@ -301,7 +301,7 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-line">Defined in <a href="" data-line="62"
-                            class="link-to-prism">src/app/com/accenture/normalize/core/interceptor/http-interceptor.service.ts:62</a></div>
+                            class="link-to-prism">src/app/com/mycompany/normalize/core/interceptor/http-interceptor.service.ts:62</a></div>
                 </td>
             </tr>
 
@@ -366,10 +366,10 @@ import { Inject, Injectable, InjectionToken, Injector } from &#x27;@angular/core
 import { CACHE_TAG, PlCacheMapService,PlCoreUtils } from &#x27;pl-core-utils-library&#x27;;
 import { Observable, of } from &#x27;rxjs&#x27;;
 import { finalize, tap, timeout } from &#x27;rxjs/operators&#x27;;
-import { ErrorBean, ErrorCode } from &#x27;src/app/com/accenture/normalize/core/bean/error-bean&#x27;;
-import { UUID } from &quot;angular2-uuid&quot;;
-import { CORE_TYPE_EVENT } from &#x27;src/app/com/accenture/normalize/core/type/type.event&#x27;;
+import { ErrorBean, ErrorCode } from &#x27;src/app/com/mycompany/normalize/core/bean/error-bean&#x27;;
+import { CORE_TYPE_EVENT } from &#x27;src/app/com/mycompany/normalize/core/type/type.event&#x27;;
 import { environment } from &#x27;src/environments/environment&#x27;;
+import { Utils  } from &#x27;src/app/com/mycompany/normalize/shared/utils/utils&#x27;;
 
 /** 
  * @author l.piciollo
@@ -429,13 +429,14 @@ export class HttpInterceptorService implements HttpInterceptor {
       if (this.isRequestCachable(request.method, request.url)) {
         let cachedResponse &#x3D; this.cache.get(request);
         if (cachedResponse !&#x3D;&#x3D; null) {
-          /**in caso sia presente in cache la chimata, viene ritornato il suo valore */
+         /**in caso sia presente in cache la chimata, viene ritornato il suo valore */
+          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, request.url);
           return of(cachedResponse);
         }
       }
       /***************************************************************************************************************************** */
       let timeoutValue &#x3D; Number(request.headers.get(&#x27;timeout&#x27;)) || this.defaultTimeout;
-      let uuid &#x3D; UUID.UUID();  
+      let uuid &#x3D;  Utils.UUIDCODE(); 
       
       let storage &#x3D; window[&quot;localStorage&quot;];
       let token &#x3D; storage[&quot;msal.idtoken&quot;];

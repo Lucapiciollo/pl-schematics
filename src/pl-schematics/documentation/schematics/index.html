@@ -31,39 +31,20 @@
                <div class="content getting-started">
                    <div class="content-data">
 
-<h1 id="portable-library-schematics">Portable Library Schematics</h1>
-<p>Portable Library Schematics *pl-schematics è una libreria nata allo scopo di velocizzare e standardizzare il processo di startup di un progetto angular &gt; 2 imponendo un patter di sviluppo ottimizzato e facilmente comprensibile. 
-i progetti angular sono suddivisi, se vogliamo in 2 macro categorie.. parte core e parte grafica
-entrambe da non sottovalutare in termini di complessità e di progettualità.. non è possibile o consigliabile iniziare con gli sviluppi grafici se non si è prima pianificata la parte core, che si occupa poi di far girare tutto il sistema, quindi gia questo aspetto rende costretti un team di sviluppatori ad attendere che almeno il 90% del lavoro del core sia pronto e potrebbero volerci divese settimane, tra studio , pianificazione e messa in opera e testing. Questo template, appunto riesce a garantire uno startup immediato del progetto e mettendo a disposizione classi o servizi gia consolidati nel tempo e quindi di preoccuparsi da subito alla creazione dei moduli grafici. 
-Il risparmio di tempo è subito evidente.</p>
-<h2 id="uso">Uso</h2>
-<div><pre class="line-numbers"><code class="language-none">1)      Creazione di un nuovo progetto
-        ng  new ProjectName
-
-2)      installaione del pattern
-        npm i pl-schematics
-
-3)      adattamento del nuovo progetto al patter
-        schematics pl-schematics:pl-schematics --force</code></pre></div><p>N.B
-I passi descritti sono specifici per adattare un nuovo progetto al template pattern. Per adattare un progetto gia esistente, occorre prestare attenzione a clonare i seguenti file</p>
-<p>app.component.html
-environment.ts e environment.prod.ts
-sonar-project.properties<br>app-routing.module.ts    </p>
-<h2 id="descrizione">Descrizione</h2>
-<p>pl-schematics nasce da un esperienza pluriennale dove si è posta molta attenzione alle performance applicative e strategie di riusabiltà.</p>
-<p>Verra creata un&#39;alberatura predisposta ad accogliere classi e oggetti, viene creata una sezione shared dove è possibile introdurre e condividere con tutto il resto del progetto nuove funzionalita custom non previste dal core, come componenti grafici utilità ed altro. 
-Questo garantisce di scandire per bene il compito di ogni sezione. La parte core non deve essere manutenuta, in quanto autonoma.. per interaggire con le utiità da lei esposte, è possibile restare in ascolto di eventi da lei lanciati e registrati di default nella global.service.ts, che è una classe di servizio globale all&#39;aplicazione e viene creata ed inizializzata dal templmate.</p>
-<p>In questo modo si evita di dover modificare la servizi o classi core. </p>
-<p>L&#39;installazione del template, prevede l&#39;aggiunta di lib di supporto, viene installata ad esempio la pl-core-library che è una raccolta di funzionalità che automatizzano alcuni processi e aggiungono delle nuove funzionalità come ad esempio la gestione delle stringhe degli array dei json e funzionalità come intercettazione del browser e funzionalita di rete per la gestione file e tanto altro.</p>
-<p>Per installare il template, occorre rispondere a delle domande guida, ed in base alle risposte si avra un tipo di configurazione piuttosto che un altra</p>
-<p>È  possibile sceglire ad esempio se abilitare scanner sonar, bootstrap 4 o il supporto per l&#39;autenticazione ad azure, al momento.</p>
-<p>La sua esecuzione in un progetto nuovo, implica la creazione di diverse classi e la modifica di alcune gia presenti per garantire una corretta configurazione.</p>
-<p>Ad un progetto gia esistente, è possibile comunque eseguire l&#39;installazione della lib, ma occorre sapere che app.module, app.component.html file di properties, configurazione di sonar vengono sostituiti co i nuovi file.</p>
-<p>Il sistema è alle prime versioni ne seguiranno degli aggiornamenti futuri</p>
-<h2 id="documentazione">Documentazione</h2>
-<p>È possibile risalire alla documentazione di supporto presente all&#39;interno del pacchetto. al momento dell&#39;installazione, oltre ad adattare il progetto ospitante, verranno create alcune folder di documentazione.</p>
-<h2 id="author">Author</h2>
-<p>Created by @l.piciollo</p>
+<h1 id="testfire">TestFire</h1>
+<p>This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a> version 7.1.0.</p>
+<h2 id="development-server">Development server</h2>
+<p>Run <code>ng serve</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files.</p>
+<h2 id="code-scaffolding">Code scaffolding</h2>
+<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
+<h2 id="build">Build</h2>
+<p>Run <code>ng build</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory. Use the <code>--prod</code> flag for a production build.</p>
+<h2 id="running-unit-tests">Running unit tests</h2>
+<p>Run <code>ng test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
+<h2 id="running-end-to-end-tests">Running end-to-end tests</h2>
+<p>Run <code>ng e2e</code> to execute the end-to-end tests via <a href="http://www.protractortest.org/">Protractor</a>.</p>
+<h2 id="further-help">Further help</h2>
+<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://github.com/angular/angular-cli/blob/master/README.md">Angular CLI README</a>.</p>
 
 
 

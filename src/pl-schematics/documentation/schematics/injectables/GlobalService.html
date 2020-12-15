@@ -57,7 +57,7 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/com/accenture/normalize/shared/service/global.service.ts</code>
+            <code>src/app/com/mycompany/normalize/shared/service/global.service.ts</code>
         </p>
 
 
@@ -85,6 +85,9 @@
                                 <a href="#callMock">callMock</a>
                             </li>
                             <li>
+                                <a href="#getProgression">getProgression</a>
+                            </li>
+                            <li>
                                 <a href="#ngOnDestroy">ngOnDestroy</a>
                             </li>
                         </ul>
@@ -110,7 +113,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/com/accenture/normalize/shared/service/global.service.ts:36</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="36" class="link-to-prism">src/app/com/mycompany/normalize/shared/service/global.service.ts:36</a></div>
                             </td>
                         </tr>
 
@@ -189,16 +192,14 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="103"
-                            class="link-to-prism">src/app/com/accenture/normalize/shared/service/global.service.ts:103</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="143"
+                            class="link-to-prism">src/app/com/mycompany/normalize/shared/service/global.service.ts:143</a></div>
                 </td>
             </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><hr>
-</div>
 
                     <div class="io-description">
                         <b>Parameters :</b>
@@ -255,6 +256,78 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="getProgression"></a>
+                    <span class="name">
+                        <b>
+                            getProgression
+                        </b>
+                        <a href="#getProgression"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getProgression(idAjax: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/com/mycompany/normalize/shared/service/global.service.ts:129</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>idAjax</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Subject&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="ngOnDestroy"></a>
                     <span class="name">
                         <b>
@@ -273,8 +346,8 @@
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="90"
-                            class="link-to-prism">src/app/com/accenture/normalize/shared/service/global.service.ts:90</a></div>
+                    <div class="io-line">Defined in <a href="" data-line="114"
+                            class="link-to-prism">src/app/com/mycompany/normalize/shared/service/global.service.ts:114</a></div>
                 </td>
             </tr>
 
@@ -299,14 +372,14 @@
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
         <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, OnDestroy,Injector } from &quot;@angular/core&quot;;
-import {ErrorBean,  ErrorCode } from &quot;src/app/com/accenture/normalize/core/bean/error-bean&quot;;
-import {HttpService } from &#x27;src/app/com/accenture/normalize/core/service/http.service&#x27;;
-import { PLUnsubscribe } from &#x27;pl-core-utils-library&#x27;;
+import {ErrorBean,  ErrorCode } from &quot;src/app/com/mycompany/normalize/core/bean/error-bean&quot;;
+import {HttpService } from &#x27;src/app/com/mycompany/normalize/core/service/http.service&#x27;;
+import { CONTENT_TYPE, PlHttpRequest, PLUnsubscribe, RESPONSE_TYPE  } from &#x27;pl-core-utils-library&#x27;;
 import { environment } from &#x27;src/environments/environment&#x27;;
-import { Observable } from &#x27;rxjs&#x27;;
-import { CORE_TYPE_EVENT } from &#x27;src/app/com/accenture/normalize/core/type/type.event&#x27;;
-import { PlCoreUtils } from &#x27;pl-core-utils-library&#x27;;
-import { AuthService } from &#x27;src/app/com/accenture/normalize/core/service/auth.service&#x27;;
+import { Observable, Subject } from &#x27;rxjs&#x27;;
+import { CORE_TYPE_EVENT } from &#x27;src/app/com/mycompany/normalize/core/type/type.event&#x27;;
+import { PlCoreUtils ,TYPE_EVENT_NETWORK} from &#x27;pl-core-utils-library&#x27;;
+import { AuthService } from &#x27;src/app/com/mycompany/normalize/core/service/auth.service&#x27;;
  /**
  * @author l.piciollo
  * classe di servizio per tutta l&#x27;applicazione, in questa classe ci saranno variabili comuni a tutti i componenti o chiamate
@@ -326,8 +399,15 @@ import { AuthService } from &#x27;src/app/com/accenture/normalize/core/service/a
 export class GlobalService implements OnDestroy {
 
 /***************************************************************************************************************************** */
-  constructor(private httpService:  HttpService, private injector: Injector ) {
+  constructor(private httpService: HttpService, private injector: Injector ) {
      
+    /**
+     * @author l.piciollo
+     * registrazione all&#x27;intercettore di interruzione di chiamata ajax.
+     */
+      PlCoreUtils.Broadcast().listenEvent(TYPE_EVENT_NETWORK.PL_BREACK_NET, (breack) &#x3D;&gt; {
+        console.log(breack.detail);
+      })
     /**
      * @author l.piciollo
      * registrazione all&#x27;intercettore di errore per servire la richiesta di apertura modale di errore.
@@ -341,7 +421,16 @@ export class GlobalService implements OnDestroy {
       */
       PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error)&#x3D;&gt;{
         console.log(error.detail);
-      });  
+      }); 
+      /**
+       * @author l.piciollo
+       * registrazione all&#x27;evento di intercettazione della cache, da parte delle chiamate ajax.. in caso viene rilevato del contenuto in cache,
+       * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
+       */
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, (url) &#x3D;&gt; {
+        console.log(&quot;PlCoreUtils cache found for : {0}&quot;.format(url.detail));
+      })  
+        
        
       /**
        * @author l.piciollo
@@ -350,6 +439,7 @@ export class GlobalService implements OnDestroy {
       PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, (OK) &#x3D;&gt; { 
         console.log(OK)
       });
+ 
       /**
        * @author l.piciollo
        * registrazione all&#x27;evento di login ok da parte della azure lib
@@ -363,17 +453,24 @@ export class GlobalService implements OnDestroy {
        * registrazione all&#x27;evento di errore da parte delle chiamate ajax.. in caso viene rilevato qualsiasi errore,
        * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
        */
-       PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) &#x3D;&gt; {
-       
+        PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) &#x3D;&gt; {
+          
           /**
            * @author l.piciollo
            * inserimento del controllo per azure directry della corretta autenticazione, in caso di 401 si va alla login
            */
            if ([401].indexOf(error.detail.status) &gt; -1) {
-             this.injector.get(AuthService).login().subscribe();
-           }
-         
-    })
+              this.injector.get(AuthService).login().subscribe();
+            }
+               
+          })
+          /**
+           * @author l.piciollo
+           * ascoltatore di evento di errore generico, qui è possibile gestire in autonomia il suo flusso
+           */
+          PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean) &#x3D;&gt; {
+            console.error(&quot;PlCoreUtils error found &gt;&gt; &quot;, errorBean);
+          });  
   }
 /***************************************************************************************************************************** */
   
@@ -386,19 +483,42 @@ export class GlobalService implements OnDestroy {
   }
 /***************************************************************************************************************************** */
 
+  /**
+   * @author l.piciollo
+   * passando in ingresso l&#x27;ajaxToken, è possibile ricevere il 
+   * subject per sottoscriversi e ricevere in tuntime i valori di stato della chiamata
+   * @param idAjax 
+   */
+  getProgression(idAjax:string):Subject&lt;any&gt; { 
+      try {
+        return this.httpService.TAILAJXCALL(idAjax);
+      }
+      catch (e) { 
+        throw new ErrorBean(e.message)
+      }
+   }
+  
+
    /**
    * @author l.piciollo
    * esempio di chiamata http
    */
-  callMock(p1:any,p2:any): Observable&lt;any&gt; {
+  callMock(p1: any, p2: any): Observable&lt;any&gt; {
     return new Observable&lt;any&gt;(obs &#x3D;&gt; {
-      this.httpService.GET(environment.http.api.exampleApi.format(p1, p2), {}).subscribe(sb &#x3D;&gt; {
+ 
+      let plHttpRequest: PlHttpRequest &#x3D; new PlHttpRequest(
+                            environment.http.api.mock , 
+                            Object({ api: &quot;api&quot;, files: &quot;files&quot; }),
+                            Object({ api: p1, files: p2 }), 
+                            null);
+                            
+      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, null, null).subscribe(sb &#x3D;&gt; {
         obs.next(sb);
         obs.complete()
       }, error &#x3D;&gt; {
         obs.error(error);
       }, () &#x3D;&gt; { })
-    })
+    }) 
   }
 }
 </code></pre>
