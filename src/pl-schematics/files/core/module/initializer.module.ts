@@ -12,17 +12,17 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule ,Injector} from '@angular/core';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
-import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule ,BROWSER} from 'pl-core-utils-library';
+import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule ,BROWSER, DEFAULT_PATH_MOCK} from 'pl-core-utils-library';
 import { BASE_URL_API } from 'src/app/<%=namePackage%>/core/service/http.service';
 import { UiLoaderConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderConfig';
 import { UiLoaderHttpConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderHttpConfig';
 import { UiLoaderRouterConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderRouterConfig';
 import { environment } from 'src/environments/environment';
-import {<%= classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
+import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
 import {<%=classify(prefixClass)%>ErrorService } from 'src/app/<%=namePackage%>/core/service/error.service';
 import {<%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
 import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=namePackage%>/core/initializer/AmbientModeLoader';
-import  <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
+import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
 import { MSAL_CONFIG } from "@azure/msal-angular/dist/msal.service";
@@ -131,7 +131,7 @@ import { filter } from 'rxjs/operators';
     <% } %>
   ]
 })
-export class   InitializerModule {
+export class   <%=classify(prefixClass)%>InitializerModule {
   
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
     /**
@@ -154,7 +154,7 @@ export class   InitializerModule {
 
   static forRoot() {
     return {
-      ngModule:  InitializerModule,
+      ngModule:   <%=classify(prefixClass)%>InitializerModule,
       providers: [],
       import: []
     }

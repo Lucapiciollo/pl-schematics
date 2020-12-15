@@ -33,10 +33,10 @@ import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/
  * in ingresso è possibile passare la lista degli osservatoti che devono rimanere attivi
  */
 @PLUnsubscribe()  
-export class GlobalService implements OnDestroy {
+export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
 
 /***************************************************************************************************************************** */
-  constructor(private httpService: <%=classify(prefixClass)%> HttpService, private injector: Injector ) {
+  constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector ) {
      
     /**
      * @author l.piciollo
@@ -97,7 +97,7 @@ export class GlobalService implements OnDestroy {
            * inserimento del controllo per azure directry della corretta autenticazione, in caso di 401 si va alla login
            */
            if ([401].indexOf(error.detail.status) > -1) {
-              this.injector.get(<%=classify(prefixClass) %> AuthService).login().subscribe();
+              this.injector.get(<%=classify(prefixClass)%>AuthService).login().subscribe();
             }
             <% } else { %>
               console.log(error.detail);
@@ -133,7 +133,7 @@ export class GlobalService implements OnDestroy {
         return this.httpService.TAILAJXCALL(idAjax);
       }
       catch (e) { 
-        throw new ErrorBean(e.message)
+        throw new <%=classify(prefixClass)%>ErrorBean(e.message)
       }
    }
   

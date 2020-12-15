@@ -11,7 +11,7 @@ function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
       { type: NodeDependencyType.Default, version: '^1.1.1', name: String("rxjs-operators") },
-      { type: NodeDependencyType.Default, version: '~1.2.2', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '~1.3.0', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '^6.5.3', name: String("rxjs-compat") },
@@ -19,7 +19,7 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^6.3.3', name: String("rxjs") },
       { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
-      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
+      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
 
     ];
 
@@ -205,6 +205,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/core/interceptor", options.namePackage + "/core/interceptor/"),
     addClass(options, "./files/shared/utils", options.namePackage + "/shared/utils/"),
     addClass(options, "./files/shared/service", options.namePackage + "/shared/service/"),
+    addClass(options, "./files/shared/component", options.namePackage + "/shared/component/"),
     addClass(options, "./files/core/utils", options.namePackage + "/core/utils/"),
     addClass(options, "./files/core/type", options.namePackage + "/core/type/"),
     addClass(options, "./files/home", options.namePackage + "/component/page/home"),

@@ -12,7 +12,7 @@ import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCod
  * @author l.piciollo
  * classe di utilità, qui vengono elencate tutte le funzioni utili per tutta l'applicazione
  */
-export class Utils {
+export class <%=classify(prefixClass)%>Utils {
   /**
    * @author l.piciollo
    * genera un UUID da assegnare a componenti grafici come ID o altro

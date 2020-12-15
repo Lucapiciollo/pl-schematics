@@ -1,0 +1,21 @@
+<div class="container shadow-sm p-3 mb-5 bg-white rounded">
+  <div *ngIf="this.idChart!=null">
+    <canvas height="60px" [id]="idChart"></canvas>
+    <div class="row" style="margin-top: 12px ">
+      <div style=" float: left;" class="col-3">
+        <p style="font-size: 12px "><b>Complete:</b> {{percentProgress}}%</p>
+      </div>
+      <div style=" float: left;" class="col-3">
+        <p style="font-size: 12px "><b>Stream:</b> {{loaded}} of {{size}}</p>
+      </div>
+      <div class="col-6 ">
+        <p class="far fa-stop-circle close" (click)="listener!=null ? killProcess() : null"></p>
+      </div>
+    </div>
+    <div class="row" style="margin-top: -20px ">
+      <div style=" float: left;" class="col-12">
+        <p style="font-size: 12px "><b>{{fileName||url}}</b> </p>
+      </div>
+    </div>
+  </div>
+</div>

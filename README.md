@@ -165,11 +165,41 @@ il servizio httpservice, contiene codice gia impachettato per effettuare chiamat
 >la console in questa occasione, tramite la funzione logTraceHttp, mostrerà come output l'oggetto di avanzamento della chiamata.
  
 
+## Visulizzazione Grafico Http
+E' stato reso disponibile, un serivizio in grado di mostrare l'andamento grafico di un flusso HTTP, la funzionalità è utile per visualizzare le tempistiche soprattutto di flussi upload/download di file. 
+Per attivare la visualizzazione del grafico, è possibile esegure i seguenti passi. 
+
+>Importare il componente grafico all'interno di una pagina o modale o anche in un componente.
+
+     <ng-container *ngFor="let idAjax of getProgress()">
+            <app-http-graphic-speed   [idAjax]="a"></app-http-graphic-speed>
+    </ng-container>
+
+>Creare a esempio una funzione che ritorna tutte le key ajax che sono in queue
+
+      getProgress(): Array<string> {
+        return Object.keys(PlCoreUtils.progressBars);
+      }
+
+>Implementare la chiamata a un servizio di download
+
+    this.globalService.callMock("parametro1", "parametro1" ).subscribe(response => {
+      this.httpService.DOWNLOAD(response.body, CONTENT_TYPE.PDF, "test.pdf").then(resp => {
+        alert("Info", "File downloaded!!")
+      })
+    })
+
+nella pagina, avendo utilizzato  *ngFor="let idAjax of getProgress()", si rimane in ascolto su cambiamenti della progressBar, quindi in automatico verrà mostrato il grafico relativo.
+E' possibile anche personalizzare la visuaizzazione del grafico, passando solo l'id della chiamata che si vuole monitorare.
+
 
 ## Release
 
->Questa versione di pl-schematics, necessia della pl-core-utils-library con version ~1.2.0
+>Questa versione di pl-schematics, necessia della pl-core-utils-library con version >= ~1.2.0
+Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils, inoltre è stato reso disponibile il componente grafico.
 
+La release, contiene anche alcuni fix relativi alla nomenclatura e l'import delle classi in base al prefisso impostato al momento della risposta all'installazione della schematics.
+  
   
 
 ## Author

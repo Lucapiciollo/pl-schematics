@@ -19,9 +19,9 @@ import { CACHE_TAG, PlCacheMapService,PlCoreUtils } from 'pl-core-utils-library'
 import { Observable, of } from 'rxjs';
 import { finalize, tap, timeout } from 'rxjs/operators';
 import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
-import { UUID } from "angular2-uuid";
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
 import { environment } from 'src/environments/environment';
+import { <%=classify(prefixClass)%>Utils  } from 'src/app/<%=namePackage%>/shared/utils/utils';
 
 /** 
  * @author l.piciollo
@@ -88,7 +88,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
       }
       /***************************************************************************************************************************** */
       let timeoutValue = Number(request.headers.get('timeout')) || this.defaultTimeout;
-      let uuid = UUID.UUID();  
+      let uuid =  <%=classify(prefixClass)%>Utils.UUIDCODE(); 
       <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
       let storage = window["localStorage"];
       let token = storage["msal.idtoken"];

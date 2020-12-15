@@ -12,9 +12,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { GlobalService } from '../service/global.service';
-
-
+import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%>/shared/service/global.service';
+import { <%=classify(prefixClass)%>HttpGraphicSpeedComponent } from 'src/app/<%=namePackage%>/shared/component/http-graphic-speed/http-graphic-speed.component';
+import { CommonModule } from '@angular/common';
 /**
  *  @author @l.piciollo
  *  modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalita con il sistema. 
@@ -22,22 +22,25 @@ import { GlobalService } from '../service/global.service';
  *  impport ed in export
  */
 @NgModule({
-  declarations: [],
+  declarations: [ <%=classify(prefixClass)%>HttpGraphicSpeedComponent],
   imports: [
+    CommonModule,
     HttpClientModule,
     FormsModule,
     TranslateModule
   ],
-  providers: [GlobalService],
+  providers: [<%=classify(prefixClass)%>GlobalService],
   exports: [
+    CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule
+    TranslateModule,
+    <%=classify(prefixClass)%>HttpGraphicSpeedComponent
   ]
 })
 export class SharedModule {
 
-  constructor(private globalService: GlobalService) { /**inizializzazione del servizio per la creazione dei listener */}
+  constructor(private globalService: <%=classify(prefixClass)%>GlobalService) { /**inizializzazione del servizio per la creazione dei listener */}
   
   static forRoot() {
     return {

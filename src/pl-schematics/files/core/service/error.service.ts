@@ -36,7 +36,7 @@ export class <%=classify(prefixClass)%>ErrorService implements ErrorHandler {
   * @author l.piciollo
   *  tutti gli errori applicativi saranno concentrati in questa funzione.. è possibile elaborarli in base alle proprie necessità
   */
-  handleError(errorBean: <%=classify(prefixClass) %> ErrorBean) {
+  handleError(errorBean: <%=classify(prefixClass)%>ErrorBean) {
     try {
       /**
        * evento lanciato per indicare che l'errore riscontrato necessita di un messaggio di dialogo figurativo per il cliente 

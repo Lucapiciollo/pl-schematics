@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { SharedModule } from './<%=namePackage%>/shared/module/shared.module';
 import { AppRoutingModule } from './app-routing.module';
-import { InitializerModule } from './<%=namePackage%>/core/module/initializer.module';
+import { <%=classify(prefixClass)%>InitializerModule } from './<%=namePackage%>/core/module/initializer.module';
 
  
 
@@ -16,7 +16,7 @@ import { InitializerModule } from './<%=namePackage%>/core/module/initializer.mo
     BrowserModule,
     SharedModule,
     AppRoutingModule,
-    InitializerModule,
+    <%=classify(prefixClass)%>InitializerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
