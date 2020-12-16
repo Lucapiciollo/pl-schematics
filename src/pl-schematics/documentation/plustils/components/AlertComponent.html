@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Scheme</title>
+        <title>Portable-Core</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +14,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Scheme</a>
+            <a href="../" class="navbar-brand">Portable-Core</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
 
@@ -42,12 +42,6 @@
 <ul class="nav nav-tabs" role="tablist">
         <li class="active">
             <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
-        </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
-        </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
         </li>
         <li >
             <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
@@ -156,14 +150,6 @@
                             <li>
                                 <a href="#ngOnInit">ngOnInit</a>
                             </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#openDialog">openDialog</a>
-                            </li>
-                            <li>
-                                    <span class="modifier">Private</span>
-                                <a href="#push">push</a>
-                            </li>
                         </ul>
                     </td>
                 </tr>
@@ -250,76 +236,6 @@
             <tr>
                 <td class="col-md-4">
 <code>ngOnInit()</code>
-                </td>
-            </tr>
-
-
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="openDialog"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            openDialog
-                        </b>
-                        <a href="#openDialog"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>openDialog()</code>
-                </td>
-            </tr>
-
-
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="push"></a>
-                    <span class="name">
-                        <b>
-                            <span class="modifier">Private</span>
-                            push
-                        </b>
-                        <a href="#push"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-                    <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>push()</code>
                 </td>
             </tr>
 
@@ -454,39 +370,7 @@
 
 
 
-    <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div  #dialog  *ngIf&#x3D;&quot;messageInfo!&#x3D;null&quot; 
-        data-backdrop&#x3D;&quot;static&quot; 
-        data-keyboard&#x3D;&quot;false&quot;  
-        class&#x3D;&quot;modal&quot;
-        [style.background]&#x3D;&quot;messageInfo!&#x3D;null ? &#x27;rgba(0,0,0,0.4)&#x27; :&#x27;&#x27;&quot; 
-        [style.display]&#x3D;&quot;messageInfo!&#x3D;null ? &#x27;block&#x27;:&#x27;none&#x27;&quot;
-        [ngClass]&#x3D;&quot;messageInfo!&#x3D;null ? &#x27;modal-open&#x27;:&#x27;fade in&#x27;&quot;&gt;
-  &lt;div class&#x3D;&quot;modal-dialog&quot; role&#x3D;&quot;document&quot;&gt;
-    &lt;div class&#x3D;&quot;modal-content&quot;&gt;
-      &lt;div class&#x3D;&quot;modal-header&quot;&gt;
-        &lt;h4 class&#x3D;&quot;modal-title w-80&quot; id&#x3D;&quot;myModalLabel&quot;&gt;{{messageInfo.title || &#x27;Message!&#x27;}}&lt;/h4&gt;
-        &lt;button (click)&#x3D;&quot;closeDialog()&quot; type&#x3D;&quot;button&quot; class&#x3D;&quot;close&quot; data-dismiss&#x3D;&quot;modal&quot; aria-label&#x3D;&quot;Close&quot;&gt;
-          &lt;span aria-hidden&#x3D;&quot;true&quot;&gt;&amp;times;&lt;/span&gt;
-        &lt;/button&gt;
-      &lt;/div&gt;
-      &lt;div class&#x3D;&quot;modal-body&quot;&gt;
-          {{messageInfo.body }}
-      &lt;/div&gt;
-      &lt;div class&#x3D;&quot;modal-footer&quot;&gt;
-        &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn btn-primary&quot; data-dismiss&#x3D;&quot;modal&quot; (click)&#x3D;&quot;closeDialog()&quot;&gt;Ok&lt;/button&gt;
-      &lt;/div&gt;
-    &lt;/div&gt;
-  &lt;/div&gt;
-&lt;/div&gt;</code></pre>
-    </div>
 
-    <div class="tab-pane fade " id="c-styleData">
-                <p class="comment">
-                    <code>./alert.component.css</code>
-                </p>
-                <pre class="line-numbers"><code class="language-scss"></code></pre>
-    </div>
 
     <div class="tab-pane fade " id="c-tree">
         <div id="tree-container"></div>

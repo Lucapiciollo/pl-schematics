@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Scheme</title>
+        <title>Portable-Core</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +14,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Scheme</a>
+            <a href="../" class="navbar-brand">Portable-Core</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
 
@@ -42,12 +42,6 @@
 <ul class="nav nav-tabs" role="tablist">
         <li class="active">
             <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
-        </li>
-        <li >
-            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
-        </li>
-        <li >
-            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
         </li>
         <li >
             <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
@@ -510,48 +504,7 @@
 
 
 
-    <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;div class&#x3D;&quot;modal-content&quot;&gt;
-  &lt;div class&#x3D;&quot;modal-header&quot;&gt;
-    &lt;h5 class&#x3D;&quot;modal-title&quot;&gt;Downloading list.. &lt;/h5&gt;
-    &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn  float-right&quot; (click)&#x3D;&quot;close()&quot;&gt; &lt;span aria-hidden&#x3D;&quot;true&quot;&gt;&amp;times;&lt;/span&gt; &lt;/button&gt;
-  &lt;/div&gt;
-  &lt;div class&#x3D;&quot;modal-body&quot; permission&#x3D;&quot;READONLY&quot; &gt;
-    &lt;ng-container *ngFor&#x3D;&quot;let progress of getProgress()&quot;&gt;
-      &lt;div class&#x3D;&quot;wrap-content  &quot;&gt;
-        &lt;div class&#x3D;&quot;container-description&quot;&gt;  &lt;p class&#x3D;&quot;wrapword&quot;&gt;Url: {{plCoreUtils.progressBars[progress].url}} &lt;/p&gt;
-          &lt;div class&#x3D;&quot;progress &quot;&gt;
-            &lt;div class&#x3D;&quot;progress-bar progress-bar-striped progress-bar-animated&quot;   [class.bg-danger]&#x3D;&quot;plCoreUtils.progressBars[progress].blocked&quot; [style.width.%]&#x3D;&quot;plCoreUtils.progressBars[progress].percent&quot;&gt;
-                {{plCoreUtils.progressBars[progress].percent}}%  
-            &lt;/div&gt;
-          &lt;/div&gt;          
-          &lt;div class&#x3D;&quot;row&quot;&gt;
-            &lt;div class&#x3D;&quot;col-4&quot;&gt;
-              &lt;p&gt;Size: {{plCoreUtils.progressBars[progress].size}}&lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class&#x3D;&quot;col-4&quot;&gt;
-              &lt;p&gt; Downloaded: {{plCoreUtils.progressBars[progress].loaded}}&lt;/p&gt;
-            &lt;/div&gt;
-            &lt;div class&#x3D;&quot;col-4&quot;&gt;
-              &lt;button type&#x3D;&quot;button&quot; class&#x3D;&quot;btn  float-right&quot;
-                (click)&#x3D;&quot;interrupt(plCoreUtils.progressBars[progress] )&quot;&gt; &lt;span aria-hidden&#x3D;&quot;true&quot;&gt;&amp;times;&lt;/span&gt; 
-              &lt;/button&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/div&gt;
 
-      &lt;/div&gt;
-   &lt;/ng-container&gt;
-&lt;/div&gt;
-&lt;/div&gt;</code></pre>
-    </div>
-
-    <div class="tab-pane fade " id="c-styleData">
-                <p class="comment">
-                    <code>./pl-progress.component.css</code>
-                </p>
-                <pre class="line-numbers"><code class="language-scss"></code></pre>
-    </div>
 
     <div class="tab-pane fade " id="c-tree">
         <div id="tree-container"></div>

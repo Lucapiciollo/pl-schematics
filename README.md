@@ -201,6 +201,8 @@ Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti ne
 La release, contiene anche alcuni fix relativi alla nomenclatura e l'import delle classi in base al prefisso impostato al momento della risposta all'installazione della schematics.
   
   
+## Documentazione online
+[Qui](https://pl-schematics.web.app/index.html) è possibile fare riferimento alla documentazione on line delle libreria e delle sue funzionalità  
 
 ## Author
 
