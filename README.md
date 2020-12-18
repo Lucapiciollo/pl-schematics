@@ -192,6 +192,7 @@ Per attivare la visualizzazione del grafico, è possibile esegure i seguenti pas
 nella pagina, avendo utilizzato  *ngFor="let idAjax of getProgress()", si rimane in ascolto su cambiamenti della progressBar, quindi in automatico verrà mostrato il grafico relativo.
 E' possibile anche personalizzare la visuaizzazione del grafico, passando solo l'id della chiamata che si vuole monitorare.
 
+ ![alt text](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2FGraficoBar.png?alt=media&token=78e4e684-1c76-4b25-9670-849dbd8c6165)
 
 ## Release
 
