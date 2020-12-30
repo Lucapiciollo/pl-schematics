@@ -197,7 +197,9 @@ E' possibile anche personalizzare la visuaizzazione del grafico, passando solo l
 ## Release
 
 >Questa versione di pl-schematics, necessia della pl-core-utils-library con version >= ~1.2.0
-Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils, inoltre è stato reso disponibile il componente grafico.
+Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils, inoltre è stato reso disponibile il componente di rete grafico.
+
+è stato predisposto l'extension del componente base nella page home, rendendo disponibili i servizi della pl-core.utils e nuove funzionalità come la goToPage per la navigazione delle pagine con la possibilità di passare parametri in URL.
 
 La release, contiene anche alcuni fix relativi alla nomenclatura e l'import delle classi in base al prefisso impostato al momento della risposta all'installazione della schematics.
   
