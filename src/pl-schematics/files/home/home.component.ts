@@ -9,9 +9,9 @@
  * di piu componenti home, eliminare la riga  providers:[HomeService] .
  * ]
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit ,Injector} from '@angular/core';
 import { HomeService } from './home.service';
-
+import { PlBaseComponent } from 'pl-core-utils-library';
 /**
  * @author l.piciollo
  * componente pagina home template.. qui viene la creazione del servizio del modulo HomeService.. questo garantisce che 
@@ -25,9 +25,11 @@ import { HomeService } from './home.service';
   styleUrls: ['./home.component.css'],
   providers:[HomeService]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent  extends PlBaseComponent implements OnInit {
 
-  constructor() { }
+  constructor( protected injector: Injector  ) {
+    super(injector)
+  }
 
   ngOnInit() {
   }
