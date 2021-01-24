@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-23 17:19:02
  * @modify date 2019-12-23 17:19:02
  * @desc [Home module, generazione di un componente modulo di base per organizzare rotte di navigazione ed

@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-23 17:31:13
  * @modify date 2019-12-23 17:31:13
  * @desc [componente pagina home template.. qui viene la creazione del servizio del modulo HomeService.. questo garantisce che 

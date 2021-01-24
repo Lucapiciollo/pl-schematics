@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-23 16:47:10
  * @modify date 2019-12-23 16:47:10
  * @desc [prototipo di inizializzazione di una rotta.. è possibile aggiungere ulteriori rotte sotto nella configurazione

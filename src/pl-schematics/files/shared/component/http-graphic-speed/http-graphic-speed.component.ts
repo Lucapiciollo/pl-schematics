@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2020-12-02 16:28:39
  * @modify date 2020-12-02 16:28:39
  * @desc [Componente per la visualizzazione delle code ajax in modalità grafico]

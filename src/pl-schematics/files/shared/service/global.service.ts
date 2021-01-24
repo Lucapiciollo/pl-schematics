@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-22 14:22:00
  * @modify date 2019-12-22 14:22:00
  * @desc [classe di servizio per tutta l'applicazione, in questa classe ci saranno variabili comuni a tutti i componenti o chiamate

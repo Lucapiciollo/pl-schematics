@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-22 00:33:10
  * @modify date 2019-12-22 00:33:10
  * @desc [configurazione per la progressione di chiamate alla rete]

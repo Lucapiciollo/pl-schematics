@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-09-09 09:39:39
  * @modify date 2019-09-09 09:39:39
  * @desc [wrapper di chiamata per i servizi di http esposti in PlHttpService, tutti i metodi sono interrotti durante la navigazione

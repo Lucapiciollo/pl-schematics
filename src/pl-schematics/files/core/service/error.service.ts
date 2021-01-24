@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 15:14:28
  * @modify date 2019-12-21 15:14:28
  * @desc [intercettazione errori per la centralizzazione della loro gestione..]

@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-22 00:34:19
  * @modify date 2019-12-22 00:34:19
  * @desc [configurazione per la visualizzazione nel tempo e nello stile delle progress]

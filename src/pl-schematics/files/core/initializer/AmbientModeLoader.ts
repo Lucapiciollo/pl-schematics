@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 15:25:51
  * @modify date 2019-12-21 15:25:51
  * @desc [intercettazione avvio applicazione, per il settaggio dell'ambiente, per determinare il tipo di browser..  

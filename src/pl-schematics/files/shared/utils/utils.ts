@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 23:18:12
  * @modify date 2019-12-21 23:18:12
  * @desc [Classe di utilita, qui vengono elencate tutte le funzionalità per l'itera applicazione.]

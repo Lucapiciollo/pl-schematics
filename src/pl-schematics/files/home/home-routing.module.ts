@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-23 17:33:52
  * @modify date 2019-12-23 17:33:52
  * @desc [Modulo di navigazione, eventualmente il modulo home ha dei componenti al suo interno da raggiungerli trami rotta

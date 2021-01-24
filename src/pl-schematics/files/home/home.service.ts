@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciolo@gmail.com
  * @create date 2019-12-23 17:27:51
  * @modify date 2019-12-23 17:27:51
  * @desc [classe di servizio per l'intermo modulo home.. non deve essere dipendende da altri servizi o moduli.. 
