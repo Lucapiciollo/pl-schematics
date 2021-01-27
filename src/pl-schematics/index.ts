@@ -4,44 +4,47 @@ import { strings } from '@angular-devkit/core';
 import { apply, chain, mergeWith, move, Rule, SchematicContext, template, Tree, url } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addModuleImportToRootModule, addPackageJsonDependency, buildDefaultPath, getProjectFromWorkspace, getWorkspace, NodeDependency, NodeDependencyType } from 'schematics-utilities';
-
+import { check } from "./checkVersion"
 
 
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: '^1.1.1', name: String("rxjs-operators") },
-      { type: NodeDependencyType.Default, version: '~1.5.1', name: String("pl-core-utils-library") },
-      { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
-      { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
-      { type: NodeDependencyType.Default, version: '^6.5.3', name: String("rxjs-compat") },
-      { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
-      { type: NodeDependencyType.Default, version: '^6.3.3', name: String("rxjs") },
-      { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
-      { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
-      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
+    
+      const dependencies: NodeDependency[] = [
+        { type: NodeDependencyType.Default, version: '^1.1.1', name: String("rxjs-operators") },
+        { type: NodeDependencyType.Default, version: '~1.5.2', name: String("pl-core-utils-library") },
+        { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
+        { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
+        { type: NodeDependencyType.Default, version: '^6.5.3', name: String("rxjs-compat") },
+        { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
+        { type: NodeDependencyType.Default, version: '^6.3.3', name: String("rxjs") },
+        { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
+        { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
+        { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
 
-    ];
+      ];
 
-    if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") });
-      dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
-      dependencies.push({ type: NodeDependencyType.Default, version: '^4.3.1', name: String("bootstrap") });
-    }
-    if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^0.1.4', name: String("@azure/msal-angular") });
-    }
+      if (options.addSupportBootstrap == "Y") {
+        dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") });
+        dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
+        dependencies.push({ type: NodeDependencyType.Default, version: '^4.3.1', name: String("bootstrap") });
+      }
+      if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
+        dependencies.push({ type: NodeDependencyType.Default, version: '^0.1.4', name: String("@azure/msal-angular") });
+      }
 
-    if (options.enableSonarQube == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
-    }
+      if (options.enableSonarQube == "Y") {
+        dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
+      }
 
 
-    dependencies.forEach(dependency => {
-      addPackageJsonDependency(host, dependency);
-      context.logger.log('info', `Library inserted:  "${dependency.name}" into ${dependency.type}`);
-    });
-    return host;
+      dependencies.forEach(dependency => {
+        addPackageJsonDependency(host, dependency);
+        context.logger.log('info', `Library inserted:  "${dependency.name}" into ${dependency.type}`);
+      });
+      return host;
+    
+
   };
 }
 
@@ -49,7 +52,7 @@ function installPackageJsonDependencies(): Rule {
   return (host: Tree, context: SchematicContext) => {
     context.addTask(new NodePackageInstallTask());
     context.logger.log('info', `package install in action.... `);
-    return host;
+    return host
   };
 }
 
@@ -122,7 +125,7 @@ function updateAngularJsonForBootstrap(): Rule {
       optionsJson['scripts'].indexOf("node_modules/bootstrap/dist/js/bootstrap.min.js") < 0 ? optionsJson['scripts'].push("node_modules/bootstrap/dist/js/bootstrap.min.js") : null;
       optionsJson['styles'].indexOf("node_modules/bootstrap/dist/css/bootstrap.min.css") < 0 ? optionsJson['styles'].push("node_modules/bootstrap/dist/css/bootstrap.min.css") : null;
       optionsJson['styles'].indexOf("node_modules/@fortawesome/fontawesome-free/css/all.min.css") < 0 ? optionsJson['styles'].push("node_modules/@fortawesome/fontawesome-free/css/all.min.css") : null;
-      
+
 
       json['projects'][json.defaultProject]['architect']['build']['options'] = optionsJson;
       host.overwrite('angular.json', JSON.stringify(json, null, 2));
@@ -132,8 +135,8 @@ function updateAngularJsonForBootstrap(): Rule {
   }
 }
 
-function getPrefixFromAngularJson(options:any): Rule {
-  return (host: Tree, context: SchematicContext)  => {
+function getPrefixFromAngularJson(options: any): Rule {
+  return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
     if (angularJsonFile) {
       var json = JSON.parse(angularJsonFile.toString());
@@ -196,7 +199,7 @@ export default function (options: any): Rule {
     getPrefixFromAngularJson(options),
     addPackageJsonDependencies(options),
     installPackageJsonDependencies(),
-    () => { console.log(options)},
+    () => { console.log(options) },
     addClass(options, "./files/core/service", options.namePackage + "/core/service/"),
     addClass(options, "./files/core/initializer", options.namePackage + "/core/initializer/"),
     addClass(options, "./files/core/bean", options.namePackage + "/core/bean/"),
@@ -212,7 +215,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/component", "/"),
     addClass(options, "./files/customInterface", "../"),
     addClass(options, "./files/properties", "../environments/"),
-    addClass(options, "./files/public", "../assets/"), 
+    addClass(options, "./files/public", "../assets/"),
     addClass(options, "./documentation", "../../pl-schematics/document"),
     options && options.enableSonarQube == "Y" ? addClass(options, "./files/application", "../../") : () => { },
     options && options.addSupportBootstrap == "Y" ? updateAngularJsonForBootstrap() : () => { },
@@ -229,6 +232,7 @@ export default function (options: any): Rule {
     scaffoldSchematics(options, options.namePackage + "/shared/directive"),
     addModuleToImports(options, options.prefixClass + "InitializerModule", "./" + options.namePackage + "/core/module/initializer.module"),
     addModuleToImports(options, "SharedModule", "./" + options.namePackage + "/shared/module/shared.module"),
-    addModuleToImports(options, "AppRoutingModule", "./app-routing.module")
+    addModuleToImports(options, "AppRoutingModule", "./app-routing.module"),
+    check({ "pl-core-utils-library": "" }) 
   ]);
 }
