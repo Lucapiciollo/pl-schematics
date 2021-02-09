@@ -1,6 +1,6 @@
 {
   "name": "pl-schematics",
-  "version": "2.2.6",
+  "version": "2.2.5",
   "description": "Standardize template develop",
   "scripts": {
     "build": "tsc -p tsconfig.json && npm pack",
@@ -18,6 +18,7 @@
   "dependencies": {
     "@types/jasmine": "^3.3.9",
     "@types/node": "^8.0.31",
+    "chalk": "^4.1.0",
     "jasmine": "^3.3.1",
     "schematics-utilities": "^2.0.0",
     "shelljs": "^0.8.4",

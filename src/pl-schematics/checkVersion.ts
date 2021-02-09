@@ -16,8 +16,7 @@ export function check(obj: any): Rule {
                     for (let i = outStrArray.length - 2; i >= 0; i = i - 2) {
                         const version = outStrArray[i];
                         if (version.indexOf('-') < 0) {
-                            console.info('\u001b[1m\u001b[31m *** ' + "ATTENZIONE L'ULTIMA VERSIONE DISPONIBILE PER LA PL-CORE-UTILS-LIBRARY E' LA: " + version + " ***\u001b[39;49m\u001b[22m")
-                            console.info('\u001b[1m\u001b[37;101m ' + "ESEGUIRE IL COMANDO 'npm i pl-core-utils-library@^" + version + "' SE LO SI RITIENE OPPORTUNO!\u001b[39;49m\u001b[22m")
+                            context.logger.log('info','\u001b[1m\u001b[31m *** ' + "Attenzione versione disponibile per "+key+" è la: " + version + " eseguire 'npm i " + key + "@" + version + "' se opportuno***\u001b[39;49m\u001b[22m");
                             obj[key] = version;
                             break;
                         }
