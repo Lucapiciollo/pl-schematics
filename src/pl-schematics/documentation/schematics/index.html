@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Scheme</title>
+        <title>Portable-Schematics</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +14,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="./" class="navbar-brand">Portable-Scheme</a>
+            <a href="./" class="navbar-brand">Portable-Schematics</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
 
@@ -31,20 +31,170 @@
                <div class="content getting-started">
                    <div class="content-data">
 
-<h1 id="testfire">TestFire</h1>
-<p>This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a> version 7.1.0.</p>
-<h2 id="development-server">Development server</h2>
-<p>Run <code>ng serve</code> for a dev server. Navigate to <code>http://localhost:4200/</code>. The app will automatically reload if you change any of the source files.</p>
-<h2 id="code-scaffolding">Code scaffolding</h2>
-<p>Run <code>ng generate component component-name</code> to generate a new component. You can also use <code>ng generate directive|pipe|service|class|guard|interface|enum|module</code>.</p>
-<h2 id="build">Build</h2>
-<p>Run <code>ng build</code> to build the project. The build artifacts will be stored in the <code>dist/</code> directory. Use the <code>--prod</code> flag for a production build.</p>
-<h2 id="running-unit-tests">Running unit tests</h2>
-<p>Run <code>ng test</code> to execute the unit tests via <a href="https://karma-runner.github.io">Karma</a>.</p>
-<h2 id="running-end-to-end-tests">Running end-to-end tests</h2>
-<p>Run <code>ng e2e</code> to execute the end-to-end tests via <a href="http://www.protractortest.org/">Protractor</a>.</p>
-<h2 id="further-help">Further help</h2>
-<p>To get more help on the Angular CLI use <code>ng help</code> or go check out the <a href="https://github.com/angular/angular-cli/blob/master/README.md">Angular CLI README</a>.</p>
+<h1 id="portable-library-schematics">Portable Library Schematics</h1>
+<p>Portable Library Schematics *pl-schematics è una libreria nata allo scopo di velocizzare e standardizzare il processo di startup di un progetto angular, imponendo un pattern di sviluppo ottimizzato e facilmente comprensibile.</p>
+<p>Questa libreria, vuole aiutare lo sviluppatore a seguire un pattern di sviluppo ben preciso e consolidato, evitando il piu possibile di inserire errori applicativi e soprattutto dare la possibilità di velocizzare lo startup del progetto, fornendo funzionalità gia implementate e collaudate.</p>
+<p>Realizzare un applicativo Angular, comporta sviluppare sia componenti grafici, che servizi e flussi logici, quindi la parte core. E&#39; proprio qui che interviene pl-schematics, con il supporto della pl-core-utils-library, la quale mette a disposizione moltissime funzioni come servizi di rete, intercettori di rotta, decoratori di funzione e tanto altro</p>
+<blockquote>
+<p>per informazioni sulla pl-core-utils-library, è possibile fare riferimento alla documentazione.</p>
+</blockquote>
+<p>Questo metodo garantisce uno standard di sviluppo in tutti i progetti che ne fanno uso, quindi standardizzando il pattern su tutti i progetti, è piu immediato lo sviluppo.</p>
+<h2 id="uso">Uso</h2>
+<p>pl-schematics si rende utile sia in un contesto gia avviato, che in uno nuovo, di seguito viene mostrato il suo utilizzo</p>
+<ul>
+<li>Creazione di un nuovo progetto</li>
+</ul>
+<blockquote>
+<p>ng new ProjectName</p>
+</blockquote>
+<ul>
+<li>installaione del pattern</li>
+</ul>
+<blockquote>
+<p>npm i pl-schematics@version</p>
+</blockquote>
+<ul>
+<li>Adattamento del progetto al patter<blockquote>
+<p>schematics pl-schematics:pl-schematics --force</p>
+</blockquote>
+</li>
+</ul>
+<p>durante l&#39;installazione, viene chiesto all&#39;utente di interagire, inserendo dati richiesti per la configurazione del pattern. l&#39;utente dovra rispondere alle seguenti domande.</p>
+<ul>
+<li>What&#39;s name your company? mycompany</li>
+<li>Insert name of package core... com/mycompany/normalize</li>
+<li>Insert prefix class for core schematics.. for example SC </li>
+<li>Select compatible browser  BROWSER.ALL</li>
+<li>Login support configuration... NONE</li>
+<li>DO you want add bootstrap 4 support ? Y</li>
+<li>DO you want add sonar support ? N</li>
+</ul>
+<p>come è visibile è possibile selezionare diverse opzioni e abilitare alcune funzionalità, come la login con il sistema azure, abilitazione del portale a specifici browser, configurazione di sonar e altro.</p>
+<p>In caso di un progetto gia avviato, è possibile comunque usufruire delle funzionalità ma occorre fare attenzione ad effettuare il backup di seguenti file   </p>
+<blockquote>
+<p>app.component.html</p>
+</blockquote>
+<blockquote>
+<p>environment.ts </p>
+</blockquote>
+<blockquote>
+<p>environment.prod.ts</p>
+</blockquote>
+<blockquote>
+<p>sonar-project.properties</p>
+</blockquote>
+<blockquote>
+<p>app-routing.module.ts</p>
+</blockquote>
+<p>Verra creata un&#39;alberatura predisposta ad accogliere classi e oggetti, viene creata una sezione shared dove è possibile introdurre e condividere con tutto il resto del progetto nuove funzionalita custom non previste dal core, come componenti grafici utilità ed altro.</p>
+<p>Questo per imporre allo sviluppatore di seguire precise linee guida durante lo sviluppo. La parte core non deve essere manutenuta, in quanto autonoma.. per interaggire con le utilità  esposte, è possibile restare in ascolto ad eventi lanciati e registrati di default nella global.service.ts, servizio globale all&#39;aplicazione e viene creata ed inizializzata dal template.</p>
+<p>In questo modo si evita di dover modificare servizi o classi core.</p>
+<p>Il sistema è alle prime versioni ne seguiranno degli aggiornamenti futuri</p>
+<h2 id="documentazione">Documentazione</h2>
+<p>È possibile risalire alla documentazione di supporto presente all&#39;interno del pacchetto. al momento dell&#39;installazione, oltre ad adattare il progetto ospitante, verranno create alcune folder di documentazione.</p>
+<h2 id="funzionalità--errorcatch">Funzionalità  ErrorCatch</h2>
+<p>pl-schematics mette a disposizione molte funzionalità CORE, alcune autonome alcune messe a disposione dello sviuppatore. </p>
+<p>E&#39; possibile ascoltare qualsiasi evento di errore, e gestirlo di conseguenza. Tutti gli eventi di errore passano per un intercettore e lancia un evento di allerta. alla creazione di un errore, è possibile specificare se  occorre aprire una modale di allerta, o fare redirect in una pagina. creando quindi un errore in questo modo </p>
+<div><pre class="line-numbers"><code class="language-none">throw  new  ErrorBean(err.message, ErrorCode.SYSTEMERRORCODE, true, true);</code></pre></div><p>si sta dicendo all&#39;intercettore, che l&#39;errore è di tipo sistemistico e che si vuole lanciare l&#39;evento di apertura di una modale e si vuole anche il redirect in qualche pagina.</p>
+<p>l&#39;intercettore quindi lancerà questi eventi, dove per default sono ascoltati nella global.service.ts . Sotto viene riportato il codice gia presente, dove viene effettuato un semplice log in caso di cattura di evento</p>
+<div><pre class="line-numbers"><code class="language-none">/**
+ * &#64;author l.piciollo
+ * registrazione all&#39;intercettore di errore per servire la richiesta di apertura modale di errore.
+ */
+PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, (error) =&gt; {
+  console.log(error.detail);
+});
+/**
+ * &#64;author l.piciollo
+ * registrazione all&#39;intercettore di errore per servire la richiesta di redirect
+ */
+PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error) =&gt; {
+  console.log(error.detail);
+});</code></pre></div><h2 id="funzionalità-broadcast">Funzionalità broadcast</h2>
+<p>il framework angular, prevede una gestione ben precisa per il passaggio di informazioni tra il sistema o tra componenti.. è previsto un rilancio di evento da figlio a padre ma non ad un altro componente o funzionalità contenuta nel sistema.
+Per questo motivo, è stato realizzato un sistema di broadcast, in quale espone metodi per mettersi in ascolto a degli eventi, e metodi per lanciare gli eventi con eventuali parametri.</p>
+<p>per registrarsi ad un evento occore semplicemente effettuare.. </p>
+<div><pre class="line-numbers"><code class="language-none">PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error) =&gt; {
+    console.log(error.detail);
+});</code></pre></div><p>allo stesso modo è possibile lanciare un evento </p>
+<div><pre class="line-numbers"><code class="language-none">PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, errorBean);</code></pre></div><h2 id="funzioni-di-rete">Funzioni di rete</h2>
+<p>pl-schematics introduce un importante gestione delle chiamate di rete, mette a disposizione tutte le possibili chiamate, come la GET, POST, PUT, DELETE, PATCH oltre a queste mette a disposizione funzionalità utili per il download e upload dei file. 
+Le prime elencate, sono state implementate con un sistema di interrupt.. ovvero sono sensibili al cambio di rotta applicativo o ad un comando di interruzione manuale.. questo significa che al momento di una chiamata GET, se questa ad esempio impiega 5 secondi a rispondere, ma nel frattempo siamo andati in un altra pagina.. la stessa chiamata viene interrota in modo da liberare le risorse di rete, migliorando il flusso di navigazione e le prestazioni dell&#39;applicativo.</p>
+<p>in caso si volesse comunque eseguire na chiamata, anche se eventualmente viene cambiata la rotta, occorre chiamare le funzioni GETBG,POSTBG,PUTBG,DELETEBG,PATCHBG. Queste funzioni vengono eseguite senza interruzione di rotta, ma solo in caso di comando manuale.</p>
+<p>è possibile anche lanciare piu chiamate contemporaneamente, grazie al forkjoin esposto.</p>
+<p>ogni chiamata puo essere monitorata, in quanto la stessa lancia un evento di progressione</p>
+<p>Esempio di chiamata ad un servizio</p>
+<div><pre class="line-numbers"><code class="language-none">  callMock(p1: any, p2: any): Observable&lt;any&gt; {
+    return new Observable&lt;any&gt;(obs =&gt; {
+      let plHttpRequest: PlHttpRequest = new PlHttpRequest(
+                                                          environment.http.api.mock,
+                                                          Object({ api: &quot;api&quot;, files: &quot;files&quot; }),
+                                                          Object({ api: p1, files: p2 }),
+                                                          null);
+      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER,null, null).subscribe(sb =&gt; {
+        obs.next(sb);
+        obs.complete()
+      }, error =&gt; {
+        obs.error(error);
+      }, () =&gt; { })
+    })
+  }</code></pre></div><p>il servizio httpservice, contiene codice gia impachettato per effettuare chiamate alla rete, passando dai servizi esposti dalla pl-core-utils-library. sotto si riporta il metodo di invocazione messo a disposizione dalla schematics. come si puo vedere,  il codice è gia impostato per l&#39;interruzione di chiamata, e il tracciamento della sua progressione, tramite la funzionalita, logTraceHttp, anch&#39;essa gia messa a disposizione dal sistema.</p>
+<div><pre class="line-numbers"><code class="language-none">   /**
+   * &#64;author l.piciollo
+   * Servizio GET 
+   * &#64;param url          :Url BE
+   * &#64;param params       :params
+   * &#64;param responseType :tipo di risposta RESPONSE_TYPE
+   * &#64;param callBack     :funzione da lanciare al momento dell&#39;avvio della richiesta, riceve l&#39;id ajax per la progressbar
+   * &#64;param contentType  :tipo di contenuto ricevuto
+   */
+  GET(plHttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) =&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer =&gt; {
+      plHttpRequest.url = this.injector.get(BASE_URL_API).concat(plHttpRequest.url);
+      this.plHttpService.GET(plHttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res =&gt; {
+        observer.next(res)
+        observer.complete(); 
+      }, err =&gt; {
+        observer.error(this.checkError(err));
+      }, () =&gt; { });
+    });
+  }</code></pre></div><blockquote>
+<p>la console in questa occasione, tramite la funzione logTraceHttp, mostrerà come output l&#39;oggetto di avanzamento della chiamata.</p>
+</blockquote>
+<h2 id="visulizzazione-grafico-http">Visulizzazione Grafico Http</h2>
+<p>E&#39; stato reso disponibile, un serivizio in grado di mostrare l&#39;andamento grafico di un flusso HTTP, la funzionalità è utile per visualizzare le tempistiche soprattutto di flussi upload/download di file. 
+Per attivare la visualizzazione del grafico, è possibile esegure i seguenti passi. </p>
+<blockquote>
+<p>Importare il componente grafico all&#39;interno di una pagina o modale o anche in un componente.</p>
+</blockquote>
+<div><pre class="line-numbers"><code class="language-none"> &lt;ng-container *ngFor=&quot;let idAjax of getProgress()&quot;&gt;
+        &lt;app-http-graphic-speed   [idAjax]=&quot;a&quot;&gt;&lt;/app-http-graphic-speed&gt;
+&lt;/ng-container&gt;</code></pre></div><blockquote>
+<p>Creare a esempio una funzione che ritorna tutte le key ajax che sono in queue</p>
+</blockquote>
+<div><pre class="line-numbers"><code class="language-none">  getProgress(): Array&lt;string&gt; {
+    return Object.keys(PlCoreUtils.progressBars);
+  }</code></pre></div><blockquote>
+<p>Implementare la chiamata a un servizio di download</p>
+</blockquote>
+<div><pre class="line-numbers"><code class="language-none">this.globalService.callMock(&quot;parametro1&quot;, &quot;parametro1&quot; ).subscribe(response =&gt; {
+  this.httpService.DOWNLOAD(response.body, CONTENT_TYPE.PDF, &quot;test.pdf&quot;).then(resp =&gt; {
+    alert(&quot;Info&quot;, &quot;File downloaded!!&quot;)
+  })
+})</code></pre></div><p>nella pagina, avendo utilizzato  *ngFor=&quot;let idAjax of getProgress()&quot;, si rimane in ascolto su cambiamenti della progressBar, quindi in automatico verrà mostrato il grafico relativo.
+E&#39; possibile anche personalizzare la visuaizzazione del grafico, passando solo l&#39;id della chiamata che si vuole monitorare.</p>
+<p> <img src="https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2FGraficoBar.png?alt=media&token=78e4e684-1c76-4b25-9670-849dbd8c6165" alt="alt text" class="img-responsive"></p>
+<h2 id="release">Release</h2>
+<blockquote>
+<p>Questa versione di pl-schematics, necessia della pl-core-utils-library con version &gt;= ~1.2.0
+Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils, inoltre è stato reso disponibile il componente di rete grafico.</p>
+</blockquote>
+<p>è stato predisposto l&#39;extension del componente base nella page home, rendendo disponibili i servizi della pl-core.utils e nuove funzionalità come la goToPage per la navigazione delle pagine con la possibilità di passare parametri in URL.</p>
+<p>La release, contiene anche alcuni fix relativi alla nomenclatura e l&#39;import delle classi in base al prefisso impostato al momento della risposta all&#39;installazione della schematics.</p>
+<h2 id="documentazione-online">Documentazione online</h2>
+<p><a href="https://pl-schematics.web.app/index.html">Qui</a> è possibile fare riferimento alla documentazione on line delle libreria e delle sue funzionalità  </p>
+<h2 id="author">Author</h2>
+<p>Created by @l.piciollo</p>
 
 
 

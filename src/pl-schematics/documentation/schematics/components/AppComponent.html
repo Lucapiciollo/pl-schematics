@@ -36,7 +36,7 @@
 
 <ol class="breadcrumb">
   <li>Components</li>
-  <li>HomeComponent</li>
+  <li>AppComponent</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -62,29 +62,12 @@
     <h3>File</h3>
 </p>
 <p class="comment">
-    <code>src/app/home/configuration/component/page/home/home.component.ts</code>
+    <code>src/app/app.component.ts</code>
 </p>
 
 
-    <p class="comment">
-        <h3>Extends</h3>
-    </p>
-    <p class="comment">
-            <code>PlBaseComponent</code>
-    </p>
 
-    <p class="comment">
-        <h3>Implements</h3>
-    </p>
-    <p class="comment">
-                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
-    </p>
 
-    <p class="comment">
-        <h3>Example</h3>
-    </p>
-    <div class="io-description">
-    </div>
 
 <section>
     <h3>Metadata</h3>
@@ -99,29 +82,23 @@
 
 
 
-            <tr>
-                <td class="col-md-3">providers</td>
-                <td class="col-md-9">
-                                <code><a href="../injectables/HomeService.html" target="_self" >HomeService</a></code>
-                </td>
-            </tr>
 
 
             <tr>
                 <td class="col-md-3">selector</td>
-                <td class="col-md-9"><code>app-home</code></td>
+                <td class="col-md-9"><code>app-root</code></td>
             </tr>
 
             <tr>
                 <td class="col-md-3">styleUrls</td>
-                <td class="col-md-9"><code>./home.component.css</code></td>
+                <td class="col-md-9"><code>./app.component.css</code></td>
             </tr>
 
 
 
             <tr>
                 <td class="col-md-3">templateUrl</td>
-                <td class="col-md-9"><code>./home.component.html</code></td>
+                <td class="col-md-9"><code>./app.component.html</code></td>
             </tr>
 
 
@@ -139,17 +116,16 @@
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
-
                 <tr>
                     <td class="col-md-4">
-                        <h6><b>Methods</b></h6>
+                        <h6><b>Properties</b></h6>
                     </td>
                 </tr>
                 <tr>
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#ngOnInit">ngOnInit</a>
+                                <a href="#title">title</a>
                             </li>
                         </ul>
                     </td>
@@ -159,58 +135,12 @@
 
 
 
+
         </tbody>
     </table>
 </section>
 
-    <section>
-    <h3 id="constructor">Constructor</h3>
-        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-<code>constructor(injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
-                    </td>
-                </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/home/configuration/component/page/home/home.component.ts:28</a></div>
-                            </td>
-                        </tr>
 
-                <tr>
-                    <td class="col-md-4">
-                            <div>
-                                    <b>Parameters :</b>
-                                    <table class="params">
-                                        <thead>
-                                            <tr>
-                                                <td>Name</td>
-                                                    <td>Type</td>
-                                                <td>Optional</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                <tr>
-                                                        <td>injector</td>
-                                                  
-                                                        <td>
-                                                                        <code><a href="https://angular.io/api/core/Injector" target="_blank" >Injector</a></code>
-                                                        </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
-                                                </tr>
-                                        </tbody>
-                                    </table>
-                            </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-</section>
 
 
 
@@ -218,93 +148,80 @@
 
     <section>
     
-    <h3 id="methods">
-        Methods
-    </h3>
-    <table class="table table-sm table-bordered">
-        <tbody>
-            <tr>
-                <td class="col-md-4">
-                    <a name="ngOnInit"></a>
-                    <span class="name">
-                        <b>
-                            ngOnInit
-                        </b>
-                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
-                    </span>
-                </td>
-            </tr>
-            <tr>
-                <td class="col-md-4">
-<code>ngOnInit()</code>
-                </td>
-            </tr>
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="title"></a>
+                        <span class="name">
+                            <b>
+                            title</b>
+                            <a href="#title"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Default value : </i><code>&#x27;pl-schematics-firebase&#x27;</code>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="9" class="link-to-prism">src/app/app.component.ts:9</a></div>
+                            </td>
+                        </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="34"
-                            class="link-to-prism">src/app/home/configuration/component/page/home/home.component.ts:34</a></div>
-                </td>
-            </tr>
-
-
-            <tr>
-                <td class="col-md-4">
-
-                    <div class="io-description">
-                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
-
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 </section>
 
 </div>
 
 
     <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit ,Injector} from &#x27;@angular/core&#x27;;
-import { HomeService } from &#x27;./home.service&#x27;;
-import { PlBaseComponent } from &#x27;pl-core-utils-library&#x27;;
-/**
- * @author l.piciollo
- * componente pagina home template.. qui viene la creazione del servizio del modulo HomeService.. questo garantisce che 
- * il servizio poi viene killato al momento dell&#x27; onDestroy del modulo.
- * attenzione, ci deve essere solo una istanza del componente home, altrimenti il servizio viene ricreato. in caso di necessita
- * di piu componenti home, eliminare la riga  providers:[HomeService] .
- */
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component } from &#x27;@angular/core&#x27;;
+
 @Component({
-  selector: &#x27;app-home&#x27;,
-  templateUrl: &#x27;./home.component.html&#x27;,
-  styleUrls: [&#x27;./home.component.css&#x27;],
-  providers:[HomeService]
+  selector: &#x27;app-root&#x27;,
+  templateUrl: &#x27;./app.component.html&#x27;,
+  styleUrls: [&#x27;./app.component.css&#x27;]
 })
-export class HomeComponent  extends PlBaseComponent implements OnInit {
-
-  constructor( protected injector: Injector  ) {
-    super(injector)
-  }
-
-  ngOnInit() {
-  }
-
+export class AppComponent {
+  title &#x3D; &#x27;pl-schematics-firebase&#x27;;
 }
 </code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-templateData">
-        <pre class="line-numbers"><code class="language-html">&lt;p&gt;
-  home works!
-&lt;/p&gt;
-</code></pre>
+        <pre class="line-numbers"><code class="language-html">&lt;!-- 
+      @author l.piciollo
+      inizializzazione di barre progressive, utile per indicare all&#x27;utento sia il cambio di rotta, che 
+      le chiamate di rete in esecuzione. 
+ --&gt;
+&lt;ngx-ui-loader [loaderId]&#x3D;&quot;&#x27;routerLoader&#x27;&quot;&gt;&lt;/ngx-ui-loader&gt;
+&lt;ngx-ui-loader [loaderId]&#x3D;&quot;&#x27;httpLoader&#x27;&quot;&gt;&lt;/ngx-ui-loader&gt;
+&lt;ngx-ui-loader&gt;&lt;/ngx-ui-loader&gt;
+
+&lt;!-- 
+      @author l.piciollo
+      inizializzazione del routing space
+--&gt;
+&lt;router-outlet&gt;&lt;/router-outlet&gt;</code></pre>
     </div>
 
     <div class="tab-pane fade " id="c-styleData">
                 <p class="comment">
-                    <code>./home.component.css</code>
+                    <code>./app.component.css</code>
                 </p>
                 <pre class="line-numbers"><code class="language-scss"></code></pre>
     </div>
@@ -334,10 +251,10 @@ export class HomeComponent  extends PlBaseComponent implements OnInit {
 <script src="../js/libs/htmlparser.js"></script>
 <script src="../js/libs/deep-iterator.js"></script>
 <script>
-        var COMPONENT_TEMPLATE = '<div><p>  home works!</p></div>'
+        var COMPONENT_TEMPLATE = '<div><!--       @author l.piciollo      inizializzazione di barre progressive, utile per indicare all\'utento sia il cambio di rotta, che       le chiamate di rete in esecuzione.  --><ngx-ui-loader [loaderId]="\'routerLoader\'"></ngx-ui-loader><ngx-ui-loader [loaderId]="\'httpLoader\'"></ngx-ui-loader><ngx-ui-loader></ngx-ui-loader><!--       @author l.piciollo      inizializzazione del routing space--><router-outlet></router-outlet></div>'
     var COMPONENTS = [{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'HomeComponent', 'selector': 'app-home'},{'name': 'HttpGraphicSpeedComponent', 'selector': 'app-http-graphic-speed'}];
     var DIRECTIVES = [];
-    var ACTUAL_COMPONENT = {'name': 'HomeComponent'};
+    var ACTUAL_COMPONENT = {'name': 'AppComponent'};
 </script>
 <script src="../js/tree.js"></script>
 
@@ -372,7 +289,7 @@ export class HomeComponent  extends PlBaseComponent implements OnInit {
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
-            var COMPODOC_CURRENT_PAGE_URL = 'HomeComponent.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'AppComponent.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

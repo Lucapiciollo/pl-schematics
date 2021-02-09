@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Scheme</title>
+        <title>Portable-Schematics</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -14,7 +14,7 @@
     <body>
 
         <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Scheme</a>
+            <a href="../" class="navbar-brand">Portable-Schematics</a>
             <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
         </div>
 
@@ -90,7 +90,7 @@ import { Routes, RouterModule } from &#x27;@angular/router&#x27;;
  */
 const routes: Routes &#x3D; [{
   path: &quot;home&quot;,
-  loadChildren: ()&#x3D;&gt; &quot;import(&#x27;./com/mycompany/normalize/component/page/home/home.module&#x27;).then(module &#x3D;&gt; module.HomeModule)&quot;,
+  loadChildren: ()&#x3D;&gt; &quot;import(&#x27;./home/configuration/component/page/home/home.module&#x27;).then(module &#x3D;&gt; module.HomeModule)&quot;,
   canActivate: [],
 }];
  /**
