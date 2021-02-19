@@ -24,4 +24,81 @@ export class <%=classify(prefixClass)%>Utils {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
+
+   /**
+   * @author l.piciollo
+   * crea un nome alfabetico stile xls, passare un valore numerico per riceverlo in formato testo
+   * @param lenght Numero che indica la lunghezza dell'alfabeto
+   */
+  public static alphaName(lenght:number):string {
+    try {
+      let ordA = "A".charCodeAt(0);
+      let ordZ = "Z".charCodeAt(0);
+      let len = ordZ - ordA + 1;
+      let alpha = "";
+      while (lenght >= 0) {
+        alpha = String.fromCharCode((lenght % len) + ordA) + alpha;
+        lenght = Math.floor(lenght / len) - 1;
+      }
+      return alpha;
+    } catch (error) {
+      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+    }
+  }
+
+  /**
+   * @author l.piciollo
+   * funzionalità utile a reperire cookie
+   * @param nameCookie 
+   */
+  public static getCookie(nameCookie: string): string {
+    try {
+      let name = nameCookie + "=";
+      let cookies = document.cookie.split(';');
+      for (let ind = 0; ind < cookies.length; ind++) {
+        let cookie = cookies[ind];
+        while (cookie.charAt(0) == ' ') {
+          cookie = cookie.substring(1);
+        }
+        if (cookie.indexOf(name) == 0) {
+          return cookie.substring(name.length, cookie.length);
+        }
+      }
+      return null;
+    } catch (error) {
+      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+    }
+  }
+
+  /**
+   * @author l.piciollo
+   * funzionalità utile alla creazione dei cookie
+   * @param nameCookie 
+   * @param valueCookie
+   * @param time
+   */
+  public static setCookie(nameCookie: string, valueCookie: string, time:number) {
+    try {
+      var date = new Date();
+      date.setTime(date.getTime() + (time * 60 * 1000));
+      var expires = "expires=" + date.toUTCString();
+      document.cookie = nameCookie + "=" + valueCookie + ";expires=" + expires + ";path=/";
+    } catch (error) {
+      throw new <%=classify(prefixClass) %> ErrorBean(error.message, <%=classify(prefixClass) %> ErrorCode.SYSTEMERRORCODE, false, false);
+    }
+  }
+
+    /**
+   * @author l.piciollo
+   * funzionalità utile ad invalidare un cookie
+   * @param nameCookie 
+   */
+  public static deleteCookie(nameCookie: string) {
+    try {
+      Utils.setCookie(nameCookie, "", 0);
+    } catch (error) {
+      throw new <%=classify(prefixClass) %> ErrorBean(error.message, <%=classify(prefixClass) %> ErrorCode.SYSTEMERRORCODE, false, false);
+    }
+  }
+
 }

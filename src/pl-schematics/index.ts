@@ -6,12 +6,10 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addModuleImportToRootModule, addPackageJsonDependency, buildDefaultPath, getProjectFromWorkspace, getWorkspace, NodeDependency, NodeDependencyType } from 'schematics-utilities';
 import { check } from "./checkVersion"
 
-
+/******************************************************************************************************************** */
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
-
     const dependencies: NodeDependency[] = [
-
       { type: NodeDependencyType.Default, version: '~1.6.0', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
@@ -23,9 +21,7 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
-
     ];
-
     if (options.addSupportBootstrap == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
@@ -34,22 +30,17 @@ function addPackageJsonDependencies(options: any): Rule {
     if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^0.1.4', name: String("@azure/msal-angular") });
     }
-
     if (options.enableSonarQube == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
     }
-
-
     dependencies.forEach(dependency => {
       addPackageJsonDependency(host, dependency);
       context.logger.log('info', `Library inserted:  "${dependency.name}" into ${dependency.type}`);
     });
     return host;
-
-
   };
 }
-
+/******************************************************************************************************************** */
 function installPackageJsonDependencies(): Rule {
   return (host: Tree, context: SchematicContext) => {
     context.addTask(new NodePackageInstallTask());
@@ -57,9 +48,7 @@ function installPackageJsonDependencies(): Rule {
     return host
   };
 }
-
-
-
+/******************************************************************************************************************** */
 function addModuleToImports(options: any, moduleName: any, libName: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
@@ -73,9 +62,7 @@ function addModuleToImports(options: any, moduleName: any, libName: any): Rule {
     return host;
   };
 }
-
-
-
+/******************************************************************************************************************** */
 function addClass(options: any, urlFile: string, destPath: string) {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
@@ -96,8 +83,7 @@ function addClass(options: any, urlFile: string, destPath: string) {
     return host
   }
 };
-
-
+/******************************************************************************************************************** */
 function scaffoldSchematics(options: any, destPath: string): Rule {
   return (host: Tree, _context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
@@ -113,22 +99,22 @@ function scaffoldSchematics(options: any, destPath: string): Rule {
   };
 };
 
-
-
-
+/******************************************************************************************************************** */
 function updateAngularJsonForBootstrap(): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
     if (angularJsonFile) {
       var json = JSON.parse(angularJsonFile.toString());
+      json['projects'][json.defaultProject]['architect']['build']["builder"] = "@angular-builders/custom-webpack:browser";
+      json['projects'][json.defaultProject]['architect']['server']["builder"] = "@angular-builders/custom-webpack:dev-server";
       var optionsJson = json['projects'][json.defaultProject]['architect']['build']['options'];
       optionsJson['scripts'].indexOf("node_modules/jquery/dist/jquery.slim.min.js") < 0 ? optionsJson['scripts'].push("node_modules/jquery/dist/jquery.slim.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/popper.js/dist/umd/popper.min.js") < 0 ? optionsJson['scripts'].push("node_modules/popper.js/dist/umd/popper.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/bootstrap/dist/js/bootstrap.min.js") < 0 ? optionsJson['scripts'].push("node_modules/bootstrap/dist/js/bootstrap.min.js") : null;
       optionsJson['styles'].indexOf("node_modules/bootstrap/dist/css/bootstrap.min.css") < 0 ? optionsJson['styles'].push("node_modules/bootstrap/dist/css/bootstrap.min.css") : null;
       optionsJson['styles'].indexOf("node_modules/@fortawesome/fontawesome-free/css/all.min.css") < 0 ? optionsJson['styles'].push("node_modules/@fortawesome/fontawesome-free/css/all.min.css") : null;
-
-
+      optionsJson["customWebpackConfig"] = { "path": "node_modules/pl-schematics/extra-webpack.config.js", "replaceDuplicatePlugins": true, "mergeRules": { "externals": "replace" } };
+      /*  optionsJson["indexTransform"] = "" ;  */
       json['projects'][json.defaultProject]['architect']['build']['options'] = optionsJson;
       host.overwrite('angular.json', JSON.stringify(json, null, 2));
     }
@@ -136,7 +122,7 @@ function updateAngularJsonForBootstrap(): Rule {
     return host;
   }
 }
-
+/******************************************************************************************************************** */
 function getPrefixFromAngularJson(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
@@ -149,7 +135,7 @@ function getPrefixFromAngularJson(options: any): Rule {
   }
 }
 
-
+/******************************************************************************************************************** */
 function updatePackageJsonForSonar(): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('package.json');
@@ -162,7 +148,7 @@ function updatePackageJsonForSonar(): Rule {
     return host;
   }
 }
-
+/******************************************************************************************************************** */
 function updatePackageJsonForBuild(option: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('package.json');
@@ -196,7 +182,7 @@ function updatePackageJsonForBuild(option: any): Rule {
 //   };
 // }
 
-
+/******************************************************************************************************************** */
 export default function (options: any): Rule {
   return chain([
     getPrefixFromAngularJson(options),
@@ -218,7 +204,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/component", "/"),
     addClass(options, "./files/customInterface", "../"),
     addClass(options, "./files/properties", "../environments/"),
-    addClass(options, "./files/public", "../assets/"),
+    addClass(options, "./files/public", "../assets/public"),
     addClass(options, "./documentation", "../../pl-schematics/document"),
     options && options.enableSonarQube == "Y" ? addClass(options, "./files/application", "../../") : () => { },
     options && options.addSupportBootstrap == "Y" ? updateAngularJsonForBootstrap() : () => { },
@@ -236,7 +222,7 @@ export default function (options: any): Rule {
     addModuleToImports(options, options.prefixClass + "InitializerModule", "./" + options.namePackage + "/core/module/initializer.module"),
     addModuleToImports(options, "SharedModule", "./" + options.namePackage + "/shared/module/shared.module"),
     addModuleToImports(options, "AppRoutingModule", "./app-routing.module"),
-    check({ "chart.js": "", "chartjs-plugin-annotation": "", "rxjs": "", "ngx-ui-loader": "", "rxjs-compat": "", "@ngx-translate/core": "", "pl-core-utils-library": "", "rxjs-operators": "", "@fortawesome/fontawesome-free": "", "@ngx-translate/http-loader": "" }),
+    check({  "pl-core-utils-library": "" }),
 
   ]);
 }
