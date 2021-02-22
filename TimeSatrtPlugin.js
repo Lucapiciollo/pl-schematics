@@ -2,7 +2,7 @@
  * @author @l.piciollo
  * @email l.piciollo@accenture.com
  * @create date 2021-02-19 17:46:39
- * @modify date 2021-02-19 18:30:37
+ * @modify date 2021-02-22 09:09:09
  * @desc [description]
  */
 
@@ -23,10 +23,17 @@ const getCircularReplacer = () => {
 
 
 
-class FileListPlugin {
+class TimeSatrtPlugin {
 
   apply(compiler) {
 
+
+    compiler.hooks.done.tapAsync("TimeSatrtPlugin", (stats, callback) => {
+      console.log("\x1b[33m%s\x1b[0m", "****************************************************************************");
+      console.log("\x1b[33m%s\x1b[0m", "PL-SCHEMATICS BUILDED IN: " + (stats.endTime - stats.startTime) / 1000 + " SECONDS WITH HASH: " + stats.hash);
+      console.log("\x1b[33m%s\x1b[0m", "****************************************************************************");
+      callback();
+    })
 
     /*  console.log(compiler) */
 
@@ -49,4 +56,4 @@ class FileListPlugin {
   }
 }
 
-module.exports = FileListPlugin;
+module.exports = TimeSatrtPlugin;

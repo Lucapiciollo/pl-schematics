@@ -1,10 +1,3 @@
-/**
- * @author @l.piciollo
- * @email l.piciollo@accenture.com
- * @create date 2021-02-19 17:46:39
- * @modify date 2021-02-19 18:33:43
- * @desc [description]
- */
 const webpack = require('webpack');
 const pkg = require('./package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -12,7 +5,7 @@ const path = require('path');
 const HtmlMinimizerPlugin = require("html-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
-const FileListPlugin = require("./FileListPlugin")
+const TimeSatrtPlugin = require("./TimeSatrtPlugin")
 const { argv } = require("process");
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const fs = require('fs');
@@ -20,6 +13,12 @@ const ASSET_PATH = process;
 
 module.exports = (config, options) => {
 
+  /*options.indexTransform=path.resolve(__dirname, 'node_modules/pl-schematics/index-html-transform.ts'  )   
+  console.log(config)
+   /*config.optimization.removeAvailableModules = false;
+    config.optimization.removeEmptyChunks= false; 
+    config.optimization.splitChunks= false; */
+  config.optimization.usedExports = true;
 
   config.output.filename = pkg.name + '.[name].[hash].' + JSON.stringify(pkg.version).replace(/"/g, '').replace(/[^0-9]/g, '-') + '.js';
   config.output.publicPath = '/';
@@ -29,7 +28,6 @@ module.exports = (config, options) => {
 
   if (checkMode(config)) {
     config.optimization.removeEmptyChunks = true;
-    config.optimization.usedExports = true;
     config.optimization.minimize = true;
     config.optimization.splitChunks = false;
     config.optimization.removeAvailableModules = true;
@@ -58,7 +56,7 @@ module.exports = (config, options) => {
     }),
   );
 
-  config.plugins.unshift(new FileListPlugin());
+  config.plugins.push(new TimeSatrtPlugin());
   return config;
 
 };
