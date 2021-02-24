@@ -164,35 +164,7 @@ il servizio httpservice, contiene codice gia impachettato per effettuare chiamat
 	  }
 >la console in questa occasione, tramite la funzione logTraceHttp, mostrerà come output l'oggetto di avanzamento della chiamata.
  
-
-## Visulizzazione Grafico Http
-E' stato reso disponibile, un serivizio in grado di mostrare l'andamento grafico di un flusso HTTP, la funzionalità è utile per visualizzare le tempistiche soprattutto di flussi upload/download di file. 
-Per attivare la visualizzazione del grafico, è possibile esegure i seguenti passi. 
-
->Importare il componente grafico all'interno di una pagina o modale o anche in un componente.
-
-     <ng-container *ngFor="let idAjax of getProgress()">
-            <app-http-graphic-speed   [idAjax]="a"></app-http-graphic-speed>
-    </ng-container>
-
->Creare a esempio una funzione che ritorna tutte le key ajax che sono in queue
-
-      getProgress(): Array<string> {
-        return Object.keys(PlCoreUtils.progressBars);
-      }
-
->Implementare la chiamata a un servizio di download
-
-    this.globalService.callMock("parametro1", "parametro1" ).subscribe(response => {
-      this.httpService.DOWNLOAD(response.body, CONTENT_TYPE.PDF, "test.pdf").then(resp => {
-        alert("Info", "File downloaded!!")
-      })
-    })
-
-nella pagina, avendo utilizzato  *ngFor="let idAjax of getProgress()", si rimane in ascolto su cambiamenti della progressBar, quindi in automatico verrà mostrato il grafico relativo.
-E' possibile anche personalizzare la visuaizzazione del grafico, passando solo l'id della chiamata che si vuole monitorare.
-
- ![alt text](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2FGraficoBar.png?alt=media&token=78e4e684-1c76-4b25-9670-849dbd8c6165)
+ 
 
 ## Release
 
@@ -203,7 +175,11 @@ Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti ne
 
 La release, contiene anche alcuni fix relativi alla nomenclatura e l'import delle classi in base al prefisso impostato al momento della risposta all'installazione della schematics.
   
-  
+ - Eliminazione della funzionalità per la visualizzazione del grafico per il monitoring dello stato ajax
+la funzionalità è stata portata nella pl-http-graphics quindi:
+
+>npm i pl-http-graphics
+
 ## Documentazione online
 [Qui](https://pl-schematics.web.app/index.html) è possibile fare riferimento alla documentazione on line delle libreria e delle sue funzionalità  
 

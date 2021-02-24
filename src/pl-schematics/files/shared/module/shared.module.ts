@@ -13,7 +13,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%>/shared/service/global.service';
-import { <%=classify(prefixClass)%>HttpGraphicSpeedComponent } from 'src/app/<%=namePackage%>/shared/component/http-graphic-speed/http-graphic-speed.component';
 import { CommonModule } from '@angular/common';
 /**
  *  @author @l.piciollo
@@ -22,7 +21,7 @@ import { CommonModule } from '@angular/common';
  *  impport ed in export
  */
 @NgModule({
-  declarations: [ <%=classify(prefixClass)%>HttpGraphicSpeedComponent],
+  declarations: [ ],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -34,8 +33,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule,
-    <%=classify(prefixClass)%>HttpGraphicSpeedComponent
+    TranslateModule
   ]
 })
 export class SharedModule {
