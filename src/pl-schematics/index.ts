@@ -20,7 +20,12 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
+      { type: NodeDependencyType.Default, version: '^11.0.0', name: String("@angular-builders/custom-webpack") },
+      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
+      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") },
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
+
+      
     ];
     if (options.addSupportBootstrap == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") });
@@ -106,7 +111,7 @@ function updateAngularJsonForBootstrap(): Rule {
     if (angularJsonFile) {
       var json = JSON.parse(angularJsonFile.toString());
       json['projects'][json.defaultProject]['architect']['build']["builder"] = "@angular-builders/custom-webpack:browser";
-      json['projects'][json.defaultProject]['architect']['server']["builder"] = "@angular-builders/custom-webpack:dev-server";
+      json['projects'][json.defaultProject]['architect']['serve']["builder"] = "@angular-builders/custom-webpack:dev-server";
       var optionsJson = json['projects'][json.defaultProject]['architect']['build']['options'];
       optionsJson['scripts'].indexOf("node_modules/jquery/dist/jquery.slim.min.js") < 0 ? optionsJson['scripts'].push("node_modules/jquery/dist/jquery.slim.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/popper.js/dist/umd/popper.min.js") < 0 ? optionsJson['scripts'].push("node_modules/popper.js/dist/umd/popper.min.js") : null;
@@ -118,7 +123,7 @@ function updateAngularJsonForBootstrap(): Rule {
       json['projects'][json.defaultProject]['architect']['build']['options'] = optionsJson;
       host.overwrite('angular.json', JSON.stringify(json, null, 2));
     }
-    context.logger.log('info', `added support bootstrap.."`);
+    context.logger.log('info', `Added support bootstrap and webpack"`);
     return host;
   }
 }
