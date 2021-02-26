@@ -1,6 +1,6 @@
 /**
  * @author @l.piciollo
- * @email l.piciollo@accenture.com
+ * @email lucapiciollo@gmail.com
  * @create date 2021-02-19 17:46:39
  * @modify date 2021-02-22 09:09:09
  * @desc [description]
