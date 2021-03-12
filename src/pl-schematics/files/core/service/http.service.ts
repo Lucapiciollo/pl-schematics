@@ -111,6 +111,29 @@ export class <%=classify(prefixClass)%>HttpService {
     this.plHttpService.DOWNLOADURL(url, filename);
   }
   /********************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Servizio BASICHTTP, richiama funzionalità di rete in modo generico, utilile per problemi di CORS. 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  BASICHTTP(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<any> {
+    return new Observable<HttpResponse<any>>(observer => {
+      plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.nativeHttp(plttpRequest, responsetype || 'json', PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res => {
+        observer.next(res)
+        observer.complete();
+      }, err => {
+        observer.error(this.checkError(err));
+      }, () => { });
+    });
+  }
+  /********************************************************************************************************************/
+    
   /**
    * @author l.piciollo
    * Servizio GET 
