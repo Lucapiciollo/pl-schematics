@@ -164,12 +164,13 @@ il servizio httpservice, contiene codice gia impachettato per effettuare chiamat
 	  }
 >la console in questa occasione, tramite la funzione logTraceHttp, mostrerà come output l'oggetto di avanzamento della chiamata.
  
- 
+### News per chiamate di rete
+ E' stato introdotto un altro metodo di invocazione BASICHTTP, questo metodo tenda di effettuare chiamate prive di header, utile in situazione di CORS in ambiente di test o in prod.
 
 ## Release
 
 >Questa versione di pl-schematics, necessia della pl-core-utils-library con version >= ~1.2.0
-Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils, inoltre è stato reso disponibile il componente di rete grafico.
+Viene predisposto il progetto ed usare le nuova funzinalità di rete presenti nella pl-core-utils.
 
 è stato predisposto l'extension del componente base nella page home, rendendo disponibili i servizi della pl-core.utils e nuove funzionalità come la goToPage per la navigazione delle pagine con la possibilità di passare parametri in URL.
 
