@@ -10,7 +10,7 @@
  * ]
  */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, ErrorHandler, NgModule ,Injector} from '@angular/core';
+import { APP_INITIALIZER,   NgModule ,Injector} from '@angular/core'; 
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule ,BROWSER, DEFAULT_PATH_MOCK} from 'pl-core-utils-library';
 import { BASE_URL_API } from 'src/app/<%=namePackage%>/core/service/http.service';
@@ -19,7 +19,6 @@ import { UiLoaderHttpConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoader
 import { UiLoaderRouterConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderRouterConfig';
 import { environment } from 'src/environments/environment';
 import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
-import {<%=classify(prefixClass)%>ErrorService } from 'src/app/<%=namePackage%>/core/service/error.service';
 import {<%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
 import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=namePackage%>/core/initializer/AmbientModeLoader';
 import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
@@ -74,12 +73,7 @@ import { filter } from 'rxjs/operators';
     * nel file environment.
     */
     { provide: BASE_URL_API, useValue: environment.baseUrlRemoteApi },
-    /**
-     * @author l.piciollo
-     * vengono intercettati tutti gli errori applicativi e rediretti al servizio predisposto alla loro lavorazione,
-     * è possibile specializzare il servizio per ogni eventualità di errore.    
-     */
-    { provide: ErrorHandler, useClass: <%=classify(prefixClass)%>ErrorService },
+     
     /**
     * @author l.piciollo
     * configurazione per la pl-library, si tratta di settare una configurazione iniziale di tutti i parametri
