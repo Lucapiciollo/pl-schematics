@@ -17,7 +17,7 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
       { type: NodeDependencyType.Default, version: '6.3.3', name: String("rxjs") },
       { type: NodeDependencyType.Default, version: '1.1.3', name: String("rxjs-operators") },
-      { type: NodeDependencyType.Default, version: '^7.2.2', name: String("ngx-ui-loader") },
+      { type: NodeDependencyType.Default, version: '^10.0.0', name: String("ngx-ui-loader") },
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
       { type: NodeDependencyType.Default, version: '^11.0.0', name: String("@angular-builders/custom-webpack") },

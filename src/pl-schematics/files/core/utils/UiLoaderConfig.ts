@@ -34,6 +34,5 @@ export const UiLoaderConfig: NgxUiLoaderConfig = {
   "hasProgressBar": false,
   "text": "",
   "textColor": "#FFFFFF",
-  "textPosition": "center-center",
-  "threshold": 50
+  "textPosition": "center-center" 
 }

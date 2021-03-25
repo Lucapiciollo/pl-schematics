@@ -36,28 +36,32 @@ export class <%=classify(prefixClass)%>ErrorService implements ErrorHandler {
   * @author l.piciollo
   *  tutti gli errori applicativi saranno concentrati in questa funzione.. è possibile elaborarli in base alle proprie necessità
   */
-  handleError(errorBean: <%=classify(prefixClass)%>ErrorBean) {
+
+
+   handleError(errorBean: any) {
     try {
-      /**
-       * evento lanciato per indicare che l'errore riscontrato necessita di un messaggio di dialogo figurativo per il cliente 
-       * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
-       */
-      if (errorBean.dialog)
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, errorBean);
-      /**
-       * evento lanciato per indicare che l'errore riscontrato necessita di una redirect applicativa..
-       * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
-       */      
-      if (errorBean.redirect) {
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, errorBean);
+      if (errorBean  instanceof <%=classify(prefixClass)%>ErrorBean || errorBean.rejection instanceof <%=classify(prefixClass)%>ErrorBean) {
+        /**
+         * evento lanciato per indicare che l'errore riscontrato necessita di un messaggio di dialogo figurativo per il cliente 
+         * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
+         */
+        if (errorBean.dialog || errorBean.rejection.dialog)
+          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, errorBean.rejection ||errorBean);
+        /**
+         * evento lanciato per indicare che l'errore riscontrato necessita di una redirect applicativa..
+         * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
+         */
+        if (errorBean.dialog ||errorBean.rejection.redirect) {
+          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, errorBean.rejection||errorBean);
+        }
       }
       /**
        * selleva qualsiasi errore applicativo ritrovato, e passa la gestione all'ascoltatore di evento
        */
-      PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE , errorBean);        
-     } catch (error) { 
+      PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, errorBean);
+    } catch (error) {
       console.error(error)
     }
-   }
-
+  }
+ 
 } 
