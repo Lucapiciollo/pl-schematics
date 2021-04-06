@@ -6,7 +6,10 @@
  * @desc [vengono inserite tutte le variabili d'ambiente ed eventuali puntamenti al BE o link vari. questo file deve essere
  * popolato con i dati relativi all'ambiente di produzione]
  */
-<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%> import { LogLevel } from 'msal'; <%}%>
+ <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%> 
+  import { LogLevel } from 'msal'; 
+  const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+<%}%>
 export const environment = {
   production: true,
   /**
@@ -22,19 +25,27 @@ export const environment = {
      * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
      * a causa dell'abilitazione al supposrto login.
      */
-    azure: {
-      clientID: null,
-      authority: null,
-      redirectUri: null,
-      validateAuthority: true,
-      storeAuthStateInCookie: true,
-      cacheLocation: "localStorage",
-      isAngular: true,
-      navigateToLoginRequestUrl : true,
-      popUp: false,
-      level: LogLevel.Verbose,
-      piiLoggingEnabled: true,
-      api_key: null
+     azure: {
+      param: {
+        auth: {
+          clientId: '',
+          authority: 'https://login.microsoftonline.com/common',
+          redirectUri: 'http://localhost:4200/',
+        },
+        cache: {
+          cacheLocation: 'localStorage',
+          storeAuthStateInCookie: isIE, // set to true for IE 11
+        }
+      },
+      scope: {
+        popUp: !isIE,
+        consentScopes: ['user.read', 'openid', 'profile',],
+        unprotectedResources: [],
+        protectedResourceMap: [
+          ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+        ],
+        extraQueryParameters: {}
+      }
     },
     <% } %>  
   http: {

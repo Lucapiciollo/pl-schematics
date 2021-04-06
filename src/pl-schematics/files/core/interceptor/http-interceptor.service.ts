@@ -89,13 +89,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
       /***************************************************************************************************************************** */
       let timeoutValue = Number(request.headers.get('timeout')) || this.defaultTimeout;
       let uuid =  <%=classify(prefixClass)%>Utils.UUIDCODE(); 
-      <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-      let storage = window["localStorage"];
-      let token = storage["msal.idtoken"];
-      let headers = { "api_key": environment.azure.api_key, "Authorization": `Bearer ${token}`, 'TransactionID': uuid };
-      <%} else { %>     
       let headers = { 'TransactionID': uuid };
-      <%}%>  
       let urlApp = request.url;
       let url = request.url;
       try { url = urlApp.truncateUrlCache(this.tagCache) } catch (e) { console.debug(url + " not in storable...");}

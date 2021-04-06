@@ -24,10 +24,12 @@ import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=nam
 import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-import { MSAL_CONFIG } from "@azure/msal-angular/dist/msal.service";
-import { BroadcastService, MsalModule, MsalService,MsalGuard } from "@azure/msal-angular";
+import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from "@azure/msal-angular";
 import { Router, NavigationStart,ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
+
+
+
 <% } %>
 /**
  * @author l.piciollo
@@ -55,7 +57,7 @@ import { filter } from 'rxjs/operators';
      * @author l.piciollo
      * inserimento modulo per azure
      */ 
-    MsalModule
+     MsalModule.forRoot(Object(environment.azure.param),Object(environment.azure.scope))
   <%}%>
   ],
   providers: [  
@@ -88,6 +90,9 @@ import { filter } from 'rxjs/operators';
      * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.
      */
     { provide: HTTP_INTERCEPTORS, useClass: <%=classify(prefixClass)%>HttpInterceptorService, multi: true },
+    <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true }, 
+    <%}%>
     /**
      * @author l.piciollo
      * viene iniettato il processo di login..
@@ -106,14 +111,8 @@ import { filter } from 'rxjs/operators';
      * impostazione tempo massimo di attesa per richieste al BE
      */
     { provide: <%=classify(prefixClass)%>DEFAULT_TIMEOUT, useValue: 300000 },    
-    { provide: DEFAULT_PATH_MOCK, useValue: "public/mock" },
-     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    /**
-     * @author l.piciollo
-     * inizializzazione della configurazione per la login tramite active directory azure
-     */
-    { provide: MSAL_CONFIG, useValue: environment.azure }
-    <% } %>
+    { provide: DEFAULT_PATH_MOCK, useValue: "public/mock" } 
+     
   ],
   exports: [
     PlCoreModule,

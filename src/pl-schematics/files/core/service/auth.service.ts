@@ -88,39 +88,42 @@ export class <%=classify(prefixClass)%>AuthService {
   public login(): Observable <boolean> {
     
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:acquireTokenFailure", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:loginFailure", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:stateMismatch", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:acquireTokenSucces", (OK) => {
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, OK);
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:loginSucces", (OK) => {
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, OK);
-      })
-      /**sottoscrizione al servizio di login, viene controllato se esiste l'utente in sessione, in caso viene fatta la redirect
-       * alla login.. occorre iscriveri a questo osservatore per scatenare la routine.
-       */       
       return new Observable<boolean>(observer => {
-        this.user = this.injector.get(MsalService).getUser()
-        if (this.user) {
-            observer.next(true);
-            observer.complete();
-        } else {
-          this.injector.get(MsalService).loginRedirect();
+
+        /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
+        this.broadcastService.subscribe("msal:acquireTokenFailure", (error) => {
           observer.error(new <%=classify(prefixClass)%>ErrorBean("User not present.. ", <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false));
+        })
+        /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
+        this.broadcastService.subscribe("msal:loginFailure", (error) => {
+          observer.error(new <%=classify(prefixClass)%>ErrorBean("User not present.. ", <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false));
+        })
+        /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
+        this.broadcastService.subscribe("msal:stateMismatch", (error) => {
+          observer.error(new <%=classify(prefixClass)%>ErrorBean("User not present.. ", <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false));
+        })
+        /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
+        this.broadcastService.subscribe("msal:acquireTokenSuccess", (OK) => {
+          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, OK);
+        })
+        /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
+        this.broadcastService.subscribe("msal:loginSuccess", (OK) => {
+          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, OK);
+          observer.next(true);
+          observer.complete();
+        })
+        /**sottoscrizione al servizio di login, viene controllato se esiste l'utente in sessione, in caso viene fatta la redirect
+         * alla login.. occorre iscriveri a questo osservatore per scatenare la routine.
+         */       
+    
+        const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+        if (isIE) {
+          this.authService.loginRedirect({ scopes: ['user.read', 'openid', 'profile' ] });
+        } else {
+          this.authService.loginPopup({ scopes: ['user.read', 'openid', 'profile' ] });
         }
-      });
+         
+     });
 
       <% } else { %>
       /**

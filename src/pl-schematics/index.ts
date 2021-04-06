@@ -10,7 +10,7 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: '~1.6.0', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '~1.7.0', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '6.5.3', name: String("rxjs-compat") },
@@ -33,7 +33,8 @@ function addPackageJsonDependencies(options: any): Rule {
       dependencies.push({ type: NodeDependencyType.Default, version: '^4.3.1', name: String("bootstrap") });
     }
     if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^0.1.4', name: String("@azure/msal-angular") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^1.0.0', name: String("@azure/msal-angular") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^1.3.2', name: String("msal") });
     }
     if (options.enableSonarQube == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
