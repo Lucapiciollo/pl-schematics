@@ -279,7 +279,7 @@ import { filter } from &#x27;rxjs/operators&#x27;;
     { provide: BROWSER_VALID, useValue: [BROWSER.ALL] },  //Abilitati l&#x27;esecuzione del portale per il browser indicato
     { provide: DISABLE_LOG, useValue: environment.production }, //vengono disabilitati i log in caso di produzione
     { provide: MAX_CACHE_AGE, useValue: 300000 }, // viene impostato il tempo di validità per la cache di rete
-    { provide: CACHE_TAG, useValue: &#x27;@cacable@&#x27; }, //indica come identificare le api che è possibile mettere in cache
+    { provide: CACHE_TAG, useValue: &#x27;@cacheble@&#x27; }, //indica come identificare le api che è possibile mettere in cache
     /**
      * @author l.piciollo
      * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.

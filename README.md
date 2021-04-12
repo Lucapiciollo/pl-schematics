@@ -1,10 +1,10 @@
 
 
 1. <a href="#presentazione">Presentazione pl-schematics</a>
-    1. <a href="#applicazionenuova">Applicazione della libreria su un nuovo progetto</a>
+   1. <a href="#applicazionenuova">Applicazione della libreria su un nuovo progetto</a>
    1. <a href="#applicazionenuova">Applicazione della libreria su un progetto gia in essere</a>
    1. <a href="#nuovaalberatura">Nuova alberatura del progetto</a>
-    1. <a href="#packagecore">Presentazione del package core</a>
+   1. <a href="#packagecore">Presentazione del package core</a>
         1. <a href="#alberaturaclassi"> Alberatura e classi</a>
         1. <a href="#packagebean"> Package bean</a>
         1. <a href="#packageinitializer"> Package initializer</a>
@@ -15,8 +15,8 @@
         1. <a href="#packageutils"> Package utils</a>
     1. <a href="#packageshare"> Package shared</a>
     1. <a href="#packagejson"> package.json</a>
-    1. <a href="#sonar"> SONAR</a> 
- 1. <a href="#tutorial">TUTORILA</a> 
+    1. <a href="#sonar"> SONAR</a>
+1. <a href="#tutorial">TUTORIAL</a> 
     1. <a href="#chiamatehttp">Chiamate HTTP</a>   
     1. <a href="#cache">Cache HTTP</a> 
     1. <a href="#decoratori">Decorator</a>
@@ -27,7 +27,7 @@
     1. <a href="#basecomponent">Support BaseComponent</a>
     1. <a href="#rxjs">Rxjs polling ed uuid</a> 
     1. <a href="#opzioniconfigurabili">Configurazione opzioni di avvio applicazione</a> 
- 1. <a href="#documentazione">Documentazione on line ed esercitazioni</a>   
+1. <a href="#documentazione">Documentazione on line </a>   
 1. <a href="#author">Author</a>   
  
 ---
@@ -288,7 +288,7 @@ i parametri di configurazione sono:
 |BROWSER_VALID|QUesta proprietà indica il browser abilitato alla presentazione del programma, viene valorizzato inizialmente con la scelta effettuata al momento dell'installazione della libreria, ma è possibile modificarlo in un secondo momenti, cambiando appunto questo valore. La proprietà accetta una lista di browser appure ALL, per indicare che tutti i browser sono abilitati a presentare il programma. |
 |DISABLE_LOG|questa variabile è molto utile in un contesto di produzione, in quanto per le policy di sicurezza, un applicazione web non deve avere alcun tipo di log in console, qundi questa variabile puo contenere true o false. di default è valorizzata con <b>environment.production</b> che in base alla compilazione del pacchetto, se per prod o per svil, assumerà il valore true o false inibendo o meno poi i log in console.|
 |MAX_CACHE_AGE|Questo valore, che di default è impostato a 300000ms, indica il tempo di validità della cache per le chiamate rest, passato questo tempo, per una determinata chiamata, alla successiva chiamata viene invocato nuovamente il BE, e non il sistema di cache.. alla risposta del be si ricomincia il ciclo di storicizzazione e cosi via|
-|CACHE_TAG|Qui è possibile indicare al sistema di caching come identificare le API che abilitate alla cacahe. Di default il valore è <b>@cacable@</b> quindi , l'intercettore http, controlla la url da invocare, e ricerca questo valore al suo interno.. se lo stesso viene trovato, significa che la url deve essere sottoposta al sistema di cache, altrimenti viene invocato sempre il BE.|
+|CACHE_TAG|Qui è possibile indicare al sistema di caching come identificare le API che abilitate alla cacahe. Di default il valore è <b>@cacheble@</b> quindi , l'intercettore http, controlla la url da invocare, e ricerca questo valore al suo interno.. se lo stesso viene trovato, significa che la url deve essere sottoposta al sistema di cache, altrimenti viene invocato sempre il BE.|
 |DEFAULT_TIMEOUT|QUesto valore, che inizialmente è valorizzato a 300000ms, indica il tempo di attesa prima di mandare in time out le chiamate API REST
 |DEFAULT_PATH_MOCK|Questo provider, specifica il path dove andare a leggere i file per il sistema di mock.. pl-schematics mette a disposizione del sistema, un motore di mock che aiuta lo sviluppatore nel procedere con il proprio lavoro anche se il BE ancora non espone i propri servizi. indicando una url come mocked:true, al momento della chiamata rest, questa viene interettata dal motore e non viente effettuata una chiamata http, ma vien prelevato il file rispettivo al metodo invocato, al path specificato in questa variabile. Lo stesso path deve essere presente sotto la cartella assets e deve essere presente un file get.json in caso di chiamate get, post.json in caso di post e cosi via. E' possibile mockare anche chiamate a file download.|
 |MSAL_CONFIG|In caso di login con il sistema AZURE, questa variabile punta alla configurazione per la connessione dell'applicazione,di default la configurazione viene preimpostata in <b>environment.azure</b>|
@@ -416,7 +416,7 @@ E' possibile dichiarare url contenenti dei pathParams, il sistema provvederò in
   
 
     mock: {
-        url: "@cacable@/example/:api/:files",
+        url: "@cacheble@/example/:api/:files",
         mocked: true,
         method:"GET"
     }
@@ -443,20 +443,20 @@ il sistema come gia detto mette a disposizione anche un servizio di cache, per e
 
     /**
         @author l.piciollo
-        si riporta un esempio di una api riconosciuta come storable, grazie al tag @cacable@ presente nella URL.
+        si riporta un esempio di una api riconosciuta come storable, grazie al tag @cacheble@ presente nella URL.
         si nota come i parametri sono passati con {0} e {1}.. il sistema è equipagiato da una funzionalita che specializza
         le stringhe ad avere il format function.. quindi .. è possibile formattare la url richimandola in questo modo:
         E.S.
         let url = environment.exampleApi.format("P1","P2")
         quindi avviene una formattazione per posizione dei paraetri..
-        exampleApi: `@cacable@/example/cacable/api?param1={0}&param2={1}`
+        exampleApi: `@cacheble@/example/cacable/api?param1={0}&param2={1}`
     */
-    exampleApi: `@cacable@/example/cache/api?param1={0}&param2={1}`,
+    exampleApi: `@cacheble@/example/cache/api?param1={0}&param2={1}`,
     exampleApeNoCache: `example/no/cache/api?param1={0}&param2={1}`
 
   
 
->come si può notare, alla url è stato anteposto il **@cacable@** , questo sta ad indicare che la url dovrà essere sottoposta al motore di cache sia in chiamata verso la rete che in risposta verso il client.
+>come si può notare, alla url è stato anteposto il **@cacheble@** , questo sta ad indicare che la url dovrà essere sottoposta al motore di cache sia in chiamata verso la rete che in risposta verso il client.
 
   
 
@@ -626,7 +626,7 @@ dichiarare nel file di properties un oggetto cosi dichiarato,
         è possibile dichiarare una chiamata ad un mock, si consiglia di rispettare il seguente formato dichiarativo
         E.S.
         mock: {
-            url: "@cacable@/example/:api/:files",
+            url: "@cacheble@/example/:api/:files",
             mocked: true,
             method:"GET"
         }
@@ -636,7 +636,7 @@ dichiarare nel file di properties un oggetto cosi dichiarato,
     */
 
     mock: {
-        url: "@cacable@/example/:api/:files",
+        url: "@cacheble@/example/:api/:files",
         mocked: true,
         method:"GET"
     }
