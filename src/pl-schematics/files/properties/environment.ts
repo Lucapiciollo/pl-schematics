@@ -56,16 +56,16 @@ export const environment = {
     api: {
       /**
        *  @author l.piciollo
-       *  si riporta un esempio di una api riconosciuta come storable, grazie al tag @cacheble@ presente nella URL.
+       *  si riporta un esempio di una api riconosciuta come storable, grazie al tag @cachable@ presente nella URL.
        *  si nota come i parametri sono passati con {0} e {1}.. il sistema è equipagiato da una funzionalita che specializza
        *  le stringhe ad avere il format function.. quindi .. è possibile formattare la url richimandola in questo modo:
        *  E.S. 
        *    let url = environment.exampleApi.format("P1","P2")
        *    quindi avviene una formattazione per posizione dei paraetri..
        *  
-       *  exampleApi: `@cacheble@/example/cacable/api?param1={0}&param2={1}`
+       *  exampleApi: `@cachable@/example/cacable/api?param1={0}&param2={1}`
        */
-      exampleApi: `@cacheble@/example/cache/api?param1={0}&param2={1}`,
+      exampleApi: `@cachable@/example/cache/api?param1={0}&param2={1}`,
       exampleApeNoCache: `example/no/cache/api?param1={0}&param2={1}`,
       /**
        *  @author l.piciollo
