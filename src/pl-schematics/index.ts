@@ -10,7 +10,7 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: '~1.7.0', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '~1.7.1', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '6.5.3', name: String("rxjs-compat") },
@@ -23,8 +23,9 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^11.0.0', name: String("@angular-builders/custom-webpack") },
       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") },
-      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") }
-
+      { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
+      { type: NodeDependencyType.Default, version: '^5.3.1', name: String("html-webpack-plugin") },
+      { type: NodeDependencyType.Default, version: '^1.0.6', name: String("replace-in-file-webpack-plugin") }
       
     ];
     if (options.addSupportBootstrap == "Y") {

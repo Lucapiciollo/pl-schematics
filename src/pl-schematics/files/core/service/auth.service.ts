@@ -36,47 +36,8 @@ import { CORE_TYPE_EVENT } from '../type/type.event';
   providedIn: 'root',
 })
 export class <%=classify(prefixClass)%>AuthService {
-
-  <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    private _token: User;
-    private _user: User;
-    private _msalService: MsalService;    
-  /*************************************************************************************************************************/
-    /**
-     * @author l.piciollo
-     * funzionalità per reperire il token di login registrato nella storage del browser
-     */
-    public get token(): User {
-      if (window.localStorage["msal.idtoken"] != null)
-        return window.localStorage["msal.idtoken"];
-    }
-    /*************************************************************************************************************************/  
-     /**
-     * @author l.piciollo
-     * utilità di settaggio del token nella storage del browser
-     */
-    public set token(token) {
-      this._token = token;
-    }
-    /*************************************************************************************************************************/
-    /**
-     * @author l.piciollo
-     * utilita di recupero dati dell'utente loggato.. viene parsato il token jwt
-     */
-    public get user(): User {
-      return this._user;
-    }
-   /*************************************************************************************************************************/
-    /**
-     * @author l.piciollo
-     * utilita di settaggio dati dell'utente loggato..
-     */    
-    public set user(user) {
-      this._user = user;
-    }
-    /************************************************************************************************************************* */    
-    <% } %>
-    constructor(<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> public broadcastService: BroadcastService, <% } %>   private httpService: <%=classify(prefixClass)%>HttpService, public injector: Injector) {    
+ 
+    constructor(<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> private authService: MsalService, public broadcastService: BroadcastService, <% } %>   private httpService: <%=classify(prefixClass)%>HttpService, public injector: Injector) {    
     }
   /************************************************************************************************************************* */
   /**
@@ -150,7 +111,7 @@ export class <%=classify(prefixClass)%>AuthService {
   public logout() { 
     try {
       <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
-        this._msalService.logout();
+        this.authService.logout();
       <% } else { %>
         console.log("Logout called...")
       <% } %>  

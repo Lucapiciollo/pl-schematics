@@ -1,6 +1,6 @@
 {
   "name": "pl-schematics",
-  "version": "2.3.1",
+  "version": "2.3.3",
   "description": "Standardize template develop",
   "scripts": {
     "build": "tsc -p tsconfig.json && npm pack",
