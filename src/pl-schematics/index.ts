@@ -10,7 +10,7 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: '~1.7.1', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '^1.7.5', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '6.5.3', name: String("rxjs-compat") },
@@ -20,7 +20,7 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^10.0.0', name: String("ngx-ui-loader") },
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
-      { type: NodeDependencyType.Default, version: '^11.0.0', name: String("@angular-builders/custom-webpack") },
+      { type: NodeDependencyType.Default, version: '^12.0.0', name: String("@angular-builders/custom-webpack") },
       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") },
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
@@ -29,9 +29,10 @@ function addPackageJsonDependencies(options: any): Rule {
       
     ];
     if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") }); 
+	  dependencies.push({ type: NodeDependencyType.Default, version: '^2.9.2', name: String("@popperjs/core") }); 
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
-      dependencies.push({ type: NodeDependencyType.Default, version: '^4.3.1', name: String("bootstrap") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }
     if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^1.0.0', name: String("@azure/msal-angular") });
@@ -209,6 +210,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/core/type", options.namePackage + "/core/type/"),
     addClass(options, "./files/home", options.namePackage + "/component/page/home"),
     addClass(options, "./files/component", "/"),
+    addClass(options, "./files/extension", "/"),
     addClass(options, "./files/customInterface", "../"),
     addClass(options, "./files/properties", "../environments/"),
     addClass(options, "./files/public", "../assets/public"),

@@ -25,12 +25,12 @@ export const environment = {
    * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
    * a causa dell'abilitazione al supposrto login.
    */
-   azure: {
+  azure: {
     param: {
       auth: {
-        clientId: '',
-        authority: 'https://login.microsoftonline.com/common',
-        redirectUri: 'http://localhost:4200/',
+        clientId: 'CLIENT-ID',
+        authority: 'https://login.microsoftonline.com/TENANT-ID', //tenantId
+        redirectUri: 'https://localhost:4200',
       },
       cache: {
         cacheLocation: 'localStorage',
@@ -38,11 +38,12 @@ export const environment = {
       }
     },
     scope: {
-      popUp: !isIE,
-      consentScopes: ['user.read', 'openid', 'profile',],
+      popUp: false,
+      consentScopes: ['user.read', 'openid', 'profile' ,"Mail.Read" ],
       unprotectedResources: [],
       protectedResourceMap: [
-        ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+        ['https://graph.microsoft.com/v1.0/me',  ['user.read' ]],
+        ['https://graph.microsoft.com/v1.0/me/messages',["Mail.Read"]]
       ],
       extraQueryParameters: {}
     }

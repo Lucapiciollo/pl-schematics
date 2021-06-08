@@ -16,6 +16,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { Observable } from 'rxjs';
 import { <%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
+import { environment } from 'src/environments/environment';
 import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
 import { MsalService, BroadcastService } from '@azure/msal-angular';
@@ -77,12 +78,12 @@ export class <%=classify(prefixClass)%>AuthService {
          * alla login.. occorre iscriveri a questo osservatore per scatenare la routine.
          */       
     
-        const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
-        if (isIE) {
-          this.authService.loginRedirect({ scopes: ['user.read', 'openid', 'profile' ] });
-        } else {
-          this.authService.loginPopup({ scopes: ['user.read', 'openid', 'profile' ] });
-        }
+		  const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
+		  if (isIE) {
+			this.authService.loginRedirect({ scopes: environment.azure.scope.consentScopes});
+		  } else {
+			this.authService.loginPopup({ scopes: environment.azure.scope.consentScopes });
+		  }
          
      });
 
@@ -119,7 +120,11 @@ export class <%=classify(prefixClass)%>AuthService {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
+  <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
   /************************************************************************************************************************* */
-
-
+  public async getToken(): Promise<string> {
+    const { accessToken } = await this.authService.acquireTokenSilent({ scopes: environment.azure.scope.consentScopes });
+    return accessToken;
+  }
+ <% } %>
 }

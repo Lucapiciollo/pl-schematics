@@ -19,34 +19,35 @@ export const environment = {
    */
   baseUrlRemoteApi: "",
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    /**
-     * @author l.piciollo
-     * configurazione per autenticazione con active directory di microsoft azure.
-     * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
-     * a causa dell'abilitazione al supposrto login.
-     */
-     azure: {
-      param: {
-        auth: {
-          clientId: '',
-          authority: 'https://login.microsoftonline.com/common',
-          redirectUri: 'http://localhost:4200/',
-        },
-        cache: {
-          cacheLocation: 'localStorage',
-          storeAuthStateInCookie: isIE, // set to true for IE 11
-        }
+  /**
+   * @author l.piciollo
+   * configurazione per autenticazione con active directory di microsoft azure.
+   * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
+   * a causa dell'abilitazione al supposrto login.
+   */
+  azure: {
+    param: {
+      auth: {
+        clientId: 'CLIENT-ID',
+        authority: 'https://login.microsoftonline.com/TENANT-ID', //tenantId
+        redirectUri: 'https://localhost:4200',
       },
-      scope: {
-        popUp: !isIE,
-        consentScopes: ['user.read', 'openid', 'profile',],
-        unprotectedResources: [],
-        protectedResourceMap: [
-          ['https://graph.microsoft.com/v1.0/me', ['user.read']]
-        ],
-        extraQueryParameters: {}
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: isIE, // set to true for IE 11
       }
     },
+    scope: {
+      popUp: false,
+      consentScopes: ['user.read', 'openid', 'profile' ,"Mail.Read" ],
+      unprotectedResources: [],
+      protectedResourceMap: [
+        ['https://graph.microsoft.com/v1.0/me',  ['user.read' ]],
+        ['https://graph.microsoft.com/v1.0/me/messages',["Mail.Read"]]
+      ],
+      extraQueryParameters: {}
+    }
+  },
     <% } %>  
   http: {
     /**

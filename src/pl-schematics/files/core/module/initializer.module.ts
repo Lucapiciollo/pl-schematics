@@ -91,7 +91,11 @@ import { filter } from 'rxjs/operators';
      */
     { provide: HTTP_INTERCEPTORS, useClass: <%=classify(prefixClass)%>HttpInterceptorService, multi: true },
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true }, 
+    /**
+     * @author l.piciollo
+     * intercettore msal per i reperimento del token in base allo scope per invocazione a microsoft graph
+     * */
+    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
     <%}%>
     /**
      * @author l.piciollo
