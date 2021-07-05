@@ -8,12 +8,21 @@
  * import ed in export
  * ]
  */
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule ,HttpClient} from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%>/shared/service/global.service';
 import { CommonModule } from '@angular/common';
+import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 /**
  *  @author @l.piciollo
  *  modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalita con il sistema. 
@@ -26,19 +35,28 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
   ],
-  providers: [<%=classify(prefixClass)%>GlobalService],
+  providers: [ ],
   exports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule
+    TranslateModule ,
   ]
 })
 export class SharedModule {
 
-  constructor(private globalService: <%=classify(prefixClass)%>GlobalService) { /**inizializzazione del servizio per la creazione dei listener */}
+  constructor(private globalService: <%=classify(prefixClass)%>GlobalService,public translate: TranslateService) { 
+      /**inizializzazione del servizio per la creazione dei listener */
+      translate.setDefaultLang('it');
+   }
   
   static forRoot() {
     return {

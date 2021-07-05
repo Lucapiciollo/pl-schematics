@@ -1,9 +1,9 @@
 {
   "name": "pl-schematics",
-  "version": "2.3.6",
+  "version": "2.3.10",
   "description": "Standardize template develop",
   "scripts": {
-    "build": "tsc -p tsconfig.json && npm pack",
+    "build": "tsc -p tsconfig.json ",
     "test": "npm run build && jasmine src/**/*_spec.js",
     "release-patch": "npm --no-git-tag-version version patch && npm run build",
     "release-minor": "npm --no-git-tag-version version minor && npm run build",

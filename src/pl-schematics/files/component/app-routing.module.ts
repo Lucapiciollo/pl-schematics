@@ -20,7 +20,7 @@ import { MsalGuard } from '@azure/msal-angular';
 const routes: Routes = [{
   path: "home",
   loadChildren: ()=> import('./<%=namePackage%>/component/page/home/home.module').then(module => module.HomeModule),
-  canActivate: [<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>MsalGuard <% } %>  ],
+  canActivate: [<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>MsalGuard <%}%>  ],
 }];
  /**
  * @author l.piciollo

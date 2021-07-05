@@ -84,7 +84,7 @@ export class <%=classify(prefixClass)%>Utils {
       var expires = "expires=" + date.toUTCString();
       document.cookie = nameCookie + "=" + valueCookie + ";expires=" + expires + ";path=/";
     } catch (error) {
-      throw new <%=classify(prefixClass) %> ErrorBean(error.message, <%=classify(prefixClass) %> ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
@@ -95,9 +95,9 @@ export class <%=classify(prefixClass)%>Utils {
    */
   public static deleteCookie(nameCookie: string) {
     try {
-      Utils.setCookie(nameCookie, "", 0);
+      <%=classify(prefixClass)%>Utils.setCookie(nameCookie, "", 0);
     } catch (error) {
-      throw new <%=classify(prefixClass) %> ErrorBean(error.message, <%=classify(prefixClass) %> ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 

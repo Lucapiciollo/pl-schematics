@@ -10,13 +10,10 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: '^1.7.5', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: 'latest', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
-      { type: NodeDependencyType.Default, version: '6.5.3', name: String("rxjs-compat") },
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
-      { type: NodeDependencyType.Default, version: '6.3.3', name: String("rxjs") },
-      { type: NodeDependencyType.Default, version: '1.1.3', name: String("rxjs-operators") },
       { type: NodeDependencyType.Default, version: '^10.0.0', name: String("ngx-ui-loader") },
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
@@ -35,8 +32,8 @@ function addPackageJsonDependencies(options: any): Rule {
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }
     if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.0.0', name: String("@azure/msal-angular") });
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.3.2', name: String("msal") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '1.0.0', name: String("@azure/msal-angular") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '1.3.2', name: String("msal") });
     }
     if (options.enableSonarQube == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
@@ -112,16 +109,16 @@ function updateAngularJsonForBootstrap(): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
     if (angularJsonFile) {
-      var json = JSON.parse(angularJsonFile.toString());
-      json['projects'][json.defaultProject]['architect']['build']["builder"] = "@angular-builders/custom-webpack:browser";
-      json['projects'][json.defaultProject]['architect']['serve']["builder"] = "@angular-builders/custom-webpack:dev-server";
+       var json = JSON.parse(angularJsonFile.toString());
+      //json['projects'][json.defaultProject]['architect']['build']["builder"] = "@angular-builders/custom-webpack:browser";
+      //json['projects'][json.defaultProject]['architect']['serve']["builder"] = "@angular-builders/custom-webpack:dev-server";
       var optionsJson = json['projects'][json.defaultProject]['architect']['build']['options'];
       optionsJson['scripts'].indexOf("node_modules/jquery/dist/jquery.slim.min.js") < 0 ? optionsJson['scripts'].push("node_modules/jquery/dist/jquery.slim.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/popper.js/dist/umd/popper.min.js") < 0 ? optionsJson['scripts'].push("node_modules/popper.js/dist/umd/popper.min.js") : null;
       optionsJson['scripts'].indexOf("node_modules/bootstrap/dist/js/bootstrap.min.js") < 0 ? optionsJson['scripts'].push("node_modules/bootstrap/dist/js/bootstrap.min.js") : null;
       optionsJson['styles'].indexOf("node_modules/bootstrap/dist/css/bootstrap.min.css") < 0 ? optionsJson['styles'].push("node_modules/bootstrap/dist/css/bootstrap.min.css") : null;
       optionsJson['styles'].indexOf("node_modules/@fortawesome/fontawesome-free/css/all.min.css") < 0 ? optionsJson['styles'].push("node_modules/@fortawesome/fontawesome-free/css/all.min.css") : null;
-      optionsJson["customWebpackConfig"] = { "path": "node_modules/pl-schematics/extra-webpack.config.js", "replaceDuplicatePlugins": true, "mergeRules": { "externals": "replace" } };
+      //optionsJson["customWebpackConfig"] = { "path": "node_modules/pl-schematics/extra-webpack.config.js", "replaceDuplicatePlugins": true, "mergeRules": { "externals": "replace" } };
       /*  optionsJson["indexTransform"] = "" ;  */
       json['projects'][json.defaultProject]['architect']['build']['options'] = optionsJson;
       host.overwrite('angular.json', JSON.stringify(json, null, 2));
