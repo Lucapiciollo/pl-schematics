@@ -28,7 +28,10 @@ import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService }
 import { Router, NavigationStart,ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-
+/**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
+export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
+  return <%=classify(prefixClass)%>AuthService.applicationType.type == "teams" ? httpInterceptorFakeService : msalInterceptor;
+};
 
 <% } %>
 /**
@@ -68,7 +71,10 @@ import { filter } from 'rxjs/operators';
      */  
       BroadcastService,
       MsalService,
+      MsalInterceptor,
+      <%=classify(prefixClass)%>HttpInterceptorFakeService,
     <%}%>
+    <%=classify(prefixClass)%>HttpInterceptorService,
     /**
     * @author l.piciollo
     * inizializzazione della base url per le chiamate al BE, la configurazione prevede che venga valorizzata la chiave di accesso
@@ -85,18 +91,20 @@ import { filter } from 'rxjs/operators';
     { provide: DISABLE_LOG, useValue: environment.production }, //vengono disabilitati i log in caso di produzione
     { provide: MAX_CACHE_AGE, useValue: 300000 }, // viene impostato il tempo di validità per la cache di rete
     { provide: CACHE_TAG, useValue: '@cachable@' }, //indica come identificare le api che è possibile mettere in cache
-    /**
-     * @author l.piciollo
-     * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.
-     */
-    { provide: HTTP_INTERCEPTORS, useClass: <%=classify(prefixClass)%>HttpInterceptorService, multi: true },
+ 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
     /**
      * @author l.piciollo
      * intercettore msal per i reperimento del token in base allo scope per invocazione a microsoft graph
      * */
-    { provide: HTTP_INTERCEPTORS, useClass: MsalInterceptor, multi: true },
+     { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [classify(prefixClass)HttpInterceptorFakeService, MsalInterceptor] },
     <%}%>
+
+       /**
+     * @author l.piciollo
+     * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.
+     */
+        { provide: HTTP_INTERCEPTORS, useClass: <%=classify(prefixClass)%>HttpInterceptorService, multi: true },
     /**
      * @author l.piciollo
      * viene iniettato il processo di login..

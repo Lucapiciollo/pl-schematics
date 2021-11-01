@@ -16,6 +16,7 @@ import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%
 import { CommonModule } from '@angular/common';
 import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+/**import { MAT_DATE_LOCALE } from '@angular/material/core';*/
 
 
 
@@ -43,7 +44,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  providers: [ ],
+  providers: [/**{provide: MAT_DATE_LOCALE, useValue: 'it-IT' }*/ ],
   exports: [
     CommonModule,
     HttpClientModule,

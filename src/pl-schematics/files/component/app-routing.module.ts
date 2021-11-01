@@ -9,9 +9,7 @@
  */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-  <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-import { MsalGuard } from '@azure/msal-angular';
- <% } %>  
+import { <%=classify(prefixClass)%>RouteFakeGuard } from './com/core/service/router.fake.guard';
 
 /**
  * @author l.piciollo
@@ -20,7 +18,7 @@ import { MsalGuard } from '@azure/msal-angular';
 const routes: Routes = [{
   path: "home",
   loadChildren: ()=> import('./<%=namePackage%>/component/page/home/home.module').then(module => module.HomeModule),
-  canActivate: [<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>MsalGuard <%}%>  ],
+  canActivate: [<%=classify(prefixClass)%>RouteFakeGuard],
 }];
  /**
  * @author l.piciollo

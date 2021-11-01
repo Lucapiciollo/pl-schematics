@@ -101,4 +101,31 @@ export class <%=classify(prefixClass)%>Utils {
     }
   }
 
+
+  public static decodeJwtToken(token: string): object {
+    let base64Url = token.split('.')[1];
+    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    let jsonPayload = decodeURIComponent(atob(base64).split('').map((c) => {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  }
+
+    /**
+   * @author l.piciollo
+   * si occupa di creare un proxy object 
+   * @param object 
+   */
+     public static proxing<Object>(object:{})  {
+      return new Proxy(object, {
+        get: function (target, prop, receiver) {
+          if (Object.keys(target).indexOf(String(prop)) > -1) {
+            return target[prop];
+          } else {
+            return null
+          }
+        }
+      })
+    }
 }

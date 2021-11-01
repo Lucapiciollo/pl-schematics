@@ -17,6 +17,8 @@ import { Observable, Subject } from 'rxjs';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
 import { PlCoreUtils ,TYPE_EVENT_NETWORK} from 'pl-core-utils-library';
 import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
+import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from "@microsoft/microsoft-graph-client";
+
  /**
  * @author l.piciollo
  * classe di servizio per tutta l'applicazione, in questa classe ci saranno variabili comuni a tutti i componenti o chiamate
@@ -35,8 +37,10 @@ import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/
 @PLUnsubscribe()  
 export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
 
+  private clienteMsGraph = null;
+  
 /***************************************************************************************************************************** */
-  constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector ) {
+  constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector , private authService:  <%=classify(prefixClass)%>AuthService) {
      
     /**
      * @author l.piciollo
@@ -158,5 +162,13 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
         obs.error(error);
       }, () => { })
     }) 
+  }
+
+  
+  /********************GRAPH SDK CALL ::************************************************************************** */
+  async getUserName(): Promise<string> {
+    this.clienteMsGraph = Client.initWithMiddleware({ authProvider: this.authService });
+    let userinfo = await this.clienteMsGraph.api("/me").get();
+    return userinfo.displayName;
   }
 }

@@ -22,12 +22,14 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") },
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
       { type: NodeDependencyType.Default, version: '^5.3.1', name: String("html-webpack-plugin") },
-      { type: NodeDependencyType.Default, version: '^1.0.6', name: String("replace-in-file-webpack-plugin") }
+      { type: NodeDependencyType.Default, version: '^1.0.6', name: String("replace-in-file-webpack-plugin") },
+      { type: NodeDependencyType.Default, version: '^3.0.0', name: String("@microsoft/microsoft-graph-client") },
+      { type: NodeDependencyType.Default, version: '^1.11.0', name: String("@microsoft/teams-js") },
       
     ];
     if (options.addSupportBootstrap == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") }); 
-	  dependencies.push({ type: NodeDependencyType.Default, version: '^2.9.2', name: String("@popperjs/core") }); 
+	    dependencies.push({ type: NodeDependencyType.Default, version: '^2.9.2', name: String("@popperjs/core") }); 
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }
