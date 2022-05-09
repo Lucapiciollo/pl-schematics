@@ -63,7 +63,7 @@ function addModuleToImports(options: any, moduleName: any, libName: any): Rule {
       const workspace = getWorkspace(host);
       const angularJsonFileObject = JSON.parse(angularJsonFile.toString());
       const project = getProjectFromWorkspace(workspace, options.project || angularJsonFileObject.defaultProject);
-      addModuleImportToRootModule(host, moduleName, libName, project);
+      addModuleImportToRootModule(host, moduleName, libName, (project as any));
       context.logger.log('info', `Insert: "${moduleName}" in module... `);
     }
     return host;
