@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/schema",
-    "id": "PLSCHEMATICS",
+    "$id": "PLSCHEMATICS",
     "title": "Package name for files",
     "type": "object",
     "description": "Generating standard schematic for project",
