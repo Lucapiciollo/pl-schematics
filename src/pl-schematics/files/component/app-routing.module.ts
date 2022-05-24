@@ -9,7 +9,7 @@
  */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { <%=classify(prefixClass)%>RouteFakeGuard } from './com/core/service/router.fake.guard';
+import { <%=classify(prefixClass)%>RouteFakeGuard } from './<%=namePackage%>/core/service/router.fake.guard';
 
 /**
  * @author l.piciollo

@@ -51,7 +51,7 @@
                 "N"
             ],
             "default": "Y",
-            "x-prompt": "DO you want add bootstrap 4 support ?"
+            "x-prompt": "DO you want add bootstrap 5 support ?"
         } ,
         "enableSonarQube": {
             "enum": [

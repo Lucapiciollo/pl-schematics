@@ -120,8 +120,8 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
   ngOnDestroy(): void {
     try {
        console.log("GlobalService destroyed ... ")
-    } catch (err) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(err.message,  <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
+    } catch (error:any) {
+      throw new  <%=classify(prefixClass)%>ErrorBean(error.message,  <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
     }
   }
 /***************************************************************************************************************************** */
@@ -136,8 +136,8 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
       try {
         return this.httpService.TAILAJXCALL(idAjax);
       }
-      catch (e) { 
-        throw new <%=classify(prefixClass)%>ErrorBean(e.message)
+      catch (error:any) { 
+        throw new <%=classify(prefixClass)%>ErrorBean(erron.message)
       }
    }
   

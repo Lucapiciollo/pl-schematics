@@ -407,6 +407,7 @@ export class <%=classify(prefixClass)%>HttpService {
       if (error.message)
         return new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
     }
+    return null
   }
   /********************************************************************************************************************/
 }

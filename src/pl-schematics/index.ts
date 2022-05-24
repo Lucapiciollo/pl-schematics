@@ -28,8 +28,8 @@ function addPackageJsonDependencies(options: any): Rule {
       
     ];
     if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.15.0', name: String("popper.js") }); 
-	    dependencies.push({ type: NodeDependencyType.Default, version: '^2.9.2', name: String("@popperjs/core") }); 
+      dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("popper.js") }); 
+	    dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("@popperjs/core") }); 
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }
@@ -205,6 +205,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/shared/utils", options.namePackage + "/shared/utils/"),
     addClass(options, "./files/shared/service", options.namePackage + "/shared/service/"),
     addClass(options, "./files/shared/component", options.namePackage + "/shared/component/"),
+    addClass(options, "./files/shared/pipe", options.namePackage + "/shared/pipe/"),
     addClass(options, "./files/core/utils", options.namePackage + "/core/utils/"),
     addClass(options, "./files/core/type", options.namePackage + "/core/type/"),
     addClass(options, "./files/home", options.namePackage + "/component/page/home"),
@@ -225,7 +226,7 @@ export default function (options: any): Rule {
     scaffoldSchematics(options, options.namePackage + "/component/section/tab"),
     scaffoldSchematics(options, options.namePackage + "/shared/config"),
     scaffoldSchematics(options, options.namePackage + "/shared/bean"),
-    scaffoldSchematics(options, options.namePackage + "/shared/pipe"),
+/*     scaffoldSchematics(options, options.namePackage + "/shared/pipe"), */
     scaffoldSchematics(options, options.namePackage + "/shared/directive"),
     addModuleToImports(options, options.prefixClass + "InitializerModule", "./" + options.namePackage + "/core/module/initializer.module"),
     addModuleToImports(options, "SharedModule", "./" + options.namePackage + "/shared/module/shared.module"),

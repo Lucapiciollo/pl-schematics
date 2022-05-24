@@ -26,8 +26,8 @@
    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
      try {
        return next.handle(request).pipe(tap(()=>console.log("fake interceptor")));
-     } catch (error) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(err.message, <%=classify(prefixClass)%>ErrorCode.NETWORKERROR)
+     } catch (error:any) {
+      throw new  <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.NETWORKERROR)
      }
    };
    /***************************************************************************************************************************** */

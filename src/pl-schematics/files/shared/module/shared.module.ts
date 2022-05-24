@@ -16,6 +16,7 @@ import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%
 import { CommonModule } from '@angular/common';
 import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { SortPipe } from 'src/app/<%=namePackage%>/shared/pipe/SortPipe.pipe';
 /**import { MAT_DATE_LOCALE } from '@angular/material/core';*/
 
 
@@ -31,7 +32,7 @@ export function HttpLoaderFactory(http: HttpClient) {
  *  impport ed in export
  */
 @NgModule({
-  declarations: [ ],
+  declarations: [ SortPipe],
   imports: [
     CommonModule,
     HttpClientModule,

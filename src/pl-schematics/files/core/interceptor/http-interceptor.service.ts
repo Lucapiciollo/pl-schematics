@@ -118,7 +118,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
           console.debug(request.method + " " + request.urlWithParams + " in " + elapsedTime + "ms");
         })
       );
-    } catch (error) {
+    } catch (error:any) {
       throw new  <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
     }
   };

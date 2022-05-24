@@ -23,6 +23,8 @@ import {<%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/c
 import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=namePackage%>/core/initializer/AmbientModeLoader';
 import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
 
+import {<%=classify(prefixClass)%>HttpInterceptorFakeService} from "src/app/<%=namePackage%>/core/interceptor/http-interceptor-fake.service";
+
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
 import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from "@azure/msal-angular";
 import { Router, NavigationStart,ActivatedRoute } from '@angular/router';
@@ -97,7 +99,7 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      * @author l.piciollo
      * intercettore msal per i reperimento del token in base allo scope per invocazione a microsoft graph
      * */
-     { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [classify(prefixClass)HttpInterceptorFakeService, MsalInterceptor] },
+     { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [<%=classify(prefixClass)%>HttpInterceptorFakeService, MsalInterceptor] },
     <%}%>
 
        /**

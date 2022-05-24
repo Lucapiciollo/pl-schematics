@@ -20,7 +20,7 @@ export class <%=classify(prefixClass)%>Utils {
   public static UUIDCODE(): any {
     try {
       return UUID.UUID();
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
@@ -41,7 +41,7 @@ export class <%=classify(prefixClass)%>Utils {
         lenght = Math.floor(lenght / len) - 1;
       }
       return alpha;
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
@@ -65,7 +65,7 @@ export class <%=classify(prefixClass)%>Utils {
         }
       }
       return null;
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
@@ -83,7 +83,7 @@ export class <%=classify(prefixClass)%>Utils {
       date.setTime(date.getTime() + (time * 60 * 1000));
       var expires = "expires=" + date.toUTCString();
       document.cookie = nameCookie + "=" + valueCookie + ";expires=" + expires + ";path=/";
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
@@ -96,7 +96,7 @@ export class <%=classify(prefixClass)%>Utils {
   public static deleteCookie(nameCookie: string) {
     try {
       <%=classify(prefixClass)%>Utils.setCookie(nameCookie, "", 0);
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
