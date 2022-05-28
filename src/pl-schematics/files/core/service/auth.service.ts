@@ -26,6 +26,10 @@ import { CORE_TYPE_EVENT } from '../type/type.event';
 import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from '@microsoft/microsoft-graph-client';
 
 <%}%>  
+<% } else { %>  
+  import { AuthenticationProviderOptions } from '@microsoft/microsoft-graph-client';
+<% } %>
+
 import { HttpParams } from '@angular/common/http';
 import { Context } from '@microsoft/teams-js';
 import { take } from 'rxjs/operators';
@@ -65,7 +69,15 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
     };
 
     
-  <% } %>
+    <% } else { %>
+        
+      getAccessToken(authenticationProviderOptions?: AuthenticationProviderOptions): Promise<string> {
+        return new Promise<string>((token) => {
+          token( <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject.accessToken)
+        })
+      };
+
+    <% } %>
   /************************************************************************************************************************* */
 
   private async ssoActiveDirectory(observer: Subscriber<boolean>) {
@@ -214,7 +226,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
       <% } else { %>
         console.log("Logout called...")
       <% } %>  
-    } catch (error) { 
+    } catch (error:any) { 
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }

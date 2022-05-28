@@ -137,7 +137,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
         return this.httpService.TAILAJXCALL(idAjax);
       }
       catch (error:any) { 
-        throw new <%=classify(prefixClass)%>ErrorBean(erron.message)
+        throw new <%=classify(prefixClass)%>ErrorBean(error.message)
       }
    }
   

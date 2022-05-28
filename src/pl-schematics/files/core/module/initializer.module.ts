@@ -56,14 +56,17 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      */
     NgxUiLoaderModule.forRoot(UiLoaderConfig),
     NgxUiLoaderHttpModule.forRoot(UiLoaderHttpConfig),
-    NgxUiLoaderRouterModule.forRoot(UiLoaderRouterConfig),
-    <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
+    NgxUiLoaderRouterModule.forRoot(UiLoaderRouterConfig),    
     /**
      * @author l.piciollo
      * inserimento modulo per azure
      */ 
+    <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
      MsalModule.forRoot(Object(environment.azure.param),Object(environment.azure.scope))
-  <%}%>
+  <%} else {%>
+    
+     MsalModule.forRoot(Object(environment.azure.param),Object({}))
+   <% } %>
   ],
   providers: [  
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>

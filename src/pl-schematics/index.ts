@@ -18,8 +18,8 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
       { type: NodeDependencyType.Default, version: '^12.0.0', name: String("@angular-builders/custom-webpack") },
-      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
-      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") },
+/*       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
+      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") }, */
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
       { type: NodeDependencyType.Default, version: '^5.3.1', name: String("html-webpack-plugin") },
       { type: NodeDependencyType.Default, version: '^1.0.6', name: String("replace-in-file-webpack-plugin") },
