@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "PLSCHEMATICS",
+    "title": "Package name for files",
+    "type": "object",
+    "description": "Generating standard schematic for project",
+    "properties": {
+        "nameCompany": {
+            "type": "string",
+            "description": "Company name...",
+            "default": "mycompany",
+            "x-prompt": "What's name your company?"
+        },
+        "namePackage": {
+            "type": "string",
+            "default": "com/mycompany/normalize",
+            "x-prompt": "Insert name of package core..."
+        },
+        "prefixClass": {
+            "type": "string",
+            "default": "",
+            "x-prompt": "Insert prefix class for core schematics.. for example SC"
+        },
+        "browserSupported": {
+            "enum": [
+                "BROWSER.EDG",
+                "BROWSER.OPERA",
+                "BROWSER.CHROME",
+                "BROWSER.IE",
+                "BROWSER.FIREFOX",
+                "BROWSER.SAFARI",
+                "BROWSER.OTHER",
+                "BROWSER.ALL"
+            ],
+            "description": "Select compatible browser ",
+            "default": "BROWSER.ALL",
+            "x-prompt": "Select compatible browser "
+        },
+        "loginSupportConfiguration": {
+            "enum": [
+                "NONE",
+                "AZURE-ACTIVE-DIRECT"
+            ],
+            "description": "Enable login support",
+            "default": "NONE",
+            "x-prompt": "Login support configuration..."
+        },
+        "addSupportBootstrap": {
+            "enum": [
+                "Y",
+                "N"
+            ],
+            "default": "Y",
+            "x-prompt": "DO you want add bootstrap 5 support ?"
+        } ,
+        "enableSonarQube": {
+            "enum": [
+                "Y",
+                "N"
+            ],
+            "default": "Y",
+            "x-prompt": "DO you want add sonar support ?"
+        } 
+    },
+    "required": [
+        "namePackage"
+    ]
+}

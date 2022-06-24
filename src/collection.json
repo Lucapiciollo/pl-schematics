@@ -1,0 +1,10 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "pl-schematics": {
+      "description": "Template & SDK for develop",
+      "factory": "./pl-schematics/index", 
+      "schema": "./pl-schematics/schema.json"
+    }
+  }
+}

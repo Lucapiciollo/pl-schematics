@@ -1,0 +1,2308 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Portable-Schematics</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	      <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/Postmark.css">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">Portable-Schematics</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li>HttpService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/home/configuration/core/service/http.service.ts</code>
+        </p>
+
+
+
+            <p class="comment">
+                <h3>Example</h3>
+            </p>
+            <div class="io-description">
+            </div>
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#plHttpService">plHttpService</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#DELETE">DELETE</a>
+                            </li>
+                            <li>
+                                <a href="#DOWNLOAD">DOWNLOAD</a>
+                            </li>
+                            <li>
+                                <a href="#DOWNLOADURL">DOWNLOADURL</a>
+                            </li>
+                            <li>
+                                <a href="#FORKJOIN">FORKJOIN</a>
+                            </li>
+                            <li>
+                                <a href="#GET">GET</a>
+                            </li>
+                            <li>
+                                <a href="#GETBG">GETBG</a>
+                            </li>
+                            <li>
+                                <a href="#GETFILE">GETFILE</a>
+                            </li>
+                            <li>
+                                <a href="#KILLAJXCALL">KILLAJXCALL</a>
+                            </li>
+                            <li>
+                                <a href="#PATCH">PATCH</a>
+                            </li>
+                            <li>
+                                <a href="#PATCHBG">PATCHBG</a>
+                            </li>
+                            <li>
+                                <a href="#POST">POST</a>
+                            </li>
+                            <li>
+                                <a href="#POSTBG">POSTBG</a>
+                            </li>
+                            <li>
+                                <a href="#POSTFILE">POSTFILE</a>
+                            </li>
+                            <li>
+                                <a href="#PUT">PUT</a>
+                            </li>
+                            <li>
+                                <a href="#PUTBG">PUTBG</a>
+                            </li>
+                            <li>
+                                <a href="#TAILAJXCALL">TAILAJXCALL</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>, plHttpService: <a href="../injectables/HttpService.html">PlHttpService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="45" class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:45</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div class="io-description"><hr>
+</div>
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>injector</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/core/Injector" target="_blank" >Injector</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>plHttpService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/HttpService.html" target="_self" >PlHttpService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DELETE"></a>
+                    <span class="name">
+                        <b>
+                            DELETE
+                        </b>
+                        <a href="#DELETE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="341"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:341</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DOWNLOAD"></a>
+                    <span class="name">
+                        <b>
+                            DOWNLOAD
+                        </b>
+                        <a href="#DOWNLOAD"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>DOWNLOAD(streamData, contentType: CONTENT_TYPE | string, fileName?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="99"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:99</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>streamData</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>fileName</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Promise&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DOWNLOADURL"></a>
+                    <span class="name">
+                        <b>
+                            DOWNLOADURL
+                        </b>
+                        <a href="#DOWNLOADURL"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>DOWNLOADURL(url: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, filename: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:110</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                    <td>Default value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>url</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>filename</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+                                    <td>
+                                        <code>new Date().getTime() + &quot;txt&quot;</code>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="FORKJOIN"></a>
+                    <span class="name">
+                        <b>
+                            FORKJOIN
+                        </b>
+                        <a href="#FORKJOIN"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>FORKJOIN(plttpRequest: Array<PlHttpRequest>, interrupt?: Subject<boolean>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="359"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:359</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>Array&lt;PlHttpRequest&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>interrupt</td>
+                                    <td>
+                                            <code>Subject&lt;boolean&gt;</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GET"></a>
+                    <span class="name">
+                        <b>
+                            GET
+                        </b>
+                        <a href="#GET"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>GET(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GETBG"></a>
+                    <span class="name">
+                        <b>
+                            GETBG
+                        </b>
+                        <a href="#GETBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:145</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="GETFILE"></a>
+                    <span class="name">
+                        <b>
+                            GETFILE
+                        </b>
+                        <a href="#GETFILE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="277"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:277</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="KILLAJXCALL"></a>
+                    <span class="name">
+                        <b>
+                            KILLAJXCALL
+                        </b>
+                        <a href="#KILLAJXCALL"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>KILLAJXCALL(IDAjax: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="84"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:84</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IDAjax</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PATCH"></a>
+                    <span class="name">
+                        <b>
+                            PATCH
+                        </b>
+                        <a href="#PATCH"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="169"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:169</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PATCHBG"></a>
+                    <span class="name">
+                        <b>
+                            PATCHBG
+                        </b>
+                        <a href="#PATCHBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="190"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:190</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POST"></a>
+                    <span class="name">
+                        <b>
+                            POST
+                        </b>
+                        <a href="#POST"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>POST(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="213"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:213</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POSTBG"></a>
+                    <span class="name">
+                        <b>
+                            POSTBG
+                        </b>
+                        <a href="#POSTBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>POSTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="234"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:234</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="POSTFILE"></a>
+                    <span class="name">
+                        <b>
+                            POSTFILE
+                        </b>
+                        <a href="#POSTFILE"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:255</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PUT"></a>
+                    <span class="name">
+                        <b>
+                            PUT
+                        </b>
+                        <a href="#PUT"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PUT(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="299"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:299</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PUTBG"></a>
+                    <span class="name">
+                        <b>
+                            PUTBG
+                        </b>
+                        <a href="#PUTBG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id?: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>) => void, contentType?: CONTENT_TYPE | string)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="320"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:320</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>plttpRequest</td>
+                                    <td>
+                                            <code>PlHttpRequest</code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>responseType</td>
+                                    <td>
+                                            <code>RESPONSE_TYPE</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>callBack</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/function" target="_blank" >function</a></code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>contentType</td>
+                                    <td>
+                                            <code>CONTENT_TYPE | string</code>
+                                    </td>
+
+                                    <td>
+                                        Yes
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;HttpResponse&lt;any&gt;&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="TAILAJXCALL"></a>
+                    <span class="name">
+                        <b>
+                            TAILAJXCALL
+                        </b>
+                        <a href="#TAILAJXCALL"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>TAILAJXCALL(IDAjax: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="70"
+                            class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:70</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IDAjax</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Subject&lt;any&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+        <h3 id="inputs">
+            Properties
+        </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="plHttpService"></a>
+                        <span class="name">
+                            <b>
+                                <span class="modifier">Public</span>
+                            plHttpService</b>
+                            <a href="#plHttpService"><span class="icon ion-ios-link"></span></a>
+                        </span>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <i>Type : </i>        <code><a href="../injectables/HttpService.html" target="_self" >PlHttpService</a></code>
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="47" class="link-to-prism">src/app/home/configuration/core/service/http.service.ts:47</a></div>
+                            </td>
+                        </tr>
+
+
+            </tbody>
+        </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable, InjectionToken, Injector } from &#x27;@angular/core&#x27;;
+import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE, PlCoreUtils, PlHttpRequest} from &#x27;pl-core-utils-library&#x27;;
+import { Observable, Subject  } from &#x27;rxjs&#x27;;
+import { ErrorBean, ErrorCode } from &#x27;src/app/home/configuration/core/bean/error-bean&#x27;;
+import { HttpResponse } from &#x27;@angular/common/http&#x27;;
+
+/** 
+ * @author l.piciollo
+ * injectiontoken per la valorizzazione della baseurl per l&#x27;invocazione dei servizi del BE.
+ * E.S http://baseurl:8080/api/v1/
+ */
+
+export const BASE_URL_API &#x3D; new InjectionToken&lt;any&gt;(&quot;Puntamento all&#x27;indirizzo del BE&quot;);
+
+/**
+ * @author l.piciollo
+ * servizio base per l&#x27;interfacciamento con la PLHttpService.. qui sono esposti metodi sia per il background, quindi non subiscono
+ * interruzioni da parte della navigazione, che servizi istantanei, i quali vengono terminati in caso di cambio di rotta
+ * la classe mette a disposizione gia tutto l&#x27;occorrente 
+ */
+@Injectable({
+  providedIn: &quot;root&quot;
+})
+/**
+* ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
+* IL SERVIZIO, E&#x27; STATO SPECIALIZZATO CON DEGLI EVENTI DI BROADCAST LANCIATI E ASCOLTATI NELLA GLOBALSERVICE QUESTO DA MODO
+* DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
+* NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
+* QUAL&#x27;ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
+*/  
+export class HttpService {
+   /********************************************************************************************************************/
+   constructor(private injector: Injector, public plHttpService: PlHttpService) {
+
+  }
+
+
+  /**
+   * @author l.piciollo
+   * logtrace per visualizzare di default lo stato di avanzamento delle http
+   * @param IDAjax 
+   */
+  private logTraceHttp(IDAjax: any) {
+    let trace &#x3D; this.TAILAJXCALL(IDAjax).subscribe(object &#x3D;&gt; {
+      console.log(object)
+    }, () &#x3D;&gt; { }, () &#x3D;&gt; { trace.unsubscribe(); })
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * funzionlita per rimanere in ascolto su una progressione di chiamata al be.. utile per risalire allo stato di chiamate al BE
+   * per il caricamento/scaricamento file. la funzione ritorna un Subject... dove possibile sottoscriversi per icevere i dati
+   * in modalità realtime. utile per costruire barre di progressione a runtime.
+   * @param IDAjax : id della chiamata ajax precedentemente chiamata, l&#x27;id viene restituido dalla callback in ingresso alle chiamate
+   */
+  TAILAJXCALL(IDAjax: string): Subject&lt;any&gt; {
+    try {
+      return PlCoreUtils.progressBars[IDAjax].changed;
+    } catch (error) {
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
+    }
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * funzionalità per la terminazione di una chiamata di rete che magari prende piu tempo del previsto.. passando in ingresso l&#x27;id AJAX 
+   * staccato al momento della chiamata è utile per killare upload/download file. 
+   * @param IDAjax : id della chiamata ajax precedentemente chiamata, l&#x27;id viene restituido dalla callback in ingresso alle chiamate
+   */
+  KILLAJXCALL(IDAjax: string) {
+    try {
+      PlCoreUtils.progressBars[IDAjax].interrupt.next(true);
+    } catch (error) {
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
+    }
+  }
+  /********************************************************************************************************************/
+  /**
+  * @author l.piciollo
+  * funzione per il download dello straming in formato file
+  * @param streamData :buffer di byte
+  * @param headers   : headers  ajax
+  * @param filename : nome file
+  */
+  DOWNLOAD(streamData, contentType: CONTENT_TYPE | string, fileName?: string): Promise&lt;any&gt; {
+    return this.plHttpService.DOWNLOAD(streamData, contentType, fileName);
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * si occupa di effettuare il download dell&#x27;immagine contenuta nel blob creato con le altre funzionalità
+   * funzionalità utilizzabile in combinazione con le funzione di creazione image o file 
+   * @param url : url del blob
+   * @param filename : nome file 
+   */
+  DOWNLOADURL(url: string, filename: string &#x3D; new Date().getTime() + &quot;txt&quot;) {
+    this.plHttpService.DOWNLOADURL(url, filename);
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio GET 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  GET(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE 
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
+
+  /********************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Servizio PATCH 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio PATCHBG REST non influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
+  /********************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Servizio POST 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  POST(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio POSTBG REST  influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  POSTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio POST REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.POST(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file 
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.GET(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio PUT REST
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PUT(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PUT(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio PUTBG REST  influente al cambio di rotta.. il servizio gira in background
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.PUT(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio DELETE REST
+   * @param url          :Url BE
+   * @param params       :params
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione da lanciare al momento dell&#x27;avvio della richiesta, riceve l&#x27;id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   */
+  DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) &#x3D;&gt; void, contentType?: CONTENT_TYPE | string): Observable&lt;HttpResponse&lt;any&gt;&gt; {
+    return new Observable&lt;HttpResponse&lt;any&gt;&gt;(observer &#x3D;&gt; {
+      plttpRequest.url &#x3D; this.injector.get(BASE_URL_API).concat(plttpRequest.url);
+      this.plHttpService.DELETE(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * Servizio FORKJOIN REST
+   * @param serviceUrls  :lista di url da richiamare in parallelo
+   * @param params       :params 
+   */
+  FORKJOIN(plttpRequest: Array&lt;PlHttpRequest&gt;, interrupt?: Subject&lt;boolean&gt;): Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt; {
+    plttpRequest &#x3D; plttpRequest.map(request &#x3D;&gt; {
+      request.url &#x3D; this.injector.get(BASE_URL_API).concat(request.url)
+      return request;
+    })
+    return new Observable&lt;Array&lt;HttpResponse&lt;any&gt;&gt;&gt;(observer &#x3D;&gt; {
+      this.plHttpService.FORKJOIN(plttpRequest, interrupt).subscribe(res &#x3D;&gt; {
+        observer.next(res)
+        observer.complete();
+      }, err &#x3D;&gt; {
+        observer.error(this.checkError(err));
+      }, () &#x3D;&gt; { });
+    });
+  }
+
+  /********************************************************************************************************************/
+  /**
+   * @author l.piciollo
+   * funzione di utilita per la cattura delle eccezioni o errori riscontrati durante le chiamte al BE
+   * @param error 
+   */
+  private checkError(error): ErrorBean {
+    try {
+      return new ErrorBean(error.error.errorResponse.description, ErrorCode.SYSTEMERRORCODE, false, true)
+    } catch (e) {
+      if (error.message)
+        return new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
+    }
+  }
+  /********************************************************************************************************************/
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'HttpService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
+       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

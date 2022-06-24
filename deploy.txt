@@ -1,0 +1,11 @@
+1: Let’s stop that process and run npm rum build command instead
+
+2: Also let’s have a look into package.json file and change the name of the package to @schematics/hello and version to 1.0.0.
+
+3: Besides that, we have to remove *.ts line from .npmignore file because it would exclude our template from the final package
+
+4: Now we could run npm publish but let’s run npm pack instead which will give us schematics-hello-1.0.0.tgz file which we can copy to some Angular CLI workspace project.
+
+5: Then, in the target Angular CLI workspace we can run npm i --no-save schematics-hello-1.0.0-tgz which will install our package into that project.
+
+6: The last step is to run schematics by referencing package name instead of the path to local schematics project. We can run ng g @schematics/hello:hello Tomas.

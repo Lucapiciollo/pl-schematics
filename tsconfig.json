@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    
+    "baseUrl": "tsconfig",
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "declaration": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "rootDir": "src/",
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "sourceMap": false,
+    "strictNullChecks": true,
+    "target": "es6",
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src/**/*"
+, "extra-webpack.config.js"  ],
+  "exclude": [
+    "src/*/files/**/*"
+  ]
+}
