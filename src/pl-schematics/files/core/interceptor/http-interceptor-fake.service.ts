@@ -10,7 +10,7 @@
  import { Injectable } from '@angular/core';
  import { Observable } from 'rxjs';
  import { tap } from 'rxjs/operators';
- import { ErrorBean, ErrorCode } from '../bean/error-bean';
+ import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
   
  
  @Injectable({

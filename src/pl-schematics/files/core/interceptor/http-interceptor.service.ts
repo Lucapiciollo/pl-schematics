@@ -15,13 +15,12 @@
 
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Inject, Injectable, InjectionToken, Injector } from '@angular/core';
-import { CACHE_TAG, PlCacheMapService,PlCoreUtils } from 'pl-core-utils-library';
-import { Observable, of } from 'rxjs';
+ import { Observable, of } from 'rxjs';
 import { finalize, tap, timeout } from 'rxjs/operators';
 import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
 import { environment } from 'src/environments/environment';
-import { <%=classify(prefixClass)%>Utils  } from 'src/app/<%=namePackage%>/shared/utils/utils';
+import { <%=classify(prefixClass)%>Utils  ,<%=classify(prefixClass)%>CacheMapService CACHE_TAG}  from 'src/app/<%=namePackage%>/shared/utils/utils';
 
 /** 
  * @author l.piciollo
@@ -59,7 +58,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
    * @param url    : url di chiamata al BE, deve contenere il tagCache per essere messo in cache
    * @returns valore buleano true|false per indicare se la chiamata puo essere messa in cache o meno
    */
-  private isRequestCachable(method, url): boolean {
+  private isRequestCachable(method:string, url:string): boolean {
     return (["GET"].indexOf(method) > -1 && url.indexOf(this.tagCache) > -1)
   }
 

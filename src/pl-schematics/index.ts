@@ -10,7 +10,7 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
-      { type: NodeDependencyType.Default, version: 'latest', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '^1.8.4', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
@@ -28,8 +28,8 @@ function addPackageJsonDependencies(options: any): Rule {
       
     ];
     if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("popper.js") }); 
-	    dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("@popperjs/core") }); 
+      dependencies.push({ type: NodeDependencyType.Default, version: '^2.11.5', name: String("popper.js") }); 
+	    dependencies.push({ type: NodeDependencyType.Default, version: '^2.4.15', name: String("@popperjs/core") }); 
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }

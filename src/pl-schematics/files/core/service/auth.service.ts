@@ -25,8 +25,7 @@ import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { CORE_TYPE_EVENT } from '../type/type.event';
 import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from '@microsoft/microsoft-graph-client';
 
-<%}%>  
-<% } else { %>  
+<%} else { %>  
   import { AuthenticationProviderOptions } from '@microsoft/microsoft-graph-client';
 <% } %>
 
@@ -69,15 +68,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
     };
 
     
-    <% } else { %>
-        
-      getAccessToken(authenticationProviderOptions?: AuthenticationProviderOptions): Promise<string> {
-        return new Promise<string>((token) => {
-          token( <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject.accessToken)
-        })
-      };
-
-    <% } %>
+    <% } 
   /************************************************************************************************************************* */
 
   private async ssoActiveDirectory(observer: Subscriber<boolean>) {
