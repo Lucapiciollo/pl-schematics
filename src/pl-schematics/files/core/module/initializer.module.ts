@@ -62,11 +62,9 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      * inserimento modulo per azure
      */ 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-     MsalModule.forRoot(Object(environment.azure.param),Object(environment.azure.scope))
-  <%} else {%>
-    
-     MsalModule.forRoot(Object(environment.azure.param),Object({}))
-   <% } %>
+        MsalModule.forRoot(Object(environment.azure.param),Object(environment.azure.scope))
+     <%}  %>
+     
   ],
   providers: [  
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>

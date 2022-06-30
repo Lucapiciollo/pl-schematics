@@ -11,7 +11,8 @@
 import { Injectable, OnDestroy,Injector } from "@angular/core";
 import {<%=classify(prefixClass)%>ErrorBean,  <%=classify(prefixClass)%>ErrorCode } from "src/app/<%=namePackage%>/core/bean/error-bean";
 import {<%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
-import { CONTENT_TYPE, PlHttpRequest, PLUnsubscribe, RESPONSE_TYPE  } from 'pl-core-utils-library';
+import { CONTENT_TYPE, PlHttpRequest,  RESPONSE_TYPE  } from 'pl-core-utils-library';
+ import {  Unsubscribe  } from 'pl-decorator';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
@@ -34,10 +35,10 @@ import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOp
  * annotazione custom, indica di distrugere tutti gli osservatori eventualmente attivi, alla distruzione della classe
  * in ingresso è possibile passare la lista degli osservatoti che devono rimanere attivi
  */
-@PLUnsubscribe()  
+@Unsubscribe()  
 export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
 
-  private clienteMsGraph = null;
+  private clienteMsGraph:any;
   
 /***************************************************************************************************************************** */
   constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector , private authService:  <%=classify(prefixClass)%>AuthService) {
@@ -46,21 +47,21 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
      * @author l.piciollo
      * registrazione all'intercettore di interruzione di chiamata ajax.
      */
-      PlCoreUtils.Broadcast().listenEvent(TYPE_EVENT_NETWORK.PL_BREACK_NET, (breack) => {
+      PlCoreUtils.Broadcast().listenEvent(TYPE_EVENT_NETWORK.PL_BREACK_NET, (breack:any) => {
         console.log(breack.detail);
       })
     /**
      * @author l.piciollo
      * registrazione all'intercettore di errore per servire la richiesta di apertura modale di errore.
      */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, (error)=>{
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, (error:any)=>{
         console.log(error.detail);
       });
      /**
       * @author l.piciollo
       * registrazione all'intercettore di errore per servire la richiesta di redirect
       */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error)=>{
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error:any)=>{
         console.log(error.detail);
       }); 
       /**
@@ -68,7 +69,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
        * registrazione all'evento di intercettazione della cache, da parte delle chiamate ajax.. in caso viene rilevato del contenuto in cache,
        * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
        */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, (url) => {
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, (url:any) => {
         console.log("PlCoreUtils cache found for : {0}".format(url.detail));
       })  
         
@@ -77,7 +78,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
        * @author l.piciollo
        * registrazione all'evento di acquisizione silente del token da parte di azure lib
        */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, (OK) => { 
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, (OK:any) => { 
         console.log(OK)
       });
  
@@ -85,7 +86,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
        * @author l.piciollo
        * registrazione all'evento di login ok da parte della azure lib
        */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, (OK) => { 
+      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, (OK:any) => { 
         console.log(OK)
       });
       <% } %> 
@@ -94,7 +95,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
        * registrazione all'evento di errore da parte delle chiamate ajax.. in caso viene rilevato qualsiasi errore,
        * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
        */
-        PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) => {
+        PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error:any) => {
           <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
           /**
            * @author l.piciollo
@@ -111,7 +112,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
            * @author l.piciollo
            * ascoltatore di evento di errore generico, qui è possibile gestire in autonomia il suo flusso
            */
-          PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean) => {
+          PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean:any) => {
             console.error("PlCoreUtils error found >> ", errorBean);
           });  
   }
@@ -155,7 +156,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
                             Object({ api: p1, files: p2 }), 
                             null);
                             
-      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, null, null).subscribe(sb => {
+      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, undefined, undefined).subscribe(sb => {
         obs.next(sb);
         obs.complete()
       }, error => {

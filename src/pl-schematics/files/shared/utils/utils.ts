@@ -119,7 +119,7 @@ export class <%=classify(prefixClass)%>Utils {
    */
      public static proxing<Object>(object:{})  {
       return new Proxy(object, {
-        get: function (target, prop, receiver) {
+        get: function (target:any, prop:any, receiver:any) {
           if (Object.keys(target).indexOf(String(prop)) > -1) {
             return target[prop];
           } else {

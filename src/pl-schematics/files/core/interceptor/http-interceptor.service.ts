@@ -20,8 +20,8 @@ import { finalize, tap, timeout } from 'rxjs/operators';
 import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
 import { environment } from 'src/environments/environment';
-import { <%=classify(prefixClass)%>Utils  ,<%=classify(prefixClass)%>CacheMapService CACHE_TAG}  from 'src/app/<%=namePackage%>/shared/utils/utils';
-
+import { <%=classify(prefixClass)%>Utils  }  from 'src/app/<%=namePackage%>/shared/utils/utils';
+import {  CACHE_TAG,  PlCacheMapService,  PlCoreUtils} from 'pl-core-utils-library';
 /** 
  * @author l.piciollo
  * token per la valorizzazione dell'attesa prima di terminare in timeout la richiesta al BE 

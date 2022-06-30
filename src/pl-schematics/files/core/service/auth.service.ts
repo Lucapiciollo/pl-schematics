@@ -68,7 +68,15 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
     };
 
     
-    <% } 
+    <% } else { %>
+        
+      getAccessToken(authenticationProviderOptions?: AuthenticationProviderOptions): Promise<string> {
+        return new Promise<string>((token) => {
+          token("")
+        })
+      };
+
+    <% } %>
   /************************************************************************************************************************* */
 
   private async ssoActiveDirectory(observer: Subscriber<boolean>) {
@@ -227,7 +235,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
   /**
    * @time token expiration in ms
    * Creates an rxjs's interval. After getting the new token make the recursive call with the new time in ms for refresh token.   */
-   public getToken(time): void {
+   public getToken(time:any): void {
     let interval$ = interval(time);
     let intervalForToken = interval$.pipe(take(1));
     intervalForToken.subscribe(() => {

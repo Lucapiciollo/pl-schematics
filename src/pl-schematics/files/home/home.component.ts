@@ -27,11 +27,11 @@ import { PlBaseComponent } from 'pl-core-utils-library';
 })
 export class HomeComponent  extends PlBaseComponent implements OnInit {
 
-  constructor( protected injector: Injector  ) {
+  constructor( protected override injector: Injector   ) {
     super(injector)
   }
 
-  ngOnInit() {
+  override ngOnInit() {
   }
 
 }

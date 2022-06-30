@@ -10,6 +10,7 @@ import { check } from "./checkVersion"
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
+      { type: NodeDependencyType.Default, version: '^1.4.1', name: String("pl-decorator") },
       { type: NodeDependencyType.Default, version: '^1.8.4', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },

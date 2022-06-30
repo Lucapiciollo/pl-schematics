@@ -32,7 +32,7 @@ export class <%=classify(prefixClass)%>ErrorBean extends Error {
        * @param redirect :valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)
        * @param dialog   :valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)
        */
-      constructor(public message: string, public eCode: string = <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, public redirect: boolean = false, public dialog: boolean = false) {
+      constructor(public override message: string, public eCode: string = <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, public redirect: boolean = false, public dialog: boolean = false) {
             super();
       }
 
