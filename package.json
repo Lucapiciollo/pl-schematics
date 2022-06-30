@@ -1,6 +1,6 @@
 {
   "name": "pl-schematics",
-  "version": "2.4.12",
+  "version": "2.4.14",
   "description": "Standardize template develop",
   "scripts": {
     "build": "tsc -p tsconfig.json ",
@@ -28,6 +28,10 @@
     "@angular-builders/custom-webpack": "^11.0.0",
     "html-minimizer-webpack-plugin": "^2.1.0",
     "html-webpack-banner-plugin": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lucapiciollo/pl-schematics.git"
   },
   "devDependencies": {
     "@angular-devkit/core": "^8.3.21",
