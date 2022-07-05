@@ -13,17 +13,17 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER,   NgModule ,Injector} from '@angular/core'; 
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule ,BROWSER, DEFAULT_PATH_MOCK} from 'pl-core-utils-library';
-import { BASE_URL_API } from 'src/app/<%=namePackage%>/core/service/http.service';
-import { UiLoaderConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderConfig';
-import { UiLoaderHttpConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderHttpConfig';
-import { UiLoaderRouterConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderRouterConfig';
-import { environment } from 'src/environments/environment';
-import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
-import {<%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
-import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=namePackage%>/core/initializer/AmbientModeLoader';
-import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
+import { BASE_URL_API } from '../service/http.service';
+import { UiLoaderConfig } from '../utils/UiLoaderConfig';
+import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
+import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
+import { environment } from '../../../../../../environments/environment';
+import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from '../interceptor/http-interceptor.service';
+import {<%=classify(prefixClass)%>AuthService } from '../service/auth.service';
+import <%=classify(prefixClass)%>AmbientModeProviderFactory from '../initializer/AmbientModeLoader';
+import <%=classify(prefixClass)%>AutenticationLoader from "../initializer/AutenticationLoader";
 
-import {<%=classify(prefixClass)%>HttpInterceptorFakeService} from "src/app/<%=namePackage%>/core/interceptor/http-interceptor-fake.service";
+import {<%=classify(prefixClass)%>HttpInterceptorFakeService} from "../interceptor/http-interceptor-fake.service";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
 import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from "@azure/msal-angular";

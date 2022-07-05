@@ -15,7 +15,7 @@
 import { Injectable, InjectionToken, Injector } from '@angular/core';
 import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE, PlCoreUtils, PlHttpRequest} from 'pl-core-utils-library';
 import { Observable, Subject  } from 'rxjs';
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
+import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
 import { HttpResponse } from '@angular/common/http';
 
 /** 
@@ -70,7 +70,7 @@ export class <%=classify(prefixClass)%>HttpService {
   TAILAJXCALL(IDAjax: string): Subject<any> {
     try {
       return PlCoreUtils.progressBars[IDAjax].changed;
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
@@ -84,7 +84,7 @@ export class <%=classify(prefixClass)%>HttpService {
   KILLAJXCALL(IDAjax: string) {
     try {
       PlCoreUtils.progressBars[IDAjax].interrupt.next(true);
-    } catch (error) {
+    } catch (error:any) {
       throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }

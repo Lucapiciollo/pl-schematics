@@ -17,10 +17,9 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Inject, Injectable, InjectionToken, Injector } from '@angular/core';
  import { Observable, of } from 'rxjs';
 import { finalize, tap, timeout } from 'rxjs/operators';
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
-import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
-import { environment } from 'src/environments/environment';
-import { <%=classify(prefixClass)%>Utils  }  from 'src/app/<%=namePackage%>/shared/utils/utils';
+import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
+import { CORE_TYPE_EVENT } from '../type/type.event';
+import { <%=classify(prefixClass)%>Utils  }  from '../../shared/utils/utils';
 import {  CACHE_TAG,  PlCacheMapService,  PlCoreUtils} from 'pl-core-utils-library';
 /** 
  * @author l.piciollo

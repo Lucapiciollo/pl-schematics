@@ -12,7 +12,7 @@
  */
 
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { <%=classify(prefixClass)%>ErrorBean } from 'src/app/<%=namePackage%>/core/bean/error-bean'; 
+import { <%=classify(prefixClass)%>ErrorBean } from '../bean/error-bean'; 
 import { PlCoreUtils } from 'pl-core-utils-library';
 import { CORE_TYPE_EVENT } from '../type/type.event';
 /**

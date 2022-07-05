@@ -29,7 +29,7 @@ function addPackageJsonDependencies(options: any): Rule {
       
     ];
     if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^2.11.5', name: String("popper.js") }); 
+      dependencies.push({ type: NodeDependencyType.Default, version: '^1.14.3', name: String("popper.js") }); 
 	    dependencies.push({ type: NodeDependencyType.Default, version: '^2.4.15', name: String("@popperjs/core") }); 
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
@@ -204,6 +204,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/core/module", options.namePackage + "/core/module/"),
     addClass(options, "./files/core/interceptor", options.namePackage + "/core/interceptor/"),
     addClass(options, "./files/shared/utils", options.namePackage + "/shared/utils/"),
+    addClass(options, "./files/shared/features", options.namePackage + "/shared/features/"),
     addClass(options, "./files/shared/service", options.namePackage + "/shared/service/"),
     addClass(options, "./files/shared/component", options.namePackage + "/shared/component/"),
     addClass(options, "./files/shared/pipe", options.namePackage + "/shared/pipe/"),

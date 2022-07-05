@@ -6,7 +6,7 @@
  * @desc [Classe di utilita, qui vengono elencate tutte le funzionalità per l'itera applicazione.]
  */
 import { UUID } from "angular2-uuid";
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
+import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../../core/bean/error-bean';
 
 /**
  * @author l.piciollo

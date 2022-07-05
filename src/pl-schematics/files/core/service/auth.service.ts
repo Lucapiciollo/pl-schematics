@@ -15,10 +15,10 @@
  import {  <%=classify(prefixClass)%>Utils } from '../../shared/utils/utils';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, Subscriber,interval } from 'rxjs';
-import { <%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
+import { <%=classify(prefixClass)%>HttpService } from './http.service';
 import { environment } from 'src/environments/environment';
 import * as microsoftTeams from "@microsoft/teams-js";
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
+import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
 import { MsalService, BroadcastService } from '@azure/msal-angular';
  import {PlCoreUtils} from 'pl-core-utils-library';

@@ -7,7 +7,7 @@
  * in caso non lo fosse, l'autenticazione da parte dell'utente]
  */
 
-import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
+import { <%=classify(prefixClass)%>AuthService } from '../service/auth.service';
 
 
 /**

@@ -1,0 +1,38 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">Downloading...</h5>
+    <button type="button" class="btn  float-right" (click)="closeModal()"> <span aria-hidden="true">&times;</span> </button>
+  </div>
+  <div class="modal-body" permission="READONLY">
+
+    <div class="wrap-content  ">
+      <div class="container-description">
+        <p class="wrapword">Url: {{url}} </p>
+        <div class="row">
+          <div class="col-11">
+            <div class="progress ">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" [class.bg-danger]="blocked" [style.width.%]="percent"> {{percent}} %  </div>
+            </div>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn  float-right" (click)="interruptFlow()"> <span
+              aria-hidden="true">&times;</span>
+          </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <p>Size: {{size}}</p>
+          </div>
+          <div class="col-6">
+            <p> Downloaded: {{loaded}}</p>
+          </div>
+ 
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
