@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SortPipe } from '../pipe/SortPipe.pipe';
-import { FeaturegModule } from '../features/feature.module';
+import { FeatureModule } from '../features/feature.module';
 /**import { MAT_DATE_LOCALE } from '@angular/material/core';*/
 
 
@@ -35,7 +35,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [ SortPipe],
   imports: [
-    FeaturegModule,
+    FeatureModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
@@ -49,7 +49,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [/**{provide: MAT_DATE_LOCALE, useValue: 'it-IT' }*/ ],
   exports: [
-    FeaturegModule,
+    FeatureModule,
     CommonModule,
     HttpClientModule,
     FormsModule,

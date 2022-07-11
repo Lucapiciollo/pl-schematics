@@ -291,7 +291,7 @@ folder containing all the objects that must be shared with the rest of the syste
 ![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Falberatura-shared.PNG?alt=media&token=3d6508c6-89ea-44c6-8602-1b5257963350)
 
  
-## Features * news 
+## Features * news
 
 pl-schematics offers some additional features, they are ready-to-use components, which make use of the pl-core-utils support. The source is visible and editable for your purpose.
  
@@ -306,10 +306,47 @@ For show progress bar is necessary inject <b>ProgressDialogService</b> and call 
 this function is called after an request upload or download file is invoked. If this function is passed in callback an call http method... at the moment that start http call, this is invocated and progress bar is shown
 
 ![alt text](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2FProgressBar.PNG?alt=media&token=34f86e01-0552-4b45-bc58-af3eb04ca64b)
- 
+
 
 the progress bar show two close button, one is for close modal dialog, other for kill http request. in case kill button is pressed, the operation upload or download is interrupted 
 
+
+###Open drag&drop file with upload
+
+A feature of pl-schematics is the drag-drop file. This component helps developers to create a drag and drop file, with loading mechanism. this is added an progress bar for each file, that show percent loading file. There is global progress bar for indentificate the remain files. Each file, have an button for terminate upload file, if pressed it, or file are loaded, this is deleted from list.
+
+>How it use?
+
+In html component import this.
+
+>     <drag-drop-upload 
+                  [width]=500 
+                  [height]=350 
+                  [multipleFile]=true 
+                  (fileSelectedEvent)="fileSelected($event)"
+                  (errorEvent)="errorEvent($event)">
+      </drag-drop-upload>
+
+Above code, insert in page the component drag and drop with attributes passed and show this html.
+
+![](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2Fdropfile.png?alt=media&token=95c8f3ed-94a1-4bee-b274-b0fc0af17113)
+
+This allows us, to drop o select file. If you have selected file, this change in:
+
+![](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2Fdropfile-selected.png?alt=media&token=d2f35632-d381-447b-b06d-2824fca3462a)
+
+How you can see, each element have close button "X", this cancel upload and delete element from list. 
+If we press upload button, the process is running, and each file will be loaded on server. How you can see, will show progress bar for single and global file.
+
+![](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2Fdropfile-selected-upload.png?alt=media&token=047962d9-0740-448a-8a3c-04fa7d49d1b8)
+
+when all file is loaded, the component will be reset to initial state, and will show 
+
+![](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2Fdropfile.png?alt=media&token=95c8f3ed-94a1-4bee-b274-b0fc0af17113)
+
+in this state the component permit drop or select file;
+
+>You can customize component how you prefere.
 
 # Presentation of the core package
 
@@ -320,9 +357,6 @@ pl-schematics, as already mentioned, takes care not only of standardizing a deve
 
 
 ![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Fdettaglio-core.PNG?alt=media&token=95344798-dadc-4e81-857c-4031a4853b6a)
-
- 
-
  
 
 <br>

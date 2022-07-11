@@ -1,0 +1,39 @@
+
+<div [style.height.px]="_height " class="p-1">
+      <div class="list-group overflow-auto " [style.height.px]="_height-50">
+           <div *ngFor="let element of showedFiles|async ; let i = index" class=" bd-callout bd-callout-danger">
+                <div class="row">
+                    <div class="col-11">
+                        <div class="d-flex w-100 ">
+                            <p class="text-left" [style.font-size.px]="12">{{element.file.name}}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-2">
+                                 <small class="float-start" [style.font-size.px]="10">{{moment(element.file.lastModifiedDate).format("DD/mm/yyyy")}}</small>
+                            </div>
+                            <div class="col-10">
+                                <div class="progress " style="height: 10px">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated"   [style.width.%]="element.percent"> {{element.percent}}%  </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <button type="button" class="btn-close " (click)="removeProgressBar(element.file.name)" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+            <button type="button"class="btn btn-primary btn-select m-2" *ngIf="(showedFiles|async)?.length>0" (click)="uploadFile()" >
+                <span>Upload</span>
+            </button>
+        </div>
+        <div class="col-9">
+            <div class="progress " style="height: 10px; margin-top: 7% !important;">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" [style.width.%]="this.globalPercent "> {{this.globalPercent  }}%  </div>
+            </div>
+        </div> 
+      </div>
+</div>

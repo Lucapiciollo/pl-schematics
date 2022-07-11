@@ -1,0 +1,19 @@
+ 
+.bd-callout-danger {
+    border-left-color: #0d6efd !important;
+}
+.bd-callout {
+    padding: 0.50rem;
+    margin-bottom: 0.50rem;
+    border: 1px solid #e9ecef;
+    border-left-width: 0.25rem;
+    border-radius: 0.25rem;
+}
+ .list-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  p {
+    margin-top: 0;
+    margin-bottom: 1px;
+}
