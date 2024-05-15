@@ -4,7 +4,7 @@ import { ErrorBean, ErrorCode } from '@app/cloud/agic/core/bean/error-bean';
 import { PlCoreModule } from 'pl-core-utils-library';
 import { Unsubscribe } from 'pl-decorator';
 import { Subscription, takeUntil, timer } from 'rxjs';
-import { CacheImageService } from '@core/service/cahce.image';
+import { CacheImageService } from '../../core/service/cahce.image';
 import { DOCUMENT } from '@angular/common';
 
 @Directive({
