@@ -2,8 +2,8 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 import { PlCoreModule } from 'pl-core-utils-library';
 import { Unsubscribe } from 'pl-decorator';
 import { Subscription, takeUntil, timer } from 'rxjs';
-import { ErrorBean, ErrorCode } from '@core/bean/error-bean';
-import { CacheImageService } from '@core/service/cahce.image';
+import { ErrorBean, ErrorCode } from '../../core/bean/error-bean';
+import { CacheImageService } from '../../core/service/cahce.image';
 
 interface CachedImage {
   url: string;

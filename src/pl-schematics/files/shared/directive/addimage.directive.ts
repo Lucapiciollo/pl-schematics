@@ -1,11 +1,11 @@
 import { Directive, ElementRef, Injector, Input, OnInit, Renderer2, inject } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
-import { ErrorBean, ErrorCode } from '@app/cloud/agic/core/bean/error-bean';
 import { PlCoreModule } from 'pl-core-utils-library';
 import { Unsubscribe } from 'pl-decorator';
 import { Subscription, takeUntil, timer } from 'rxjs';
-import { CacheImageService } from '../../core/service/cahce.image';
 import { DOCUMENT } from '@angular/common';
+import { ErrorBean, ErrorCode } from '../../core/bean/error-bean';
+import { CacheImageService } from '../../core/service/cahce.image';
 
 @Directive({
   selector: '[addImage]'
