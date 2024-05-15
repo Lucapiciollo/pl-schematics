@@ -9,15 +9,15 @@
  */
 
 import { Injectable, OnDestroy,Injector } from "@angular/core";
-import {<%=classify(prefixClass)%>ErrorBean,  <%=classify(prefixClass)%>ErrorCode } from "src/app/<%=namePackage%>/core/bean/error-bean";
-import {<%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
+import {ErrorBean,  ErrorCode } from "src/app/<%=namePackage%>/core/bean/error-bean";
+import {HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
 import { CONTENT_TYPE, PlHttpRequest,  RESPONSE_TYPE  } from 'pl-core-utils-library';
  import {  Unsubscribe  } from 'pl-decorator';
 import { environment } from 'src/environments/environment';
 import { Observable, Subject } from 'rxjs';
 import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
 import { PlCoreUtils ,TYPE_EVENT_NETWORK} from 'pl-core-utils-library';
-import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
+import { AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
 import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from "@microsoft/microsoft-graph-client";
 
  /**
@@ -36,12 +36,12 @@ import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOp
  * in ingresso è possibile passare la lista degli osservatoti che devono rimanere attivi
  */
 @Unsubscribe()  
-export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
+export class GlobalService implements OnDestroy {
 
   private clienteMsGraph:any;
   
 /***************************************************************************************************************************** */
-  constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector , private authService:  <%=classify(prefixClass)%>AuthService) {
+  constructor(private httpService: HttpService, private injector: Injector , private authService:  AuthService) {
      
     /**
      * @author l.piciollo
@@ -102,7 +102,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
            * inserimento del controllo per azure directry della corretta autenticazione, in caso di 401 si va alla login
            */
            if ([401].indexOf(error.detail.status) > -1) {
-              this.injector.get(<%=classify(prefixClass)%>AuthService).login().subscribe();
+              this.injector.get(AuthService).login().subscribe();
             }
             <% } else { %>
               console.log(error.detail);
@@ -122,7 +122,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
     try {
        console.log("GlobalService destroyed ... ")
     } catch (error:any) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(error.message,  <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
+      throw new  ErrorBean(error.message,  ErrorCode.SYSTEMERRORCODE);
     }
   }
 /***************************************************************************************************************************** */
@@ -138,7 +138,7 @@ export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
         return this.httpService.TAILAJXCALL(idAjax);
       }
       catch (error:any) { 
-        throw new <%=classify(prefixClass)%>ErrorBean(error.message)
+        throw new ErrorBean(error.message)
       }
    }
   

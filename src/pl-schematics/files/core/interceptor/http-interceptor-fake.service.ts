@@ -10,13 +10,13 @@
  import { Injectable } from '@angular/core';
  import { Observable } from 'rxjs';
  import { tap } from 'rxjs/operators';
- import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
+ import { ErrorBean, ErrorCode } from '../bean/error-bean';
   
  
  @Injectable({
    providedIn: 'root'
  })
- export class  <%=classify(prefixClass)%>HttpInterceptorFakeService implements HttpInterceptor {
+ export class  HttpInterceptorFakeService implements HttpInterceptor {
  
    /***************************************************************************************************************************** */
    constructor() {
@@ -27,7 +27,7 @@
      try {
        return next.handle(request).pipe(tap(()=>console.log("fake interceptor")));
      } catch (error:any) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.NETWORKERROR)
+      throw new  ErrorBean(error.message, ErrorCode.NETWORKERROR)
      }
    };
    /***************************************************************************************************************************** */

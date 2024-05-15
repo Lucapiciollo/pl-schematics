@@ -12,13 +12,13 @@
  * E' POSSIBILE RICHIAMARE I METODI DEL SERVIZIO TRANQUILLAMENTE DA UNA CLASSE DI UTILIY PERSONALE, E GESTIRE IL RISULTATO IN AUTONOMIA
  */
  
- import {  <%=classify(prefixClass)%>Utils } from '../../shared/utils/utils';
+ import {  Utils } from '../../shared/utils/utils';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, Subscriber,interval } from 'rxjs';
-import { <%=classify(prefixClass)%>HttpService } from './http.service';
+import { HttpService } from './http.service';
 import { environment } from 'src/environments/environment';
 import * as microsoftTeams from "@microsoft/teams-js";
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
+import { ErrorBean, ErrorCode } from '../bean/error-bean';
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
 import { MsalService, BroadcastService } from '@azure/msal-angular';
  import {PlCoreUtils} from 'pl-core-utils-library';
@@ -44,14 +44,14 @@ import { take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> implements AuthenticationProvider <%}%>  {
+export class AuthService<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> implements AuthenticationProvider <%}%>  {
  
   public static teamContext: Context|null = null;
   public static applicationType: { type: string|null } = { type: "" };
   public static idToken: string;
   public static loginObject: any = null;
 
-    constructor(<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> private authService: MsalService, public broadcastService: BroadcastService, <% } %>   private httpService: <%=classify(prefixClass)%>HttpService, public injector: Injector) {    
+    constructor(<% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> private authService: MsalService, public broadcastService: BroadcastService, <% } %>   private httpService: HttpService, public injector: Injector) {    
     }
   /************************************************************************************************************************* */
 
@@ -63,7 +63,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
  
     getAccessToken(authenticationProviderOptions?: AuthenticationProviderOptions): Promise<string> {
       return new Promise<string>((token) => {
-        token( <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject.accessToken)
+        token( AuthService.objectResponseMsal.retrievAccessTokenObject.accessToken)
       })
     };
 
@@ -86,7 +86,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
         this.broadcastService.subscribe("msal:loginFailure", (error) => {
         })
         this.broadcastService.subscribe("msal:stateMismatch", (error) => {
-          observer.error(new  <%=classify(prefixClass)%>ErrorBean("User not present.. ", <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false));
+          observer.error(new  ErrorBean("User not present.. ", ErrorCode.SYSTEMERRORCODE, false, false));
         })
         this.broadcastService.subscribe("msal:acquireTokenSuccess", (response) => {
           PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, response);
@@ -95,12 +95,12 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
 
         this.broadcastService.subscribe("msal:loginSuccess", (response) => {
           PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, response);
-          <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievLogin = { ...response };
+          AuthService.objectResponseMsal.retrievLogin = { ...response };
         })
 
         const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
         this.authService.acquireTokenSilent({ scopes: environment.azure.scope.consentScopes, loginHint: "..." }).then(response => {
-          response.tokenType == "id_token" ?   <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :   <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
+          response.tokenType == "id_token" ?   AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :   AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
           observer.next(true);
           observer.complete();
         }).catch(e => {
@@ -109,12 +109,12 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
           } else {
             this.authService.loginPopup({ scopes: environment.azure.scope.consentScopes }).then(response => {
               this.authService.acquireTokenSilent({ scopes: environment.azure.scope.consentScopes, loginHint: response.account.userName }).then(response => {
-                response.tokenType == "id_token" ?   <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :  <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
+                response.tokenType == "id_token" ?   AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :  AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
                 observer.next(true);
                 observer.complete();
               }).catch(e => {
                 this.authService.acquireTokenPopup({ scopes: environment.azure.scope.consentScopes, loginHint: response.account.userName }).then(response => {
-                  response.tokenType == "id_token" ?   <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :  <%=classify(prefixClass)%>AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
+                  response.tokenType == "id_token" ?   AuthService.objectResponseMsal.retrievIdTokenObject = { ...response } :  AuthService.objectResponseMsal.retrievAccessTokenObject = { ...response };
                   observer.next(true);
                   observer.complete();
                 })
@@ -131,7 +131,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
       <% } %>
 
      } catch (error: any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
 
@@ -145,25 +145,25 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
         <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
         microsoftTeams.authentication.getAuthToken({
           successCallback: (token) => {
-            <%=classify(prefixClass)%>AuthService.idToken = token;
-            const decodetToken: any = <%=classify(prefixClass)%>Utils.decodeJwtToken(token)
+            AuthService.idToken = token;
+            const decodetToken: any = Utils.decodeJwtToken(token)
             const expireTime = (decodetToken.exp * 1000) - new Date().getTime();
             this.getToken(expireTime);
             microsoftTeams.getContext((context) => {
-              <%=classify(prefixClass)%>AuthService.teamContext = context;
+              AuthService.teamContext = context;
               observer.next(true);
               observer.complete();
             });
           },
           failureCallback: (error) => {
-            <%=classify(prefixClass)%>AuthService.teamContext = null;
+            AuthService.teamContext = null;
             observer.error(true);
           }
         });
         <% } %>
       });
      } catch (error: any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
 
@@ -184,10 +184,10 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
         const url = window.location.href;
         const httpParams = new HttpParams({ fromString: url.split('?')[1] });
         if (httpParams.get("type") != null) {
-          <%=classify(prefixClass)%>AuthService.applicationType.type = httpParams.get("type");
+          AuthService.applicationType.type = httpParams.get("type");
         } else
-        <%=classify(prefixClass)%>AuthService.applicationType.type = "web";
-        if ( <%=classify(prefixClass)%>AuthService.applicationType.type == "teams") {
+        AuthService.applicationType.type = "web";
+        if ( AuthService.applicationType.type == "teams") {
           this.contextTeams(observer);
         } else {
           this.ssoActiveDirectory(observer);
@@ -226,7 +226,7 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
         console.log("Logout called...")
       <% } %>  
     } catch (error:any) { 
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, true)
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true)
     }
   }
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
@@ -241,13 +241,13 @@ export class <%=classify(prefixClass)%>AuthService<% if (loginSupportConfigurati
     intervalForToken.subscribe(() => {
       microsoftTeams.authentication.getAuthToken({
         successCallback: (token) => {
-          <%=classify(prefixClass)%>AuthService.idToken = token;
-          const decodetToken: any = <%=classify(prefixClass)%>Utils.decodeJwtToken(token)
+          AuthService.idToken = token;
+          const decodetToken: any = Utils.decodeJwtToken(token)
           const expireTime = (decodetToken.exp * 1000) - new Date().getTime();
           this.getToken(expireTime);
         },
         failureCallback: (error) => {
-          <%=classify(prefixClass)%>AuthService.teamContext = null;
+          AuthService.teamContext = null;
         }
       })
     })

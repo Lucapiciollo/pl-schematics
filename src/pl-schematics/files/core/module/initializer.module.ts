@@ -18,12 +18,12 @@ import { UiLoaderConfig } from '../utils/UiLoaderConfig';
 import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
 import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
 import { environment } from '../../../../../../environments/environment';
-import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from '../interceptor/http-interceptor.service';
-import {<%=classify(prefixClass)%>AuthService } from '../service/auth.service';
-import <%=classify(prefixClass)%>AmbientModeProviderFactory from '../initializer/AmbientModeLoader';
-import <%=classify(prefixClass)%>AutenticationLoader from "../initializer/AutenticationLoader";
+import {DEFAULT_TIMEOUT, HttpInterceptorService } from '../interceptor/http-interceptor.service';
+import {AuthService } from '../service/auth.service';
+import AmbientModeProviderFactory from '../initializer/AmbientModeLoader';
+import AutenticationLoader from "../initializer/AutenticationLoader";
 
-import {<%=classify(prefixClass)%>HttpInterceptorFakeService} from "../interceptor/http-interceptor-fake.service";
+import {HttpInterceptorFakeService} from "../interceptor/http-interceptor-fake.service";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
 import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from "@azure/msal-angular";
@@ -32,7 +32,7 @@ import { filter } from 'rxjs/operators';
 
 /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
 export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
-  return <%=classify(prefixClass)%>AuthService.applicationType.type == "teams" ? httpInterceptorFakeService : msalInterceptor;
+  return AuthService.applicationType.type == "teams" ? httpInterceptorFakeService : msalInterceptor;
 };
 
 <% } %>
@@ -75,9 +75,9 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
       BroadcastService,
       MsalService,
       MsalInterceptor,
-      <%=classify(prefixClass)%>HttpInterceptorFakeService,
+      HttpInterceptorFakeService,
     <%}%>
-    <%=classify(prefixClass)%>HttpInterceptorService,
+    HttpInterceptorService,
     /**
     * @author l.piciollo
     * inizializzazione della base url per le chiamate al BE, la configurazione prevede che venga valorizzata la chiave di accesso
@@ -100,32 +100,32 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      * @author l.piciollo
      * intercettore msal per i reperimento del token in base allo scope per invocazione a microsoft graph
      * */
-     { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [<%=classify(prefixClass)%>HttpInterceptorFakeService, MsalInterceptor] },
+     { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [HttpInterceptorFakeService, MsalInterceptor] },
     <%}%>
 
        /**
      * @author l.piciollo
      * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.
      */
-        { provide: HTTP_INTERCEPTORS, useClass: <%=classify(prefixClass)%>HttpInterceptorService, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true },
     /**
      * @author l.piciollo
      * viene iniettato il processo di login..
      * il servizio deve ritornare un ok che indica l'avvenuta login, altrimenti il portale non si avvia 
      */
-    { provide: APP_INITIALIZER, useFactory: <%=classify(prefixClass)%>AutenticationLoader, deps: [<%=classify(prefixClass)%>AuthService ], multi: true },
+    { provide: APP_INITIALIZER, useFactory: AutenticationLoader, deps: [AuthService ], multi: true },
     /**
     * @author l.piciollo
     * viene intercettata la creazione del portale.. 
     * viene identificato il tipo di browwser e vengono adeguate le funzionalita per il tipo di browser. 
     * l'adeguamento riane trasparente all'applicazione, il core ne gestisce le funzionalità
     */
-    { provide: APP_INITIALIZER, useFactory: <%=classify(prefixClass)%>AmbientModeProviderFactory, deps: [PlAmbientModeLoaderService], multi: true },
+    { provide: APP_INITIALIZER, useFactory: AmbientModeProviderFactory, deps: [PlAmbientModeLoaderService], multi: true },
     /**
      * @author l.piciollo
      * impostazione tempo massimo di attesa per richieste al BE
      */
-    { provide: <%=classify(prefixClass)%>DEFAULT_TIMEOUT, useValue: 300000 },    
+    { provide: DEFAULT_TIMEOUT, useValue: 300000 },    
     { provide: DEFAULT_PATH_MOCK, useValue: "public/mock" } 
      
   ],
@@ -139,7 +139,7 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
     <% } %>
   ]
 })
-export class   <%=classify(prefixClass)%>InitializerModule {
+export class   InitializerModule {
   
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
     /**
@@ -162,7 +162,7 @@ export class   <%=classify(prefixClass)%>InitializerModule {
 
   static forRoot() {
     return {
-      ngModule:   <%=classify(prefixClass)%>InitializerModule,
+      ngModule:   InitializerModule,
       providers: [],
       import: []
     }

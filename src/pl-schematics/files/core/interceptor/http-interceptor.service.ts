@@ -17,15 +17,15 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Inject, Injectable, InjectionToken, Injector } from '@angular/core';
  import { Observable, of } from 'rxjs';
 import { finalize, tap, timeout } from 'rxjs/operators';
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../bean/error-bean';
+import { ErrorBean, ErrorCode } from '../bean/error-bean';
 import { CORE_TYPE_EVENT } from '../type/type.event';
-import { <%=classify(prefixClass)%>Utils  }  from '../../shared/utils/utils';
+import { Utils  }  from '../../shared/utils/utils';
 import {  CACHE_TAG,  PlCacheMapService,  PlCoreUtils} from 'pl-core-utils-library';
 /** 
  * @author l.piciollo
  * token per la valorizzazione dell'attesa prima di terminare in timeout la richiesta al BE 
  */
-export const <%=classify(prefixClass)%>DEFAULT_TIMEOUT = new InjectionToken<number>('DefaulTimeOut for http request');
+export const DEFAULT_TIMEOUT = new InjectionToken<number>('DefaulTimeOut for http request');
 
 /**
  * @author l.piciollo
@@ -41,10 +41,10 @@ export const <%=classify(prefixClass)%>DEFAULT_TIMEOUT = new InjectionToken<numb
 @Injectable({
   providedIn: 'root'
 })
-export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInterceptor {
+export class HttpInterceptorService implements HttpInterceptor {
 
   /***************************************************************************************************************************** */
-  constructor(private cache: PlCacheMapService, @Inject(CACHE_TAG) protected tagCache: string, @Inject(<%=classify(prefixClass)%>DEFAULT_TIMEOUT) protected defaultTimeout: number, private injector: Injector) {
+  constructor(private cache: PlCacheMapService, @Inject(CACHE_TAG) protected tagCache: string, @Inject(DEFAULT_TIMEOUT) protected defaultTimeout: number, private injector: Injector) {
 
   }
   /***************************************************************************************************************************** */
@@ -86,7 +86,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
       }
       /***************************************************************************************************************************** */
       let timeoutValue = Number(request.headers.get('timeout')) || this.defaultTimeout;
-      let uuid =  <%=classify(prefixClass)%>Utils.UUIDCODE(); 
+      let uuid =  Utils.UUIDCODE(); 
       let headers = { 'TransactionID': uuid };
       let urlApp = request.url;
       let url = request.url;
@@ -106,7 +106,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
             if (err instanceof HttpErrorResponse) {
             /**l'errore vienre rediretto nell'intercettore di eccezione, è possibile specializzarne l'operazione di gestione */
               PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, err);
-              throw new  <%=classify(prefixClass)%>ErrorBean(err.message, <%=classify(prefixClass)%>ErrorCode.NETWORKERROR)
+              throw new  ErrorBean(err.message, ErrorCode.NETWORKERROR)
             }
           }
         ),
@@ -117,7 +117,7 @@ export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInt
         })
       );
     } catch (error:any) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
+      throw new  ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE);
     }
   };
   /***************************************************************************************************************************** */

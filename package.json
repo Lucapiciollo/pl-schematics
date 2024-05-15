@@ -1,6 +1,6 @@
 {
   "name": "pl-schematics",
-  "version": "2.6.1",
+  "version": "3.0.2",
   "description": "Standardize template develop",
   "scripts": {
     "build": "tsc -p tsconfig.json ",
@@ -16,26 +16,36 @@
   "license": "MIT",
   "schematics": "./src/collection.json",
   "dependencies": {
+    "@angular-builders/custom-webpack": "^11.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "@types/jasmine": "^3.3.9",
     "@types/node": "^8.0.31",
+    "angular2-uuid": "^1.1.1",
     "chalk": "^4.1.0",
+    "html-minimizer-webpack-plugin": "^2.1.0",
+    "html-webpack-banner-plugin": "^2.0.0",
     "jasmine": "^3.3.1",
     "schematics-utilities": "^2.0.0",
     "shelljs": "^0.8.4",
-    "typescript": "~3.5.3",
+    "typescript": "~4.9.4",
     "webpack-dev-middleware": "^4.1.0",
-    "workbox-webpack-plugin": "^6.1.0",
-    "@angular-builders/custom-webpack": "^11.0.0",
-    "html-minimizer-webpack-plugin": "^2.1.0",
-    "html-webpack-banner-plugin": "^2.0.0"
+    "workbox-webpack-plugin": "^6.1.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Lucapiciollo/pl-schematics.git"
   },
   "devDependencies": {
-    "@angular-devkit/core": "^8.3.21",
-    "@angular-devkit/schematics": "^8.3.21",
+    "@angular-devkit/core": "^8.3.29",
+    "@angular-devkit/schematics": "^8.3.29",
+    "@angular/animations": "^15.1.0",
+    "@angular/common": "^15.1.0",
+    "@angular/compiler": "^15.1.0",
+    "@angular/core": "^15.1.1",
+    "@angular/forms": "^15.1.0",
+    "@angular/platform-browser": "^15.1.0",
+    "@angular/platform-browser-dynamic": "^15.1.0",
+    "@angular/router": "^15.1.0",
     "schematics-utilities": "^2.0.0"
   }
 }

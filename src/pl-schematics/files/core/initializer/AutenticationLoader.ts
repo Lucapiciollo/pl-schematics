@@ -7,7 +7,7 @@
  * in caso non lo fosse, l'autenticazione da parte dell'utente]
  */
 
-import { <%=classify(prefixClass)%>AuthService } from '../service/auth.service';
+import { AuthService } from '../service/auth.service';
 
 
 /**
@@ -17,7 +17,7 @@ import { <%=classify(prefixClass)%>AuthService } from '../service/auth.service';
  * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
   
  */
-export default function <%=classify(prefixClass)%>AutenticationLoader(authService: <%=classify(prefixClass)%>AuthService) {
+export default function AutenticationLoader(authService: AuthService) {
     return (): Promise<any> => {
         return new Promise((resolve, reject) => {
             /**

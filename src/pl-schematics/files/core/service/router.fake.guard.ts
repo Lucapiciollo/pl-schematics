@@ -11,12 +11,12 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
 import { MsalGuard } from '@azure/msal-angular';
 <%}  %>  
-import { <%=classify(prefixClass)%>AuthService } from './auth.service';
+import { AuthService } from './auth.service';
 @Injectable({ providedIn: "root" })
-export class <%=classify(prefixClass)%>RouteFakeGuard implements CanActivate {
-    constructor(public auth: <%=classify(prefixClass)%>AuthService, public router: Router <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> , private msalGuard: MsalGuard <%}  %>) { }
+export class RouteFakeGuard implements CanActivate {
+    constructor(public auth: AuthService, public router: Router <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> , private msalGuard: MsalGuard <%}  %>) { }
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        return <%=classify(prefixClass)%>AuthService.applicationType.type == "web" ?  <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> this.msalGuard.canActivate(route, state) : true <%} else { %> true:true  <% } %> ;
+        return AuthService.applicationType.type == "web" ?  <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> this.msalGuard.canActivate(route, state) : true <%} else { %> true:true  <% } %> ;
     }
 }
 

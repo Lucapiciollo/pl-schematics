@@ -16,11 +16,6 @@
             "default": "com/mycompany/normalize",
             "x-prompt": "Insert name of package core..."
         },
-        "prefixClass": {
-            "type": "string",
-            "default": "",
-            "x-prompt": "Insert prefix class for core schematics.. for example SC"
-        },
         "browserSupported": {
             "enum": [
                 "BROWSER.EDG",
@@ -52,15 +47,31 @@
             ],
             "default": "Y",
             "x-prompt": "DO you want add bootstrap 5 support ?"
-        } ,
-        "enableSonarQube": {
+        },
+        "addSupportIonic": {
+            "enum": [
+                "Y",
+                "N"
+            ],
+            "default": "N",
+            "x-prompt": "DO you want add Ionic support ?"
+        },
+        "addSupportNgrx": {
             "enum": [
                 "Y",
                 "N"
             ],
             "default": "Y",
+            "x-prompt": "DO you want add Ngrx support ?"
+        },
+        "enableSonarQube": {
+            "enum": [
+                "Y",
+                "N"
+            ],
+            "default": "N",
             "x-prompt": "DO you want add sonar support ?"
-        } 
+        }
     },
     "required": [
         "namePackage"

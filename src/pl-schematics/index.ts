@@ -4,14 +4,14 @@ import { strings } from '@angular-devkit/core';
 import { apply, chain, mergeWith, move, Rule, SchematicContext, template, Tree, url } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addModuleImportToRootModule, addPackageJsonDependency, buildDefaultPath, getProjectFromWorkspace, getWorkspace, NodeDependency, NodeDependencyType } from 'schematics-utilities';
-import { check } from "./checkVersion"
+import { check } from "./checkVersion";
 
 /******************************************************************************************************************** */
 function addPackageJsonDependencies(options: any): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
       { type: NodeDependencyType.Default, version: '^1.4.1', name: String("pl-decorator") },
-      { type: NodeDependencyType.Default, version: '^1.8.4', name: String("pl-core-utils-library") },
+      { type: NodeDependencyType.Default, version: '^1.8.12', name: String("pl-core-utils-library") },
       { type: NodeDependencyType.Default, version: '^5.15.1', name: String("@fortawesome/fontawesome-free") },
       { type: NodeDependencyType.Default, version: '^4.0.0', name: String("@ngx-translate/http-loader") },
       { type: NodeDependencyType.Default, version: '11.0.1', name: String("@ngx-translate/core") },
@@ -19,24 +19,40 @@ function addPackageJsonDependencies(options: any): Rule {
       { type: NodeDependencyType.Default, version: '^2.9.4', name: String("chart.js") },
       { type: NodeDependencyType.Default, version: '^1.1.11', name: String("@compodoc/compodoc") },
       { type: NodeDependencyType.Default, version: '^12.0.0', name: String("@angular-builders/custom-webpack") },
-/*       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
-      { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") }, */
+      /*       { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler") },
+            { type: NodeDependencyType.Default, version: 'latest', name: String("@angular/compiler-cli") }, */
       { type: NodeDependencyType.Default, version: '^0.5.7', name: String("chartjs-plugin-annotation") },
       { type: NodeDependencyType.Default, version: '^5.3.1', name: String("html-webpack-plugin") },
       { type: NodeDependencyType.Default, version: '^1.0.6', name: String("replace-in-file-webpack-plugin") },
       { type: NodeDependencyType.Default, version: '^3.0.0', name: String("@microsoft/microsoft-graph-client") },
       { type: NodeDependencyType.Default, version: '^1.11.0', name: String("@microsoft/teams-js") },
-      
+      { type: NodeDependencyType.Default, version: '^16.1.7', name: String("@angular/material") }
+
     ];
+
+    if (options.addSupportNgrx == "Y") {
+      dependencies.push({ type: NodeDependencyType.Default, version: '^5.36.0', name: String("@ngrx/effects") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^7.0.0', name: String("@ngrx/router-store") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^10.0.0', name: String("@ngrx/store") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^3.2.2', name: String("@ngrx/store-devtools") });
+    }
+
+    if (options.addSupportIonic == "Y") {
+      dependencies.push({ type: NodeDependencyType.Default, version: '^5.36.0', name: String("@ionic-native/camera") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^7.0.0', name: String("@ionic/angular") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^10.0.0', name: String("@ionic/angular-toolkit") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^3.2.2', name: String("@ionic/pwa-elements") });
+    }
+
     if (options.addSupportBootstrap == "Y") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '^1.14.3', name: String("popper.js") }); 
-	    dependencies.push({ type: NodeDependencyType.Default, version: '^2.4.15', name: String("@popperjs/core") }); 
+      dependencies.push({ type: NodeDependencyType.Default, version: '^1.14.3', name: String("popper.js") });
+      dependencies.push({ type: NodeDependencyType.Default, version: '^2.4.15', name: String("@popperjs/core") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.4.0', name: String("jquery") });
       dependencies.push({ type: NodeDependencyType.Default, version: '^5.0.0', name: String("bootstrap") });
     }
     if (options.loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {
-      dependencies.push({ type: NodeDependencyType.Default, version: '1.0.0', name: String("@azure/msal-angular") });
-      dependencies.push({ type: NodeDependencyType.Default, version: '1.3.2', name: String("msal") });
+      dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("@azure/msal-angular") });
+      dependencies.push({ type: NodeDependencyType.Default, version: 'latest', name: String("msal") });
     }
     if (options.enableSonarQube == "Y") {
       dependencies.push({ type: NodeDependencyType.Default, version: '^3.1.0', name: String("sonar-scanner") });
@@ -112,7 +128,7 @@ function updateAngularJsonForBootstrap(): Rule {
   return (host: Tree, context: SchematicContext) => {
     const angularJsonFile = host.read('angular.json');
     if (angularJsonFile) {
-       var json = JSON.parse(angularJsonFile.toString());
+      var json = JSON.parse(angularJsonFile.toString());
       //json['projects'][json.defaultProject]['architect']['build']["builder"] = "@angular-builders/custom-webpack:browser";
       //json['projects'][json.defaultProject]['architect']['serve']["builder"] = "@angular-builders/custom-webpack:dev-server";
       var optionsJson = json['projects'][json.defaultProject]['architect']['build']['options'];
@@ -211,6 +227,7 @@ export default function (options: any): Rule {
     addClass(options, "./files/core/utils", options.namePackage + "/core/utils/"),
     addClass(options, "./files/core/type", options.namePackage + "/core/type/"),
     addClass(options, "./files/home", options.namePackage + "/component/page/home"),
+    addClass(options, "./files/redux", options.namePackage + "/shared/redux"),
     addClass(options, "./files/component", "/"),
     addClass(options, "./files/extension", "/"),
     addClass(options, "./files/customInterface", "../"),
@@ -228,12 +245,12 @@ export default function (options: any): Rule {
     scaffoldSchematics(options, options.namePackage + "/component/section/tab"),
     scaffoldSchematics(options, options.namePackage + "/shared/config"),
     scaffoldSchematics(options, options.namePackage + "/shared/bean"),
-/*     scaffoldSchematics(options, options.namePackage + "/shared/pipe"), */
+    /*     scaffoldSchematics(options, options.namePackage + "/shared/pipe"), */
     scaffoldSchematics(options, options.namePackage + "/shared/directive"),
-    addModuleToImports(options, options.prefixClass + "InitializerModule", "./" + options.namePackage + "/core/module/initializer.module"),
+    addModuleToImports(options, "InitializerModule", "./" + options.namePackage + "/core/module/initializer.module"),
     addModuleToImports(options, "SharedModule", "./" + options.namePackage + "/shared/module/shared.module"),
     addModuleToImports(options, "AppRoutingModule", "./app-routing.module"),
-    check({  "pl-core-utils-library": "" }),
+    check({ "pl-core-utils-library": "" }),
 
   ]);
 }

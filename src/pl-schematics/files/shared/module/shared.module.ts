@@ -8,18 +8,19 @@
  * import ed in export
  * ]
  */
-import { HttpClientModule ,HttpClient} from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
-import { <%=classify(prefixClass)%>GlobalService } from '../service/global.service';
+import { GlobalService } from '../service/global.service';
 import { CommonModule } from '@angular/common';
-import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { SortPipe } from '../pipe/SortPipe.pipe';
 import { FeatureModule } from '../features/feature.module';
+import { DirectiveModule } from '../directive/directive.module';
 /**import { MAT_DATE_LOCALE } from '@angular/material/core';*/
-
+import { MaterialModule } from './material.module';
 
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -33,8 +34,10 @@ export function HttpLoaderFactory(http: HttpClient) {
  *  impport ed in export
  */
 @NgModule({
-  declarations: [ SortPipe],
+  declarations: [SortPipe],
   imports: [
+    MaterialModule,
+    DirectiveModule,
     FeatureModule,
     CommonModule,
     HttpClientModule,
@@ -47,22 +50,24 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
   ],
-  providers: [/**{provide: MAT_DATE_LOCALE, useValue: 'it-IT' }*/ ],
+  providers: [/**{provide: MAT_DATE_LOCALE, useValue: 'it-IT' }*/],
   exports: [
+    MaterialModule,
     FeatureModule,
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule ,
+    TranslateModule,
+    DirectiveModule
   ]
 })
 export class SharedModule {
 
-  constructor(private globalService: <%=classify(prefixClass)%>GlobalService,public translate: TranslateService) { 
-      /**inizializzazione del servizio per la creazione dei listener */
-      translate.setDefaultLang('it');
-   }
-  
+  constructor(private globalService: GlobalService, public translate: TranslateService) {
+    /**inizializzazione del servizio per la creazione dei listener */
+    translate.setDefaultLang('it');
+  }
+
   static forRoot() {
     return {
       ngModule: SharedModule,

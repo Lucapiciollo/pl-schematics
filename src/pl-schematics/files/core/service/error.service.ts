@@ -12,7 +12,7 @@
  */
 
 import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { <%=classify(prefixClass)%>ErrorBean } from '../bean/error-bean'; 
+import { ErrorBean } from '../bean/error-bean'; 
 import { PlCoreUtils } from 'pl-core-utils-library';
 import { CORE_TYPE_EVENT } from '../type/type.event';
 /**
@@ -29,7 +29,7 @@ import { CORE_TYPE_EVENT } from '../type/type.event';
 * DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
 * NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
 */
-export class <%=classify(prefixClass)%>ErrorService implements ErrorHandler {
+export class ErrorService implements ErrorHandler {
 
   constructor(private injector: Injector) { }
   /**
@@ -40,7 +40,7 @@ export class <%=classify(prefixClass)%>ErrorService implements ErrorHandler {
 
    handleError(errorBean: any) {
     try {
-      if (errorBean  instanceof <%=classify(prefixClass)%>ErrorBean || errorBean.rejection instanceof <%=classify(prefixClass)%>ErrorBean) {
+      if (errorBean  instanceof ErrorBean || errorBean.rejection instanceof ErrorBean) {
         /**
          * evento lanciato per indicare che l'errore riscontrato necessita di un messaggio di dialogo figurativo per il cliente 
          * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 

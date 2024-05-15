@@ -6,13 +6,13 @@
  * @desc [Classe di utilita, qui vengono elencate tutte le funzionalità per l'itera applicazione.]
  */
 import { UUID } from "angular2-uuid";
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from '../../core/bean/error-bean';
+import { ErrorBean, ErrorCode } from '../../core/bean/error-bean';
 
 /**
  * @author l.piciollo
  * classe di utilità, qui vengono elencate tutte le funzioni utili per tutta l'applicazione
  */
-export class <%=classify(prefixClass)%>Utils {
+export class Utils {
   /**
    * @author l.piciollo
    * genera un UUID da assegnare a componenti grafici come ID o altro
@@ -21,7 +21,7 @@ export class <%=classify(prefixClass)%>Utils {
     try {
       return UUID.UUID();
     } catch (error:any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
@@ -42,7 +42,7 @@ export class <%=classify(prefixClass)%>Utils {
       }
       return alpha;
     } catch (error:any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
@@ -66,7 +66,7 @@ export class <%=classify(prefixClass)%>Utils {
       }
       return null;
     } catch (error:any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
@@ -84,7 +84,7 @@ export class <%=classify(prefixClass)%>Utils {
       var expires = "expires=" + date.toUTCString();
       document.cookie = nameCookie + "=" + valueCookie + ";expires=" + expires + ";path=/";
     } catch (error:any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
@@ -95,9 +95,9 @@ export class <%=classify(prefixClass)%>Utils {
    */
   public static deleteCookie(nameCookie: string) {
     try {
-      <%=classify(prefixClass)%>Utils.setCookie(nameCookie, "", 0);
+      Utils.setCookie(nameCookie, "", 0);
     } catch (error:any) {
-      throw new <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE, false, false);
+      throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, false);
     }
   }
 
