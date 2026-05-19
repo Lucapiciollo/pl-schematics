@@ -1,68 +1,173 @@
 {
-    "$schema": "http://json-schema.org/schema",
-    "$id": "PLSCHEMATICS",
-    "title": "Package name for files",
-    "type": "object",
-    "description": "Generating standard schematic for project",
-    "properties": {
-        "nameCompany": {
-            "type": "string",
-            "description": "Company name...",
-            "default": "mycompany",
-            "x-prompt": "What's name your company?"
-        },
-        "namePackage": {
-            "type": "string",
-            "default": "com/mycompany/normalize",
-            "x-prompt": "Insert name of package core..."
-        },
-        "prefixClass": {
-            "type": "string",
-            "default": "",
-            "x-prompt": "Insert prefix class for core schematics.. for example SC"
-        },
-        "browserSupported": {
-            "enum": [
-                "BROWSER.EDG",
-                "BROWSER.OPERA",
-                "BROWSER.CHROME",
-                "BROWSER.IE",
-                "BROWSER.FIREFOX",
-                "BROWSER.SAFARI",
-                "BROWSER.OTHER",
-                "BROWSER.ALL"
-            ],
-            "description": "Select compatible browser ",
-            "default": "BROWSER.ALL",
-            "x-prompt": "Select compatible browser "
-        },
-        "loginSupportConfiguration": {
-            "enum": [
-                "NONE",
-                "AZURE-ACTIVE-DIRECT"
-            ],
-            "description": "Enable login support",
-            "default": "NONE",
-            "x-prompt": "Login support configuration..."
-        },
-        "addSupportBootstrap": {
-            "enum": [
-                "Y",
-                "N"
-            ],
-            "default": "Y",
-            "x-prompt": "DO you want add bootstrap 5 support ?"
-        } ,
-        "enableSonarQube": {
-            "enum": [
-                "Y",
-                "N"
-            ],
-            "default": "Y",
-            "x-prompt": "DO you want add sonar support ?"
-        } 
+  "$schema": "http://json-schema.org/schema",
+  "$id": "PlSchematics",
+  "title": "PL Schematics Options",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Angular project name"
     },
-    "required": [
-        "namePackage"
-    ]
+    "nameCompany": {
+      "type": "string",
+      "description": "Company name",
+      "default": "mycompany"
+    },
+    "namePackage": {
+      "type": "string",
+      "description": "Generated package/folder name"
+    },
+    "prefixClass": {
+      "type": "string",
+      "description": "Class prefix used for generated modules/classes",
+      "default": ""
+    },
+    "browserSupported": {
+      "type": "string",
+      "description": "Browser support strategy",
+      "default": "BROWSER.ALL",
+      "enum": [
+        "BROWSER.EDG",
+        "BROWSER.OPERA",
+        "BROWSER.CHROME",
+        "BROWSER.IE",
+        "BROWSER.FIREFOX",
+        "BROWSER.SAFARI",
+        "BROWSER.OTHER",
+        "BROWSER.ALL"
+      ]
+    },
+    "loginSupportConfiguration": {
+      "type": "string",
+      "description": "Authentication support",
+      "default": "NONE",
+      "enum": [
+        "NONE",
+        "AZURE-ACTIVE-DIRECT"
+      ]
+    },
+    "addSupportBootstrap": {
+      "type": "string",
+      "description": "Legacy bootstrap support flag",
+      "default": "Y",
+      "enum": [
+        "Y",
+        "N"
+      ]
+    },
+    "enableSonarQube": {
+      "type": "string",
+      "description": "Enable SonarQube support",
+      "default": "Y",
+      "enum": [
+        "Y",
+        "N"
+      ]
+    },
+    "architecture": {
+      "type": "string",
+      "description": "Angular architecture style",
+      "default": "classic",
+      "enum": [
+        "classic",
+        "standalone",
+        "hybrid"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "description": "State management strategy",
+      "default": "none",
+      "enum": [
+        "none",
+        "ngrx",
+        "signals"
+      ]
+    },
+    "http": {
+      "type": "string",
+      "description": "HTTP layer strategy",
+      "default": "interceptor-classic",
+      "enum": [
+        "none",
+        "interceptor-classic",
+        "interceptor-functional"
+      ]
+    },
+    "ui": {
+      "type": "string",
+      "description": "UI framework",
+      "default": "bootstrap",
+      "enum": [
+        "none",
+        "bootstrap",
+        "material",
+        "ux-directives"
+      ]
+    },
+    "i18n": {
+      "type": "string",
+      "description": "Internationalization strategy",
+      "default": "ngx-translate",
+      "enum": [
+        "none",
+        "ngx-translate",
+        "angular-localize"
+      ]
+    },
+    "logging": {
+      "type": "string",
+      "description": "Logging strategy",
+      "default": "console",
+      "enum": [
+        "none",
+        "console",
+        "advanced"
+      ]
+    },
+    "mockApi": {
+      "type": "string",
+      "description": "Mock API strategy",
+      "default": "none",
+      "enum": [
+        "none",
+        "json-server",
+        "node-express"
+      ]
+    },
+    "ci": {
+      "type": "string",
+      "description": "CI/CD pipeline support",
+      "default": "none",
+      "enum": [
+        "none",
+        "github-actions",
+        "azure-devops"
+      ]
+    },
+    "tests": {
+      "type": "string",
+      "description": "Testing strategy",
+      "default": "jasmine",
+      "enum": [
+        "none",
+        "jasmine",
+        "jest",
+        "vitest"
+      ]
+    },
+    "docker": {
+      "type": "boolean",
+      "description": "Add Docker support",
+      "default": false
+    },
+    "strict": {
+      "type": "boolean",
+      "description": "Enable stricter generated configuration",
+      "default": false
+    }
+  },
+  "required": [
+    "namePackage"
+  ]
 }

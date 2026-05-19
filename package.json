@@ -1,37 +1,49 @@
 {
   "name": "pl-schematics",
-  "version": "2.4.13",
-  "description": "Standardize template develop",
+  "version": "2.4.14",
+  "description": "Standardize Angular project template with PL schematics",
+  "schematics": "./src/collection.json",
+  "keywords": [
+    "schematics",
+    "angular",
+    "angular-devkit",
+    "template",
+    "generator"
+  ],
+  "author": "@l.piciollo",
+  "license": "MIT",
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build": "tsc -p tsconfig.json ",
+    "build": "tsc -p tsconfig.json",
     "test": "npm run build && jasmine src/**/*_spec.js",
+    "test:schematic": "npm run build && schematics .:pl-schematics --namePackage=my-app-template --dry-run",
+    "test:schematic:full": "npm run build && schematics .:pl-schematics --namePackage=my-app-template --nameCompany=PL --architecture=classic --state=none --http=interceptor-classic --ui=bootstrap --i18n=ngx-translate --logging=console --mockApi=none --ci=none --tests=jasmine --docker=false --strict=false --dry-run",
     "release-patch": "npm --no-git-tag-version version patch && npm run build",
     "release-minor": "npm --no-git-tag-version version minor && npm run build",
     "release-major": "npm --no-git-tag-version version major && npm run build"
   },
-  "keywords": [
-    "schematics"
-  ],
-  "author": "@l.piciollo",
-  "license": "MIT",
-  "schematics": "./src/collection.json",
   "dependencies": {
-    "@types/jasmine": "^3.3.9",
-    "@types/node": "^8.0.31",
-    "chalk": "^4.1.0",
-    "jasmine": "^3.3.1",
-    "schematics-utilities": "^2.0.0",
-    "shelljs": "^0.8.4",
-    "typescript": "~3.5.3",
-    "webpack-dev-middleware": "^4.1.0",
-    "workbox-webpack-plugin": "^6.1.0",
-    "@angular-builders/custom-webpack": "^11.0.0",
-    "html-minimizer-webpack-plugin": "^2.1.0",
-    "html-webpack-banner-plugin": "^2.0.0"
+    "@angular-devkit/core": "8.3.21",
+    "@angular-devkit/schematics": "8.3.21",
+    "chalk": "4.1.0",
+    "schematics-utilities": "2.0.0",
+    "shelljs": "0.8.4"
   },
   "devDependencies": {
-    "@angular-devkit/core": "^8.3.21",
-    "@angular-devkit/schematics": "^8.3.21",
-    "schematics-utilities": "^2.0.0"
+    "@angular-devkit/schematics-cli": "0.803.21",
+    "@types/jasmine": "3.3.9",
+    "@types/node": "8.0.31",
+    "jasmine": "3.3.1",
+    "typescript": "3.5.3"
+  },
+  "peerDependencies": {
+    "@angular-devkit/schematics": ">=8.0.0"
+  },
+  "engines": {
+    "node": ">=10.13.0"
   }
 }
