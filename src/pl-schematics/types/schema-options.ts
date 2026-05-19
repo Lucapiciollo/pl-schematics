@@ -71,7 +71,7 @@ export interface PlSchematicsOptions {
 
   browserSupported?: BrowserSupported;
   loginSupportConfiguration?: LoginSupportConfiguration;
-
+  includeDocumentation: boolean;
   addSupportBootstrap?: YesNo;
   enableSonarQube?: YesNo;
 
@@ -99,7 +99,7 @@ export interface NormalizedPlSchematicsOptions {
 
   browserSupported: BrowserSupported;
   loginSupportConfiguration: LoginSupportConfiguration;
-
+  includeDocumentation?: boolean;
   addSupportBootstrap: YesNo;
   enableSonarQube: YesNo;
 

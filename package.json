@@ -24,8 +24,8 @@
     "test:schematic:full": "npm run build && schematics .:pl-schematics --namePackage=my-app-template --nameCompany=PL --architecture=classic --state=none --http=interceptor-classic --ui=bootstrap --i18n=ngx-translate --logging=console --mockApi=none --ci=none --tests=jasmine --docker=false --strict=false --dry-run",
     "release-patch": "npm --no-git-tag-version version patch && npm run build",
     "release-minor": "npm --no-git-tag-version version minor && npm run build",
-    "release-major": "npm --no-git-tag-version version major && npm run build"
-  },
+    "release-major": "npm --no-git-tag-version version major && npm run build" 
+   },
   "dependencies": {
     "@angular-devkit/core": "8.3.21",
     "@angular-devkit/schematics": "8.3.21",

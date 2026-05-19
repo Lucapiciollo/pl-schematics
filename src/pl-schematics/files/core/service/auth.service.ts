@@ -25,7 +25,7 @@ import { MsalService, BroadcastService } from '@azure/msal-angular';
 import { CORE_TYPE_EVENT } from '../type/type.event';
 import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from '@microsoft/microsoft-graph-client';
 
-<%}%>  
+ 
 <% } else { %>  
   import { AuthenticationProviderOptions } from '@microsoft/microsoft-graph-client';
 <% } %>

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "firstName": "Mario",
+    "lastName": "Rossi",
+    "role": "Operator",
+    "active": true
+  },
+  {
+    "id": 2,
+    "firstName": "Anna",
+    "lastName": "Bianchi",
+    "role": "Supervisor",
+    "active": true
+  },
+  {
+    "id": 3,
+    "firstName": "Luca",
+    "lastName": "Verdi",
+    "role": "Operator",
+    "active": false
+  }
+]

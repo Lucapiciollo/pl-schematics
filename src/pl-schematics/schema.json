@@ -115,6 +115,11 @@
         "angular-localize"
       ]
     },
+    "includeDocumentation": {
+      "type": "boolean",
+      "description": "Include generated documentation files",
+      "default": false
+    },
     "logging": {
       "type": "string",
       "description": "Logging strategy",

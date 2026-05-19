@@ -30,6 +30,7 @@ export function addClass(
     const source = apply(sourceTemplate, [
       template({
         ...options,
+        name: options.namePackage,
         ...strings,
       }),
       move(defaultPath + '/' + destPath),

@@ -1,5 +1,5 @@
 import { chain, noop, Rule } from '@angular-devkit/schematics';
-
+import { addAdvancedLogging } from './rules/add-advanced-logging.rule';
 import { check } from './checkVersion';
 import { addPackageJsonDependencies } from './rules/add-package-json-dependencies.rule';
 import { addRootModuleImports } from './rules/add-root-module-imports.rule';
@@ -28,7 +28,7 @@ export default function plSchematics(options: PlSchematicsOptions): Rule {
     logOptions(options),
 
     addTemplateFiles(options),
-
+    addAdvancedLogging(options),
     options.addSupportBootstrap === 'Y'
       ? updateAngularJsonForBootstrap(options)
       : noop(),

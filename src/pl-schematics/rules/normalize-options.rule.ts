@@ -16,7 +16,7 @@ export function normalizeOptions(options: PlSchematicsOptions): Rule {
         if (!options.namePackage) {
             throw new Error('Option "namePackage" is required.');
         }
-
+        options.includeDocumentation = options.includeDocumentation === true;
         options.architecture = options.architecture || 'classic';
         options.state = options.state || 'none';
         options.http = options.http || 'interceptor-classic';

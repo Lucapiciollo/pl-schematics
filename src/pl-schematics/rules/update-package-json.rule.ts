@@ -37,6 +37,9 @@ export function updatePackageJsonForBuild(
 
         delete packageJson.scripts.build;
 
+        if (options.mockApi === 'node-express') {
+            packageJson.scripts['mock-api'] = 'cd mock-api && npm install && npm run start';
+        }
         packageJson.scripts['build-dev'] = 'ng build';
         packageJson.scripts['build-prod'] =
             'ng build --lazyModules --aot --prod --source-map=false';

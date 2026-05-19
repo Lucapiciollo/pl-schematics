@@ -2,33 +2,128 @@ import { chain, noop, Rule } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { addClass } from './add-class.rule';
 
+interface TemplateFolderConfig {
+    source: string;
+    destination: string;
+    enabled?: (options: PlSchematicsOptions) => boolean;
+}
+
+const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
+    {
+        source: './files/core/service',
+        destination: '<namePackage>/core/service/',
+    },
+    {
+        source: './files/core/initializer',
+        destination: '<namePackage>/core/initializer/',
+    },
+    {
+        source: './files/core/bean',
+        destination: '<namePackage>/core/bean/',
+    },
+    {
+        source: './files/core/module',
+        destination: '<namePackage>/core/module/',
+    },
+    {
+        source: './files/core/interceptor',
+        destination: '<namePackage>/core/interceptor/',
+    },
+    {
+        source: './files/core/utils',
+        destination: '<namePackage>/core/utils/',
+    },
+    {
+        source: './files/core/type',
+        destination: '<namePackage>/core/type/',
+    },
+
+    {
+        source: './files/shared/module',
+        destination: '<namePackage>/shared/module/',
+    },
+    {
+        source: './files/shared/utils',
+        destination: '<namePackage>/shared/utils/',
+    },
+    {
+        source: './files/shared/service',
+        destination: '<namePackage>/shared/service/',
+    },
+    {
+        source: './files/shared/component',
+        destination: '<namePackage>/shared/component/',
+    },
+    {
+        source: './files/shared/pipe',
+        destination: '<namePackage>/shared/pipe/',
+    },
+
+    {
+        source: './files/home',
+        destination: '<namePackage>/component/page/home',
+    },
+    {
+        source: './files/component',
+        destination: '/',
+    },
+    {
+        source: './files/extension',
+        destination: '/',
+    },
+    {
+        source: './files/customInterface',
+        destination: '../',
+    },
+    {
+        source: './files/properties',
+        destination: '../environments/',
+    },
+    {
+        source: './files/public',
+        destination: '../assets/public',
+    },
+    {
+        source: './documentation',
+        destination: '../../pl-schematics/document',
+        enabled: function (options: PlSchematicsOptions): boolean {
+            return options.includeDocumentation === true;
+        }
+    },
+    {
+        source: './files/mock-api-node',
+        destination: '../mock-api',
+        enabled: function (options: PlSchematicsOptions): boolean {
+            return options.mockApi === 'node-express';
+        },
+    },
+    {
+        source: './files/application',
+        destination: '../../',
+        enabled: options => options.enableSonarQube === 'Y',
+    },
+
+];
+
+function resolveDestination(
+    destination: string,
+    options: PlSchematicsOptions,
+): string {
+    return destination.replace('<namePackage>', options.namePackage);
+}
+
 export function addTemplateFiles(options: PlSchematicsOptions): Rule {
-    return chain([
-        addClass(options, './files/core/service', options.namePackage + '/core/service/'),
-        addClass(options, './files/core/initializer', options.namePackage + '/core/initializer/'),
-        addClass(options, './files/core/bean', options.namePackage + '/core/bean/'),
+    const rules = TEMPLATE_FOLDERS.map((item: TemplateFolderConfig) => {
+        if (item.enabled && !item.enabled(options)) {
+            return noop();
+        }
 
-        addClass(options, './files/core/module', options.namePackage + '/core/module/'),
-        addClass(options, './files/core/interceptor', options.namePackage + '/core/interceptor/'),
-        addClass(options, './files/core/utils', options.namePackage + '/core/utils/'),
-        addClass(options, './files/core/type', options.namePackage + '/core/type/'),
+        return addClass(
+            options,
+            item.source,
+            resolveDestination(item.destination, options),
+        );
+    });
 
-        addClass(options, './files/shared/module', options.namePackage + '/shared/module/'),
-        addClass(options, './files/shared/utils', options.namePackage + '/shared/utils/'),
-        addClass(options, './files/shared/service', options.namePackage + '/shared/service/'),
-        addClass(options, './files/shared/component', options.namePackage + '/shared/component/'),
-        addClass(options, './files/shared/pipe', options.namePackage + '/shared/pipe/'),
-
-        addClass(options, './files/home', options.namePackage + '/component/page/home'),
-        addClass(options, './files/component', '/'),
-        addClass(options, './files/extension', '/'),
-        addClass(options, './files/customInterface', '../'),
-        addClass(options, './files/properties', '../environments/'),
-        addClass(options, './files/public', '../assets/public'),
-        addClass(options, './documentation', '../../pl-schematics/document'),
-
-        options.enableSonarQube === 'Y'
-            ? addClass(options, './files/application', '../../')
-            : noop(),
-    ]);
+    return chain(rules);
 }

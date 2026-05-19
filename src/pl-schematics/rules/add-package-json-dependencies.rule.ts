@@ -128,6 +128,41 @@ export function addPackageJsonDependencies(
       });
     }
 
+    if (options.mockApi === 'node-express') {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Dev,
+          version: '^4.18.2',
+          name: 'express',
+        },
+        {
+          type: NodeDependencyType.Dev,
+          version: '^1.7.0',
+          name: 'cors',
+        },
+        {
+          type: NodeDependencyType.Dev,
+          version: '^5.0.0',
+          name: 'ts-node',
+        },
+        {
+          type: NodeDependencyType.Dev,
+          version: '^10.9.2',
+          name: 'ts-node-dev',
+        },
+        {
+          type: NodeDependencyType.Dev,
+          version: '^4.17.21',
+          name: '@types/express',
+        },
+        {
+          type: NodeDependencyType.Dev,
+          version: '^2.8.17',
+          name: '@types/cors',
+        },
+      );
+    }
+
     dependencies.forEach((dependency: NodeDependency) => {
       addPackageJsonDependency(host, dependency);
       context.logger.info(
