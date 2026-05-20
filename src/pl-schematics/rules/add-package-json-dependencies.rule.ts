@@ -97,7 +97,30 @@ export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
         },
       );
     }
-
+    if (options.state === "ngrx") {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: "latest",
+          name: "@ngrx/store",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "latest",
+          name: "@ngrx/effects",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "latest",
+          name: "@ngrx/entity",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "latest",
+          name: "@ngrx/store-devtools",
+        },
+      );
+    }
     if (options.addSupportBootstrap === "Y") {
       dependencies.push(
         {

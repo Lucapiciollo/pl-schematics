@@ -28,6 +28,10 @@ import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
 import { MaterialModule } from '../material/material.module';
 <% } %>
 
+<% if (state === "ngrx") { %>
+import { StateModule } from 'src/app/<%= namePackage %>/store/state.module';
+<% } %>
+
 /** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -51,6 +55,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% if (ui === "material") { %>
     MaterialModule,
     <% } %>
+    <% if (state === "ngrx") { %>
+    StateModule,
+    <% } %>
   ],
   providers: [
     /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
@@ -64,6 +71,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% if (ui === "material") { %>
     MaterialModule,
     <% } %>
+      <% if (state === "ngrx") { %>
+    StateModule,
+  <% } %>
   ],
 })
 export class SharedModule {

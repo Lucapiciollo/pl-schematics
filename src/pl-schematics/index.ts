@@ -23,13 +23,14 @@ import {
 import { validateOptions } from './rules/validate-options.rule';
 
 import { PlSchematicsOptions } from './types/schema-options';
+import { addNgrxModuleImports } from './rules/add-ngrx-module-imports.rule';
 
 export default function plSchematics(options: PlSchematicsOptions): Rule {
   return chain([
     normalizeOptions(options),
     validateOptions(options),
     getPrefixFromAngularJson(options),
-
+    addNgrxModuleImports(options),
     addPackageJsonDependencies(options),
     installPackageJsonDependencies(),
     logOptions(options),

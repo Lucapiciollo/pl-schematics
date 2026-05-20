@@ -88,14 +88,14 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     destination: "../../pl-schematics/document",
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.includeDocumentation === true;
-    }
+    },
   },
   {
     source: "./files/mock-api-node",
     destination: "../mock-api",
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.mockApi === "node-express";
-    }
+    },
   },
   {
     source: "./files/application",
@@ -107,22 +107,29 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     destination: "../../",
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.ci === "azure-devops";
-    }
+    },
   },
   {
     source: "./files/ci-github-actions",
     destination: "../../",
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.ci === "github-actions";
-    }
+    },
   },
   {
     source: "./files/material",
     destination: "<namePackage>/shared/material",
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.ui === "material";
-    }
-  }
+    },
+  },
+  {
+    source: "./files/ngrx",
+    destination: "<namePackage>",
+    enabled: function (options: PlSchematicsOptions): boolean {
+      return options.state === "ngrx";
+    },
+  },
 ];
 
 function resolveDestination(
