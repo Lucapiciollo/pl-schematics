@@ -41,79 +41,49 @@
       "type": "string",
       "description": "Authentication support",
       "default": "NONE",
-      "enum": [
-        "NONE",
-        "AZURE-ACTIVE-DIRECT"
-      ]
+      "enum": ["NONE", "AZURE-ACTIVE-DIRECT"]
     },
     "addSupportBootstrap": {
       "type": "string",
       "description": "Legacy bootstrap support flag",
       "default": "Y",
-      "enum": [
-        "Y",
-        "N"
-      ]
+      "enum": ["Y", "N"]
     },
     "enableSonarQube": {
       "type": "string",
       "description": "Enable SonarQube support",
       "default": "Y",
-      "enum": [
-        "Y",
-        "N"
-      ]
+      "enum": ["Y", "N"]
     },
     "architecture": {
       "type": "string",
       "description": "Angular architecture style",
       "default": "classic",
-      "enum": [
-        "classic",
-        "standalone",
-        "hybrid"
-      ]
+      "enum": ["classic", "standalone", "hybrid"]
     },
     "state": {
       "type": "string",
       "description": "State management strategy",
       "default": "none",
-      "enum": [
-        "none",
-        "ngrx",
-        "signals"
-      ]
+      "enum": ["none", "ngrx", "signals"]
     },
     "http": {
       "type": "string",
       "description": "HTTP layer strategy",
       "default": "interceptor-classic",
-      "enum": [
-        "none",
-        "interceptor-classic",
-        "interceptor-functional"
-      ]
+      "enum": ["none", "interceptor-classic", "interceptor-functional"]
     },
     "ui": {
       "type": "string",
       "description": "UI framework",
       "default": "bootstrap",
-      "enum": [
-        "none",
-        "bootstrap",
-        "material",
-        "ux-directives"
-      ]
+      "enum": ["none", "bootstrap", "material", "ux-directives"]
     },
     "i18n": {
       "type": "string",
       "description": "Internationalization strategy",
       "default": "ngx-translate",
-      "enum": [
-        "none",
-        "ngx-translate",
-        "angular-localize"
-      ]
+      "enum": ["none", "ngx-translate", "angular-localize"]
     },
     "includeDocumentation": {
       "type": "boolean",
@@ -124,55 +94,32 @@
       "type": "string",
       "description": "Logging strategy",
       "default": "console",
-      "enum": [
-        "none",
-        "console",
-        "advanced"
-      ]
+      "enum": ["none", "console", "advanced"]
     },
     "mockApi": {
       "type": "string",
       "description": "Mock API strategy",
       "default": "none",
-      "enum": [
-        "none",
-        "json-server",
-        "node-express"
-      ]
+      "enum": ["none", "json-server", "node-express"]
     },
     "ci": {
       "type": "string",
       "description": "CI/CD pipeline support",
       "default": "none",
-      "enum": [
-        "none",
-        "github-actions",
-        "azure-devops"
-      ]
+      "enum": ["none", "github-actions", "azure-devops"]
     },
     "tests": {
       "type": "string",
       "description": "Testing strategy",
       "default": "jasmine",
-      "enum": [
-        "none",
-        "jasmine",
-        "jest",
-        "vitest"
-      ]
+      "enum": ["none", "jasmine", "jest", "vitest"]
     },
-    "docker": {
-      "type": "boolean",
-      "description": "Add Docker support",
-      "default": false
-    },
+    
     "strict": {
       "type": "boolean",
       "description": "Enable stricter generated configuration",
       "default": false
     }
   },
-  "required": [
-    "namePackage"
-  ]
+  "required": ["namePackage"]
 }

@@ -1,164 +1,182 @@
 // src/pl-schematics/rules/add-package-json-dependencies.rule.ts
 
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, Tree } from "@angular-devkit/schematics";
 import {
   addPackageJsonDependency,
   NodeDependency,
   NodeDependencyType,
-} from 'schematics-utilities';
-import { PlSchematicsOptions } from '../types/schema-options';
+} from "schematics-utilities";
+import { PlSchematicsOptions } from "../types/schema-options";
 
-export function addPackageJsonDependencies(
-  options: PlSchematicsOptions,
-): Rule {
+export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
       {
         type: NodeDependencyType.Default,
-        version: 'latest',
-        name: 'pl-core-utils-library',
+        version: "latest",
+        name: "pl-core-utils-library",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^5.15.1',
-        name: '@fortawesome/fontawesome-free',
+        version: "^5.15.1",
+        name: "@fortawesome/fontawesome-free",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^4.0.0',
-        name: '@ngx-translate/http-loader',
+        version: "^4.0.0",
+        name: "@ngx-translate/http-loader",
       },
       {
         type: NodeDependencyType.Default,
-        version: '11.0.1',
-        name: '@ngx-translate/core',
+        version: "11.0.1",
+        name: "@ngx-translate/core",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^10.0.0',
-        name: 'ngx-ui-loader',
+        version: "^10.0.0",
+        name: "ngx-ui-loader",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^2.9.4',
-        name: 'chart.js',
+        version: "^2.9.4",
+        name: "chart.js",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^1.1.11',
-        name: '@compodoc/compodoc',
+        version: "^1.1.11",
+        name: "@compodoc/compodoc",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^12.0.0',
-        name: '@angular-builders/custom-webpack',
+        version: "^12.0.0",
+        name: "@angular-builders/custom-webpack",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^0.5.7',
-        name: 'chartjs-plugin-annotation',
+        version: "^0.5.7",
+        name: "chartjs-plugin-annotation",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^5.3.1',
-        name: 'html-webpack-plugin',
+        version: "^5.3.1",
+        name: "html-webpack-plugin",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^1.0.6',
-        name: 'replace-in-file-webpack-plugin',
+        version: "^1.0.6",
+        name: "replace-in-file-webpack-plugin",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^3.0.0',
-        name: '@microsoft/microsoft-graph-client',
+        version: "^3.0.0",
+        name: "@microsoft/microsoft-graph-client",
       },
       {
         type: NodeDependencyType.Default,
-        version: '^1.11.0',
-        name: '@microsoft/teams-js',
+        version: "^1.11.0",
+        name: "@microsoft/teams-js",
       },
     ];
 
-    if (options.addSupportBootstrap === 'Y') {
+    if (options.ui === "material") {
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
-          name: 'popper.js',
+          version: "latest",
+          name: "@angular/material",
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
-          name: '@popperjs/core',
+          version: "latest",
+          name: "@angular/cdk",
         },
         {
           type: NodeDependencyType.Default,
-          version: '^3.4.0',
-          name: 'jquery',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^5.0.0',
-          name: 'bootstrap',
+          version: "latest",
+          name: "@angular/animations",
         },
       );
     }
 
-    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
+    if (options.addSupportBootstrap === "Y") {
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: '1.0.0',
-          name: '@azure/msal-angular',
+          version: "latest",
+          name: "popper.js",
         },
         {
           type: NodeDependencyType.Default,
-          version: '1.3.2',
-          name: 'msal',
+          version: "latest",
+          name: "@popperjs/core",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "^3.4.0",
+          name: "jquery",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "^5.0.0",
+          name: "bootstrap",
         },
       );
     }
 
-    if (options.enableSonarQube === 'Y') {
+    if (options.loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: "1.0.0",
+          name: "@azure/msal-angular",
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: "1.3.2",
+          name: "msal",
+        },
+      );
+    }
+
+    if (options.enableSonarQube === "Y") {
       dependencies.push({
         type: NodeDependencyType.Default,
-        version: '^3.1.0',
-        name: 'sonar-scanner',
+        version: "^3.1.0",
+        name: "sonar-scanner",
       });
     }
 
-    if (options.mockApi === 'node-express') {
+    if (options.mockApi === "node-express") {
       dependencies.push(
         {
           type: NodeDependencyType.Dev,
-          version: '^4.18.2',
-          name: 'express',
+          version: "^4.18.2",
+          name: "express",
         },
         {
           type: NodeDependencyType.Dev,
-          version: '^1.7.0',
-          name: 'cors',
+          version: "^1.7.0",
+          name: "cors",
         },
         {
           type: NodeDependencyType.Dev,
-          version: '^5.0.0',
-          name: 'ts-node',
+          version: "^5.0.0",
+          name: "ts-node",
         },
         {
           type: NodeDependencyType.Dev,
-          version: '^10.9.2',
-          name: 'ts-node-dev',
+          version: "^10.9.2",
+          name: "ts-node-dev",
         },
         {
           type: NodeDependencyType.Dev,
-          version: '^4.17.21',
-          name: '@types/express',
+          version: "^4.17.21",
+          name: "@types/express",
         },
         {
           type: NodeDependencyType.Dev,
-          version: '^2.8.17',
-          name: '@types/cors',
+          version: "^2.8.17",
+          name: "@types/cors",
         },
       );
     }

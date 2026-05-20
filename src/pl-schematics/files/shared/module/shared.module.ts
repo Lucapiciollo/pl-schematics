@@ -3,68 +3,87 @@
  * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 12:30:36
  * @modify date 2019-12-21 12:30:36
- * @desc [ modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalita con il sistema. 
- * tutti i componenti o moduli che dovranno essere condivisi con il resto dell'applicazione devono essere posti in 
- * import ed in export
+ * @desc [
+ * modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalità con il sistema.
+ * tutti i componenti o moduli che dovranno essere condivisi con il resto dell'applicazione devono essere posti in
+ * import ed export.
  * ]
  */
-import { HttpClientModule ,HttpClient} from '@angular/common/http';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { <%=classify(prefixClass)%>GlobalService } from 'src/app/<%=namePackage%>/shared/service/global.service';
+
 import { CommonModule } from '@angular/common';
-import { TranslateLoader,   TranslateService } from '@ngx-translate/core';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SortPipe } from 'src/app/<%=namePackage%>/shared/pipe/SortPipe.pipe';
-/**import { MAT_DATE_LOCALE } from '@angular/material/core';*/
 
+import { <%= classify(prefixClass) %>GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
+import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
 
+<% if (ui === "material") { %>
+import { MaterialModule } from '../material/material.module';
+<% } %>
 
-export function HttpLoaderFactory(http: HttpClient) {
+/** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http);
 }
 
-/**
- *  @author @l.piciollo
- *  modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalita con il sistema. 
- *  tutti i componenti o moduli che dovranno essere condivisi con il resto dell'applicazione devono essere posti in 
- *  impport ed in export
- */
 @NgModule({
-  declarations: [ SortPipe],
+  declarations: [],
   imports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
+    PipeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
+        deps: [HttpClient],
+      },
     }),
+    <% if (ui === "material") { %>
+    MaterialModule,
+    <% } %>
   ],
-  providers: [/**{provide: MAT_DATE_LOCALE, useValue: 'it-IT' }*/ ],
+  providers: [
+    /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
+  ],
   exports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
-    TranslateModule ,
-  ]
+    PipeModule,
+    TranslateModule,
+    <% if (ui === "material") { %>
+    MaterialModule,
+    <% } %>
+  ],
 })
 export class SharedModule {
+  constructor(
+    private globalService: <%= classify(prefixClass) %>GlobalService,
+    public translate: TranslateService,
+  ) {
+    this.translate.setDefaultLang('it');
 
-  constructor(private globalService: <%=classify(prefixClass)%>GlobalService,public translate: TranslateService) { 
-      /**inizializzazione del servizio per la creazione dei listener */
-      translate.setDefaultLang('it');
-   }
-  
-  static forRoot() {
+    /**
+     * Mantiene referenziato il servizio globale.
+     * Utile se il costruttore inizializza listener o side effect.
+     */
+    this.globalService;
+  }
+
+  static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
       providers: [],
-      import: []
-    }
+    };
   }
 }
