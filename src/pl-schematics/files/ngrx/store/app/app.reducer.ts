@@ -13,42 +13,36 @@ export const appFeatureKey = 'app';
 export const appReducer = createReducer(
   initialAppState,
 
-  on(appInit, function(state): AppState {
-    return {
-      ...state,
-      loading: true,
-      error: null,
-    };
-  }),
 
-  on(appInitSuccess, function(state): AppState {
-    return {
-      ...state,
-      initialized: true,
-      loading: false,
-      error: null,
-    };
-  }),
+  on(appInit, (state): AppState => ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
 
-  on(appInitFailure, function(state, action): AppState {
-    return {
-      ...state,
-      loading: false,
-      error: action.error,
-    };
-  }),
 
-  on(appSetLoading, function(state, action): AppState {
-    return {
-      ...state,
-      loading: action.loading,
-    };
-  }),
+  on(appInitSuccess, (state): AppState => ({
+    ...state,
+    initialized: true,
+    loading: false,
+    error: null,
+  })),
 
-  on(appClearError, function(state): AppState {
-    return {
-      ...state,
-      error: null,
-    };
-  }),
+
+  on(appInitFailure, (state, action): AppState => ({
+    ...state,
+    loading: false,
+    error: action.error,
+  })),
+
+
+  on(appSetLoading, (state, action): AppState => ({
+    ...state,
+    loading: action.loading,
+  })),
+
+  on(appClearError, (state): AppState => ({
+    ...state,
+    error: null,
+  })),
 );
