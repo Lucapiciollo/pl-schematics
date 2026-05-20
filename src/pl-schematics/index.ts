@@ -21,7 +21,7 @@ import {
   updatePackageJsonForSonar,
 } from './rules/update-package-json.rule';
 import { validateOptions } from './rules/validate-options.rule';
-
+import { updateAngularJsonForEnvironments } from './rules/update-angular-json-environments.rule';
 import { PlSchematicsOptions } from './types/schema-options';
 import { addNgrxModuleImports } from './rules/add-ngrx-module-imports.rule';
 
@@ -48,6 +48,7 @@ export default function plSchematics(options: PlSchematicsOptions): Rule {
      * - documentation opzionale
      */
     addTemplateFiles(options),
+    updateAngularJsonForEnvironments(options),
 
     /**
      * Angular Material
