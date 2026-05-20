@@ -122,6 +122,14 @@ const TEMPLATE_FOLDERS = [
             return options.state === "ngrx";
         },
     },
+    {
+        source: "./files/dependency-updater",
+        destination: "../",
+    },
+    {
+        source: "./files/dependency-updater",
+        destination: "../",
+    },
 ];
 function resolveDestination(destination, options) {
     return destination.replace("<namePackage>", options.namePackage);

@@ -16,6 +16,7 @@ const update_angular_json_material_rule_1 = require("./rules/update-angular-json
 const update_index_html_material_rule_1 = require("./rules/update-index-html-material.rule");
 const update_package_json_rule_1 = require("./rules/update-package-json.rule");
 const validate_options_rule_1 = require("./rules/validate-options.rule");
+const update_angular_json_environments_rule_1 = require("./rules/update-angular-json-environments.rule");
 const add_ngrx_module_imports_rule_1 = require("./rules/add-ngrx-module-imports.rule");
 function plSchematics(options) {
     return schematics_1.chain([
@@ -27,6 +28,7 @@ function plSchematics(options) {
         install_package_json_dependencies_rule_1.installPackageJsonDependencies(),
         log_options_rule_1.logOptions(options),
         add_template_files_rule_1.addTemplateFiles(options),
+        update_angular_json_environments_rule_1.updateAngularJsonForEnvironments(options),
         update_angular_json_material_rule_1.updateAngularJsonForMaterial(options),
         update_index_html_material_rule_1.updateIndexHtmlForMaterial(options),
         options.addSupportBootstrap === 'Y'
