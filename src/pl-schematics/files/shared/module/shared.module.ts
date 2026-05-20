@@ -31,7 +31,7 @@ import { MaterialModule } from '../material/material.module';
 <% if (state === "ngrx") { %>
 import { StateModule } from 'src/app/<%= namePackage %>/store/state.module';
 <% } %>
-
+import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
 /** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -60,7 +60,13 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% } %>
   ],
   providers: [
-    /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
+  ...provide<%= classify(prefixClass) %>HttpInterceptor({
+    defaultTimeout: 30000,
+    refreshUrlIncludes: '/Authentication/Refresh',
+    enableExecutionTimeLog: true,
+    reloadOnRefreshFailure: true,
+  }),
+  /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
   ],
   exports: [
     CommonModule,
@@ -75,6 +81,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     StateModule,
   <% } %>
   ],
+ 
 })
 export class SharedModule {
   constructor(

@@ -1,15 +1,48 @@
-/** @format */
-
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-   name: 'enumToDesc',
-})
-export class EnumToDesc implements PipeTransform {
-   transform(value: string | number, enumObject: Array<{id: string | number; description: string; translateId?: string}> = []): string {
-      if (value == null || !Array.isArray(enumObject)) return value?.toString() ?? '';
+export interface EnumDescriptionItem {
+  id?: string | number;
+  code?: string | number;
+  value?: string | number;
+  key?: string | number;
+  description?: string;
+  desc?: string;
+  label?: string;
+  name?: string;
+}
 
-      const found = enumObject.find(f => f.id.toString() === value.toString());
-      return found ? found.translateId ? found.translateId : found.description : value.toString();
-   }
+@Pipe({
+  name: 'enumToDesc',
+})
+export class EnumToDescPipe implements PipeTransform {
+  transform(
+    value: string | number | null | undefined,
+    items: EnumDescriptionItem[] | Record<string, string> | null | undefined,
+    defaultValue = '',
+  ): string {
+    if (value === null || value === undefined || !items) {
+      return defaultValue;
+    }
+
+    if (Array.isArray(items)) {
+      const found = items.find((item: EnumDescriptionItem) => {
+        return String(item.id) === String(value) ||
+          String(item.code) === String(value) ||
+          String(item.value) === String(value) ||
+          String(item.key) === String(value);
+      });
+
+      if (!found) {
+        return defaultValue;
+      }
+
+      return found.description ||
+        found.desc ||
+        found.label ||
+        found.name ||
+        defaultValue;
+    }
+
+    return items[String(value)] || defaultValue;
+  }
 }

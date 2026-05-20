@@ -1,21 +1,40 @@
-/**
- * @format
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-11-18 12:51:22
- * @modify date 2022-11-18 12:51:22
- * @desc [description]
- */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import {Pipe, PipeTransform} from '@angular/core';
-
-@Pipe({name: 'namefile'})
+@Pipe({
+  name: 'truncateNameFile',
+})
 export class TruncateNameFilePipe implements PipeTransform {
-   transform(value: string, character: string): string {
-      try {
-         return value.split(character)[value.split(character).length - 1];
-      } catch (error) {
-         return value;
-      }
-   }
+  transform(
+    value: string | null | undefined,
+    maxLength = 25,
+    separator = '...',
+  ): string {
+    if (!value) {
+      return '';
+    }
+
+    const fileName = String(value);
+
+    if (fileName.length <= maxLength) {
+      return fileName;
+    }
+
+    const lastDotIndex = fileName.lastIndexOf('.');
+    const hasExtension = lastDotIndex > 0 && lastDotIndex < fileName.length - 1;
+
+    if (!hasExtension) {
+      return fileName.substring(0, maxLength) + separator;
+    }
+
+    const name = fileName.substring(0, lastDotIndex);
+    const extension = fileName.substring(lastDotIndex);
+
+    const allowedNameLength = maxLength - separator.length - extension.length;
+
+    if (allowedNameLength <= 0) {
+      return fileName.substring(0, maxLength) + separator;
+    }
+
+    return name.substring(0, allowedNameLength) + separator + extension;
+  }
 }

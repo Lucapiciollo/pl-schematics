@@ -1,21 +1,27 @@
-/**
- * @format
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-11-18 12:51:22
- * @modify date 2022-11-18 12:51:22
- * @desc [description]
- */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import {ElementRef, Pipe, PipeTransform} from '@angular/core';
-
-@Pipe({name: 'round', pure: false})
+@Pipe({
+  name: 'round',
+})
 export class RoundPipe implements PipeTransform {
-   constructor(element: ElementRef) {}
+  transform(
+    value: string | number | null | undefined,
+    decimals = 0,
+  ): number | null {
+    if (value === null || value === undefined || value === '') {
+      return null;
+    }
 
-   /************************************************************************************************************************************************************************ */
+    const numericValue = Number(
+      typeof value === 'string' ? value.replace(',', '.') : value,
+    );
 
-   transform(value: number): number {
-      if (value != null) return Number(Math.round(value * 2) / 2);
-   }
+    if (isNaN(numericValue)) {
+      return null;
+    }
+
+    const factor = Math.pow(10, decimals);
+
+    return Math.round(numericValue * factor) / factor;
+  }
 }

@@ -1,42 +1,66 @@
-/** @format */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import {Pipe, PipeTransform, inject} from '@angular/core';
-import {DateConfig, FORMAT_LOCAL_DATE} from '@app/cloud/agic/shared/module/shared.module';
-import {DomSanitizer} from '@angular/platform-browser';
-import moment from 'moment';
+function toDate(value: string | number | Date): Date | null {
+  if (value instanceof Date) {
+    return isNaN(value.getTime()) ? null : value;
+  }
 
-@Pipe({
-   name: 'countYars',
-})
-export class CountYars implements PipeTransform {
-   private formatDate: DateConfig = inject(FORMAT_LOCAL_DATE);
-   constructor(protected sanitizer: DomSanitizer) {}
+  const date = new Date(value);
 
-   /************************************************************************************************************************************************************************ */
-
-   public transform(value: string): number {
-      const parseFormat = this.formatDate.formatDateMoment;
-      const m = moment(value, parseFormat);
-      return moment().diff(m, 'years') + 1;
-   }
+  return isNaN(date.getTime()) ? null : date;
 }
 
 @Pipe({
-   name: 'countDay',
+  name: 'countYears',
 })
-export class CountDay implements PipeTransform {
-   constructor() {}
+export class CountYearsPipe implements PipeTransform {
+  transform(value: string | number | Date | null | undefined): number {
+    if (value === null || value === undefined || value === '') {
+      return 0;
+    }
 
-   /************************************************************************************************************************************************************************ */
+    const date = toDate(value);
 
-   public transform(from: string, to?: string): number {
-      if (from != null) {
-         const parseFormat = inject(FORMAT_LOCAL_DATE).formatDateMoment;
-         const toMoment = to ? moment(to, parseFormat) : moment();
-         const fromMoment = moment(from, parseFormat);
-         const diff = toMoment.diff(fromMoment, 'days');
-         return Math.abs(diff);
-      }
-      return null;
-   }
+    if (!date) {
+      return 0;
+    }
+
+    const today = new Date();
+    let years = today.getFullYear() - date.getFullYear();
+
+    const monthDiff = today.getMonth() - date.getMonth();
+    const dayDiff = today.getDate() - date.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      years--;
+    }
+
+    return years < 0 ? 0 : years;
+  }
+}
+
+@Pipe({
+  name: 'countDays',
+})
+export class CountDayPipe implements PipeTransform {
+  transform(
+    from: string | number | Date | null | undefined,
+    to?: string | number | Date,
+  ): number {
+    if (from === null || from === undefined || from === '') {
+      return 0;
+    }
+
+    const fromDate = toDate(from);
+    const toDateValue = to ? toDate(to) : new Date();
+
+    if (!fromDate || !toDateValue) {
+      return 0;
+    }
+
+    const diff = toDateValue.getTime() - fromDate.getTime();
+    const dayMs = 1000 * 60 * 60 * 24;
+
+    return Math.abs(Math.floor(diff / dayMs));
+  }
 }

@@ -1,17 +1,32 @@
-/** @format */
-
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-   name: 'decimalFix',
-   pure: false, // Permette di aggiornare dinamicamente il valore
+  name: 'decimalFix',
 })
 export class DecimalFixPipe implements PipeTransform {
-   transform(value: any, decimalPlaces: number = 2): any {
-      if (value === null || value === undefined || isNaN(value)) {
-         return value; // Se il valore è nullo o non è un numero, restituisci il valore originale
-      }
+  transform(
+    value: string | number | null | undefined,
+    decimals = 2,
+    decimalSeparator: '.' | ',' = ',',
+  ): string {
+    if (value === null || value === undefined || value === '') {
+      return '';
+    }
 
-      return parseFloat(value).toFixed(decimalPlaces);
-   }
+    const normalized = typeof value === 'string'
+      ? value.replace(',', '.')
+      : value;
+
+    const numericValue = Number(normalized);
+
+    if (isNaN(numericValue)) {
+      return String(value);
+    }
+
+    const result = numericValue.toFixed(decimals);
+
+    return decimalSeparator === ','
+      ? result.replace('.', ',')
+      : result;
+  }
 }

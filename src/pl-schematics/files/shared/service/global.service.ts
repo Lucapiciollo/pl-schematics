@@ -2,173 +2,279 @@
  * @author @l.piciollo
  * @email lucapiciolo@gmail.com
  * @create date 2019-12-22 14:22:00
- * @modify date 2019-12-22 14:22:00
- * @desc [classe di servizio per tutta l'applicazione, in questa classe ci saranno variabili comuni a tutti i componenti o chiamate
- * al BE di tipo generico, non vincolante ad un modulo.. come ad esempio chiamate al BE per risalire a delle tipologiche
- * che verranno poi distribuite in tutto il contesto applicavo vengono registrati gli eventi lanciati dalla parte core, per evitare di manipolare direttamente il core.]
+ * @modify date 2026-05-20
+ * @desc [
+ * Servizio globale dell'applicazione.
+ * Qui vengono centralizzate funzionalità comuni, eventi core, gestione errori,
+ * cache HTTP, redirect e servizi generici condivisi.
+ * ]
  */
 
-import { Injectable, OnDestroy,Injector } from "@angular/core";
-import {<%=classify(prefixClass)%>ErrorBean,  <%=classify(prefixClass)%>ErrorCode } from "src/app/<%=namePackage%>/core/bean/error-bean";
-import {<%=classify(prefixClass)%>HttpService } from 'src/app/<%=namePackage%>/core/service/http.service';
-import { CONTENT_TYPE, PlHttpRequest, PLUnsubscribe, RESPONSE_TYPE  } from 'pl-core-utils-library';
-import { environment } from 'src/environments/environment';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
-import { PlCoreUtils ,TYPE_EVENT_NETWORK} from 'pl-core-utils-library';
-import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
-import { AuthenticationProvider, AuthenticationProviderOptions, Client, ClientOptions } from "@microsoft/microsoft-graph-client";
 
- /**
- * @author l.piciollo
- * classe di servizio per tutta l'applicazione, in questa classe ci saranno variabili comuni a tutti i componenti o chiamate
- * al BE di tipo generico, non vincolante ad un modulo.. come ad esempio chiamate al BE per risalire a delle tipologiche
- * che verranno poi distribuite in tutto il contesto applicavo.
- * vengono registrati gli eventi lanciati dalla parte core, per evitare di manipolare direttamente il core.
- */
+import {
+  CONTENT_TYPE,
+  PlCoreUtils,
+  PlHttpRequest,
+  PLUnsubscribe,
+  RESPONSE_TYPE,
+  TYPE_EVENT_NETWORK,
+} from 'pl-core-utils-library';
+
+import { environment } from 'src/environments/environment';
+
+import {
+  <%= classify(prefixClass) %>ErrorBean,
+  <%= classify(prefixClass) %>ErrorCode,
+} from 'src/app/<%= namePackage %>/core/bean/error-bean';
+
+import { <%= classify(prefixClass) %>HttpService } from 'src/app/<%= namePackage %>/core/service/http.service';
+import { CORE_TYPE_EVENT } from 'src/app/<%= namePackage %>/core/type/type.event';
+
+<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+import { Client } from '@microsoft/microsoft-graph-client';
+import { <%= classify(prefixClass) %>AuthService } from 'src/app/<%= namePackage %>/core/service/auth.service';
+<% } %>
+
+<% if (logging === "advanced") { %>
+import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
+import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+<% } %>
+
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
-/**
- * @author l.piciollo
- * annotazione custom, indica di distrugere tutti gli osservatori eventualmente attivi, alla distruzione della classe
- * in ingresso è possibile passare la lista degli osservatoti che devono rimanere attivi
- */
-@PLUnsubscribe()  
-export class <%=classify(prefixClass)%>GlobalService implements OnDestroy {
+@PLUnsubscribe()
+export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
+  <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+  private graphClient: Client | null = null;
+  <% } %>
 
-  private clienteMsGraph = null;
-  
-/***************************************************************************************************************************** */
-  constructor(private httpService: <%=classify(prefixClass)%>HttpService, private injector: Injector , private authService:  <%=classify(prefixClass)%>AuthService) {
-     
-    /**
-     * @author l.piciollo
-     * registrazione all'intercettore di interruzione di chiamata ajax.
-     */
-      PlCoreUtils.Broadcast().listenEvent(TYPE_EVENT_NETWORK.PL_BREACK_NET, (breack) => {
-        console.log(breack.detail);
-      })
-    /**
-     * @author l.piciollo
-     * registrazione all'intercettore di errore per servire la richiesta di apertura modale di errore.
-     */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, (error)=>{
-        console.log(error.detail);
-      });
-     /**
-      * @author l.piciollo
-      * registrazione all'intercettore di errore per servire la richiesta di redirect
-      */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, (error)=>{
-        console.log(error.detail);
-      }); 
-      /**
-       * @author l.piciollo
-       * registrazione all'evento di intercettazione della cache, da parte delle chiamate ajax.. in caso viene rilevato del contenuto in cache,
-       * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
-       */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, (url) => {
-        console.log("PlCoreUtils cache found for : {0}".format(url.detail));
-      })  
-        
-      <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %> 
-      /**
-       * @author l.piciollo
-       * registrazione all'evento di acquisizione silente del token da parte di azure lib
-       */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, (OK) => { 
-        console.log(OK)
-      });
- 
-      /**
-       * @author l.piciollo
-       * registrazione all'evento di login ok da parte della azure lib
-       */
-      PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, (OK) => { 
-        console.log(OK)
-      });
-      <% } %> 
-      /**
-       * @author l.piciollo
-       * registrazione all'evento di errore da parte delle chiamate ajax.. in caso viene rilevato qualsiasi errore,
-       * viene catturato in questa funzione.. qui è possibile gestirne in autonomia la casistica
-       */
-        PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, (error) => {
-          <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
-          /**
-           * @author l.piciollo
-           * inserimento del controllo per azure directry della corretta autenticazione, in caso di 401 si va alla login
-           */
-           if ([401].indexOf(error.detail.status) > -1) {
-              this.injector.get(<%=classify(prefixClass)%>AuthService).login().subscribe();
-            }
-            <% } else { %>
-              console.log(error.detail);
-            <% } %>   
-          })
-          /**
-           * @author l.piciollo
-           * ascoltatore di evento di errore generico, qui è possibile gestire in autonomia il suo flusso
-           */
-          PlCoreUtils.Broadcast().listenEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, (errorBean) => {
-            console.error("PlCoreUtils error found >> ", errorBean);
-          });  
+  constructor(
+    private readonly httpService: <%= classify(prefixClass) %>HttpService,
+    private readonly injector: Injector,
+    <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+    private readonly authService: <%= classify(prefixClass) %>AuthService,
+    <% } %>
+    <% if (logging === "advanced") { %>
+    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    <% } %>
+  ) {
+    this.registerCoreEvents();
   }
-/***************************************************************************************************************************** */
-  
+
   ngOnDestroy(): void {
-    try {
-       console.log("GlobalService destroyed ... ")
-    } catch (error:any) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(error.message,  <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
-    }
+    this.logDebug('GlobalService destroyed');
   }
-/***************************************************************************************************************************** */
 
   /**
-   * @author l.piciollo
-   * passando in ingresso l'ajaxToken, è possibile ricevere il 
-   * subject per sottoscriversi e ricevere in tuntime i valori di stato della chiamata
-   * @param idAjax 
+   * Ritorna il Subject legato alla progressione di una chiamata HTTP.
    */
-  getProgression(idAjax:string):Subject<any> { 
-      try {
-        return this.httpService.TAILAJXCALL(idAjax);
-      }
-      catch (error:any) { 
-        throw new <%=classify(prefixClass)%>ErrorBean(error.message)
-      }
-   }
-  
-
-   /**
-   * @author l.piciollo
-   * esempio di chiamata http
-   */
-  callMock(p1: any, p2: any): Observable<any> {
-    return new Observable<any>(obs => {
- 
-      let plHttpRequest: PlHttpRequest = new PlHttpRequest(
-                            environment.http.api.mock , 
-                            Object({ api: "api", files: "files" }),
-                            Object({ api: p1, files: p2 }), 
-                            null);
-                            
-      this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, null, null).subscribe(sb => {
-        obs.next(sb);
-        obs.complete()
-      }, error => {
-        obs.error(error);
-      }, () => { })
-    }) 
+  getProgression(idAjax: string): Subject<unknown> {
+    try {
+      return this.httpService.TAILAJXCALL(idAjax) as Subject<unknown>;
+    } catch (error) {
+      throw this.toErrorBean(error);
+    }
   }
 
-  
-  /********************GRAPH SDK CALL ::************************************************************************** */
+  /**
+   * Esempio di chiamata HTTP verso file mock.
+   */
+  callMock(p1: string, p2: string): Observable<ArrayBuffer> {
+    return new Observable<ArrayBuffer>((observer) => {
+      const request: PlHttpRequest = new PlHttpRequest(
+        environment.http.api.mock,
+        {
+          api: 'api',
+          files: 'files',
+        },
+        {
+          api: p1,
+          files: p2,
+        },
+        null,
+      );
+
+      this.httpService
+        .GETFILE(request, RESPONSE_TYPE.ARRAYBUFFER, CONTENT_TYPE.JSON, null)
+        .subscribe(
+          (response: ArrayBuffer) => {
+            observer.next(response);
+            observer.complete();
+          },
+          (error: unknown) => {
+            observer.error(error);
+          },
+        );
+    });
+  }
+
+  <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+  /**
+   * Esempio di chiamata Microsoft Graph.
+   */
   async getUserName(): Promise<string> {
-    this.clienteMsGraph = Client.initWithMiddleware({ authProvider: this.authService });
-    let userinfo = await this.clienteMsGraph.api("/me").get();
-    return userinfo.displayName;
+    try {
+      this.graphClient = Client.initWithMiddleware({
+        authProvider: this.authService,
+      });
+
+      const userInfo = await this.graphClient.api('/me').get();
+
+      return userInfo && userInfo.displayName
+        ? String(userInfo.displayName)
+        : '';
+    } catch (error) {
+      throw this.toErrorBean(error);
+    }
+  }
+  <% } %>
+
+  private registerCoreEvents(): void {
+    /**
+     * Evento di interruzione rete.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      TYPE_EVENT_NETWORK.PL_BREACK_NET,
+      (event: CustomEvent) => {
+        this.logWarn('Network break detected', event.detail);
+      },
+    );
+
+    /**
+     * Apertura dialog errore.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG,
+      (event: CustomEvent) => {
+        this.logError('Core error dialog event', event.detail);
+      },
+    );
+
+    /**
+     * Redirect da errore core.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT,
+      (event: CustomEvent) => {
+        this.logWarn('Core error redirect event', event.detail);
+      },
+    );
+
+    /**
+     * Cache HTTP rilevata.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE,
+      (event: CustomEvent) => {
+        this.logDebug('HTTP cache found', event.detail);
+      },
+    );
+
+    <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+    /**
+     * Token Azure acquisito correttamente.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS,
+      (event: CustomEvent) => {
+        this.logDebug('Azure token acquired', event.detail);
+      },
+    );
+
+    /**
+     * Login Azure riuscito.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS,
+      (event: CustomEvent) => {
+        this.logDebug('Azure login success', event.detail);
+      },
+    );
+    <% } %>
+
+    /**
+     * Errore HTTP globale.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR,
+      (event: CustomEvent) => {
+        this.handleHttpAjaxError(event.detail);
+      },
+    );
+
+    /**
+     * Errore generico globale.
+     */
+    PlCoreUtils.Broadcast().listenEvent(
+      CORE_TYPE_EVENT.CORE_ERROR_SERVICE,
+      (event: CustomEvent) => {
+        this.logError('Core generic error', event.detail);
+      },
+    );
+  }
+
+  private handleHttpAjaxError(error: any): void {
+    <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+    if (error && [401].indexOf(error.status) > -1) {
+      this.injector
+        .get(<%= classify(prefixClass) %>AuthService)
+        .login()
+        .subscribe();
+
+      return;
+    }
+    <% } %>
+
+    this.logError('HTTP ajax error', error);
+  }
+
+  private toErrorBean(error: unknown): <%= classify(prefixClass) %>ErrorBean {
+    const message = this.getErrorMessage(error);
+
+    return new <%= classify(prefixClass) %>ErrorBean(
+      message,
+      <%= classify(prefixClass) %>ErrorCode.SYSTEMERRORCODE,
+      false,
+      true,
+    );
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof Error) {
+      return error.message;
+    }
+
+    if (typeof error === 'string') {
+      return error;
+    }
+
+    return 'Unexpected global service error';
+  }
+
+  private logDebug(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    <% } else { %>
+    console.debug(message, payload);
+    <% } %>
+  }
+
+  private logWarn(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.warn(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    <% } else { %>
+    console.warn(message, payload);
+    <% } %>
+  }
+
+  private logError(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.error(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    <% } else { %>
+    console.error(message, payload);
+    <% } %>
   }
 }

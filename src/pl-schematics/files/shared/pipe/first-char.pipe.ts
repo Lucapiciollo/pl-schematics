@@ -1,21 +1,20 @@
-/**
- * @format
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-11-18 12:51:22
- * @modify date 2022-11-18 12:51:22
- * @desc [description]
- */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import {ElementRef, Pipe, PipeTransform} from '@angular/core';
-
-@Pipe({name: 'firstChar'})
+@Pipe({
+  name: 'firstChar',
+})
 export class FirstCharPipe implements PipeTransform {
-   constructor(element: ElementRef) {}
+  transform(
+    value: string | null | undefined,
+    uppercase = true,
+    fallback = '',
+  ): string {
+    if (!value) {
+      return fallback;
+    }
 
-   /************************************************************************************************************************************************************************ */
+    const char = String(value).trim().charAt(0);
 
-   transform(value: string): string {
-      return value.substring(0, 1).toUpperCase();
-   }
+    return uppercase ? char.toUpperCase() : char;
+  }
 }

@@ -1,38 +1,27 @@
-/**
- * @format
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-11-18 12:51:22
- * @modify date 2022-11-18 12:51:22
- * @desc [description]
- */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import {ElementRef, Pipe, PipeTransform} from '@angular/core';
-
-@Pipe({name: 'normalize'})
+@Pipe({
+  name: 'normalize',
+})
 export class NormalizePipe implements PipeTransform {
-   constructor(element: ElementRef) {}
+  transform(
+    value: string | number | null | undefined,
+    lowerCase = true,
+  ): string {
+    if (value === null || value === undefined) {
+      return '';
+    }
 
-   /************************************************************************************************************************************************************************ */
+    let result = String(value)
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .replace(/\s+/g, ' ');
 
-   encodeHtmlEntities(str) {
-      const entities = {
-         '&': '&amp;',
-         '<': '&lt;',
-         '>': '&gt;',
-         '"': '&quot;',
-         "'": '&#39;',
-         à: '&agrave;',
-         á: '&aacute;',
-         â: '&acirc;',
-         ä: '&auml;',
-         ã: '&atilde;',
-         å: '&aring;', // Aggiungi altri caratteri speciali se necessario
-      };
-      return str.replace(/[&<>"'àáâäãå]/g, char => entities[char] || char);
-   }
+    if (lowerCase) {
+      result = result.toLowerCase();
+    }
 
-   transform(value: string): string {
-      return this.encodeHtmlEntities(value);
-   }
+    return result;
+  }
 }

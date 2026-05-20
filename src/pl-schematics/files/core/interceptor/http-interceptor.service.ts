@@ -1,127 +1,349 @@
-/**
- * @author @l.piciollo
- * @email lucapiciolo@gmail.com
- * @create date 2019-12-21 21:58:27
- * @modify date 2019-12-21 21:58:27
- * @desc [Intercettore di rete, inizializzazione di base per la centralizzazione delel chiamate al BE
- * qui è possibile arrichire le chiamate con Token di autenticazione o altro, richiesto dal BE
- * è possibile inibire anche le chiamate]
- * 
- * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
- * LA CLASSE SI INNESCA AUTOMATICAMENTE E SI OCCUPA DELLA GESTIONE DELLA CACHE CENTRLALIZZATA, SI OCCUPA DI CONTROLLARE LA PROFILAZIONE
- * UTENTE, PASSANDO IN HEADER I DATI AUTENTICAZIONE E VIENE GESTITA IN FINE LA CHIAMATA DI RETE.
- * IN CASO FOSSE NECESSARIO INSERIRE UN ALTR INTERCETTORE.. E' POSSIBLE FARLO NELLA PARTE SHARED INSERENDOLO NEL MODULO SHARED
- */
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Inject, Injectable, Optional } from '@angular/core';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  filter,
+  finalize,
+  switchMap,
+  take,
+  throwError,
+  timeout,
+} from 'rxjs';
 
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Inject, Injectable, InjectionToken, Injector } from '@angular/core';
-import { CACHE_TAG, PlCacheMapService,PlCoreUtils } from 'pl-core-utils-library';
-import { Observable, of } from 'rxjs';
-import { finalize, tap, timeout } from 'rxjs/operators';
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
-import { CORE_TYPE_EVENT } from 'src/app/<%=namePackage%>/core/type/type.event';
-import { environment } from 'src/environments/environment';
-import { <%=classify(prefixClass)%>Utils  } from 'src/app/<%=namePackage%>/shared/utils/utils';
+import {
+  DEFAULT_HTTP_INTERCEPTOR_CONFIG,
+  HTTP_AUTH_ADAPTER,
+  HTTP_INTERCEPTOR_CONFIG,
+  HttpAuthAdapter,
+  HttpInterceptorConfig,
+  HttpRefreshTokenResponse,
+} from 'src/app/<%= namePackage %>/shared/http/http-interceptor.tokens';
 
-/** 
- * @author l.piciollo
- * token per la valorizzazione dell'attesa prima di terminare in timeout la richiesta al BE 
- */
-export const <%=classify(prefixClass)%>DEFAULT_TIMEOUT = new InjectionToken<number>('DefaulTimeOut for http request');
+<% if (logging === "advanced") { %>
+import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
+import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+<% } %>
 
-/**
- * @author l.piciollo
-*  Intercettore di rete, inizializzazione di base per la centralizzazione delel chiamate al BE
- * qui è possibile arrichire le chiamate con Token di autenticazione o altro, richiesto dal BE
- * è possibile inibire anche le chiamate
- * 
- * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
- * LA CLASSE SI INNESCA AUTOMATICAMENTE E SI OCCUPA DELLA GESTIONE DELLA CACHE CENTRLALIZZATA, SI OCCUPA DI CONTROLLARE LA PROFILAZIONE
- * UTENTE, PASSANDO IN HEADER I DATI AUTENTICAZIONE E VIENE GESTITA IN FINE LA CHIAMATA DI RETE.
- * IN CASO FOSSE NECESSARIO INSERIRE UN ALTR INTERCETTORE.. E' POSSIBLE FARLO NELLA PARTE SHARED INSERENDOLO NEL MODULO SHARED
- */
-@Injectable({
-  providedIn: 'root'
-})
-export class <%=classify(prefixClass)%>HttpInterceptorService implements HttpInterceptor {
+@Injectable()
+export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpInterceptor {
+  private isRefreshing = false;
 
-  /***************************************************************************************************************************** */
-  constructor(private cache: PlCacheMapService, @Inject(CACHE_TAG) protected tagCache: string, @Inject(<%=classify(prefixClass)%>DEFAULT_TIMEOUT) protected defaultTimeout: number, private injector: Injector) {
+  private readonly refreshTokenSubject =
+    new BehaviorSubject<string | null>(null);
 
-  }
-  /***************************************************************************************************************************** */
+  private readonly config: HttpInterceptorConfig;
 
-  /**
-   * @author l.piciollo
-   * Funzionalita di controllo per l'abilitazione della cache per le chiamate di rete.. 
-   * di default sono abilitate alla cache solo le chiamate GET
-   * @param method : metodo utilizzato per la chiamata POST,GET,DELETE ....
-   * @param url    : url di chiamata al BE, deve contenere il tagCache per essere messo in cache
-   * @returns valore buleano true|false per indicare se la chiamata puo essere messa in cache o meno
-   */
-  private isRequestCachable(method, url): boolean {
-    return (["GET"].indexOf(method) > -1 && url.indexOf(this.tagCache) > -1)
+  constructor(
+    @Optional()
+    @Inject(HTTP_INTERCEPTOR_CONFIG)
+    config: HttpInterceptorConfig | null,
+
+    @Optional()
+    @Inject(HTTP_AUTH_ADAPTER)
+    private readonly authAdapter: HttpAuthAdapter | null,
+
+    <% if (logging === "advanced") { %>
+    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    <% } %>
+  ) {
+    this.config = {
+      ...DEFAULT_HTTP_INTERCEPTOR_CONFIG,
+      ...(config || {}),
+    };
   }
 
-  /***************************************************************************************************************************** */
-  /**
-   * @author l.piciollo
-   * intercettore per le chiamate di tere.. tutte le chiamate passano da questo intercettore per poterne poi eventualmente
-   * modificarne i parametri di ritorno e di andata, è possibile qui modificare header ed altro
-   * @param request
-   * @param next
-   */
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    try {
-      let startTime = Date.now();
-      /**
-       * si procede a verificare se la chiamata è in cache, in caso i dati vengono prelevati dalla cache e la chiamata 
-       * al be non viene effettuata
-       */
-      if (this.isRequestCachable(request.method, request.url)) {
-        let cachedResponse = this.cache.get(request);
-        if (cachedResponse !== null) {
-         /**in caso sia presente in cache la chimata, viene ritornato il suo valore */
-          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, request.url);
-          return of(cachedResponse);
-        }
-      }
-      /***************************************************************************************************************************** */
-      let timeoutValue = Number(request.headers.get('timeout')) || this.defaultTimeout;
-      let uuid =  <%=classify(prefixClass)%>Utils.UUIDCODE(); 
-      let headers = { 'TransactionID': uuid };
-      let urlApp = request.url;
-      let url = request.url;
-      try { url = urlApp.truncateUrlCache(this.tagCache) } catch (e) { console.debug(url + " not in storable...");}
-      request = request.clone({ setHeaders: headers, url: url });
-      return next.handle(request).pipe(
+  intercept(
+    request: HttpRequest<unknown>,
+    next: HttpHandler,
+  ): Observable<HttpEvent<unknown>> {
+    const startedAt = this.getNow();
+    const timeoutValue = this.getTimeoutValue(request);
+
+    const originalRequest = request;
+
+    if (this.shouldSkipAuth(originalRequest)) {
+      return next.handle(originalRequest).pipe(
         timeout(timeoutValue),
-        tap(
-          event => {
-            if (event instanceof HttpResponse) {
-              /**in caso di esito positivo della chiamata al BE, si verifica se o meno è possibile storicizzare la response */
-              if (this.isRequestCachable(request.method, urlApp))
-                this.cache.put(request, event);
-              /**è possibile aggiungere qui chiamate ad altri servizi o modali di allerta della buon uscita dell'operazione */
-            }
-          }, (err: any) => {
-            if (err instanceof HttpErrorResponse) {
-            /**l'errore vienre rediretto nell'intercettore di eccezione, è possibile specializzarne l'operazione di gestione */
-              PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, err);
-              throw new  <%=classify(prefixClass)%>ErrorBean(err.message, <%=classify(prefixClass)%>ErrorCode.NETWORKERROR)
-            }
-          }
-        ),
-        finalize(() => {
-          /**viene monitorizzato il temp di esecuzione di una chiamata al BE, per verificarne le prestazioni */
-          let elapsedTime = Date.now() - startTime;
-          console.debug(request.method + " " + request.urlWithParams + " in " + elapsedTime + "ms");
-        })
+        finalize(() => this.logExecutionTime(originalRequest, startedAt)),
       );
-    } catch (error:any) {
-      throw new  <%=classify(prefixClass)%>ErrorBean(error.message, <%=classify(prefixClass)%>ErrorCode.SYSTEMERRORCODE);
     }
-  };
-  /***************************************************************************************************************************** */
 
+    const explicitAuthorization =
+      originalRequest.headers.get(this.config.authorizationHeaderName);
+
+    if (
+      this.isRefreshing &&
+      !this.isRefreshRequest(originalRequest)
+    ) {
+      return this.waitRefreshAndRetry(
+        originalRequest,
+        next,
+        explicitAuthorization,
+        timeoutValue,
+        startedAt,
+      );
+    }
+
+    const requestWithAuth = this.addAuthorizationHeader(
+      originalRequest,
+      this.getAccessToken(),
+      explicitAuthorization,
+    );
+
+    return next.handle(requestWithAuth).pipe(
+      timeout(timeoutValue),
+      catchError((error: HttpErrorResponse) => {
+        if (!this.isUnauthorized(error)) {
+          return throwError(() => error);
+        }
+
+        if (this.isRefreshRequest(originalRequest)) {
+          this.handleRefreshFailure(error);
+          return throwError(() => error);
+        }
+
+        return this.handle401Error(
+          originalRequest,
+          next,
+          explicitAuthorization,
+          timeoutValue,
+          startedAt,
+        );
+      }),
+      finalize(() => this.logExecutionTime(requestWithAuth, startedAt)),
+    );
+  }
+
+  private handle401Error(
+    originalRequest: HttpRequest<unknown>,
+    next: HttpHandler,
+    explicitAuthorization: string | null,
+    timeoutValue: number,
+    startedAt: number,
+  ): Observable<HttpEvent<unknown>> {
+    if (!this.authAdapter || !this.authAdapter.refreshToken) {
+      this.handleRefreshFailure(
+        new Error('HTTP_AUTH_ADAPTER.refreshToken is not configured'),
+      );
+
+      return throwError(
+        () => new Error('HTTP_AUTH_ADAPTER.refreshToken is not configured'),
+      );
+    }
+
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      return this.authAdapter.refreshToken().pipe(
+        switchMap((response: HttpRefreshTokenResponse) => {
+          const newAccessToken = response && response.accessToken
+            ? response.accessToken
+            : null;
+
+          if (!newAccessToken) {
+            this.isRefreshing = false;
+            this.refreshTokenSubject.next(null);
+
+            this.handleRefreshFailure(
+              new Error('Access token not found in refresh response'),
+            );
+
+            return throwError(
+              () => new Error('Access token not found in refresh response'),
+            );
+          }
+
+          this.authAdapter!.setAccessToken(newAccessToken);
+
+          if (
+            response.refreshToken &&
+            this.authAdapter &&
+            this.authAdapter.setRefreshToken
+          ) {
+            this.authAdapter.setRefreshToken(response.refreshToken);
+          }
+
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(newAccessToken);
+
+          const clonedRequest = this.addAuthorizationHeader(
+            originalRequest,
+            newAccessToken,
+            explicitAuthorization,
+          );
+
+          return next.handle(clonedRequest).pipe(
+            timeout(timeoutValue),
+            finalize(() => this.logExecutionTime(clonedRequest, startedAt)),
+          );
+        }),
+        catchError((refreshError: unknown) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(null);
+
+          this.handleRefreshFailure(refreshError);
+
+          return throwError(() => refreshError);
+        }),
+      );
+    }
+
+    return this.waitRefreshAndRetry(
+      originalRequest,
+      next,
+      explicitAuthorization,
+      timeoutValue,
+      startedAt,
+    );
+  }
+
+  private waitRefreshAndRetry(
+    originalRequest: HttpRequest<unknown>,
+    next: HttpHandler,
+    explicitAuthorization: string | null,
+    timeoutValue: number,
+    startedAt: number,
+  ): Observable<HttpEvent<unknown>> {
+    return this.refreshTokenSubject.pipe(
+      filter((token: string | null): token is string => !!token),
+      take(1),
+      switchMap((token: string) => {
+        const clonedRequest = this.addAuthorizationHeader(
+          originalRequest,
+          token,
+          explicitAuthorization,
+        );
+
+        return next.handle(clonedRequest).pipe(
+          timeout(timeoutValue),
+          finalize(() => this.logExecutionTime(clonedRequest, startedAt)),
+        );
+      }),
+    );
+  }
+
+  private addAuthorizationHeader(
+    request: HttpRequest<unknown>,
+    token: string | null,
+    explicitAuthorization: string | null,
+  ): HttpRequest<unknown> {
+    if (explicitAuthorization) {
+      return request.clone({
+        setHeaders: {
+          [this.config.authorizationHeaderName]: explicitAuthorization,
+        },
+      });
+    }
+
+    if (token) {
+      return request.clone({
+        setHeaders: {
+          [this.config.authorizationHeaderName]:
+            this.config.authorizationPrefix + ' ' + token,
+        },
+      });
+    }
+
+    return request;
+  }
+
+  private getAccessToken(): string | null {
+    if (!this.authAdapter) {
+      return null;
+    }
+
+    return this.authAdapter.getAccessToken();
+  }
+
+  private getTimeoutValue(request: HttpRequest<unknown>): number {
+    const headerValue = request.headers.get(this.config.timeoutHeaderName);
+
+    const parsedValue = Number(headerValue);
+
+    if (!isNaN(parsedValue) && parsedValue > 0) {
+      return parsedValue;
+    }
+
+    return this.config.defaultTimeout;
+  }
+
+  private shouldSkipAuth(request: HttpRequest<unknown>): boolean {
+    return request.headers.has(this.config.skipAuthHeaderName);
+  }
+
+  private isUnauthorized(error: HttpErrorResponse): boolean {
+    return error && error.status === 401;
+  }
+
+  private isRefreshRequest(request: HttpRequest<unknown>): boolean {
+    return request.url.indexOf(this.config.refreshUrlIncludes) > -1;
+  }
+
+  private handleRefreshFailure(error: unknown): void {
+    this.logError('Refresh token failure', error);
+
+    if (this.authAdapter && this.authAdapter.logout) {
+      this.authAdapter.logout();
+      return;
+    }
+
+    if (this.config.reloadOnRefreshFailure) {
+      window.location.reload();
+    }
+  }
+
+  private logExecutionTime(
+    request: HttpRequest<unknown>,
+    startedAt: number,
+  ): void {
+    if (!this.config.enableExecutionTimeLog) {
+      return;
+    }
+
+    const seconds = ((this.getNow() - startedAt) / 1000).toFixed(3);
+
+    this.logDebug(
+      'HTTP execution time',
+      {
+        url: request.url,
+        seconds: seconds,
+      },
+    );
+  }
+
+  private getNow(): number {
+    if (
+      typeof performance !== 'undefined' &&
+      typeof performance.now === 'function'
+    ) {
+      return performance.now();
+    }
+
+    return Date.now();
+  }
+
+  private logDebug(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.HTTP, message, payload);
+    <% } else { %>
+    console.debug(message, payload);
+    <% } %>
+  }
+
+  private logError(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.error(<%= classify(prefixClass) %>LoggerFeature.HTTP, message, payload);
+    <% } else { %>
+    console.error(message, payload);
+    <% } %>
+  }
 }

@@ -1,71 +1,63 @@
-/**
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-05-19 18:27:36
- * @modify date 2022-05-19 18:27:36
- * @desc [Sort Array]
- */
+import { Pipe, PipeTransform } from '@angular/core';
 
-import { Pipe, PipeTransform } from "@angular/core";
+export type SortOrder = 'asc' | 'desc';
 
+type SortableValue = string | number | boolean | Date | null | undefined;
 
-/**
- * @author luca.piciollo
- * implementing function to compare Number, function name is equals to localCompare
- * now is possibile call Number.localCompare
- */
-Number.prototype.localeCompare = function (val: number): number {
-    if (val)
-        return this < val ? -1 : this > val ? 1 : 0;
-    return this as number;
-};
-
-/**
- * @author luca.piciollo
- * implementing function to compare Boolean, function name is equals to localCompare
- * now is possibile call Boolean.localCompare
- */
-Boolean.prototype.localeCompare = function (val: boolean): number {
-    if (val)
-        return this < val ? -1 : this > val ? 1 : 0;
-    return this as any;
-};
-
-
-/**
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-05-19 18:27:36
- * @modify date 2022-05-19 18:27:36
- * @desc [Sort Array]
- */
-@Pipe({ name: "SORT", pure: false })
+@Pipe({
+  name: 'sort',
+  pure: false,
+})
 export class SortPipe implements PipeTransform {
-    /**
-     * @param value Array of object to render in table
-     * @param order Sort type  "asc"  or "desc"
-     * @param key   Key of object in Array passed in value params, key it must be in first level of json
-     * @returns sorted value Array by key of object
-     */
-    transform<A extends object, B extends "asc" | "desc", C extends keyof A>(value: Array<Number | String | Boolean | A>, order: B, key: C) {
-        let app = value.sort((a: any, b: any) => {
-            try {
-                if (!order) throw new Error("order paramiter is required...")
-                let compare = 0;
-                if ((typeof a == "object") && key) {
-                    if (!key) throw new Error("key parameter is required...")
-                    if ((typeof a[key] != "object") ) {
-                       compare = a[key].localeCompare(b[key])
-                    }else return 0;
-                }
-                else
-                    compare = a[key].localeCompare(b[key])
-                return (compare == 0 || order == "asc") ? compare : order == "desc" ? -compare : 0;
-            } catch (e) {
-                console.error((e as Error).message)
-                return 0;
-            }
-        });
-        return app;
+  transform<T extends Record<string, any>>(
+    value: T[] | null | undefined,
+    order: SortOrder = 'asc',
+    key?: keyof T,
+  ): T[] {
+    if (!Array.isArray(value)) {
+      return [];
     }
-} 
+
+    const cloned = value.slice();
+
+    return cloned.sort((a: T, b: T) => {
+      const left = key ? a[key] : a;
+      const right = key ? b[key] : b;
+
+      const result = this.compare(
+        left as SortableValue,
+        right as SortableValue,
+      );
+
+      return order === 'desc' ? -result : result;
+    });
+  }
+
+  private compare(left: SortableValue, right: SortableValue): number {
+    if (left === right) {
+      return 0;
+    }
+
+    if (left === null || left === undefined) {
+      return -1;
+    }
+
+    if (right === null || right === undefined) {
+      return 1;
+    }
+
+    if (left instanceof Date && right instanceof Date) {
+      return left.getTime() - right.getTime();
+    }
+
+    if (typeof left === 'number' && typeof right === 'number') {
+      return left - right;
+    }
+
+    if (typeof left === 'boolean' && typeof right === 'boolean') {
+      return Number(left) - Number(right);
+    }
+
+    return String(left).localeCompare(String(right));
+  }
+}

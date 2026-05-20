@@ -1,39 +1,40 @@
-/**
- * @format
- * @author luca.piciollo
- * @email lucapiciollo@gmail.com
- * @create date 2022-11-18 12:51:22
- * @modify date 2022-11-18 12:51:22
- * @desc Converte un numero di byte in formato leggibile (B, KB, MB, GB, TB).
- */
-
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({name: 'convertByte'})
+export type FileSizeUnit =
+  | 'B'
+  | 'KB'
+  | 'MB'
+  | 'GB'
+  | 'TB';
+
+@Pipe({
+  name: 'convertMb',
+})
 export class ConvertMbPipe implements PipeTransform {
-   transform(value: number | null | undefined, decimals: number = 2): string {
-      if (value === null || value === undefined || isNaN(value)) {
-         return '0 B';
-      }
+  transform(
+    value: number | string | null | undefined,
+    unit: FileSizeUnit = 'MB',
+    decimals = 2,
+  ): string {
+    if (value === null || value === undefined || value === '') {
+      return '';
+    }
 
-      if (value === 0) {
-         return '0 B';
-      }
+    const bytes = Number(value);
 
-      const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
-      const k = 1024;
+    if (isNaN(bytes)) {
+      return String(value);
+    }
 
-      let bytes = Math.abs(value);
-      let i = 0;
+    const units: FileSizeUnit[] = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const unitIndex = units.indexOf(unit);
 
-      while (bytes >= k && i < units.length - 1) {
-         bytes /= k;
-         i++;
-      }
+    if (unitIndex < 0) {
+      return String(value);
+    }
 
-      const formatted = bytes.toFixed(decimals);
-      const sign = value < 0 ? '-' : '';
+    const converted = bytes / Math.pow(1024, unitIndex);
 
-      return `${sign}${formatted} ${units[i]}`;
-   }
+    return converted.toFixed(decimals) + ' ' + unit;
+  }
 }
