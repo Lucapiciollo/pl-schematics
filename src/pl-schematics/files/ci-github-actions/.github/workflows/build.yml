@@ -1,0 +1,50 @@
+name: Build <%= dasherize(namePackage) %>
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  build:
+    name: Build Angular App
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build-dev
+
+      <% if (tests !== "none") { %>
+      - name: Run tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
+      <% } %>
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: <%= dasherize(namePackage) %>-dist
+          path: dist
