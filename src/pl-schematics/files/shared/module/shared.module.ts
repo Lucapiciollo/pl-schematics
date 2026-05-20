@@ -1,15 +1,3 @@
-/**
- * @author @l.piciollo
- * @email lucapiciolo@gmail.com
- * @create date 2019-12-21 12:30:36
- * @modify date 2019-12-21 12:30:36
- * @desc [
- * modulo comune a tutto l'applicativo, si occupa di condividere altri moduli e funzionalità con il sistema.
- * tutti i componenti o moduli che dovranno essere condivisi con il resto dell'applicazione devono essere posti in
- * import ed export.
- * ]
- */
-
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -23,6 +11,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { <%= classify(prefixClass) %>GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
 import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
+import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
 
 <% if (ui === "material") { %>
 import { MaterialModule } from '../material/material.module';
@@ -31,7 +20,7 @@ import { MaterialModule } from '../material/material.module';
 <% if (state === "ngrx") { %>
 import { StateModule } from 'src/app/<%= namePackage %>/store/state.module';
 <% } %>
-import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
+
 /** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
@@ -60,13 +49,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% } %>
   ],
   providers: [
-  ...provide<%= classify(prefixClass) %>HttpInterceptor({
-    defaultTimeout: 30000,
-    refreshUrlIncludes: '/Authentication/Refresh',
-    enableExecutionTimeLog: true,
-    reloadOnRefreshFailure: true,
-  }),
-  /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
+    /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
   ],
   exports: [
     CommonModule,
@@ -77,30 +60,31 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% if (ui === "material") { %>
     MaterialModule,
     <% } %>
-      <% if (state === "ngrx") { %>
+    <% if (state === "ngrx") { %>
     StateModule,
-  <% } %>
+    <% } %>
   ],
- 
 })
 export class SharedModule {
   constructor(
-    private globalService: <%= classify(prefixClass) %>GlobalService,
-    public translate: TranslateService,
+    private readonly globalService: <%= classify(prefixClass) %>GlobalService,
+    public readonly translate: TranslateService,
   ) {
     this.translate.setDefaultLang('it');
-
-    /**
-     * Mantiene referenziato il servizio globale.
-     * Utile se il costruttore inizializza listener o side effect.
-     */
     this.globalService;
   }
 
   static forRoot(): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [],
+      providers: [
+        ...provide<%= classify(prefixClass) %>HttpInterceptor({
+          defaultTimeout: 30000,
+          refreshUrlIncludes: '/Authentication/Refresh',
+          enableExecutionTimeLog: true,
+          reloadOnRefreshFailure: true,
+        }),
+      ],
     };
   }
 }

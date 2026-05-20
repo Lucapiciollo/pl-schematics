@@ -14,7 +14,7 @@ import { <%=classify(prefixClass)%>InitializerModule } from './<%=namePackage%>/
   ],
   imports: [
     BrowserModule,
-    SharedModule,
+    SharedModule.forRoot(),
     AppRoutingModule,
     <%=classify(prefixClass)%>InitializerModule 
   ],
