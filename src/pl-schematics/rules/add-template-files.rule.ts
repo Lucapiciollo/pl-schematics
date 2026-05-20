@@ -130,6 +130,14 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
       return options.state === "ngrx";
     },
   },
+  {
+    source: "./files/dependency-updater",
+    destination: "../",
+  },
+  {
+    source: "./files/dependency-updater",
+    destination: "../",
+  },
 ];
 
 function resolveDestination(
