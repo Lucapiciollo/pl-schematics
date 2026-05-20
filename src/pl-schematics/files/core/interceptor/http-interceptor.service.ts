@@ -18,6 +18,10 @@ import {
   timeout,
 } from 'rxjs';
 
+
+type GenericHttpRequest = HttpRequest<any>;
+type GenericHttpEvent = HttpEvent<any>;
+
 import {
   DEFAULT_HTTP_INTERCEPTOR_CONFIG,
   HTTP_AUTH_ADAPTER,
@@ -61,7 +65,7 @@ export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpI
   }
 
   intercept(
-    request: HttpRequest<unknown>,
+    request: GenericHttpRequest,
     next: HttpHandler,
   ): Observable<HttpEvent<unknown>> {
     const startedAt = this.getNow();

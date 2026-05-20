@@ -1,617 +1,352 @@
-/**
- * @author @l.piciollo
- * @email lucapiciolo@gmail.com
- * @create date 2019-09-09 09:39:39
- * @modify date 2019-09-09 09:39:39
- * @desc [wrapper di chiamata per i servizi di http esposti in PlHttpService, tutti i metodi sono interrotti durante la navigazione
- * per garantire il corretto funzionamento applicativo.]
-* ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
-* IL SERVIZIO, E' STATO SPECIALIZZATO CON DEGLI EVENTI DI BROADCAST LANCIATI E ASCOLTATI NELLA GLOBALSERVICE QUESTO DA MODO
-* DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
-* NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
-* QUAL'ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
-*/ 
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Inject, Injectable, Optional } from '@angular/core';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  filter,
+  finalize,
+  switchMap,
+  take,
+  throwError,
+  timeout,
+} from 'rxjs';
 
-import { Injectable, InjectionToken, Injector } from '@angular/core';
-import { CONTENT_TYPE, PlCoreModule, PlHttpService, RESPONSE_TYPE, PlCoreUtils, PlHttpRequest} from 'pl-core-utils-library';
-import { Observable, Subject  } from 'rxjs';
-import { <%=classify(prefixClass)%>ErrorBean, <%=classify(prefixClass)%>ErrorCode } from 'src/app/<%=namePackage%>/core/bean/error-bean';
-import { HttpResponse } from '@angular/common/http';
+import {
+  DEFAULT_HTTP_INTERCEPTOR_CONFIG,
+  HTTP_AUTH_ADAPTER,
+  HTTP_INTERCEPTOR_CONFIG,
+  HttpAuthAdapter,
+  HttpInterceptorConfig,
+  HttpRefreshTokenResponse,
+} from 'src/app/<%= namePackage %>/shared/http/http-interceptor.tokens';
 
-/** 
- * @author l.piciollo
- * injectiontoken per la valorizzazione della baseurl per l'invocazione dei servizi del BE.
- * E.S http://baseurl:8080/api/v1/
- */
+<% if (logging === "advanced") { %>
+import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
+import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+<% } %>
 
-export const BASE_URL_API = new InjectionToken<any>("Puntamento all'indirizzo del BE");
+type GenericHttpRequest = HttpRequest<any>;
+type GenericHttpEvent = HttpEvent<any>;
 
-/**
- * @author l.piciollo
- * servizio base per l'interfacciamento con la PLHttpService.. qui sono esposti metodi sia per il background, quindi non subiscono
- * interruzioni da parte della navigazione, che servizi istantanei, i quali vengono terminati in caso di cambio di rotta
- * la classe mette a disposizione gia tutto l'occorrente 
- */
-@Injectable({
-  providedIn: "root"
-})
-/**
-* ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
-* IL SERVIZIO, E' STATO SPECIALIZZATO CON DEGLI EVENTI DI BROADCAST LANCIATI E ASCOLTATI NELLA GLOBALSERVICE QUESTO DA MODO
-* DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
-* NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
-* QUAL'ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
-*/  
-export class <%=classify(prefixClass)%>HttpService {
-   /********************************************************************************************************************/
+@Injectable()
+export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpInterceptor {
+  private isRefreshing = false;
+
+  private readonly refreshTokenSubject: BehaviorSubject<string | null> =
+    new BehaviorSubject<string | null>(null);
+
+  private readonly config: HttpInterceptorConfig;
+
   constructor(
-      private http: HttpClient,
-      private injector: Injector,
-      public plHttpService: PlHttpService,
-   ) {}
-   /**
-    * @author l.piciollo
-    * logtrace per visualizzare di default lo stato di avanzamento delle http
-    * @param IDAjax
-    */
-   private logTraceHttp(IDAjax: any) {
-      // let trace = this.TAILAJXCALL(IDAjax).pipe(takeUntil(PlCoreUtils.progressBars[IDAjax].interrupt)).subscribe(object => {
-      //   console.log(object)
-      // }, () => { }, () => { trace.unsubscribe(); })
-   }
+    @Optional()
+    @Inject(HTTP_INTERCEPTOR_CONFIG)
+    config: HttpInterceptorConfig | null,
 
-   /********************************************************************************************************************/
+    @Optional()
+    @Inject(HTTP_AUTH_ADAPTER)
+    private readonly authAdapter: HttpAuthAdapter | null,
 
-   /**
-    * @author l.piciollo
-    * funzionlita per rimanere in ascolto su una progressione di chiamata al be.. utile per risalire allo stato di chiamate al BE
-    * per il caricamento/scaricamento file. la funzione ritorna un Subject... dove possibile sottoscriversi per icevere i dati
-    * in modalità realtime. utile per costruire barre di progressione a runtime.
-    * @param IDAjax : id della chiamata ajax precedentemente chiamata, l'id viene restituido dalla callback in ingresso alle chiamate
-    */
-   TAILAJXCALL(IDAjax: string): Subject<any> {
-      try {
-         return PlCoreUtils.progressBars[IDAjax].changed;
-      } catch (error: any) {
-         throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true);
-      }
-   }
+    <% if (logging === "advanced") { %>
+    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    <% } %>
+  ) {
+    this.config = {
+      ...DEFAULT_HTTP_INTERCEPTOR_CONFIG,
+      ...(config || {}),
+    };
+  }
 
-   /********************************************************************************************************************/
+  intercept(
+    request: GenericHttpRequest,
+    next: HttpHandler,
+  ): Observable<GenericHttpEvent> {
+    const startedAt = this.getNow();
+    const timeoutValue = this.getTimeoutValue(request);
+    const originalRequest = request;
 
-   /**
-    * @author l.piciollo
-    * funzionalità per la terminazione di una chiamata di rete che magari prende piu tempo del previsto.. passando in ingresso l'id AJAX
-    * staccato al momento della chiamata è utile per killare upload/download file.
-    * @param IDAjax : id della chiamata ajax precedentemente chiamata, l'id viene restituido dalla callback in ingresso alle chiamate
-    */
-   KILLAJXCALL(IDAjax: string) {
-      try {
-         PlCoreUtils.progressBars[IDAjax].interrupt.next(true);
-      } catch (error: any) {
-         throw new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true);
-      }
-   }
+    if (this.shouldSkipAuth(originalRequest)) {
+      return next.handle(originalRequest).pipe(
+        timeout(timeoutValue),
+        finalize(() => this.logExecutionTime(originalRequest, startedAt)),
+      );
+    }
 
-   /********************************************************************************************************************/
+    const explicitAuthorization =
+      originalRequest.headers.get(this.config.authorizationHeaderName);
 
-   /**
-    * @author l.piciollo
-    * funzione per il download dello straming in formato file
-    * @param streamData :buffer di byte
-    * @param headers   : headers  ajax
-    * @param filename : nome file
-    */
-   DOWNLOAD(streamData, contentType: CONTENT_TYPE | string, fileName?: string): Promise<any> {
-      return this.plHttpService.DOWNLOAD(streamData, contentType, fileName);
-   }
+    if (
+      this.isRefreshing &&
+      !this.isRefreshRequest(originalRequest)
+    ) {
+      return this.waitRefreshAndRetry(
+        originalRequest,
+        next,
+        explicitAuthorization,
+        timeoutValue,
+        startedAt,
+      );
+    }
 
-   /********************************************************************************************************************/
+    const requestWithAuth = this.addAuthorizationHeader(
+      originalRequest,
+      this.getAccessToken(),
+      explicitAuthorization,
+    );
 
-   /**
-    * @author l.piciollo
-    * si occupa di effettuare il download dell'immagine contenuta nel blob creato con le altre funzionalità
-    * funzionalità utilizzabile in combinazione con le funzione di creazione image o file
-    * @param url : url del blob
-    * @param filename : nome file
-    */
-   DOWNLOADURL(url: string, filename: string = new Date().getTime() + 'txt') {
-      this.plHttpService.DOWNLOADURL(url, filename);
-   }
+    return next.handle(requestWithAuth).pipe(
+      timeout(timeoutValue),
+      catchError((error: HttpErrorResponse) => {
+        if (!this.isUnauthorized(error)) {
+          return throwError(error);
+        }
 
-   /********************************************************************************************************************/
+        if (this.isRefreshRequest(originalRequest)) {
+          this.handleRefreshFailure(error);
+          return throwError(error);
+        }
 
+        return this.handle401Error(
+          originalRequest,
+          next,
+          explicitAuthorization,
+          timeoutValue,
+          startedAt,
+        );
+      }),
+      finalize(() => this.logExecutionTime(requestWithAuth, startedAt)),
+    );
+  }
 
-   private level = 0;
-   private partialItem = '';
-   private decoder = new TextDecoder();
-   private JTOKEN_START_OBJECT = '{';
-   private JTOKEN_END_OBJECT = '}';
+  private handle401Error(
+    originalRequest: GenericHttpRequest,
+    next: HttpHandler,
+    explicitAuthorization: string | null,
+    timeoutValue: number,
+    startedAt: number,
+  ): Observable<GenericHttpEvent> {
+    if (!this.authAdapter || !this.authAdapter.refreshToken) {
+      const error = new Error('HTTP_AUTH_ADAPTER.refreshToken is not configured');
 
-   private decodeChunk<T>(value: Uint8Array, decodedItemCallback: (item: T) => void): void {
-      const chunk = this.decoder.decode(value);
-      let itemStart = 0;
-      for (let i = 0; i < chunk.length; i++) {
-         if (chunk[i] === this.JTOKEN_START_OBJECT) {
-            if (this.level === 0) {
-               itemStart = i;
+      this.handleRefreshFailure(error);
+
+      return throwError(error);
+    }
+
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      return this.authAdapter.refreshToken().pipe(
+        switchMap((response: HttpRefreshTokenResponse) => {
+          const newAccessToken =
+            response && response.accessToken
+              ? response.accessToken
+              : null;
+
+          if (!newAccessToken) {
+            const error = new Error('Access token not found in refresh response');
+
+            this.isRefreshing = false;
+            this.refreshTokenSubject.next(null);
+            this.handleRefreshFailure(error);
+
+            return throwError(error);
+          }
+
+          if (this.authAdapter) {
+            this.authAdapter.setAccessToken(newAccessToken);
+
+            if (
+              response.refreshToken &&
+              this.authAdapter.setRefreshToken
+            ) {
+              this.authAdapter.setRefreshToken(response.refreshToken);
             }
-            this.level++;
-         }
-         if (chunk[i] === this.JTOKEN_END_OBJECT) {
-            this.level--;
-            if (this.level === 0) {
-               let item = chunk.substring(itemStart, i + 1);
-               if (this.partialItem) {
-                  item = this.partialItem + item;
-                  this.partialItem = '';
-               }
-               decodedItemCallback(JSON.parse(item));
-            }
-         }
-      }
-      if (this.level !== 0) {
-         this.partialItem = chunk.substring(itemStart);
-      }
-   }
+          }
 
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(newAccessToken);
 
-   STREAM<T>(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, decodeChunk?: (value: Uint8Array, decodedItemCallback: (item: T) => void) => void): Observable<T> {
-      const abortController = new AbortController();
-      const abortSignal = abortController.signal;
-      const sn = toSignal(PlCoreModule.Routing().getIinterrupt(), { initialValue: false, injector: this.injector });
+          const clonedRequest = this.addAuthorizationHeader(
+            originalRequest,
+            newAccessToken,
+            explicitAuthorization,
+          );
 
-      effect(() => {
-         if (sn()  ) {
-            abortController.abort();
-         }
-      }, { injector: this.injector });
+          return next.handle(clonedRequest).pipe(
+            timeout(timeoutValue),
+            finalize(() => this.logExecutionTime(clonedRequest, startedAt)),
+          );
+        }),
+        catchError((refreshError: any) => {
+          this.isRefreshing = false;
+          this.refreshTokenSubject.next(null);
 
-      return new Observable(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.STREAM(plttpRequest, abortController.signal, decodeChunk).subscribe({
-            next: (item: T) => observer.next(item),
-            error: (err) => observer.error(this.checkError(err)),
-            complete: () => observer.complete()
-         });
+          this.handleRefreshFailure(refreshError);
+
+          return throwError(refreshError);
+        }),
+      );
+    }
+
+    return this.waitRefreshAndRetry(
+      originalRequest,
+      next,
+      explicitAuthorization,
+      timeoutValue,
+      startedAt,
+    );
+  }
+
+  private waitRefreshAndRetry(
+    originalRequest: GenericHttpRequest,
+    next: HttpHandler,
+    explicitAuthorization: string | null,
+    timeoutValue: number,
+    startedAt: number,
+  ): Observable<GenericHttpEvent> {
+    return this.refreshTokenSubject.pipe(
+      filter((token: string | null): token is string => !!token),
+      take(1),
+      switchMap((token: string) => {
+        const clonedRequest = this.addAuthorizationHeader(
+          originalRequest,
+          token,
+          explicitAuthorization,
+        );
+
+        return next.handle(clonedRequest).pipe(
+          timeout(timeoutValue),
+          finalize(() => this.logExecutionTime(clonedRequest, startedAt)),
+        );
+      }),
+    );
+  }
+
+  private addAuthorizationHeader(
+    request: GenericHttpRequest,
+    token: string | null,
+    explicitAuthorization: string | null,
+  ): GenericHttpRequest {
+    if (explicitAuthorization) {
+      return request.clone({
+        setHeaders: {
+          [this.config.authorizationHeaderName]: explicitAuthorization,
+        },
       });
-   }
+    }
 
-   /**
-    * @author l.piciollo
-    * Servizio BASICHTTP, richiama funzionalità di rete in modo generico, utilile per problemi di CORS.
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   BASICHTTP(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<any> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.nativeHttp(plttpRequest, responsetype || 'json', PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
+    if (token) {
+      return request.clone({
+        setHeaders: {
+          [this.config.authorizationHeaderName]:
+            this.config.authorizationPrefix + ' ' + token,
+        },
       });
-   }
+    }
 
-   /********************************************************************************************************************/
+    return request;
+  }
 
-   /**
-    * @author l.piciollo
-    * Servizio GET
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   GET<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<T> {
-      return new Observable<T>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-
-         this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res.body as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         try {
-            let obs = this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this));
-            obs.subscribe(
-               res => {
-                  try {
-                     observer.next(res as any);
-                     observer.complete();
-                  } catch (error: any) {}
-               },
-               err => {
-                  observer.error(this.checkError(err));
-               },
-               () => {},
-            );
-         } catch (e) {
-            console.error(e);
-         }
-      });
-
-      // let header = plttpRequest.httpHeaders || new HttpHeaders();
-      // plttpRequest.mocked ? header = header.append('mocked', "true") : null;
-      // const options = this.injector.get(PlHttpService).requestOption(plttpRequest.queryParams, header, responseType, contentType);
-      // return this.http.get(decodeURIComponent(plttpRequest.url ).replace(/\*/g, "%2A"), options).pipe(filter( (event : any)=>event.type ==4)) as any
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio PATCH
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio PATCHBG REST non influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio POST
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   POST<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, interrupt?: Subject<any>): Observable<T> {
-      return new Observable<T>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, interrupt || PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res.body as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio POSTBG REST  influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   POSTBG<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<T>> {
-      return new Observable<HttpResponse<T>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio POST REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.POST(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.GET(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio PUT REST
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   PUT<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<T>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.PUT(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio PUTBG REST  influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.PUT(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio DELETE REST
-    * @param url          :Url BE
-    * @param params       :params
-    * @param responseType :tipo di risposta RESPONSE_TYPE
-    * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
-    * @param contentType  :tipo di contenuto ricevuto
-    */
-   DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
-      return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
-         this.plHttpService.DELETE(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * Servizio FORKJOIN REST
-    * @param serviceUrls  :lista di url da richiamare in parallelo
-    * @param params       :params
-    */
-   FORKJOIN(plttpRequest: Array<PlHttpRequest>, interrupt?: Subject<boolean>): Observable<Array<HttpResponse<any>>> {
-      plttpRequest = plttpRequest.map(request => {
-         request.url = this.injector.get(BASE_URL_API).concat(request.url);
-         return request;
-      });
-      return new Observable<Array<HttpResponse<any>>>(observer => {
-         this.plHttpService.FORKJOIN(plttpRequest, interrupt).subscribe(
-            res => {
-               observer.next(res as any);
-               observer.complete();
-            },
-            err => {
-               observer.error(this.checkError(err));
-            },
-            () => {},
-         );
-      });
-   }
-
-   /************************************************************************************************** */
-
-  //  private store: Store<{settingsStore: IAppState}> = inject(Store<{settingsStore: IAppState}>);
-
-  //  public httpBg<T>(obs: Subscriber<T>, plHttpRequest: PlHttpRequest, mode: 'GETBG' | 'POSTBG' | 'PATCHBG' | 'DELETE' | 'PUTBG', aggregator?: (response: T) => T, permissions?: string[], callBack?: (id: any) => void, type?: RESPONSE_TYPE) {
-  //     try {
-  //        of(null)
-  //           .pipe(checkPermission(permissions, this.store))
-  //           .subscribe({
-  //              next: () => {
-  //                 this[mode](plHttpRequest, RESPONSE_TYPE.JSON, callBack != null ? callBack : () => {})
-  //                    .pipe()
-  //                    .subscribe({
-  //                       next: value => {
-  //                          let response = JSON.parse(value.body);
-  //                          if (response && response.errors && response.errors.length > 0) {
-  //                             Utils.runSubject(obs, null, true);
-  //                          } else {
-  //                             if (aggregator) {
-  //                                response = aggregator(response);
-  //                             }
-  //                             Utils.runSubject(obs, response, true);
-  //                          }
-  //                       },
-  //                       complete: () => {},
-  //                       error: async e => {
-  //                          const createMessages = this.injector.get(BE_MESSAGES);
-  //                          if (e && e?.message && e?.message?.error && JSON.parse(e?.message?.error)?.code) {
-  //                             let msgError = createMessages()(JSON.parse(e?.message?.error)?.code || 'DEFAULT');
-  //                             let errors = JSON.parse(e?.message?.error)?.errors;
-  //                             if (JSON.parse(e?.message?.error)?.placeholders && Object.keys(JSON.parse(e?.message?.error)?.placeholders).length > 0) {
-  //                                Object.entries(JSON.parse(e?.message?.error)?.placeholders).forEach(([key, value]) => {
-  //                                   msgError = msgError.replace(`{{${key}}}`, value as any);
-  //                                });
-  //                             }
-  //                             msgError = msgError.format( errors && errors.length > 0 ? errors[0] : ''  );
-
-  //                             // Se il codice di errore è 'REQUIRED_NOTES_NOT_FOUND', lancia un errore specifico
-  //                             if (JSON.parse(e?.message?.error)?.code === 'REQUIRED_NOTES_NOT_FOUND') obs.error({msgError, code: JSON.parse(e?.message?.error)?.code});
-  //                             else if (JSON.parse(e?.message?.error)?.code === 'LEAVE_REQUESTED_DAYS_ARE_ALREADY_COVERED_WOULD_YOU_LIKE_TO_FORCE_APPROVAL') obs.error({msgError, code: JSON.parse(e?.message?.error)?.code, requestConfermation: true});
-  //                             else obs.error(msgError);
-  //                          } else {
-  //                             obs.error(createMessages()('DEFAULT'));
-  //                             obs.complete();
-  //                          }
-  //                       },
-  //                    });
-  //              },
-  //              complete: () => {},
-  //              error: async e => {
-  //                 obs.error(e);
-  //                 obs.complete();
-  //              },
-  //           });
-  //     } catch (e) {
-  //        obs.error(e);
-  //     }
-   }
-
-   /********************************************************************************************************************/
-
-   /**
-    * @author l.piciollo
-    * funzione di utilita per la cattura delle eccezioni o errori riscontrati durante le chiamte al BE
-    * @param error
-    */
-   private checkError(error): ErrorBean {
-      try {
-         return new ErrorBean(error, ErrorCode.SYSTEMERRORCODE, false, true);
-      } catch (e) {
-         if (error.message) return new ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE, false, true);
-      }
+  private getAccessToken(): string | null {
+    if (!this.authAdapter) {
       return null;
-   }
-}
+    }
 
+    return this.authAdapter.getAccessToken();
+  }
+
+  private getTimeoutValue(request: GenericHttpRequest): number {
+    const headerValue = request.headers.get(this.config.timeoutHeaderName);
+    const parsedValue = Number(headerValue);
+
+    if (!isNaN(parsedValue) && parsedValue > 0) {
+      return parsedValue;
+    }
+
+    return this.config.defaultTimeout;
+  }
+
+  private shouldSkipAuth(request: GenericHttpRequest): boolean {
+    return request.headers.has(this.config.skipAuthHeaderName);
+  }
+
+  private isUnauthorized(error: HttpErrorResponse): boolean {
+    return !!error && error.status === 401;
+  }
+
+  private isRefreshRequest(request: GenericHttpRequest): boolean {
+    return request.url.indexOf(this.config.refreshUrlIncludes) > -1;
+  }
+
+  private handleRefreshFailure(error: any): void {
+    this.logError('Refresh token failure', error);
+
+    if (this.authAdapter && this.authAdapter.logout) {
+      this.authAdapter.logout();
+      return;
+    }
+
+    if (this.config.reloadOnRefreshFailure) {
+      window.location.reload();
+    }
+  }
+
+  private logExecutionTime(
+    request: GenericHttpRequest,
+    startedAt: number,
+  ): void {
+    if (!this.config.enableExecutionTimeLog) {
+      return;
+    }
+
+    const seconds = ((this.getNow() - startedAt) / 1000).toFixed(3);
+
+    this.logDebug('HTTP execution time', {
+      url: request.url,
+      seconds: seconds,
+    });
+  }
+
+  private getNow(): number {
+    if (
+      typeof performance !== 'undefined' &&
+      typeof performance.now === 'function'
+    ) {
+      return performance.now();
+    }
+
+    return Date.now();
+  }
+
+  private logDebug(message: string, payload?: any): void {
+    <% if (logging === "advanced") { %>
+    this.logger.debug(
+      <%= classify(prefixClass) %>LoggerFeature.HTTP,
+      message,
+      payload,
+    );
+    <% } else { %>
+    console.debug(message, payload);
+    <% } %>
+  }
+
+  private logError(message: string, payload?: any): void {
+    <% if (logging === "advanced") { %>
+    this.logger.error(
+      <%= classify(prefixClass) %>LoggerFeature.HTTP,
+      message,
+      payload,
+    );
+    <% } else { %>
+    console.error(message, payload);
+    <% } %>
+  }
+}

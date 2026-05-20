@@ -5,8 +5,8 @@
  * @modify date 2026-05-20
  * @desc [
  * Servizio globale dell'applicazione.
- * Qui vengono centralizzate funzionalità comuni, eventi core, gestione errori,
- * cache HTTP, redirect e servizi generici condivisi.
+ * Centralizza funzionalità comuni, eventi core, errori globali,
+ * cache HTTP, redirect e servizi condivisi.
  * ]
  */
 
@@ -71,9 +71,9 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   /**
    * Ritorna il Subject legato alla progressione di una chiamata HTTP.
    */
-  getProgression(idAjax: string): Subject<unknown> {
+  getProgression(idAjax: string): Subject<any> {
     try {
-      return this.httpService.TAILAJXCALL(idAjax) as Subject<unknown>;
+      return this.httpService.TAILAJXCALL(idAjax) as Subject<any>;
     } catch (error) {
       throw this.toErrorBean(error);
     }
@@ -133,9 +133,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   <% } %>
 
   private registerCoreEvents(): void {
-    /**
-     * Evento di interruzione rete.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       TYPE_EVENT_NETWORK.PL_BREACK_NET,
       (event: CustomEvent) => {
@@ -143,9 +140,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       },
     );
 
-    /**
-     * Apertura dialog errore.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG,
       (event: CustomEvent) => {
@@ -153,9 +147,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       },
     );
 
-    /**
-     * Redirect da errore core.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT,
       (event: CustomEvent) => {
@@ -163,9 +154,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       },
     );
 
-    /**
-     * Cache HTTP rilevata.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE,
       (event: CustomEvent) => {
@@ -174,9 +162,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
     );
 
     <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-    /**
-     * Token Azure acquisito correttamente.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS,
       (event: CustomEvent) => {
@@ -184,9 +169,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       },
     );
 
-    /**
-     * Login Azure riuscito.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS,
       (event: CustomEvent) => {
@@ -195,9 +177,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
     );
     <% } %>
 
-    /**
-     * Errore HTTP globale.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR,
       (event: CustomEvent) => {
@@ -205,9 +184,6 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       },
     );
 
-    /**
-     * Errore generico globale.
-     */
     PlCoreUtils.Broadcast().listenEvent(
       CORE_TYPE_EVENT.CORE_ERROR_SERVICE,
       (event: CustomEvent) => {
@@ -218,7 +194,7 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
 
   private handleHttpAjaxError(error: any): void {
     <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-    if (error && [401].indexOf(error.status) > -1) {
+    if (error && error.status === 401) {
       this.injector
         .get(<%= classify(prefixClass) %>AuthService)
         .login()
@@ -251,12 +227,20 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
       return error;
     }
 
+    if (error && typeof error === 'object' && 'message' in error) {
+      return String((error as { message?: unknown }).message || '');
+    }
+
     return 'Unexpected global service error';
   }
 
   private logDebug(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
-    this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    this.logger.debug(
+      <%= classify(prefixClass) %>LoggerFeature.APP,
+      message,
+      payload,
+    );
     <% } else { %>
     console.debug(message, payload);
     <% } %>
@@ -264,7 +248,11 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
 
   private logWarn(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
-    this.logger.warn(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    this.logger.warn(
+      <%= classify(prefixClass) %>LoggerFeature.APP,
+      message,
+      payload,
+    );
     <% } else { %>
     console.warn(message, payload);
     <% } %>
@@ -272,7 +260,11 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
 
   private logError(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
-    this.logger.error(<%= classify(prefixClass) %>LoggerFeature.APP, message, payload);
+    this.logger.error(
+      <%= classify(prefixClass) %>LoggerFeature.APP,
+      message,
+      payload,
+    );
     <% } else { %>
     console.error(message, payload);
     <% } %>

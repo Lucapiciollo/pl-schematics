@@ -2,66 +2,130 @@
  * @author @l.piciollo
  * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 15:14:28
- * @modify date 2019-12-21 15:14:28
- * @desc [intercettazione errori per la centralizzazione della loro gestione..]
- * 
- * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
- * IL SERVIZIO, E' STATO SPECIALIZZATO CON DEGLI EVENTI DI BROADCAST LANCIATI E ASCOLTATI NELLA GLOBALSERVICE QUESTO DA MODO
- * DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
- * NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
+ * @modify date 2026-05-20
+ * @desc [
+ * Servizio per la centralizzazione della gestione degli errori applicativi.
+ * Gli errori vengono trasformati in eventi broadcast e gestiti dalla GlobalService.
+ * ]
  */
 
-import { ErrorHandler, Injectable, Injector } from "@angular/core";
-import { <%=classify(prefixClass)%>ErrorBean } from 'src/app/<%=namePackage%>/core/bean/error-bean'; 
+import { ErrorHandler, Injectable } from '@angular/core';
+
 import { PlCoreUtils } from 'pl-core-utils-library';
-import { CORE_TYPE_EVENT } from '../type/type.event';
-/**
- * @author l.piciollo
- * classe per la centralizzazione della gestione degli errori.. qui possono essere catalogati e gestiti come da richiesta
- * possono essere accodati per un servizio di ftp per l'analisi eventuale.
- */
+
+import { <%= classify(prefixClass) %>ErrorBean } from 'src/app/<%= namePackage %>/core/bean/error-bean';
+import { CORE_TYPE_EVENT } from 'src/app/<%= namePackage %>/core/type/type.event';
+
+<% if (logging === "advanced") { %>
+import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
+import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+<% } %>
+
 @Injectable({
-  providedIn: "root"
+  providedIn: 'root',
 })
-/**
-* ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
-* IL SERVIZIO, E' STATO SPECIALIZZATO CON DEGLI EVENTI DI BROADCAST LANCIATI E ASCOLTATI NELLA GLOBALSERVICE QUESTO DA MODO
-* DI EVITARE DI METTERE MANI A QUESTO SERVIZIO. 
-* NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
-*/
-export class <%=classify(prefixClass)%>ErrorService implements ErrorHandler {
+export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
+  constructor(
+    <% if (logging === "advanced") { %>
+    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    <% } %>
+  ) {}
 
-  constructor(private injector: Injector) { }
   /**
-  * @author l.piciollo
-  *  tutti gli errori applicativi saranno concentrati in questa funzione.. è possibile elaborarli in base alle proprie necessità
-  */
-
-
-   handleError(errorBean: any) {
+   * Entry point globale Angular per la gestione errori.
+   */
+  handleError(error: unknown): void {
     try {
-      if (errorBean  instanceof <%=classify(prefixClass)%>ErrorBean || errorBean.rejection instanceof <%=classify(prefixClass)%>ErrorBean) {
-        /**
-         * evento lanciato per indicare che l'errore riscontrato necessita di un messaggio di dialogo figurativo per il cliente 
-         * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
-         */
-        if (errorBean.dialog || errorBean.rejection.dialog)
-          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG, errorBean.rejection ||errorBean);
-        /**
-         * evento lanciato per indicare che l'errore riscontrato necessita di una redirect applicativa..
-         * l'evento viene raccolto nel global service, occorre specializzare l'operazione richiesta 
-         */
-        if (errorBean.dialog ||errorBean.rejection.redirect) {
-          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT, errorBean.rejection||errorBean);
-        }
+      const errorBean = this.resolveErrorBean(error);
+
+      if (errorBean) {
+        this.handleErrorBean(errorBean);
       }
-      /**
-       * selleva qualsiasi errore applicativo ritrovato, e passa la gestione all'ascoltatore di evento
-       */
-      PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ERROR_SERVICE, errorBean);
-    } catch (error) {
-      console.error(error)
+
+      PlCoreUtils.Broadcast().execEvent(
+        CORE_TYPE_EVENT.CORE_ERROR_SERVICE,
+        errorBean || error,
+      );
+
+      if (!errorBean) {
+        this.logError('Unhandled application error', error);
+      }
+    } catch (handlerError) {
+      this.logError('ErrorService failed while handling an error', handlerError);
+      console.error(handlerError);
     }
   }
- 
-} 
+
+  private handleErrorBean(errorBean: <%= classify(prefixClass) %>ErrorBean): void {
+    if (this.shouldOpenDialog(errorBean)) {
+      PlCoreUtils.Broadcast().execEvent(
+        CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG,
+        errorBean,
+      );
+    }
+
+    if (this.shouldRedirect(errorBean)) {
+      PlCoreUtils.Broadcast().execEvent(
+        CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT,
+        errorBean,
+      );
+    }
+
+    this.logError('Application ErrorBean handled', errorBean);
+  }
+
+  /**
+   * Angular spesso wrappa gli errori async dentro:
+   * - error.rejection
+   * - error.originalError
+   *
+   * Qui normalizziamo il valore in un ErrorBean, quando possibile.
+   */
+  private resolveErrorBean(error: unknown): <%= classify(prefixClass) %>ErrorBean | null {
+    if (error instanceof <%= classify(prefixClass) %>ErrorBean) {
+      return error;
+    }
+
+    const anyError = error as any;
+
+    if (
+      anyError &&
+      anyError.rejection instanceof <%= classify(prefixClass) %>ErrorBean
+    ) {
+      return anyError.rejection;
+    }
+
+    if (
+      anyError &&
+      anyError.originalError instanceof <%= classify(prefixClass) %>ErrorBean
+    ) {
+      return anyError.originalError;
+    }
+
+    return null;
+  }
+
+  private shouldOpenDialog(errorBean: <%= classify(prefixClass) %>ErrorBean): boolean {
+    const anyError = errorBean as any;
+
+    return anyError.dialog === true;
+  }
+
+  private shouldRedirect(errorBean: <%= classify(prefixClass) %>ErrorBean): boolean {
+    const anyError = errorBean as any;
+
+    return anyError.redirect === true;
+  }
+
+  private logError(message: string, payload?: unknown): void {
+    <% if (logging === "advanced") { %>
+    this.logger.error(
+      <%= classify(prefixClass) %>LoggerFeature.APP,
+      message,
+      payload,
+    );
+    <% } else { %>
+    console.error(message, payload);
+    <% } %>
+  }
+}
