@@ -1,6 +1,7 @@
-import { chain, noop, Rule } from "@angular-devkit/schematics";
-import { PlSchematicsOptions } from "../types/schema-options";
-import { addClass } from "./add-class.rule";
+import { chain, noop, Rule } from '@angular-devkit/schematics';
+
+import { PlSchematicsOptions } from '../types/schema-options';
+import { addClass } from './add-class.rule';
 
 interface TemplateFolderConfig {
   source: string;
@@ -10,133 +11,140 @@ interface TemplateFolderConfig {
 
 const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
-    source: "./files/core/service",
-    destination: "<namePackage>/core/service/",
+    source: './files/core/service',
+    destination: '<namePackage>/core/service/',
   },
   {
-    source: "./files/core/initializer",
-    destination: "<namePackage>/core/initializer/",
+    source: './files/core/initializer',
+    destination: '<namePackage>/core/initializer/',
   },
   {
-    source: "./files/core/bean",
-    destination: "<namePackage>/core/bean/",
+    source: './files/core/bean',
+    destination: '<namePackage>/core/bean/',
   },
   {
-    source: "./files/core/module",
-    destination: "<namePackage>/core/module/",
+    source: './files/core/module',
+    destination: '<namePackage>/core/module/',
   },
   {
-    source: "./files/core/interceptor",
-    destination: "<namePackage>/core/interceptor/",
+    source: './files/core/interceptor',
+    destination: '<namePackage>/core/interceptor/',
   },
   {
-    source: "./files/core/utils",
-    destination: "<namePackage>/core/utils/",
+    source: './files/core/utils',
+    destination: '<namePackage>/core/utils/',
   },
   {
-    source: "./files/core/type",
-    destination: "<namePackage>/core/type/",
-  },
-
-  {
-    source: "./files/shared/module",
-    destination: "<namePackage>/shared/module/",
+    source: './files/core/type',
+    destination: '<namePackage>/core/type/',
   },
   {
-    source: "./files/shared/utils",
-    destination: "<namePackage>/shared/utils/",
+    source: './files/shared/module',
+    destination: '<namePackage>/shared/module/',
   },
   {
-    source: "./files/shared/service",
-    destination: "<namePackage>/shared/service/",
+    source: './files/shared/utils',
+    destination: '<namePackage>/shared/utils/',
   },
   {
-    source: "./files/shared/component",
-    destination: "<namePackage>/shared/component/",
+    source: './files/shared/service',
+    destination: '<namePackage>/shared/service/',
   },
   {
-    source: "./files/shared/pipe",
-    destination: "<namePackage>/shared/pipe/",
-  },
-
-  {
-    source: "./files/home",
-    destination: "<namePackage>/component/page/home",
+    source: './files/shared/component',
+    destination: '<namePackage>/shared/component/',
   },
   {
-    source: "./files/component",
-    destination: "/",
+    source: './files/shared/pipe',
+    destination: '<namePackage>/shared/pipe/',
   },
   {
-    source: "./files/extension",
-    destination: "/",
+    source: './files/shared/http',
+    destination: '<namePackage>/shared/http/',
   },
   {
-    source: "./files/customInterface",
-    destination: "../",
+    source: './files/home',
+    destination: '<namePackage>/component/page/home',
   },
   {
-    source: "./files/properties",
-    destination: "../environments/",
+    source: './files/component',
+    destination: '/',
   },
   {
-    source: "./files/public",
-    destination: "../assets/public",
+    source: './files/extension',
+    destination: '/',
   },
   {
-    source: "./documentation",
-    destination: "../../pl-schematics/document",
+    source: './files/customInterface',
+    destination: '../',
+  },
+  {
+    source: './files/properties',
+    destination: '../environments/',
+  },
+  {
+    source: './files/public',
+    destination: '../assets/public',
+  },
+  {
+    source: './files/application',
+    destination: '../../',
+    enabled: function (options: PlSchematicsOptions): boolean {
+      return options.enableSonarQube === 'Y';
+    },
+  },
+  {
+    source: './documentation',
+    destination: '../../pl-schematics/document',
     enabled: function (options: PlSchematicsOptions): boolean {
       return options.includeDocumentation === true;
     },
   },
   {
-    source: "./files/mock-api-node",
-    destination: "../mock-api",
+    source: './files/advanced-logging',
+    destination: '<namePackage>/core/logging/',
     enabled: function (options: PlSchematicsOptions): boolean {
-      return options.mockApi === "node-express";
+      return options.logging === 'advanced';
     },
   },
   {
-    source: "./files/application",
-    destination: "../../",
-    enabled: (options) => options.enableSonarQube === "Y",
-  },
-  {
-    source: "./files/ci-azure-devops",
-    destination: "../../",
+    source: './files/material',
+    destination: '<namePackage>/shared/material/',
     enabled: function (options: PlSchematicsOptions): boolean {
-      return options.ci === "azure-devops";
+      return options.ui === 'material';
     },
   },
   {
-    source: "./files/ci-github-actions",
-    destination: "../../",
+    source: './files/ngrx',
+    destination: '<namePackage>/',
     enabled: function (options: PlSchematicsOptions): boolean {
-      return options.ci === "github-actions";
+      return options.state === 'ngrx';
     },
   },
   {
-    source: "./files/material",
-    destination: "<namePackage>/shared/material",
+    source: './files/mock-api-node',
+    destination: '../../mock-api',
     enabled: function (options: PlSchematicsOptions): boolean {
-      return options.ui === "material";
+      return options.mockApi === 'node-express';
     },
   },
   {
-    source: "./files/ngrx",
-    destination: "<namePackage>",
+    source: './files/ci-azure-devops',
+    destination: '../../',
     enabled: function (options: PlSchematicsOptions): boolean {
-      return options.state === "ngrx";
+      return options.ci === 'azure-devops';
     },
   },
   {
-    source: "./files/dependency-updater",
-    destination: "../",
+    source: './files/ci-github-actions',
+    destination: '../../',
+    enabled: function (options: PlSchematicsOptions): boolean {
+      return options.ci === 'github-actions';
+    },
   },
   {
-    source: "./files/dependency-updater",
-    destination: "../",
+    source: './files/dependency-updater',
+    destination: '../../',
   },
 ];
 
@@ -144,11 +152,11 @@ function resolveDestination(
   destination: string,
   options: PlSchematicsOptions,
 ): string {
-  return destination.replace("<namePackage>", options.namePackage);
+  return destination.replace('<namePackage>', options.namePackage);
 }
 
 export function addTemplateFiles(options: PlSchematicsOptions): Rule {
-  const rules = TEMPLATE_FOLDERS.map((item: TemplateFolderConfig) => {
+  const rules = TEMPLATE_FOLDERS.map(function (item: TemplateFolderConfig): Rule {
     if (item.enabled && !item.enabled(options)) {
       return noop();
     }

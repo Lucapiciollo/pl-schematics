@@ -1,3 +1,16 @@
+/**
+ * @author @l.piciollo
+ * @email lucapiciolo@gmail.com
+ * @create date 2019-12-21 12:30:36
+ * @modify date 2026-05-24
+ * @desc [
+ * Modulo comune a tutto l'applicativo.
+ * Si occupa di condividere moduli, pipe, componenti e funzionalità comuni.
+ * Tutti i componenti o moduli che dovranno essere condivisi con il resto
+ * dell'applicazione devono essere importati ed esportati da qui.
+ * ]
+ */
+
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -9,12 +22,14 @@ import {
 } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { environment } from 'src/environments/environment';
+
 import { <%= classify(prefixClass) %>GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
 import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
 import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
 
 <% if (ui === "material") { %>
-import { MaterialModule } from '../material/material.module';
+import { MaterialModule } from 'src/app/<%= namePackage %>/shared/material/material.module';
 <% } %>
 
 <% if (state === "ngrx") { %>
@@ -38,7 +53,9 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
+        deps: [
+          HttpClient,
+        ],
       },
     }),
     <% if (ui === "material") { %>
@@ -49,6 +66,10 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% } %>
   ],
   providers: [
+    /**
+     * Provider condivisi non root-only.
+     * I provider root-only, come interceptor HTTP, devono stare nel forRoot().
+     */
     /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
   ],
   exports: [
@@ -70,7 +91,12 @@ export class SharedModule {
     private readonly globalService: <%= classify(prefixClass) %>GlobalService,
     public readonly translate: TranslateService,
   ) {
-    this.translate.setDefaultLang('it');
+    this.translate.setDefaultLang(environment.i18n.defaultLanguage);
+
+    /**
+     * Mantiene referenziato il servizio globale.
+     * Utile se il costruttore del servizio registra listener globali.
+     */
     this.globalService;
   }
 
@@ -79,9 +105,9 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         ...provide<%= classify(prefixClass) %>HttpInterceptor({
-          defaultTimeout: 30000,
-          refreshUrlIncludes: '/Authentication/Refresh',
-          enableExecutionTimeLog: true,
+          defaultTimeout: environment.http.timeout,
+          refreshUrlIncludes: environment.http.api.refreshToken,
+          enableExecutionTimeLog: environment.http.enableExecutionTimeLog,
           reloadOnRefreshFailure: true,
         }),
       ],

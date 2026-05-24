@@ -129,3 +129,4 @@ export class <%=classify(prefixClass)%>Utils {
       })
     }
 }
+export * from './device-detector.constants';

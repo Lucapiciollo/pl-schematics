@@ -15,7 +15,12 @@ function normalizeOptions(options) {
         options.architecture = options.architecture || "classic";
         options.state = options.state || "none";
         options.http = options.http || "interceptor-classic";
-        options.ui = options.ui || "bootstrap";
+        if (options.ui === 'bootstrap') {
+            options.addSupportBootstrap = 'Y';
+        }
+        if (options.ui !== 'bootstrap') {
+            options.addSupportBootstrap = 'N';
+        }
         options.i18n = options.i18n || "ngx-translate";
         options.logging = options.logging || "console";
         options.mockApi = options.mockApi || "none";

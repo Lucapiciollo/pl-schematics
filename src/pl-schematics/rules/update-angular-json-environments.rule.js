@@ -11,14 +11,6 @@ function getBuildTarget(project) {
     }
     return null;
 }
-function getBuildOptions(project) {
-    const buildTarget = getBuildTarget(project);
-    if (!buildTarget) {
-        return null;
-    }
-    buildTarget.options = buildTarget.options || {};
-    return buildTarget.options;
-}
 function getBuildConfigurations(project) {
     const buildTarget = getBuildTarget(project);
     if (!buildTarget) {
@@ -50,12 +42,14 @@ function updateAngularJsonForEnvironments(options) {
         const projectName = workspace_utils_1.getDefaultProjectName(workspaceJson, options);
         const project = workspaceJson.projects && workspaceJson.projects[projectName];
         if (!project) {
-            context.logger.warn('Project "' + projectName + '" not found. Skipping environment configuration.');
+            context.logger.warn('Project "' +
+                projectName +
+                '" not found. Skipping environment configuration.');
             return host;
         }
-        const buildOptions = getBuildOptions(project);
+        const buildTarget = getBuildTarget(project);
         const configurations = getBuildConfigurations(project);
-        if (!buildOptions || !configurations) {
+        if (!buildTarget || !configurations) {
             context.logger.warn('Build target not found for project "' +
                 projectName +
                 '". Skipping environment configuration.');
@@ -70,7 +64,9 @@ function updateAngularJsonForEnvironments(options) {
         pushFileReplacementIfMissing(configurations.production.fileReplacements, environmentPath, environmentProdPath);
         configurations.development = configurations.development || {};
         json_utils_1.overwriteJsonFile(host, 'angular.json', workspaceJson);
-        context.logger.info('Environment fileReplacements configured for project "' + projectName + '".');
+        context.logger.info('Environment fileReplacements configured for project "' +
+            projectName +
+            '".');
         return host;
     };
 }

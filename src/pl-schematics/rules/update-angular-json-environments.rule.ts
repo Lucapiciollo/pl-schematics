@@ -1,10 +1,11 @@
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+
+import { PlSchematicsOptions } from '../types/schema-options';
 import {
   ensureArray,
   overwriteJsonFile,
   readJsonFile,
 } from '../utils/json.utils';
-import { PlSchematicsOptions } from '../types/schema-options';
 import { getDefaultProjectName } from '../utils/workspace.utils';
 
 function getBuildTarget(project: any): any {
@@ -17,18 +18,6 @@ function getBuildTarget(project: any): any {
   }
 
   return null;
-}
-
-function getBuildOptions(project: any): any {
-  const buildTarget = getBuildTarget(project);
-
-  if (!buildTarget) {
-    return null;
-  }
-
-  buildTarget.options = buildTarget.options || {};
-
-  return buildTarget.options;
 }
 
 function getBuildConfigurations(project: any): any {
@@ -69,7 +58,10 @@ export function updateAngularJsonForEnvironments(
     const workspaceJson = readJsonFile(host, 'angular.json');
 
     if (!workspaceJson) {
-      context.logger.warn('angular.json not found. Skipping environment configuration.');
+      context.logger.warn(
+        'angular.json not found. Skipping environment configuration.',
+      );
+
       return host;
     }
 
@@ -78,26 +70,34 @@ export function updateAngularJsonForEnvironments(
 
     if (!project) {
       context.logger.warn(
-        'Project "' + projectName + '" not found. Skipping environment configuration.',
+        'Project "' +
+          projectName +
+          '" not found. Skipping environment configuration.',
       );
+
       return host;
     }
 
-    const buildOptions = getBuildOptions(project);
+    const buildTarget = getBuildTarget(project);
     const configurations = getBuildConfigurations(project);
 
-    if (!buildOptions || !configurations) {
+    if (!buildTarget || !configurations) {
       context.logger.warn(
         'Build target not found for project "' +
           projectName +
           '". Skipping environment configuration.',
       );
+
       return host;
     }
 
     const sourceRoot = project.sourceRoot || 'src';
-    const environmentPath = sourceRoot + '/environments/environment.ts';
-    const environmentProdPath = sourceRoot + '/environments/environment.prod.ts';
+
+    const environmentPath =
+      sourceRoot + '/environments/environment.ts';
+
+    const environmentProdPath =
+      sourceRoot + '/environments/environment.prod.ts';
 
     configurations.production = configurations.production || {};
     configurations.production.fileReplacements =
@@ -109,17 +109,14 @@ export function updateAngularJsonForEnvironments(
       environmentProdPath,
     );
 
-    /**
-     * Alcuni progetti moderni hanno anche development.
-     * Qui non serve fileReplacement perché environment.ts è già quello dev.
-     * Però garantiamo che la configurazione esista se manca.
-     */
     configurations.development = configurations.development || {};
 
     overwriteJsonFile(host, 'angular.json', workspaceJson);
 
     context.logger.info(
-      'Environment fileReplacements configured for project "' + projectName + '".',
+      'Environment fileReplacements configured for project "' +
+        projectName +
+        '".',
     );
 
     return host;

@@ -20,7 +20,13 @@ export function normalizeOptions(options: PlSchematicsOptions): Rule {
     options.architecture = options.architecture || "classic";
     options.state = options.state || "none";
     options.http = options.http || "interceptor-classic";
-    options.ui = options.ui || "bootstrap";
+    if (options.ui === 'bootstrap') {
+      options.addSupportBootstrap = 'Y';
+    }
+
+    if (options.ui !== 'bootstrap') {
+      options.addSupportBootstrap = 'N';
+    }
     options.i18n = options.i18n || "ngx-translate";
     options.logging = options.logging || "console";
     options.mockApi = options.mockApi || "none";
@@ -31,8 +37,8 @@ export function normalizeOptions(options: PlSchematicsOptions): Rule {
 
     context.logger.info(
       'Options normalized for project: "' +
-        (options.project || "default") +
-        '"',
+      (options.project || "default") +
+      '"',
     );
 
     return host;

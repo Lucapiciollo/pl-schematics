@@ -1,86 +1,173 @@
-// src/pl-schematics/rules/update-package-json.rule.ts
+import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 
-import { Rule, SchematicContext, Tree } from "@angular-devkit/schematics";
-import { PlSchematicsOptions } from "../types/schema-options";
-import { overwriteJsonFile, readJsonFile } from "../utils/json.utils";
+import { PlSchematicsOptions } from '../types/schema-options';
+import { overwriteJsonFile, readJsonFile } from '../utils/json.utils';
+
+function ensureScripts(packageJson: any): Record<string, string> {
+  packageJson.scripts = packageJson.scripts || {};
+  return packageJson.scripts;
+}
+
+function appendScript(
+  scripts: Record<string, string>,
+  name: string,
+  command: string,
+): void {
+  if (!scripts[name]) {
+    scripts[name] = command;
+    return;
+  }
+
+  if (scripts[name].indexOf(command) >= 0) {
+    return;
+  }
+
+  scripts[name] = scripts[name] + ' && ' + command;
+}
+
+function setScriptIfMissing(
+  scripts: Record<string, string>,
+  name: string,
+  command: string,
+): void {
+  if (!scripts[name]) {
+    scripts[name] = command;
+  }
+}
+
+function upsertScript(
+  scripts: Record<string, string>,
+  name: string,
+  command: string,
+): void {
+  scripts[name] = command;
+}
 
 export function updatePackageJsonForSonar(): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const packageJson = readJsonFile(host, "package.json");
+    const packageJson = readJsonFile(host, 'package.json');
 
     if (!packageJson) {
+      context.logger.warn('package.json not found. Skipping Sonar script.');
       return host;
     }
 
-    packageJson.scripts = packageJson.scripts || {};
-    packageJson.scripts.sonar = "sonar-scanner";
+    const scripts = ensureScripts(packageJson);
 
-    overwriteJsonFile(host, "package.json", packageJson);
+    upsertScript(
+      scripts,
+      'sonar',
+      'sonar-scanner',
+    );
 
-    context.logger.info("Added npm script: sonar.");
+    overwriteJsonFile(host, 'package.json', packageJson);
+
+    context.logger.info('Added npm script: sonar.');
 
     return host;
   };
 }
 
-export function updatePackageJsonForBuild(options: PlSchematicsOptions): Rule {
+export function updatePackageJsonForBuild(
+  options: PlSchematicsOptions,
+): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const packageJson = readJsonFile(host, "package.json");
+    const packageJson = readJsonFile(host, 'package.json');
 
     if (!packageJson) {
+      context.logger.warn('package.json not found. Skipping package scripts update.');
       return host;
     }
 
-    packageJson.scripts = packageJson.scripts || {};
+    const scripts = ensureScripts(packageJson);
 
-    delete packageJson.scripts.build;
-
-    if (options.mockApi === "node-express") {
-      packageJson.scripts["mock-api"] =
-        "cd mock-api && npm install && npm run start";
-    }
-    packageJson.scripts["build-dev"] = "ng build";
-    packageJson.scripts["build-prod"] =
-      "ng build --lazyModules --aot --prod --source-map=false";
-    packageJson.scripts.typedoc =
-      "compodoc -d pl-schematics/document/schematics -p tsconfig.json -s -n Portable-Schematics --theme Postmark --disablePrivate --disableCoverage";
-
-    packageJson.author =
-      (options.nameCompany || "mycompany") + " template by @l.piciollo";
-    packageJson.description =
-      (options.nameCompany || "mycompany") + " project for client";
-
-    packageJson.scripts = packageJson.scripts || {};
-
-    packageJson.scripts["deps:check"] =
-      "node tools/check-dependencies-on-install.js";
-
-    packageJson.scripts["deps:update"] =
-      "node tools/check-dependencies-on-install.js && npm install";
-
-    appendScript(
-      packageJson.scripts,
-      "postinstall",
-      "node tools/check-dependencies-on-install.js",
+    /**
+     * Build scripts legacy/comuni.
+     */
+    setScriptIfMissing(
+      scripts,
+      'build-dev',
+      'ng build',
     );
 
-    overwriteJsonFile(host, "package.json", packageJson);
+    setScriptIfMissing(
+      scripts,
+      'build-prod',
+      'ng build --configuration production',
+    );
 
-    context.logger.info("Updated package.json build scripts.");
+    /**
+     * Documentazione opzionale.
+     * Lo script resta disponibile, ma i file documentazione vengono copiati
+     * solo se includeDocumentation === true.
+     */
+    setScriptIfMissing(
+      scripts,
+      'typedoc',
+      'compodoc -d pl-schematics/document/schematics -p tsconfig.json -s -n Portable-Schematics --theme Postmark --disablePrivate --disableCoverage',
+    );
+
+    /**
+     * Mock API Node/Express.
+     */
+    if (options.mockApi === 'node-express') {
+      upsertScript(
+        scripts,
+        'mock-api',
+        'cd mock-api && npm install && npm run start',
+      );
+    }
+
+    /**
+     * Dependency updater interattivo.
+     */
+    upsertScript(
+      scripts,
+      'deps:check',
+      'node tools/check-dependencies-on-install.js',
+    );
+
+    upsertScript(
+      scripts,
+      'deps:update',
+      'node tools/check-dependencies-on-install.js && npm install',
+    );
+
+    appendScript(
+      scripts,
+      'postinstall',
+      'node tools/check-dependencies-on-install.js',
+    );
+
+    /**
+     * Script utili se si usa GitHub Actions o Azure DevOps.
+     */
+    if (options.ci === 'github-actions' || options.ci === 'azure-devops') {
+      setScriptIfMissing(
+        scripts,
+        'ci:install',
+        'npm ci',
+      );
+
+      setScriptIfMissing(
+        scripts,
+        'ci:build',
+        'npm run build-prod',
+      );
+
+      if (options.tests !== 'none') {
+        setScriptIfMissing(
+          scripts,
+          'ci:test',
+          'npm test -- --watch=false --browsers=ChromeHeadless',
+        );
+      }
+    }
+
+    overwriteJsonFile(host, 'package.json', packageJson);
+
+    context.logger.info('Updated package.json build scripts.');
 
     return host;
   };
-
-  function appendScript(scripts: any, name: string, command: string): void {
-    if (!scripts[name]) {
-      scripts[name] = command;
-      return;
-    }
-
-    if (scripts[name].indexOf(command) >= 0) {
-      return;
-    }
-
-    scripts[name] = scripts[name] + " && " + command;
-  }
 }

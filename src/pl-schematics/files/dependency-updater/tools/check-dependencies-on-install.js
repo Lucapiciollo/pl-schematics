@@ -108,6 +108,7 @@ function getVersionPrefix(version) {
 
 function parseSemver(version) {
   const clean = normalizeVersion(version);
+
   const parts = clean.split('.').map(function(part) {
     const parsed = parseInt(part.replace(/\D.*$/, ''), 10);
     return isNaN(parsed) ? 0 : parsed;
@@ -203,7 +204,7 @@ function applyUpdate(packageJson, update) {
   packageJson[update.section][update.name] = nextVersion;
 
   console.log(
-    'Aggiornato: ' +
+    '[PL deps] Aggiornato: ' +
       update.name +
       ' ' +
       update.currentVersion +

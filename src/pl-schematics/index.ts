@@ -16,7 +16,7 @@ import { scaffoldEmptyFolders } from './rules/scaffold-empty-folders.rule';
 import { updateAngularJsonForBootstrap } from './rules/update-angular-json-bootstrap.rule';
 import { updateAngularJsonForMaterial } from './rules/update-angular-json-material.rule';
 import { updateIndexHtmlForMaterial } from './rules/update-index-html-material.rule';
-import {
+ import {
   updatePackageJsonForBuild,
   updatePackageJsonForSonar,
 } from './rules/update-package-json.rule';
