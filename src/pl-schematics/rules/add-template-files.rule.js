@@ -2,6 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const schematics_1 = require("@angular-devkit/schematics");
 const add_class_rule_1 = require("./add-class.rule");
+function hasHttpInterceptor(options) {
+    return options.http === 'interceptor-classic' ||
+        options.http === 'interceptor-functional';
+}
+function hasAdvancedLogging(options) {
+    return options.logging === 'advanced';
+}
+function hasMaterial(options) {
+    return options.ui === 'material';
+}
+function hasNgrx(options) {
+    return options.state === 'ngrx';
+}
+function hasMockApi(options) {
+    return options.mockApi === 'node-express';
+}
 const TEMPLATE_FOLDERS = [
     {
         source: './files/core/service',
@@ -20,16 +36,17 @@ const TEMPLATE_FOLDERS = [
         destination: '<namePackage>/core/module/',
     },
     {
-        source: './files/core/interceptor',
-        destination: '<namePackage>/core/interceptor/',
-    },
-    {
         source: './files/core/utils',
         destination: '<namePackage>/core/utils/',
     },
     {
         source: './files/core/type',
         destination: '<namePackage>/core/type/',
+    },
+    {
+        source: './files/core/interceptor',
+        destination: '<namePackage>/core/interceptor/',
+        enabled: hasHttpInterceptor,
     },
     {
         source: './files/shared/module',
@@ -54,6 +71,7 @@ const TEMPLATE_FOLDERS = [
     {
         source: './files/shared/http',
         destination: '<namePackage>/shared/http/',
+        enabled: hasHttpInterceptor,
     },
     {
         source: './files/home',
@@ -96,30 +114,22 @@ const TEMPLATE_FOLDERS = [
     {
         source: './files/advanced-logging',
         destination: '<namePackage>/core/logging/',
-        enabled: function (options) {
-            return options.logging === 'advanced';
-        },
+        enabled: hasAdvancedLogging,
     },
     {
         source: './files/material',
         destination: '<namePackage>/shared/material/',
-        enabled: function (options) {
-            return options.ui === 'material';
-        },
+        enabled: hasMaterial,
     },
     {
         source: './files/ngrx',
         destination: '<namePackage>/',
-        enabled: function (options) {
-            return options.state === 'ngrx';
-        },
+        enabled: hasNgrx,
     },
     {
         source: './files/mock-api-node',
         destination: '../../mock-api',
-        enabled: function (options) {
-            return options.mockApi === 'node-express';
-        },
+        enabled: hasMockApi,
     },
     {
         source: './files/ci-azure-devops',

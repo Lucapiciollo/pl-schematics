@@ -9,6 +9,27 @@ interface TemplateFolderConfig {
   enabled?: (options: PlSchematicsOptions) => boolean;
 }
 
+function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
+  return options.http === 'interceptor-classic' ||
+    options.http === 'interceptor-functional';
+}
+
+function hasAdvancedLogging(options: PlSchematicsOptions): boolean {
+  return options.logging === 'advanced';
+}
+
+function hasMaterial(options: PlSchematicsOptions): boolean {
+  return options.ui === 'material';
+}
+
+function hasNgrx(options: PlSchematicsOptions): boolean {
+  return options.state === 'ngrx';
+}
+
+function hasMockApi(options: PlSchematicsOptions): boolean {
+  return options.mockApi === 'node-express';
+}
+
 const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
     source: './files/core/service',
@@ -27,16 +48,21 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     destination: '<namePackage>/core/module/',
   },
   {
-    source: './files/core/interceptor',
-    destination: '<namePackage>/core/interceptor/',
-  },
-  {
     source: './files/core/utils',
     destination: '<namePackage>/core/utils/',
   },
   {
     source: './files/core/type',
     destination: '<namePackage>/core/type/',
+  },
+
+  /**
+   * Interceptor core solo se scelto da prompt/opzione.
+   */
+  {
+    source: './files/core/interceptor',
+    destination: '<namePackage>/core/interceptor/',
+    enabled: hasHttpInterceptor,
   },
 
   {
@@ -59,9 +85,14 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     source: './files/shared/pipe',
     destination: '<namePackage>/shared/pipe/',
   },
+
+  /**
+   * Token/provider/adapter HTTP solo se si usa interceptor.
+   */
   {
     source: './files/shared/http',
     destination: '<namePackage>/shared/http/',
+    enabled: hasHttpInterceptor,
   },
 
   {
@@ -106,30 +137,22 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
     source: './files/advanced-logging',
     destination: '<namePackage>/core/logging/',
-    enabled: function(options: PlSchematicsOptions): boolean {
-      return options.logging === 'advanced';
-    },
+    enabled: hasAdvancedLogging,
   },
   {
     source: './files/material',
     destination: '<namePackage>/shared/material/',
-    enabled: function(options: PlSchematicsOptions): boolean {
-      return options.ui === 'material';
-    },
+    enabled: hasMaterial,
   },
   {
     source: './files/ngrx',
     destination: '<namePackage>/',
-    enabled: function(options: PlSchematicsOptions): boolean {
-      return options.state === 'ngrx';
-    },
+    enabled: hasNgrx,
   },
   {
     source: './files/mock-api-node',
     destination: '../../mock-api',
-    enabled: function(options: PlSchematicsOptions): boolean {
-      return options.mockApi === 'node-express';
-    },
+    enabled: hasMockApi,
   },
   {
     source: './files/ci-azure-devops',
@@ -145,6 +168,11 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
       return options.ci === 'github-actions';
     },
   },
+
+  /**
+   * Tool aggiornamento dipendenze sempre generato.
+   * Se lo vuoi condizionale, aggiungiamo una opzione dedicata.
+   */
   {
     source: './files/dependency-updater',
     destination: '../../',

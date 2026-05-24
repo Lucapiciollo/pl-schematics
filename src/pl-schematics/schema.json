@@ -1,125 +1,373 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "PlSchematics",
-  "title": "PL Schematics Options",
+  "id": "PlSchematicsSchema",
+  "title": "PL Schematics",
   "type": "object",
   "properties": {
-    "project": {
+    "namePackage": {
       "type": "string",
-      "description": "Angular project name"
+      "description": "Application package name",
+      "x-prompt": "Nome del package applicativo?"
+    },
+    "prefixClass": {
+      "type": "string",
+      "description": "Class prefix",
+      "default": "Pl",
+      "x-prompt": "Prefisso delle classi?"
     },
     "nameCompany": {
       "type": "string",
       "description": "Company name",
       "default": "mycompany"
     },
-    "namePackage": {
+    "project": {
       "type": "string",
-      "description": "Generated package/folder name"
+      "description": "Angular project name"
     },
-    "prefixClass": {
+    "prefix": {
       "type": "string",
-      "description": "Class prefix used for generated modules/classes",
-      "default": ""
-    },
-    "browserSupported": {
-      "type": "string",
-      "description": "Browser support strategy",
-      "default": "BROWSER.ALL",
-      "enum": [
-        "BROWSER.EDG",
-        "BROWSER.OPERA",
-        "BROWSER.CHROME",
-        "BROWSER.IE",
-        "BROWSER.FIREFOX",
-        "BROWSER.SAFARI",
-        "BROWSER.OTHER",
-        "BROWSER.ALL"
-      ]
-    },
-    "loginSupportConfiguration": {
-      "type": "string",
-      "description": "Authentication support",
-      "default": "NONE",
-      "enum": ["NONE", "AZURE-ACTIVE-DIRECT"]
-    },
-    "addSupportBootstrap": {
-      "type": "string",
-      "description": "Legacy bootstrap support flag",
-      "default": "Y",
-      "enum": ["Y", "N"]
-    },
-    "enableSonarQube": {
-      "type": "string",
-      "description": "Enable SonarQube support",
-      "default": "Y",
-      "enum": ["Y", "N"]
-    },
-    "architecture": {
-      "type": "string",
-      "description": "Angular architecture style",
-      "default": "classic",
-      "enum": ["classic", "standalone", "hybrid"]
-    },
-    "state": {
-      "type": "string",
-      "description": "State management strategy",
-      "default": "none",
-      "enum": ["none", "ngrx", "signals"]
-    },
-    "http": {
-      "type": "string",
-      "description": "HTTP layer strategy",
-      "default": "interceptor-classic",
-      "enum": ["none", "interceptor-classic", "interceptor-functional"]
+      "description": "Angular selector prefix"
     },
     "ui": {
       "type": "string",
       "description": "UI framework",
-      "default": "bootstrap",
-      "enum": ["none", "bootstrap", "material", "ux-directives"]
-    },
-    "i18n": {
-      "type": "string",
-      "description": "Internationalization strategy",
-      "default": "ngx-translate",
-      "enum": ["none", "ngx-translate", "angular-localize"]
-    },
-    "includeDocumentation": {
-      "type": "boolean",
-      "description": "Include generated documentation files",
-      "default": false
+      "default": "none",
+      "enum": [
+        "none",
+        "material",
+        "bootstrap"
+      ],
+      "x-prompt": {
+        "message": "Vuoi installare una libreria UI?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No, nessuna libreria UI"
+          },
+          {
+            "value": "material",
+            "label": "Angular Material"
+          },
+          {
+            "value": "bootstrap",
+            "label": "Bootstrap"
+          }
+        ]
+      }
     },
     "logging": {
       "type": "string",
       "description": "Logging strategy",
       "default": "console",
-      "enum": ["none", "console", "advanced"]
+      "enum": [
+        "none",
+        "console",
+        "advanced"
+      ],
+      "x-prompt": {
+        "message": "Vuoi installare il sistema di logging?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No logging"
+          },
+          {
+            "value": "console",
+            "label": "Solo console logging"
+          },
+          {
+            "value": "advanced",
+            "label": "Logging avanzato con servizi dedicati"
+          }
+        ]
+      }
+    },
+    "state": {
+      "type": "string",
+      "description": "State management",
+      "default": "none",
+      "enum": [
+        "none",
+        "ngrx"
+      ],
+      "x-prompt": {
+        "message": "Vuoi installare NgRx?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "ngrx",
+            "label": "Sì, NgRx base con StateModule, actions, reducer e selectors"
+          }
+        ]
+      }
+    },
+    "http": {
+      "type": "string",
+      "description": "HTTP strategy",
+      "default": "none",
+      "enum": [
+        "none",
+        "interceptor-classic",
+        "interceptor-functional"
+      ],
+      "x-prompt": {
+        "message": "Vuoi configurare un interceptor HTTP?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "interceptor-classic",
+            "label": "Sì, interceptor classico"
+          },
+          {
+            "value": "interceptor-functional",
+            "label": "Sì, interceptor funzionale"
+          }
+        ]
+      }
     },
     "mockApi": {
       "type": "string",
       "description": "Mock API strategy",
       "default": "none",
-      "enum": ["none", "json-server", "node-express"]
+      "enum": [
+        "none",
+        "node-express"
+      ],
+      "x-prompt": {
+        "message": "Vuoi generare una mock API?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "node-express",
+            "label": "Sì, Node Express"
+          }
+        ]
+      }
     },
     "ci": {
       "type": "string",
-      "description": "CI/CD pipeline support",
+      "description": "CI/CD pipeline",
       "default": "none",
-      "enum": ["none", "github-actions", "azure-devops"]
+      "enum": [
+        "none",
+        "github-actions",
+        "azure-devops"
+      ],
+      "x-prompt": {
+        "message": "Vuoi generare una pipeline CI/CD?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "github-actions",
+            "label": "GitHub Actions"
+          },
+          {
+            "value": "azure-devops",
+            "label": "Azure DevOps"
+          }
+        ]
+      }
+    },
+    "architecture": {
+      "type": "string",
+      "description": "Angular architecture",
+      "default": "classic",
+      "enum": [
+        "classic",
+        "standalone"
+      ],
+      "x-prompt": {
+        "message": "Che architettura Angular vuoi usare?",
+        "type": "list",
+        "items": [
+          {
+            "value": "classic",
+            "label": "Classic NgModule"
+          },
+          {
+            "value": "standalone",
+            "label": "Standalone"
+          }
+        ]
+      }
+    },
+    "i18n": {
+      "type": "string",
+      "description": "Internationalization",
+      "default": "ngx-translate",
+      "enum": [
+        "none",
+        "ngx-translate"
+      ],
+      "x-prompt": {
+        "message": "Vuoi configurare i18n?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "ngx-translate",
+            "label": "ngx-translate"
+          }
+        ]
+      }
     },
     "tests": {
       "type": "string",
-      "description": "Testing strategy",
+      "description": "Test framework",
       "default": "jasmine",
-      "enum": ["none", "jasmine", "jest", "vitest"]
+      "enum": [
+        "none",
+        "jasmine",
+        "jest"
+      ],
+      "x-prompt": {
+        "message": "Vuoi configurare i test?",
+        "type": "list",
+        "items": [
+          {
+            "value": "none",
+            "label": "No"
+          },
+          {
+            "value": "jasmine",
+            "label": "Jasmine"
+          },
+          {
+            "value": "jest",
+            "label": "Jest"
+          }
+        ]
+      }
     },
-    
+    "loginSupportConfiguration": {
+      "type": "string",
+      "description": "Login support configuration",
+      "default": "NONE",
+      "enum": [
+        "NONE",
+        "AZURE-ACTIVE-DIRECT"
+      ],
+      "x-prompt": {
+        "message": "Vuoi configurare il login/autenticazione?",
+        "type": "list",
+        "items": [
+          {
+            "value": "NONE",
+            "label": "No, nessun login"
+          },
+          {
+            "value": "AZURE-ACTIVE-DIRECT",
+            "label": "Azure Active Directory / MSAL"
+          }
+        ]
+      }
+    },
+    "browserSupported": {
+      "type": "string",
+      "description": "Browser support configuration",
+      "default": "BROWSER.ALL",
+      "enum": [
+        "BROWSER.ALL",
+        "BROWSER.CHROME",
+        "BROWSER.FIREFOX",
+        "BROWSER.EDGE",
+        "BROWSER.SAFARI"
+      ],
+      "x-prompt": {
+        "message": "Quali browser vuoi supportare?",
+        "type": "list",
+        "items": [
+          {
+            "value": "BROWSER.ALL",
+            "label": "Tutti i browser principali"
+          },
+          {
+            "value": "BROWSER.CHROME",
+            "label": "Solo Chrome"
+          },
+          {
+            "value": "BROWSER.FIREFOX",
+            "label": "Solo Firefox"
+          },
+          {
+            "value": "BROWSER.EDGE",
+            "label": "Solo Edge"
+          },
+          {
+            "value": "BROWSER.SAFARI",
+            "label": "Solo Safari"
+          }
+        ]
+      }
+    },
+    "enableSonarQube": {
+      "type": "string",
+      "description": "Enable SonarQube support",
+      "default": "N",
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "x-prompt": {
+        "message": "Vuoi configurare SonarQube?",
+        "type": "list",
+        "items": [
+          {
+            "value": "N",
+            "label": "No"
+          },
+          {
+            "value": "Y",
+            "label": "Sì"
+          }
+        ]
+      }
+    },
+    "includeDocumentation": {
+      "type": "boolean",
+      "description": "Include generated documentation files",
+      "default": false,
+      "x-prompt": "Vuoi includere anche la documentazione?"
+    },
     "strict": {
       "type": "boolean",
-      "description": "Enable stricter generated configuration",
-      "default": false
+      "description": "Enable strict mode",
+      "default": false,
+      "x-prompt": "Vuoi abilitare strict mode?"
+    },
+    "addSupportBootstrap": {
+      "type": "string",
+      "description": "Internal option derived from ui",
+      "default": "N",
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "visible": false
     }
   },
-  "required": ["namePackage"]
+  "required": [
+    "namePackage"
+  ]
 }

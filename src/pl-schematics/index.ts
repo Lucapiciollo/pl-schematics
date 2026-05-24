@@ -29,6 +29,7 @@ export default function plSchematics(options: PlSchematicsOptions): Rule {
   return chain([
     normalizeOptions(options),
     validateOptions(options),
+    
     getPrefixFromAngularJson(options),
     addNgrxModuleImports(options),
     addPackageJsonDependencies(options),

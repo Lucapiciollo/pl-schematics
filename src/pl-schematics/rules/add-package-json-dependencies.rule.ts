@@ -1,5 +1,3 @@
-// src/pl-schematics/rules/add-package-json-dependencies.rule.ts
-
 import {
   Rule,
   SchematicContext,
@@ -13,6 +11,11 @@ import {
 
 import { PlSchematicsOptions } from '../types/schema-options';
 
+function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
+  return options.http === 'interceptor-classic' ||
+    options.http === 'interceptor-functional';
+}
+
 export function addPackageJsonDependencies(
   options: PlSchematicsOptions,
 ): Rule {
@@ -23,67 +26,22 @@ export function addPackageJsonDependencies(
         version: 'latest',
         name: 'pl-core-utils-library',
       },
-      {
-        type: NodeDependencyType.Default,
-        version: '^5.15.1',
-        name: '@fortawesome/fontawesome-free',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^4.0.0',
-        name: '@ngx-translate/http-loader',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '11.0.1',
-        name: '@ngx-translate/core',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^10.0.0',
-        name: 'ngx-ui-loader',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^2.9.4',
-        name: 'chart.js',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^1.1.11',
-        name: '@compodoc/compodoc',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^12.0.0',
-        name: '@angular-builders/custom-webpack',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^0.5.7',
-        name: 'chartjs-plugin-annotation',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^5.3.1',
-        name: 'html-webpack-plugin',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^1.0.6',
-        name: 'replace-in-file-webpack-plugin',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^3.0.0',
-        name: '@microsoft/microsoft-graph-client',
-      },
-      {
-        type: NodeDependencyType.Default,
-        version: '^1.11.0',
-        name: '@microsoft/teams-js',
-      },
     ];
+
+    if (options.i18n === 'ngx-translate') {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: '^4.0.0',
+          name: '@ngx-translate/http-loader',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '11.0.1',
+          name: '@ngx-translate/core',
+        },
+      );
+    }
 
     if (options.ui === 'material') {
       dependencies.push(
@@ -101,6 +59,31 @@ export function addPackageJsonDependencies(
           type: NodeDependencyType.Default,
           version: 'latest',
           name: '@angular/animations',
+        },
+      );
+    }
+
+    if (options.ui === 'bootstrap') {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: 'popper.js',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: '@popperjs/core',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^3.4.0',
+          name: 'jquery',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^5.0.0',
+          name: 'bootstrap',
         },
       );
     }
@@ -130,29 +113,11 @@ export function addPackageJsonDependencies(
       );
     }
 
-    if (options.addSupportBootstrap === 'Y') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: 'latest',
-          name: 'popper.js',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: 'latest',
-          name: '@popperjs/core',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^3.4.0',
-          name: 'jquery',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^5.0.0',
-          name: 'bootstrap',
-        },
-      );
+    if (hasHttpInterceptor(options)) {
+      /**
+       * Per ora nessuna dipendenza extra necessaria.
+       * I token/provider HTTP usano solo Angular/RxJS.
+       */
     }
 
     if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
@@ -166,6 +131,16 @@ export function addPackageJsonDependencies(
           type: NodeDependencyType.Default,
           version: '1.3.2',
           name: 'msal',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^3.0.0',
+          name: '@microsoft/microsoft-graph-client',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^1.11.0',
+          name: '@microsoft/teams-js',
         },
       );
     }
@@ -213,14 +188,25 @@ export function addPackageJsonDependencies(
       );
     }
 
-    dependencies.forEach((dependency: NodeDependency) => {
+    /**
+     * Dipendenze opzionali vecchio template.
+     * Le teniamo solo se servono davvero in futuro.
+     * Non vanno più installate sempre.
+     */
+    if (options.logging === 'advanced') {
+      /**
+       * Il logging avanzato attuale non richiede librerie esterne.
+       */
+    }
+
+    dependencies.forEach(function(dependency: NodeDependency): void {
       addPackageJsonDependency(host, dependency);
 
       context.logger.info(
         'Library inserted: "' +
-        dependency.name +
-        '" into ' +
-        dependency.type,
+          dependency.name +
+          '" into ' +
+          dependency.type,
       );
     });
 

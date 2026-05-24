@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const schematics_utilities_1 = require("schematics-utilities");
+function hasHttpInterceptor(options) {
+    return options.http === 'interceptor-classic' ||
+        options.http === 'interceptor-functional';
+}
 function addPackageJsonDependencies(options) {
     return (host, context) => {
         const dependencies = [
@@ -9,67 +13,18 @@ function addPackageJsonDependencies(options) {
                 version: 'latest',
                 name: 'pl-core-utils-library',
             },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^5.15.1',
-                name: '@fortawesome/fontawesome-free',
-            },
-            {
+        ];
+        if (options.i18n === 'ngx-translate') {
+            dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: '^4.0.0',
                 name: '@ngx-translate/http-loader',
-            },
-            {
+            }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: '11.0.1',
                 name: '@ngx-translate/core',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^10.0.0',
-                name: 'ngx-ui-loader',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^2.9.4',
-                name: 'chart.js',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^1.1.11',
-                name: '@compodoc/compodoc',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^12.0.0',
-                name: '@angular-builders/custom-webpack',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^0.5.7',
-                name: 'chartjs-plugin-annotation',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^5.3.1',
-                name: 'html-webpack-plugin',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^1.0.6',
-                name: 'replace-in-file-webpack-plugin',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.0.0',
-                name: '@microsoft/microsoft-graph-client',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^1.11.0',
-                name: '@microsoft/teams-js',
-            },
-        ];
+            });
+        }
         if (options.ui === 'material') {
             dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Default,
@@ -83,6 +38,25 @@ function addPackageJsonDependencies(options) {
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: 'latest',
                 name: '@angular/animations',
+            });
+        }
+        if (options.ui === 'bootstrap') {
+            dependencies.push({
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: 'latest',
+                name: 'popper.js',
+            }, {
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: 'latest',
+                name: '@popperjs/core',
+            }, {
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: '^3.4.0',
+                name: 'jquery',
+            }, {
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: '^5.0.0',
+                name: 'bootstrap',
             });
         }
         if (options.state === 'ngrx') {
@@ -104,24 +78,7 @@ function addPackageJsonDependencies(options) {
                 name: '@ngrx/store-devtools',
             });
         }
-        if (options.addSupportBootstrap === 'Y') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
-                name: 'popper.js',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
-                name: '@popperjs/core',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.4.0',
-                name: 'jquery',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^5.0.0',
-                name: 'bootstrap',
-            });
+        if (hasHttpInterceptor(options)) {
         }
         if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
             dependencies.push({
@@ -132,6 +89,14 @@ function addPackageJsonDependencies(options) {
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: '1.3.2',
                 name: 'msal',
+            }, {
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: '^3.0.0',
+                name: '@microsoft/microsoft-graph-client',
+            }, {
+                type: schematics_utilities_1.NodeDependencyType.Default,
+                version: '^1.11.0',
+                name: '@microsoft/teams-js',
             });
         }
         if (options.enableSonarQube === 'Y') {
@@ -168,7 +133,9 @@ function addPackageJsonDependencies(options) {
                 name: '@types/cors',
             });
         }
-        dependencies.forEach((dependency) => {
+        if (options.logging === 'advanced') {
+        }
+        dependencies.forEach(function (dependency) {
             schematics_utilities_1.addPackageJsonDependency(host, dependency);
             context.logger.info('Library inserted: "' +
                 dependency.name +

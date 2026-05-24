@@ -1,118 +1,142 @@
-export type YesNo = 'Y' | 'N';
+export type PlUiOption = 'none' | 'material' | 'bootstrap';
 
-export type BrowserSupported =
-  | 'BROWSER.EDG'
-  | 'BROWSER.OPERA'
-  | 'BROWSER.CHROME'
-  | 'BROWSER.IE'
-  | 'BROWSER.FIREFOX'
-  | 'BROWSER.SAFARI'
-  | 'BROWSER.OTHER'
-  | 'BROWSER.ALL';
+export type PlStateOption = 'none' | 'ngrx';
 
-export type LoginSupportConfiguration =
-  | 'NONE'
-  | 'AZURE-ACTIVE-DIRECT';
+export type PlLoggingOption = 'none' | 'console' | 'advanced';
 
-export type AngularArchitecture =
-  | 'classic'
-  | 'standalone'
-  | 'hybrid';
+export type PlMockApiOption = 'none' | 'node-express';
 
-export type StateManagement =
-  | 'none'
-  | 'ngrx'
-  | 'signals';
+export type PlCiOption = 'none' | 'github-actions' | 'azure-devops';
 
-export type HttpStrategy =
+export type PlHttpOption =
   | 'none'
   | 'interceptor-classic'
   | 'interceptor-functional';
 
-export type UiFramework =
-  | 'none'
-  | 'bootstrap'
-  | 'material'
-  | 'ux-directives';
+export type PlArchitectureOption =
+  | 'classic'
+  | 'standalone';
 
-export type I18nStrategy =
+export type PlI18nOption =
   | 'none'
-  | 'ngx-translate'
-  | 'angular-localize';
+  | 'ngx-translate';
 
-export type LoggingStrategy =
-  | 'none'
-  | 'console'
-  | 'advanced';
-
-export type MockApiStrategy =
-  | 'none'
-  | 'json-server'
-  | 'node-express';
-
-export type CiStrategy =
-  | 'none'
-  | 'github-actions'
-  | 'azure-devops';
-
-export type TestStrategy =
+export type PlTestsOption =
   | 'none'
   | 'jasmine'
-  | 'jest'
-  | 'vitest';
+  | 'jest';
+
+export type PlLoginSupportConfiguration =
+  | 'NONE'
+  | 'AZURE-ACTIVE-DIRECT';
+
+export type PlBrowserSupported =
+  | 'BROWSER.ALL'
+  | 'BROWSER.CHROME'
+  | 'BROWSER.FIREFOX'
+  | 'BROWSER.EDGE'
+  | 'BROWSER.SAFARI';
+
+export type PlYesNo = 'Y' | 'N';
 
 export interface PlSchematicsOptions {
+  /**
+   * Nome cartella/package applicativo generato sotto src/app.
+   */
+  namePackage: string;
+
+  /**
+   * Prefisso classi generate.
+   */
+  prefixClass?: string;
+
+  /**
+   * Nome azienda/autore.
+   */
+  nameCompany?: string;
+
+  /**
+   * Nome progetto Angular risolto da angular.json.
+   */
   project?: string;
 
-  nameCompany?: string;
-  namePackage: string;
-  prefixClass?: string;
+  /**
+   * Prefix Angular del progetto, es: app.
+   */
   prefix?: string;
 
-  browserSupported?: BrowserSupported;
-  loginSupportConfiguration?: LoginSupportConfiguration;
-  includeDocumentation: boolean;
-  addSupportBootstrap?: YesNo;
-  enableSonarQube?: YesNo;
+  /**
+   * UI framework.
+   */
+  ui?: PlUiOption;
 
-  architecture?: AngularArchitecture;
-  state?: StateManagement;
-  http?: HttpStrategy;
-  ui?: UiFramework;
-  i18n?: I18nStrategy;
-  logging?: LoggingStrategy;
-  mockApi?: MockApiStrategy;
-  ci?: CiStrategy;
-  tests?: TestStrategy;
+  /**
+   * State management.
+   */
+  state?: PlStateOption;
 
-  docker?: boolean;
-  strict?: boolean;
-}
+  /**
+   * Logging strategy.
+   */
+  logging?: PlLoggingOption;
 
-export interface NormalizedPlSchematicsOptions {
-  project: string;
+  /**
+   * Mock API.
+   */
+  mockApi?: PlMockApiOption;
 
-  nameCompany: string;
-  namePackage: string;
-  prefixClass: string;
-  prefix: string;
+  /**
+   * CI/CD.
+   */
+  ci?: PlCiOption;
 
-  browserSupported: BrowserSupported;
-  loginSupportConfiguration: LoginSupportConfiguration;
-  includeDocumentation?: boolean;
-  addSupportBootstrap: YesNo;
-  enableSonarQube: YesNo;
+  /**
+   * HTTP strategy.
+   */
+  http?: PlHttpOption;
 
-  architecture: AngularArchitecture;
-  state: StateManagement;
-  http: HttpStrategy;
-  ui: UiFramework;
-  i18n: I18nStrategy;
-  logging: LoggingStrategy;
-  mockApi: MockApiStrategy;
-  ci: CiStrategy;
-  tests: TestStrategy;
+  /**
+   * Architettura Angular.
+   */
+  architecture?: PlArchitectureOption;
 
-  docker: boolean;
-  strict: boolean;
+  /**
+   * Internazionalizzazione.
+   */
+  i18n?: PlI18nOption;
+
+  /**
+   * Test framework.
+   */
+  tests?: PlTestsOption;
+
+  /**
+   * Login provider.
+   */
+  loginSupportConfiguration?: PlLoginSupportConfiguration;
+
+  /**
+   * Browser support usato dai vecchi template.
+   */
+  browserSupported?: PlBrowserSupported;
+
+  /**
+   * Derivato da ui === bootstrap.
+   */
+  addSupportBootstrap?: PlYesNo;
+
+  /**
+   * SonarQube.
+   */
+  enableSonarQube?: PlYesNo | boolean | string;
+
+  /**
+   * Include documentazione generata.
+   */
+  includeDocumentation?: boolean | string;
+
+  /**
+   * Strict mode.
+   */
+  strict?: boolean | string;
 }

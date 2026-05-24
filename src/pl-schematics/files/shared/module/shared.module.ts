@@ -5,9 +5,7 @@
  * @modify date 2026-05-24
  * @desc [
  * Modulo comune a tutto l'applicativo.
- * Si occupa di condividere moduli, pipe, componenti e funzionalità comuni.
- * Tutti i componenti o moduli che dovranno essere condivisi con il resto
- * dell'applicazione devono essere importati ed esportati da qui.
+ * Condivide moduli, pipe, componenti e funzionalità comuni.
  * ]
  */
 
@@ -26,7 +24,10 @@ import { environment } from 'src/environments/environment';
 
 import { <%= classify(prefixClass) %>GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
 import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
+
+<% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
 import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
+<% } %>
 
 <% if (ui === "material") { %>
 import { MaterialModule } from 'src/app/<%= namePackage %>/shared/material/material.module';
@@ -66,10 +67,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     <% } %>
   ],
   providers: [
-    /**
-     * Provider condivisi non root-only.
-     * I provider root-only, come interceptor HTTP, devono stare nel forRoot().
-     */
     /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
   ],
   exports: [
@@ -92,11 +89,6 @@ export class SharedModule {
     public readonly translate: TranslateService,
   ) {
     this.translate.setDefaultLang(environment.i18n.defaultLanguage);
-
-    /**
-     * Mantiene referenziato il servizio globale.
-     * Utile se il costruttore del servizio registra listener globali.
-     */
     this.globalService;
   }
 
@@ -104,12 +96,14 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
+        <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
         ...provide<%= classify(prefixClass) %>HttpInterceptor({
           defaultTimeout: environment.http.timeout,
           refreshUrlIncludes: environment.http.api.refreshToken,
           enableExecutionTimeLog: environment.http.enableExecutionTimeLog,
           reloadOnRefreshFailure: true,
         }),
+        <% } %>
       ],
     };
   }
