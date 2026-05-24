@@ -9,12 +9,15 @@ export interface HttpRefreshTokenResponse {
 
 export interface HttpAuthAdapter {
   getAccessToken(): string | null;
+
   setAccessToken(token: string): void;
 
   getRefreshToken?(): string | null;
+
   setRefreshToken?(token: string): void;
 
   refreshToken?(): Observable<HttpRefreshTokenResponse>;
+
   logout?(): void;
 }
 

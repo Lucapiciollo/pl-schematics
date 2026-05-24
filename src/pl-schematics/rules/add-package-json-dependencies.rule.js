@@ -141,31 +141,31 @@ function addPackageJsonDependencies(options) {
                 name: "sonar-scanner",
             });
         }
-        if (options.mockApi === "node-express") {
+        if (options.mockApi === 'node-express') {
             dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^4.18.2",
-                name: "express",
+                version: '^4.18.2',
+                name: 'express',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^1.7.0",
-                name: "cors",
+                version: '^2.8.5',
+                name: 'cors',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^5.0.0",
-                name: "ts-node",
+                version: '^10.9.2',
+                name: 'ts-node',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^10.9.2",
-                name: "ts-node-dev",
+                version: '^2.0.0',
+                name: 'ts-node-dev',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^4.17.21",
-                name: "@types/express",
+                version: '^4.17.21',
+                name: '@types/express',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: "^2.8.17",
-                name: "@types/cors",
+                version: '^2.8.17',
+                name: '@types/cors',
             });
         }
         dependencies.forEach((dependency) => {

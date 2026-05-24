@@ -3,25 +3,82 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const schematics_1 = require("@angular-devkit/schematics");
 const add_class_rule_1 = require("./add-class.rule");
 const TEMPLATE_FOLDERS = [
-    { source: './files/core/service', destination: '<namePackage>/core/service/' },
-    { source: './files/core/initializer', destination: '<namePackage>/core/initializer/' },
-    { source: './files/core/bean', destination: '<namePackage>/core/bean/' },
-    { source: './files/core/module', destination: '<namePackage>/core/module/' },
-    { source: './files/core/interceptor', destination: '<namePackage>/core/interceptor/' },
-    { source: './files/core/utils', destination: '<namePackage>/core/utils/' },
-    { source: './files/core/type', destination: '<namePackage>/core/type/' },
-    { source: './files/shared/module', destination: '<namePackage>/shared/module/' },
-    { source: './files/shared/utils', destination: '<namePackage>/shared/utils/' },
-    { source: './files/shared/service', destination: '<namePackage>/shared/service/' },
-    { source: './files/shared/component', destination: '<namePackage>/shared/component/' },
-    { source: './files/shared/pipe', destination: '<namePackage>/shared/pipe/' },
-    { source: './files/shared/http', destination: '<namePackage>/shared/http/' },
-    { source: './files/home', destination: '<namePackage>/component/page/home' },
-    { source: './files/component', destination: '/' },
-    { source: './files/extension', destination: '/' },
-    { source: './files/customInterface', destination: '../' },
-    { source: './files/properties', destination: '../environments/' },
-    { source: './files/public', destination: '../assets/public' },
+    {
+        source: './files/core/service',
+        destination: '<namePackage>/core/service/',
+    },
+    {
+        source: './files/core/initializer',
+        destination: '<namePackage>/core/initializer/',
+    },
+    {
+        source: './files/core/bean',
+        destination: '<namePackage>/core/bean/',
+    },
+    {
+        source: './files/core/module',
+        destination: '<namePackage>/core/module/',
+    },
+    {
+        source: './files/core/interceptor',
+        destination: '<namePackage>/core/interceptor/',
+    },
+    {
+        source: './files/core/utils',
+        destination: '<namePackage>/core/utils/',
+    },
+    {
+        source: './files/core/type',
+        destination: '<namePackage>/core/type/',
+    },
+    {
+        source: './files/shared/module',
+        destination: '<namePackage>/shared/module/',
+    },
+    {
+        source: './files/shared/utils',
+        destination: '<namePackage>/shared/utils/',
+    },
+    {
+        source: './files/shared/service',
+        destination: '<namePackage>/shared/service/',
+    },
+    {
+        source: './files/shared/component',
+        destination: '<namePackage>/shared/component/',
+    },
+    {
+        source: './files/shared/pipe',
+        destination: '<namePackage>/shared/pipe/',
+    },
+    {
+        source: './files/shared/http',
+        destination: '<namePackage>/shared/http/',
+    },
+    {
+        source: './files/home',
+        destination: '<namePackage>/component/page/home',
+    },
+    {
+        source: './files/component',
+        destination: '/',
+    },
+    {
+        source: './files/extension',
+        destination: '/',
+    },
+    {
+        source: './files/customInterface',
+        destination: '../',
+    },
+    {
+        source: './files/properties',
+        destination: '../environments/',
+    },
+    {
+        source: './files/public',
+        destination: '../assets/public',
+    },
     {
         source: './files/application',
         destination: '../../',
@@ -59,7 +116,7 @@ const TEMPLATE_FOLDERS = [
     },
     {
         source: './files/mock-api-node',
-        destination: '../../../mock-api',
+        destination: '../../mock-api',
         enabled: function (options) {
             return options.mockApi === 'node-express';
         },
