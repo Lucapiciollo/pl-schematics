@@ -1,171 +1,180 @@
 // src/pl-schematics/rules/add-package-json-dependencies.rule.ts
 
-import { Rule, SchematicContext, Tree } from "@angular-devkit/schematics";
+import {
+  Rule,
+  SchematicContext,
+  Tree,
+} from '@angular-devkit/schematics';
 import {
   addPackageJsonDependency,
   NodeDependency,
   NodeDependencyType,
-} from "schematics-utilities";
-import { PlSchematicsOptions } from "../types/schema-options";
+} from 'schematics-utilities';
 
-export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
+import { PlSchematicsOptions } from '../types/schema-options';
+
+export function addPackageJsonDependencies(
+  options: PlSchematicsOptions,
+): Rule {
   return (host: Tree, context: SchematicContext) => {
     const dependencies: NodeDependency[] = [
       {
         type: NodeDependencyType.Default,
-        version: "latest",
-        name: "pl-core-utils-library",
+        version: 'latest',
+        name: 'pl-core-utils-library',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^5.15.1",
-        name: "@fortawesome/fontawesome-free",
+        version: '^5.15.1',
+        name: '@fortawesome/fontawesome-free',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^4.0.0",
-        name: "@ngx-translate/http-loader",
+        version: '^4.0.0',
+        name: '@ngx-translate/http-loader',
       },
       {
         type: NodeDependencyType.Default,
-        version: "11.0.1",
-        name: "@ngx-translate/core",
+        version: '11.0.1',
+        name: '@ngx-translate/core',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^10.0.0",
-        name: "ngx-ui-loader",
+        version: '^10.0.0',
+        name: 'ngx-ui-loader',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^2.9.4",
-        name: "chart.js",
+        version: '^2.9.4',
+        name: 'chart.js',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^1.1.11",
-        name: "@compodoc/compodoc",
+        version: '^1.1.11',
+        name: '@compodoc/compodoc',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^12.0.0",
-        name: "@angular-builders/custom-webpack",
+        version: '^12.0.0',
+        name: '@angular-builders/custom-webpack',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^0.5.7",
-        name: "chartjs-plugin-annotation",
+        version: '^0.5.7',
+        name: 'chartjs-plugin-annotation',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^5.3.1",
-        name: "html-webpack-plugin",
+        version: '^5.3.1',
+        name: 'html-webpack-plugin',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^1.0.6",
-        name: "replace-in-file-webpack-plugin",
+        version: '^1.0.6',
+        name: 'replace-in-file-webpack-plugin',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^3.0.0",
-        name: "@microsoft/microsoft-graph-client",
+        version: '^3.0.0',
+        name: '@microsoft/microsoft-graph-client',
       },
       {
         type: NodeDependencyType.Default,
-        version: "^1.11.0",
-        name: "@microsoft/teams-js",
+        version: '^1.11.0',
+        name: '@microsoft/teams-js',
       },
     ];
 
-    if (options.ui === "material") {
+    if (options.ui === 'material') {
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@angular/material",
+          version: 'latest',
+          name: '@angular/material',
         },
         {
           type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@angular/cdk",
+          version: 'latest',
+          name: '@angular/cdk',
         },
         {
           type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@angular/animations",
-        },
-      );
-    }
-    if (options.state === "ngrx") {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@ngrx/store",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@ngrx/effects",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@ngrx/entity",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@ngrx/store-devtools",
-        },
-      );
-    }
-    if (options.addSupportBootstrap === "Y") {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "popper.js",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "latest",
-          name: "@popperjs/core",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "^3.4.0",
-          name: "jquery",
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: "^5.0.0",
-          name: "bootstrap",
+          version: 'latest',
+          name: '@angular/animations',
         },
       );
     }
 
-    if (options.loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") {
+    if (options.state === 'ngrx') {
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: "1.0.0",
-          name: "@azure/msal-angular",
+          version: 'latest',
+          name: '@ngrx/store',
         },
         {
           type: NodeDependencyType.Default,
-          version: "1.3.2",
-          name: "msal",
+          version: 'latest',
+          name: '@ngrx/effects',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: '@ngrx/entity',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: '@ngrx/store-devtools',
         },
       );
     }
 
-    if (options.enableSonarQube === "Y") {
+    if (options.addSupportBootstrap === 'Y') {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: 'popper.js',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: 'latest',
+          name: '@popperjs/core',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^3.4.0',
+          name: 'jquery',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '^5.0.0',
+          name: 'bootstrap',
+        },
+      );
+    }
+
+    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
+      dependencies.push(
+        {
+          type: NodeDependencyType.Default,
+          version: '1.0.0',
+          name: '@azure/msal-angular',
+        },
+        {
+          type: NodeDependencyType.Default,
+          version: '1.3.2',
+          name: 'msal',
+        },
+      );
+    }
+
+    if (options.enableSonarQube === 'Y') {
       dependencies.push({
         type: NodeDependencyType.Default,
-        version: "^3.1.0",
-        name: "sonar-scanner",
+        version: '^3.1.0',
+        name: 'sonar-scanner',
       });
     }
 
@@ -206,8 +215,12 @@ export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
 
     dependencies.forEach((dependency: NodeDependency) => {
       addPackageJsonDependency(host, dependency);
+
       context.logger.info(
-        'Library inserted: "' + dependency.name + '" into ' + dependency.type,
+        'Library inserted: "' +
+        dependency.name +
+        '" into ' +
+        dependency.type,
       );
     });
 
