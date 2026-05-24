@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "id": "PlSchematicsSchema",
+  "$id": "PlSchematicsSchema",
   "title": "PL Schematics",
   "type": "object",
   "properties": {

@@ -25,11 +25,12 @@ import {
   HttpAuthAdapter,
   HttpInterceptorConfig,
   HttpRefreshTokenResponse,
-} from 'src/app/<%= namePackage %>/shared/http/http-interceptor.tokens';
+} from '../../shared/http/http-interceptor.tokens';
 
 <% if (logging === "advanced") { %>
-import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
-import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+  
+import { <%= classify(prefixClass) %>LoggerFeature } from '../logging/<%= dasherize(namePackage) %>-logger.service.enum';
+import { <%= classify(prefixClass) %>LoggerService } from '../logging/<%= dasherize(namePackage) %>-logger.service';
 <% } %>
 
 type GenericHttpRequest = HttpRequest<any>;

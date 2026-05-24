@@ -1,0 +1,17 @@
+export enum <%= classify(prefixClass) %>LoggerFeature {
+  APP = 'APP',
+  AUTH = 'AUTH',
+  HTTP = 'HTTP',
+  ROUTER = 'ROUTER',
+  STORE = 'STORE',
+  FORM = 'FORM',
+  UI = 'UI',
+  MATERIAL = 'MATERIAL',
+  NGRX = 'NGRX',
+  MOCK_API = 'MOCK_API',
+  INTERCEPTOR = 'INTERCEPTOR',
+  GLOBAL_SERVICE = 'GLOBAL_SERVICE',
+  ERROR_HANDLER = 'ERROR_HANDLER',
+  INITIALIZER = 'INITIALIZER',
+  UNKNOWN = 'UNKNOWN',
+}
