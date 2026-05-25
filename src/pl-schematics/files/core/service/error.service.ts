@@ -16,20 +16,20 @@ import { inject } from '@angular/core';
 
 import { PlCoreUtils } from 'pl-core-utils-library';
 
-import { <%= classify(prefixClass) %>ErrorBean } from 'src/app/<%= namePackage %>/core/bean/error-bean';
-import { CORE_TYPE_EVENT } from 'src/app/<%= namePackage %>/core/type/type.event';
+import {  ErrorBean } from '../bean/error-bean';
+import { CORE_TYPE_EVENT } from '../type/type.event';
 
 <% if (logging === "advanced") { %>
-import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
-import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+import { LoggerService } from '../logging/logger.service';
+import { LoggerFeature } from '../logging/logger-feature.enum';
 <% } %>
 
 @Injectable({
   providedIn: 'root',
 })
-export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
+export class  ErrorService implements ErrorHandler {
   <% if (logging === "advanced") { %>
-  private readonly logger = inject(<%= classify(prefixClass) %>LoggerService);
+  private readonly logger = inject( LoggerService);
   <% } %>
 
   constructor() {}
@@ -59,7 +59,7 @@ export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
     }
   }
 
-  private handleErrorBean(errorBean: <%= classify(prefixClass) %>ErrorBean): void {
+  private handleErrorBean(errorBean:  ErrorBean): void {
     if (this.shouldOpenDialog(errorBean)) {
       PlCoreUtils.Broadcast().execEvent(
         CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG,
@@ -84,8 +84,8 @@ export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
    *
    * Qui normalizziamo il valore in un ErrorBean, quando possibile.
    */
-  private resolveErrorBean(error: unknown): <%= classify(prefixClass) %>ErrorBean | null {
-    if (error instanceof <%= classify(prefixClass) %>ErrorBean) {
+  private resolveErrorBean(error: unknown):  ErrorBean | null {
+    if (error instanceof  ErrorBean) {
       return error;
     }
 
@@ -93,14 +93,14 @@ export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
 
     if (
       anyError &&
-      anyError.rejection instanceof <%= classify(prefixClass) %>ErrorBean
+      anyError.rejection instanceof  ErrorBean
     ) {
       return anyError.rejection;
     }
 
     if (
       anyError &&
-      anyError.originalError instanceof <%= classify(prefixClass) %>ErrorBean
+      anyError.originalError instanceof  ErrorBean
     ) {
       return anyError.originalError;
     }
@@ -108,13 +108,13 @@ export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
     return null;
   }
 
-  private shouldOpenDialog(errorBean: <%= classify(prefixClass) %>ErrorBean): boolean {
+  private shouldOpenDialog(errorBean:  ErrorBean): boolean {
     const anyError = errorBean as any;
 
     return anyError.dialog === true;
   }
 
-  private shouldRedirect(errorBean: <%= classify(prefixClass) %>ErrorBean): boolean {
+  private shouldRedirect(errorBean:  ErrorBean): boolean {
     const anyError = errorBean as any;
 
     return anyError.redirect === true;
@@ -123,7 +123,7 @@ export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
   private logError(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.error(
-      <%= classify(prefixClass) %>LoggerFeature.APP,
+       LoggerFeature.APP,
       message,
       payload,
     );

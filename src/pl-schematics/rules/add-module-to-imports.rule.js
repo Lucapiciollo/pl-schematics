@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.addModuleToImports = void 0;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function normalizePath(path) {
@@ -77,13 +78,13 @@ function addModuleToNgModuleImports(content, moduleName) {
 }
 function addModuleToImports(options, moduleName, libName) {
     return (host, context) => {
-        const workspaceJson = json_utils_1.readJsonFile(host, 'angular.json');
+        const workspaceJson = (0, json_utils_1.readJsonFile)(host, 'angular.json');
         if (!workspaceJson) {
             context.logger.warn('angular.json not found. Skipping module import: "' + moduleName + '"');
             return host;
         }
-        const projectName = workspace_utils_1.getDefaultProjectName(workspaceJson, options);
-        const project = workspace_utils_1.getProjectObject(workspaceJson, options);
+        const projectName = (0, workspace_utils_1.getDefaultProjectName)(workspaceJson, options);
+        const project = (0, workspace_utils_1.getProjectObject)(workspaceJson, options);
         const rootModulePath = getRootModulePath(host, project);
         if (!rootModulePath) {
             context.logger.warn('Root AppModule not found for project "' +

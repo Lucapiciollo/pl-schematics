@@ -1,3 +1,6 @@
+function hasAzureActiveDirectory(options: PlSchematicsOptions): boolean {
+  return options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT';
+}
 import { chain, noop, Rule } from '@angular-devkit/schematics';
 
 import { PlSchematicsOptions } from '../types/schema-options';
@@ -46,6 +49,11 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
     source: './files/core/module',
     destination: '<namePackage>/core/module/',
+  },
+  {
+    source: './files/core/module/msal',
+    destination: '<namePackage>/core/module/',
+    enabled: hasAzureActiveDirectory,
   },
   {
     source: './files/core/utils',

@@ -29,15 +29,15 @@ import {
   HttpAuthAdapter,
   HttpInterceptorConfig,
   HttpRefreshTokenResponse,
-} from 'src/app/<%= namePackage %>/shared/http/http-interceptor.tokens';
+} from '../../shared/http/http-interceptor.tokens';
 
 <% if (logging === "advanced") { %>
-import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
-import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+import {  LoggerFeature } from '../logging/logger.service';
+import {  LoggerService } from '../logging/logger-feature.enum';
 <% } %>
 
 @Injectable()
-export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpInterceptor {
+export class  HttpInterceptorService implements HttpInterceptor {
   private isRefreshing = false;
 
   private readonly refreshTokenSubject =
@@ -55,7 +55,7 @@ export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpI
     private readonly authAdapter: HttpAuthAdapter | null,
 
     <% if (logging === "advanced") { %>
-    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    private readonly logger:  LoggerService,
     <% } %>
   ) {
     this.config = {
@@ -337,7 +337,7 @@ export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpI
 
   private logDebug(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
-    this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.HTTP, message, payload);
+    this.logger.debug( LoggerFeature.HTTP, message, payload);
     <% } else { %>
     console.debug(message, payload);
     <% } %>
@@ -345,7 +345,7 @@ export class <%= classify(prefixClass) %>HttpInterceptorService implements HttpI
 
   private logError(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
-    this.logger.error(<%= classify(prefixClass) %>LoggerFeature.HTTP, message, payload);
+    this.logger.error( LoggerFeature.HTTP, message, payload);
     <% } else { %>
     console.error(message, payload);
     <% } %>

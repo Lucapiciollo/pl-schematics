@@ -11,39 +11,44 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject, Subscriber, Subscription } from 'rxjs';
 
+
+
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-import { Inject, inject } from '@angular/core';
-import { MSAL_GUARD_CONFIG, MSAL_INSTANCE, MsalBroadcastService, MsalGuardConfiguration } from '@azure/msal-angular';
-import { AccountInfo, AuthenticationResult, InteractionStatus, InteractionType, PopupRequest, PublicClientApplication } from '@azure/msal-browser';
-import { filter } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { Client } from '@microsoft/microsoft-graph-client';
-import { AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client/authProviders/authCodeMsalBrowser';
+import { inject, Inject, Optional } from '@angular/core';
+import { MsalBroadcastService, MsalGuard, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
+import { MsalGuardConfiguration, MsalInterceptorConfiguration } from '@azure/msal-angular';
+import { AccountInfo, AuthenticationResult, InteractionStatus, InteractionType, PublicClientApplication, LogLevel ,PopupRequest} from '@azure/msal-browser';
+import { Client, AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client';
+import { environment } from '../../../../environments/environment';
+import { MSALGuardConfigFactory } from '../module/MSALGuardConfigFactory';
+import { MSALInstanceFactory } from '../module/MSALInstanceFactory';
+import { MSALInterceptorConfigFactory } from '../module/MSALInterceptorConfigFactory';
 <% } %>
 
+
 <% if (logging === "advanced") { %>
-import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
-import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+import { LoggerFeature } from '../logging/logger-feature.enum';
+import { LoggerService } from '../logging/logger.service';
 <% } %>
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
 /**
- * Abstract adapter che disaccoppia <%= classify(prefixClass) %>AuthService da qualsiasi libreria di state management.
+ * Abstract adapter che disaccoppia  AuthService da qualsiasi libreria di state management.
  *
- * Implementa questa classe e forniscila via DI per integrare <%= classify(prefixClass) %>AuthService
+ * Implementa questa classe e forniscila via DI per integrare  AuthService
  * con NgRx, Signals, BehaviorSubject o qualsiasi altro meccanismo.
  * L'adapter e' @Optional: se non fornito, il servizio funziona standalone.
  *
  * @example
  * @Injectable({ providedIn: 'root' })
- * export class MyNgrxAuthAdapter extends <%= classify(prefixClass) %>AuthStateAdapter {
+ * export class MyNgrxAuthAdapter extends  AuthStateAdapter {
  *   readonly token$ = this.store.select(selectToken);
  *   constructor(private store: Store) { super(); }
  *   onUserAuthenticated(account, result) { this.store.dispatch(setUser({ account, result })); }
  *   onUserLoggedOut() { this.store.dispatch(clearUser()); }
  * }
  */
-export abstract class <%= classify(prefixClass) %>AuthStateAdapter {
+export abstract class  AuthStateAdapter {
   /** Observable del token di autenticazione corrente. */
   abstract readonly token$: Observable<string | null>;
 
@@ -61,7 +66,7 @@ export abstract class <%= classify(prefixClass) %>AuthStateAdapter {
  * <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
  * Costruito su MSAL: gestisce login, logout e client MS Graph senza accoppiare
  * il chiamante a una libreria di state management specifica.
- * L'integrazione con NgRx (o altri store) e' opt-in tramite <%= classify(prefixClass) %>AuthStateAdapter.
+ * L'integrazione con NgRx (o altri store) e' opt-in tramite  AuthStateAdapter.
  * <% } else { %>
  * Login disabilitata — il sistema emula l'utente autenticato all'avvio.
  * Inserire qui un SSO custom se necessario.
@@ -72,7 +77,7 @@ export abstract class <%= classify(prefixClass) %>AuthStateAdapter {
 @Injectable({
   providedIn: 'root',
 })
-export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %> implements OnDestroy<% } %> {
+export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %> implements OnDestroy<% } %> {
 
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
   /** Imposta il runtime corrente: 'web' | 'teams'. */
@@ -84,9 +89,9 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
 
   public readonly broadcastService: MsalBroadcastService = inject(MsalBroadcastService);
   private readonly subscriptions = new Subscription();
-  private readonly stateAdapter: <%= classify(prefixClass) %>AuthStateAdapter | null = inject(<%= classify(prefixClass) %>AuthStateAdapter, { optional: true });
+  private readonly stateAdapter:  AuthStateAdapter | null = inject( AuthStateAdapter, { optional: true });
   <% if (logging === "advanced") { %>
-    private readonly logger: <%= classify(prefixClass) %>LoggerService  = inject(<%= classify(prefixClass) %>LoggerService);
+    private readonly logger:  LoggerService  = inject( LoggerService);
    <% } %>
   constructor(
     @Inject(MSAL_INSTANCE) private readonly msalInstance: any,
@@ -173,7 +178,7 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
           })
           .catch((error: any) => {
             <% if (logging === "advanced") { %>
-            this.logger.error(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'Login failed', error);
+            this.logger.error( LoggerFeature.AUTH, 'Login failed', error);
             <% } else { %>
             console.error(error);
             <% } %>
@@ -192,14 +197,14 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
         .loginRedirect({ ...this.msalGuardConfig.authRequest })
         .then((res: any) => {
           <% if (logging === "advanced") { %>
-          this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'loginRedirect response', res);
+          this.logger.debug( LoggerFeature.AUTH, 'loginRedirect response', res);
           <% } else { %>
           console.debug(res);
           <% } %>
         })
         .catch((err: any) => {
           <% if (logging === "advanced") { %>
-          this.logger.error(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'loginRedirect error', err);
+          this.logger.error( LoggerFeature.AUTH, 'loginRedirect error', err);
           <% } else { %>
           console.error(err);
           <% } %>
@@ -225,7 +230,7 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
         },
         error: (err: any) => {
           <% if (logging === "advanced") { %>
-          this.logger.error(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'loginPopup error', err);
+          this.logger.error( LoggerFeature.AUTH, 'loginPopup error', err);
           <% } else { %>
           console.error(err);
           <% } %>
@@ -264,7 +269,7 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
 
   constructor(
     <% if (logging === "advanced") { %>
-    private readonly logger: <%= classify(prefixClass) %>LoggerService,
+    private readonly logger:  LoggerService,
     <% } %>
   ) {}
 
@@ -281,7 +286,7 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
        * - observer.error(...) in caso KO
        */
       <% if (logging === "advanced") { %>
-      this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'Login bypass — no authentication provider configured');
+      this.logger.debug( LoggerFeature.AUTH, 'Login bypass — no authentication provider configured');
       <% } %>
       observer.next(true);
       observer.complete();
@@ -292,7 +297,7 @@ export class <%= classify(prefixClass) %>AuthService<% if (loginSupportConfigura
 
   public logout(): void {
     <% if (logging === "advanced") { %>
-    this.logger.debug(<%= classify(prefixClass) %>LoggerFeature.AUTH, 'Logout called without authentication provider');
+    this.logger.debug( LoggerFeature.AUTH, 'Logout called without authentication provider');
     <% } %>
   }
 

@@ -1,7 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Provider } from '@angular/core';
 
-import { <%= classify(prefixClass) %>HttpInterceptorService } from 'src/app/<%= namePackage %>/core/interceptor/http-interceptor.service';
+import {   HttpInterceptorService } from '../../core/interceptor/http-interceptor.service';
 
 import {
   DEFAULT_HTTP_INTERCEPTOR_CONFIG,
@@ -13,7 +13,7 @@ import {
 
 import { LocalStorageAuthAdapterService } from './local-storage-auth-adapter.service';
 
-export function provide<%= classify(prefixClass) %>HttpInterceptor(
+export function provideHttpInterceptor(
   config?: Partial<HttpInterceptorConfig>,
   authAdapterProvider?: Provider,
 ): Provider[] {
@@ -31,8 +31,8 @@ export function provide<%= classify(prefixClass) %>HttpInterceptor(
     },
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: <%= classify(prefixClass) %>HttpInterceptorService,
+      useClass:  HttpInterceptorService,
       multi: true,
-    },
+    } 
   ];
 }

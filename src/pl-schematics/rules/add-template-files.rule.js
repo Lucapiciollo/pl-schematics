@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.addTemplateFiles = void 0;
+function hasAzureActiveDirectory(options) {
+    return options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT';
+}
 const schematics_1 = require("@angular-devkit/schematics");
 const add_class_rule_1 = require("./add-class.rule");
 function hasHttpInterceptor(options) {
@@ -34,6 +38,11 @@ const TEMPLATE_FOLDERS = [
     {
         source: './files/core/module',
         destination: '<namePackage>/core/module/',
+    },
+    {
+        source: './files/core/module/msal',
+        destination: '<namePackage>/core/module/',
+        enabled: hasAzureActiveDirectory,
     },
     {
         source: './files/core/utils',
@@ -154,11 +163,11 @@ function resolveDestination(destination, options) {
     return destination.replace('<namePackage>', options.namePackage);
 }
 function addTemplateFiles(options) {
-    return schematics_1.chain(TEMPLATE_FOLDERS.map(function (item) {
+    return (0, schematics_1.chain)(TEMPLATE_FOLDERS.map(function (item) {
         if (item.enabled && !item.enabled(options)) {
-            return schematics_1.noop();
+            return (0, schematics_1.noop)();
         }
-        return add_class_rule_1.addClass(options, item.source, resolveDestination(item.destination, options));
+        return (0, add_class_rule_1.addClass)(options, item.source, resolveDestination(item.destination, options));
     }));
 }
 exports.addTemplateFiles = addTemplateFiles;

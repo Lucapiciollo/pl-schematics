@@ -22,11 +22,11 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { environment } from 'src/environments/environment';
 
-import { <%= classify(prefixClass) %>GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
+import {  GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
 import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
 
 <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-import { provide<%= classify(prefixClass) %>HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
+import { provide HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
 <% } %>
 
 <% if (ui === "material") { %>
@@ -85,7 +85,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 })
 export class SharedModule {
   constructor(
-    private readonly globalService: <%= classify(prefixClass) %>GlobalService,
+    private readonly globalService:  GlobalService,
     public readonly translate: TranslateService,
   ) {
     this.translate.setDefaultLang(environment.i18n.defaultLanguage);
@@ -97,7 +97,7 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-        ...provide<%= classify(prefixClass) %>HttpInterceptor({
+        ...provide HttpInterceptor({
           defaultTimeout: environment.http.timeout,
           refreshUrlIncludes: environment.http.api.refreshToken,
           enableExecutionTimeLog: environment.http.enableExecutionTimeLog,

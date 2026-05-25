@@ -9,7 +9,7 @@
 
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { effect, inject, Injectable, InjectionToken, Injector } from '@angular/core';
-import {  <%= classify(prefixClass) %>ErrorBean,  <%= classify(prefixClass) %>ErrorCode } from '@core/bean/error-bean';
+import {   ErrorBean,   ErrorCode } from '@core/bean/error-bean';
  
 import { CONTENT_TYPE, PlCoreModule, PlCoreUtils, PlHttpRequest, PlHttpService, RESPONSE_TYPE } from 'pl-core-utils-library';
 import { Observable, Subject,   empty  } from 'rxjs';
@@ -40,7 +40,7 @@ export const BASE_URL_API = new InjectionToken<any>("Puntamento all'indirizzo de
  * NELLA GLOBAL SERVICE SARA POSSIBILE GESTIRE IN AUTONOMIA GLI EVENTI LANCIATI
  * QUAL'ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
  */
-export class  <%= classify(prefixClass) %>HttpService {
+export class   HttpService {
    constructor(
       private http: HttpClient,
       private injector: Injector,

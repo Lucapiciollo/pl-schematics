@@ -29,18 +29,21 @@
     "deps:update": "node tools/update-dependencies.interactive.js && npm install"
   },
   "dependencies": {
-    "@angular-devkit/core": "8.3.21",
-    "@angular-devkit/schematics": "8.3.21",
+    "@angular-devkit/schematics": ">=8.0.0",
+    "@angular/core": "^21.2.14",
     "chalk": "4.1.0",
-    "schematics-utilities": "2.0.0",
     "shelljs": "0.8.4"
   },
   "devDependencies": {
-    "@angular-devkit/schematics-cli": "0.803.21",
+    "@angular-devkit/core": "^21.2.12",
+    "@angular-devkit/schematics": "^21.2.12",
+    "@angular-devkit/schematics-cli": "^0.803.21",
     "@types/jasmine": "3.3.9",
     "@types/node": "8.0.31",
     "jasmine": "3.3.1",
-    "typescript": "3.5.3"
+    "schematics-utilities": "^2.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.9.5"
   },
   "peerDependencies": {
     "@angular-devkit/schematics": ">=8.0.0"

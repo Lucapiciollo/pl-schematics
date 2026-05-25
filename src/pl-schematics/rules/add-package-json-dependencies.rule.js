@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.addPackageJsonDependencies = void 0;
 const schematics_utilities_1 = require("schematics-utilities");
 function hasHttpInterceptor(options) {
     return options.http === 'interceptor-classic' ||
@@ -136,7 +137,7 @@ function addPackageJsonDependencies(options) {
         if (options.logging === 'advanced') {
         }
         dependencies.forEach(function (dependency) {
-            schematics_utilities_1.addPackageJsonDependency(host, dependency);
+            (0, schematics_utilities_1.addPackageJsonDependency)(host, dependency);
             context.logger.info('Library inserted: "' +
                 dependency.name +
                 '" into ' +

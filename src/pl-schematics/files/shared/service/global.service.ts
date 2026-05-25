@@ -22,41 +22,38 @@ import {
   TYPE_EVENT_NETWORK,
 } from 'pl-core-utils-library';
 
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../environments/environment';
 
-import {
-  <%= classify(prefixClass) %>ErrorBean,
-  <%= classify(prefixClass) %>ErrorCode,
-} from 'src/app/<%= namePackage %>/core/bean/error-bean';
+import { ErrorBean, ErrorCode } from '../../core/bean/error-bean';
 
 
-import { <%= classify(prefixClass) %>HttpService } from 'pl-core-utils-library';
-import { CORE_TYPE_EVENT } from 'src/app/<%= namePackage %>/core/type/type.event';
+import {  HttpService } from 'pl-core-utils-library';
+import { CORE_TYPE_EVENT } from '../../core/type/type.event';
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
 import { Client } from '@microsoft/microsoft-graph-client';
-import { <%= classify(prefixClass) %>AuthService } from 'src/app/<%= namePackage %>/core/service/auth.service';
+import {  AuthService } from '../../core/service/auth.service';
 <% } %>
 
 <% if (logging === "advanced") { %>
-import { <%= classify(prefixClass) %>LoggerFeature } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger-feature.enum';
-import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePackage %>/core/logging/<%= dasherize(namePackage) %>-logger.service';
+import {  LoggerFeature } from '../../core/logging/logger-feature.enum';
+import {  LoggerService } from '../../core/logging/logger.service';
 <% } %>
 
 @Injectable({
   providedIn: 'root',
 })
 @PLUnsubscribe()
-export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
+export class  GlobalService implements OnDestroy {
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
   private graphClient: Client | null = null;
-  private readonly authService = inject(<%= classify(prefixClass) %>AuthService);
+  private readonly authService = inject( AuthService);
   <% } %>
 
-  private readonly httpService = inject(<%= classify(prefixClass) %>HttpService);
+  private readonly httpService = inject( HttpService);
   private readonly injector = inject(Injector);
   <% if (logging === "advanced") { %>
-  private readonly logger = inject(<%= classify(prefixClass) %>LoggerService);
+  private readonly logger = inject( LoggerService);
   <% } %>
 
   constructor(
@@ -197,7 +194,7 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
     <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
     if (error && error.status === 401) {
       this.injector
-        .get(<%= classify(prefixClass) %>AuthService)
+        .get( AuthService)
         .login()
         .subscribe();
 
@@ -208,12 +205,12 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
     this.logError('HTTP ajax error', error);
   }
 
-  private toErrorBean(error: unknown): <%= classify(prefixClass) %>ErrorBean {
+  private toErrorBean(error: unknown):  ErrorBean {
     const message = this.getErrorMessage(error);
 
-    return new <%= classify(prefixClass) %>ErrorBean(
+    return new  ErrorBean(
       message,
-      <%= classify(prefixClass) %>ErrorCode.SYSTEMERRORCODE,
+       ErrorCode.SYSTEMERRORCODE,
       false,
       true,
     );
@@ -238,7 +235,7 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   private logDebug(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.debug(
-      <%= classify(prefixClass) %>LoggerFeature.APP,
+       LoggerFeature.APP,
       message,
       payload,
     );
@@ -250,7 +247,7 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   private logWarn(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.warn(
-      <%= classify(prefixClass) %>LoggerFeature.APP,
+       LoggerFeature.APP,
       message,
       payload,
     );
@@ -262,7 +259,7 @@ export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   private logError(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.error(
-      <%= classify(prefixClass) %>LoggerFeature.APP,
+       LoggerFeature.APP,
       message,
       payload,
     );
