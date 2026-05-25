@@ -12,6 +12,7 @@ export interface EnumDescriptionItem {
 }
 
 @Pipe({
+  standalone: false,
   name: 'enumToDesc',
 })
 export class EnumToDescPipe implements PipeTransform {

@@ -10,7 +10,7 @@
  * ]
  */
 
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 import {
@@ -29,7 +29,8 @@ import {
   <%= classify(prefixClass) %>ErrorCode,
 } from 'src/app/<%= namePackage %>/core/bean/error-bean';
 
-import { <%= classify(prefixClass) %>HttpService } from 'src/app/<%= namePackage %>/core/service/http.service';
+
+import { <%= classify(prefixClass) %>HttpService } from 'pl-core-utils-library';
 import { CORE_TYPE_EVENT } from 'src/app/<%= namePackage %>/core/type/type.event';
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
@@ -49,17 +50,17 @@ import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePacka
 export class <%= classify(prefixClass) %>GlobalService implements OnDestroy {
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
   private graphClient: Client | null = null;
+  private readonly authService = inject(<%= classify(prefixClass) %>AuthService);
+  <% } %>
+
+  private readonly httpService = inject(<%= classify(prefixClass) %>HttpService);
+  private readonly injector = inject(Injector);
+  <% if (logging === "advanced") { %>
+  private readonly logger = inject(<%= classify(prefixClass) %>LoggerService);
   <% } %>
 
   constructor(
-    private readonly httpService: <%= classify(prefixClass) %>HttpService,
-    private readonly injector: Injector,
-    <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-    private readonly authService: <%= classify(prefixClass) %>AuthService,
-    <% } %>
-    <% if (logging === "advanced") { %>
-    private readonly logger: <%= classify(prefixClass) %>LoggerService,
-    <% } %>
+     
   ) {
     this.registerCoreEvents();
   }

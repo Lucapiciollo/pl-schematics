@@ -16,6 +16,7 @@ export type SafePipeType =
   | 'resourceUrl';
 
 @Pipe({
+  standalone: false,
   name: 'safe',
 })
 export class SafePipe implements PipeTransform {

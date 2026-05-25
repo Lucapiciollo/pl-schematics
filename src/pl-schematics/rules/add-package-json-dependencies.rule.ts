@@ -124,13 +124,13 @@ export function addPackageJsonDependencies(
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: '1.0.0',
+          version: '^3.0.0-beta.0',
           name: '@azure/msal-angular',
         },
         {
           type: NodeDependencyType.Default,
-          version: '1.3.2',
-          name: 'msal',
+          version: '^3.0.0-beta.0',
+          name: '@azure/msal-browser',
         },
         {
           type: NodeDependencyType.Default,
@@ -139,7 +139,7 @@ export function addPackageJsonDependencies(
         },
         {
           type: NodeDependencyType.Default,
-          version: '^1.11.0',
+          version: '^2.0.0',
           name: '@microsoft/teams-js',
         },
       );

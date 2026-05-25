@@ -10,29 +10,34 @@
  * ]
  */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER,   NgModule ,Injector} from '@angular/core'; 
+import { APP_INITIALIZER, NgModule } from '@angular/core'; 
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
-import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule ,BROWSER, DEFAULT_PATH_MOCK} from 'pl-core-utils-library';
-import { BASE_URL_API } from 'src/app/<%=namePackage%>/core/service/http.service';
+import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule, DEFAULT_PATH_MOCK,BROWSER} from 'pl-core-utils-library';
+import { BASE_URL_API } from 'src/app/<%=namePackage%>/shared/http/http-interceptor.tokens';
 import { UiLoaderConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderConfig';
 import { UiLoaderHttpConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderHttpConfig';
 import { UiLoaderRouterConfig } from 'src/app/<%=namePackage%>/core/utils/UiLoaderRouterConfig';
 import { environment } from 'src/environments/environment';
-import {<%=classify(prefixClass)%>DEFAULT_TIMEOUT, <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
-import {<%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
+import { <%=classify(prefixClass)%>HttpInterceptorService } from 'src/app/<%=namePackage%>/core/interceptor/http-interceptor.service';
+import { <%=classify(prefixClass)%>AuthService } from 'src/app/<%=namePackage%>/core/service/auth.service';
 import <%=classify(prefixClass)%>AmbientModeProviderFactory from 'src/app/<%=namePackage%>/core/initializer/AmbientModeLoader';
 import <%=classify(prefixClass)%>AutenticationLoader from "src/app/<%=namePackage%>/core/initializer/AutenticationLoader";
-
-import {<%=classify(prefixClass)%>HttpInterceptorFakeService} from "src/app/<%=namePackage%>/core/interceptor/http-interceptor-fake.service";
+ import { <%=classify(prefixClass)%>HttpInterceptorFakeService } from "src/app/<%=namePackage%>/core/interceptor/http-interceptor-fake.service";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-import { BroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from "@azure/msal-angular";
-import { Router, NavigationStart,ActivatedRoute } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import MSALGuardConfigFactory from './MSALGuardConfigFactory';
+import MSALInstanceFactory from './MSALInstanceFactory';
+import MSALInterceptorConfigFactory from './MSALInterceptorConfigFactory';
+
+import { MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalBroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from '@azure/msal-angular';
+import { Router, ActivatedRoute } from '@angular/router';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { InteractionStatus } from '@azure/msal-browser';
 
 /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
-export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
-  return <%=classify(prefixClass)%>AuthService.applicationType.type == "teams" ? httpInterceptorFakeService : msalInterceptor;
+export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
+  return <%=classify(prefixClass)%>AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
 };
 
 <% } %>
@@ -62,21 +67,29 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      * inserimento modulo per azure
      */ 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-     MsalModule.forRoot(Object(environment.azure.param),Object(environment.azure.scope))
-  <%} else {%>
-    
-     MsalModule.forRoot(Object(environment.azure.param),Object({}))
-   <% } %>
+    MsalModule,
+    <% } %>
   ],
   providers: [  
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    /**
-     *  @author l.piciollo
-     * inserimento servizi azure
-     */  
-      BroadcastService,
+      /** Configurazione istanza MSAL per autenticazione Azure AD. */
+      {
+         provide: MSAL_INSTANCE,
+         useFactory: MSALInstanceFactory,
+      },
+      /** Configurazione guard MSAL (interaction, scopes, fallback route). */
+      {
+         provide: MSAL_GUARD_CONFIG,
+         useFactory: MSALGuardConfigFactory,
+      },
+      /** Configurazione interceptor MSAL e mappa resource->scopes. */
+      {
+         provide: MSAL_INTERCEPTOR_CONFIG,
+         useFactory: MSALInterceptorConfigFactory,
+      },
       MsalService,
-      MsalInterceptor,
+      MsalGuard,
+      MsalBroadcastService,
       <%=classify(prefixClass)%>HttpInterceptorFakeService,
     <%}%>
     <%=classify(prefixClass)%>HttpInterceptorService,
@@ -85,7 +98,7 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
     * inizializzazione della base url per le chiamate al BE, la configurazione prevede che venga valorizzata la chiave di accesso
     * nel file environment.
     */
-    { provide: BASE_URL_API, useValue: environment.baseUrlRemoteApi },
+    { provide: BASE_URL_API, useValue: environment.http.api.baseUrl },
      
     /**
     * @author l.piciollo
@@ -127,7 +140,6 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
      * @author l.piciollo
      * impostazione tempo massimo di attesa per richieste al BE
      */
-    { provide: <%=classify(prefixClass)%>DEFAULT_TIMEOUT, useValue: 300000 },    
     { provide: DEFAULT_PATH_MOCK, useValue: "public/mock" } 
      
   ],
@@ -137,28 +149,41 @@ export let myServiceFactory = (httpInterceptorFakeService, msalInterceptor) => {
     NgxUiLoaderHttpModule,
     NgxUiLoaderRouterModule,
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    MsalModule
+    MsalModule,
     <% } %>
   ]
 })
 export class   <%=classify(prefixClass)%>InitializerModule {
   
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
+  private readonly destroying$ = new Subject<void>();
+
     /**
      * @author l.piciollo
      * abilitato il supporto di intercettore di rotta per il controllo della login... in caso di mancata
      * login.. viene effettuato il redirect alla login .. 
      */
-    constructor( private router: Router,private msalService:MsalService,private msalGuard: MsalGuard,private activatedRoute: ActivatedRoute) { 
-      router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(event => {          
-         try { 
-           if (!msalGuard.canActivate(this.activatedRoute.snapshot,this.router.routerState.snapshot)) {
-             this.msalService.loginRedirect();
-          }  
-        }catch(e){
+    constructor(
+      private router: Router,
+      private msalService: MsalService,
+      private msalBroadcastService: MsalBroadcastService,
+    ) {
+      this.msalService.handleRedirectObservable().subscribe();
+
+      this.msalBroadcastService.inProgress$.pipe(
+        filter((status: InteractionStatus) => status === InteractionStatus.None),
+        takeUntil(this.destroying$),
+      ).subscribe(() => {
+        const accounts = this.msalService.instance.getAllAccounts();
+        if (accounts.length === 0) {
           this.msalService.loginRedirect();
         }
       });
+    }
+
+    ngOnDestroy(): void {
+      this.destroying$.next();
+      this.destroying$.complete();
     }
     <% } %>
 

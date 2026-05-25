@@ -1,12 +1,13 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Inject, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 
 @Pipe({
+  standalone: false,
   name: 'translateAsync',
 })
 export class TranslateAsyncPipe implements PipeTransform {
-  constructor(private readonly translateService: TranslateService) {}
+  constructor( @Inject(TranslateService) private readonly translateService: TranslateService) {}
 
   transform(
     key: string | null | undefined,

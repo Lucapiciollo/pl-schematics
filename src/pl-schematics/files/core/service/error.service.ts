@@ -10,6 +10,9 @@
  */
 
 import { ErrorHandler, Injectable } from '@angular/core';
+<% if (logging === "advanced") { %>
+import { inject } from '@angular/core';
+<% } %>
 
 import { PlCoreUtils } from 'pl-core-utils-library';
 
@@ -25,11 +28,11 @@ import { <%= classify(prefixClass) %>LoggerService } from 'src/app/<%= namePacka
   providedIn: 'root',
 })
 export class <%= classify(prefixClass) %>ErrorService implements ErrorHandler {
-  constructor(
-    <% if (logging === "advanced") { %>
-    private readonly logger: <%= classify(prefixClass) %>LoggerService,
-    <% } %>
-  ) {}
+  <% if (logging === "advanced") { %>
+  private readonly logger = inject(<%= classify(prefixClass) %>LoggerService);
+  <% } %>
+
+  constructor() {}
 
   /**
    * Entry point globale Angular per la gestione errori.

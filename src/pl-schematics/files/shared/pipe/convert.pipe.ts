@@ -8,6 +8,7 @@ export type FileSizeUnit =
   | 'TB';
 
 @Pipe({
+  standalone: false,
   name: 'convertMb',
 })
 export class ConvertMbPipe implements PipeTransform {

@@ -5,6 +5,7 @@ export type SortOrder = 'asc' | 'desc';
 type SortableValue = string | number | boolean | Date | null | undefined;
 
 @Pipe({
+  standalone: false,
   name: 'sort',
   pure: false,
 })

@@ -83,19 +83,19 @@ function addPackageJsonDependencies(options) {
         if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
             dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '1.0.0',
+                version: '^3.0.0-beta.0',
                 name: '@azure/msal-angular',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '1.3.2',
-                name: 'msal',
+                version: '^3.0.0-beta.0',
+                name: '@azure/msal-browser',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: '^3.0.0',
                 name: '@microsoft/microsoft-graph-client',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^1.11.0',
+                version: '^2.0.0',
                 name: '@microsoft/teams-js',
             });
         }

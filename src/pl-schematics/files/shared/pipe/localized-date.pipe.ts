@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
+  standalone: false,
   name: 'localizedDate',
 })
 export class LocalizedDatePipe implements PipeTransform {

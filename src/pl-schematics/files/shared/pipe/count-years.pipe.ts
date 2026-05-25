@@ -11,6 +11,7 @@ function toDate(value: string | number | Date): Date | null {
 }
 
 @Pipe({
+  standalone: false,
   name: 'countYears',
 })
 export class CountYearsPipe implements PipeTransform {
@@ -40,6 +41,7 @@ export class CountYearsPipe implements PipeTransform {
 }
 
 @Pipe({
+  standalone: false,
   name: 'countDays',
 })
 export class CountDayPipe implements PipeTransform {

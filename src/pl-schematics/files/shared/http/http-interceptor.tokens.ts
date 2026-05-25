@@ -48,3 +48,6 @@ export const HTTP_INTERCEPTOR_CONFIG =
 
 export const HTTP_AUTH_ADAPTER =
   new InjectionToken<HttpAuthAdapter>('HTTP_AUTH_ADAPTER');
+
+export const BASE_URL_API =
+  new InjectionToken<string>('BASE_URL_API');

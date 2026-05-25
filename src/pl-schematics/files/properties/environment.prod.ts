@@ -32,8 +32,8 @@ export const environment: AppEnvironment = {
 
   features: {
     mockApi: false,
-    ngrx: <%= state === "ngrx" ? "true" : "false" %>,
-    material: <%= ui === "material" ? "true" : "false" %>,
+    ngrx: <%= state === "ngrx" %>,
+    material: <%= ui === "material" %>,
   },
 
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>

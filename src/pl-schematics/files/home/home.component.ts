@@ -20,6 +20,7 @@ import { PlBaseComponent } from 'pl-core-utils-library';
  * di piu componenti home, eliminare la riga  providers:[HomeService] .
  */
 @Component({
+  standalone: false,
   selector: '<%=prefix%>-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],

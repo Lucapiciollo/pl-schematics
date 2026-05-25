@@ -75,9 +75,9 @@ export const environment: AppEnvironment = {
   },
 
   features: {
-    mockApi: <%= mockApi === "node-express" || mockApi === "json-server" ? "true" : "false" %>,
-    ngrx: <%= state === "ngrx" ? "true" : "false" %>,
-    material: <%= ui === "material" ? "true" : "false" %>,
+    mockApi: <%= mockApi === "node-express" || mockApi === "json-server" %>,
+    ngrx: <%= state === "ngrx" %>,
+    material: <%= ui === "material" %>,
   },
 
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
