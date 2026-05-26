@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProjectDefaultPath = exports.getProjectObject = exports.getDefaultProjectName = void 0;
 const schematics_utilities_1 = require("schematics-utilities");
 const json_utils_1 = require("./json.utils");
 function getDefaultProjectName(workspaceJson, options) {
@@ -28,11 +27,11 @@ function getProjectObject(workspaceJson, options) {
 }
 exports.getProjectObject = getProjectObject;
 function getProjectDefaultPath(host, options) {
-    const workspaceJson = (0, json_utils_1.readJsonFile)(host, 'angular.json');
+    const workspaceJson = json_utils_1.readJsonFile(host, 'angular.json');
     if (!workspaceJson) {
         return null;
     }
     const projectObject = getProjectObject(workspaceJson, options);
-    return (0, schematics_utilities_1.buildDefaultPath)(projectObject);
+    return schematics_utilities_1.buildDefaultPath(projectObject);
 }
 exports.getProjectDefaultPath = getProjectDefaultPath;

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateOptions = void 0;
 function validateOptions(options) {
     return (host, context) => {
         if (!options.namePackage) {

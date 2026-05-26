@@ -18,8 +18,7 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-
+ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { environment } from 'src/environments/environment';
 
 import {  GlobalService } from 'src/app/<%= namePackage %>/shared/service/global.service';
@@ -39,9 +38,7 @@ import { StateModule } from 'src/app/<%= namePackage %>/store/state.module';
 
 /** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
 
-export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http);
-}
+ 
 
 @NgModule({
   declarations: [],
@@ -51,13 +48,12 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     FormsModule,
     PipeModule,
     TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [
-          HttpClient,
-        ],
-      },
+      loader: provideTranslateHttpLoader({
+        prefix: './assets/i18n/',
+        suffix: '.json',
+      }),
+      fallbackLang: 'it',
+      lang: 'it',
     }),
     <% if (ui === "material") { %>
     MaterialModule,

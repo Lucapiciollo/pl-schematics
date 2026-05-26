@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAngularJsonForEnvironments = void 0;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function getBuildTarget(project) {
@@ -35,12 +34,12 @@ function pushFileReplacementIfMissing(fileReplacements, replacePath, withPath) {
 }
 function updateAngularJsonForEnvironments(options) {
     return (host, context) => {
-        const workspaceJson = (0, json_utils_1.readJsonFile)(host, 'angular.json');
+        const workspaceJson = json_utils_1.readJsonFile(host, 'angular.json');
         if (!workspaceJson) {
             context.logger.warn('angular.json not found. Skipping environment configuration.');
             return host;
         }
-        const projectName = (0, workspace_utils_1.getDefaultProjectName)(workspaceJson, options);
+        const projectName = workspace_utils_1.getDefaultProjectName(workspaceJson, options);
         const project = workspaceJson.projects && workspaceJson.projects[projectName];
         if (!project) {
             context.logger.warn('Project "' +
@@ -61,10 +60,10 @@ function updateAngularJsonForEnvironments(options) {
         const environmentProdPath = sourceRoot + '/environments/environment.prod.ts';
         configurations.production = configurations.production || {};
         configurations.production.fileReplacements =
-            (0, json_utils_1.ensureArray)(configurations.production.fileReplacements);
+            json_utils_1.ensureArray(configurations.production.fileReplacements);
         pushFileReplacementIfMissing(configurations.production.fileReplacements, environmentPath, environmentProdPath);
         configurations.development = configurations.development || {};
-        (0, json_utils_1.overwriteJsonFile)(host, 'angular.json', workspaceJson);
+        json_utils_1.overwriteJsonFile(host, 'angular.json', workspaceJson);
         context.logger.info('Environment fileReplacements configured for project "' +
             projectName +
             '".');

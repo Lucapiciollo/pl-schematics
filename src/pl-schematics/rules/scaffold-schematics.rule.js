@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scaffoldSchematics = void 0;
 const workspace_utils_1 = require("../utils/workspace.utils");
 function scaffoldSchematics(options, destPath) {
     return (host, context) => {
-        const defaultPath = (0, workspace_utils_1.getProjectDefaultPath)(host, options);
+        const defaultPath = workspace_utils_1.getProjectDefaultPath(host, options);
         if (!defaultPath) {
             return host;
         }

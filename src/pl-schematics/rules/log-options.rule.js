@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logOptions = void 0;
 function logOptions(options) {
     return (host, context) => {
         context.logger.info('PL schematics options:');

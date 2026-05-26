@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizeOptions = void 0;
 const json_utils_1 = require("../utils/json.utils");
 function normalizeString(value, defaultValue) {
     if (value === undefined || value === null || value === '') {
@@ -49,7 +48,7 @@ function normalizeOptionValue(value, defaultValue, allowedValues) {
         : defaultValue;
 }
 function getDefaultProjectName(host) {
-    const workspace = (0, json_utils_1.readJsonFile)(host, 'angular.json');
+    const workspace = json_utils_1.readJsonFile(host, 'angular.json');
     if (!workspace || !workspace.projects) {
         return '';
     }
@@ -60,7 +59,7 @@ function getDefaultProjectName(host) {
     return projectNames.length > 0 ? projectNames[0] : '';
 }
 function getProjectPrefix(host, projectName) {
-    const workspace = (0, json_utils_1.readJsonFile)(host, 'angular.json');
+    const workspace = json_utils_1.readJsonFile(host, 'angular.json');
     if (!workspace ||
         !workspace.projects ||
         !workspace.projects[projectName]) {

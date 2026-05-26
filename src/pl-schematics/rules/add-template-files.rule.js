@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addTemplateFiles = void 0;
 function hasAzureActiveDirectory(options) {
     return options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT';
 }
@@ -163,11 +162,11 @@ function resolveDestination(destination, options) {
     return destination.replace('<namePackage>', options.namePackage);
 }
 function addTemplateFiles(options) {
-    return (0, schematics_1.chain)(TEMPLATE_FOLDERS.map(function (item) {
+    return schematics_1.chain(TEMPLATE_FOLDERS.map(function (item) {
         if (item.enabled && !item.enabled(options)) {
-            return (0, schematics_1.noop)();
+            return schematics_1.noop();
         }
-        return (0, add_class_rule_1.addClass)(options, item.source, resolveDestination(item.destination, options));
+        return add_class_rule_1.addClass(options, item.source, resolveDestination(item.destination, options));
     }));
 }
 exports.addTemplateFiles = addTemplateFiles;
