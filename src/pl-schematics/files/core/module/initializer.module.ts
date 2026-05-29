@@ -25,17 +25,8 @@ import AutenticationLoader from "../initializer/AutenticationLoader";
 import { HttpInterceptorFakeService } from "../interceptor/http-interceptor-fake.service";
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-import MSALGuardConfigFactory from './MSALGuardConfigFactory';
-import MSALInstanceFactory from './MSALInstanceFactory';
-import MSALInterceptorConfigFactory from './MSALInterceptorConfigFactory';
-
-import { MSAL_GUARD_CONFIG, MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalBroadcastService, MsalGuard, MsalInterceptor, MsalModule, MsalService } from '@azure/msal-angular';
-import { Router, ActivatedRoute } from '@angular/router';
-import { filter, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
-import { InteractionStatus } from '@azure/msal-browser';
-
-/**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
+  import { MsalAuthModule } from './msal/msal-auth.module';
+ /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
   return  AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
 };
@@ -67,7 +58,8 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
      * inserimento modulo per azure
      */ 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-    MsalModule,
+     MsalAuthModule.forRoot(),
+,
     <% } %>
   ],
   providers: [  

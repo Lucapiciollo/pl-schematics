@@ -32,8 +32,8 @@ import {
 } from '../../shared/http/http-interceptor.tokens';
 
 <% if (logging === "advanced") { %>
-import {  LoggerFeature } from '../logging/logger.service';
-import {  LoggerService } from '../logging/logger-feature.enum';
+import { LoggerService } from '../logging/logger.service';
+import { LoggerFeature } from '../logging/logger-feature.enum';
 <% } %>
 
 @Injectable()
