@@ -25,7 +25,7 @@ import {  GlobalService } from 'src/app/<%= namePackage %>/shared/service/global
 import { PipeModule } from 'src/app/<%= namePackage %>/shared/pipe/pipe.module';
 
 <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-import { provide HttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
+import { provideHttpInterceptor } from 'src/app/<%= namePackage %>/shared/http/http-interceptor.provider';
 <% } %>
 
 <% if (ui === "material") { %>
@@ -93,7 +93,7 @@ export class SharedModule {
       ngModule: SharedModule,
       providers: [
         <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-        ...provide HttpInterceptor({
+        provideHttpInterceptor({
           defaultTimeout: environment.http.timeout,
           refreshUrlIncludes: environment.http.api.refreshToken,
           enableExecutionTimeLog: environment.http.enableExecutionTimeLog,

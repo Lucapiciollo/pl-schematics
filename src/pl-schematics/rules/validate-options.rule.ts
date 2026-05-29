@@ -13,11 +13,6 @@ export function validateOptions(options: PlSchematicsOptions): Rule {
       );
     }
 
-    if (options.prefixClass && !/^[a-zA-Z0-9_]+$/.test(options.prefixClass)) {
-      throw new Error(
-        'Option "prefixClass" can contain only letters, numbers and underscore.',
-      );
-    }
 
     if (options.architecture === 'standalone' && options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
       context.logger.warn(

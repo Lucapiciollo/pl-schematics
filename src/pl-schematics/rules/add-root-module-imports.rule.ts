@@ -6,7 +6,7 @@ export function addRootModuleImports(options: PlSchematicsOptions): Rule {
   return chain([
     addModuleToImports(
       options,
-      (options.prefixClass || '') + 'InitializerModule',
+      'InitializerModule',
       './' + options.namePackage + '/core/module/initializer.module',
     ),
 

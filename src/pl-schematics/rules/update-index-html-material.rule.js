@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateIndexHtmlForMaterial = void 0;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function getBuildOptions(project) {
@@ -16,11 +17,11 @@ function updateIndexHtmlForMaterial(options) {
         if (options.ui !== 'material') {
             return host;
         }
-        const workspaceJson = json_utils_1.readJsonFile(host, 'angular.json');
+        const workspaceJson = (0, json_utils_1.readJsonFile)(host, 'angular.json');
         if (!workspaceJson) {
             return host;
         }
-        const project = workspace_utils_1.getProjectObject(workspaceJson, options);
+        const project = (0, workspace_utils_1.getProjectObject)(workspaceJson, options);
         const buildOptions = getBuildOptions(project);
         const indexPath = buildOptions.index || 'src/index.html';
         if (!host.exists(indexPath)) {

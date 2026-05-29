@@ -9,12 +9,6 @@
       "description": "Application package name",
       "x-prompt": "Nome del package applicativo?"
     },
-    "prefixClass": {
-      "type": "string",
-      "description": "Class prefix",
-      "default": "Pl",
-      "x-prompt": "Prefisso delle classi?"
-    },
     "nameCompany": {
       "type": "string",
       "description": "Company name",

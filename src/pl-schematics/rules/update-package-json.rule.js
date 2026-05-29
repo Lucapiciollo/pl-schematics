@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updatePackageJsonForBuild = exports.updatePackageJsonForSonar = void 0;
 const json_utils_1 = require("../utils/json.utils");
 function ensureScripts(packageJson) {
     packageJson.scripts = packageJson.scripts || {};
@@ -25,14 +26,14 @@ function upsertScript(scripts, name, command) {
 }
 function updatePackageJsonForSonar() {
     return (host, context) => {
-        const packageJson = json_utils_1.readJsonFile(host, 'package.json');
+        const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json');
         if (!packageJson) {
             context.logger.warn('package.json not found. Skipping Sonar script.');
             return host;
         }
         const scripts = ensureScripts(packageJson);
         upsertScript(scripts, 'sonar', 'sonar-scanner');
-        json_utils_1.overwriteJsonFile(host, 'package.json', packageJson);
+        (0, json_utils_1.overwriteJsonFile)(host, 'package.json', packageJson);
         context.logger.info('Added npm script: sonar.');
         return host;
     };
@@ -40,7 +41,7 @@ function updatePackageJsonForSonar() {
 exports.updatePackageJsonForSonar = updatePackageJsonForSonar;
 function updatePackageJsonForBuild(options) {
     return (host, context) => {
-        const packageJson = json_utils_1.readJsonFile(host, 'package.json');
+        const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json');
         if (!packageJson) {
             context.logger.warn('package.json not found. Skipping package scripts update.');
             return host;
@@ -62,7 +63,7 @@ function updatePackageJsonForBuild(options) {
                 setScriptIfMissing(scripts, 'ci:test', 'npm test -- --watch=false --browsers=ChromeHeadless');
             }
         }
-        json_utils_1.overwriteJsonFile(host, 'package.json', packageJson);
+        (0, json_utils_1.overwriteJsonFile)(host, 'package.json', packageJson);
         context.logger.info('Updated package.json build scripts.');
         return host;
     };

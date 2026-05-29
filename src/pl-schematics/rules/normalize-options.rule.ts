@@ -117,10 +117,6 @@ export function normalizeOptions(options: PlSchematicsOptions): Rule {
       'mycompany',
     );
 
-    options.prefixClass = normalizeString(
-      options.prefixClass,
-      'Pl',
-    );
 
     options.ui = normalizeOptionValue(
       options.ui as any,

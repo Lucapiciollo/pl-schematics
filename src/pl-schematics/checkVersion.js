@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.check = void 0;
 var shell = require('shelljs');
 function check(obj) {
     return (host, context) => {

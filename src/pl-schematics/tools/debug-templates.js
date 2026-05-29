@@ -31,7 +31,6 @@ const options = {
   name: 'my-app-template',
   namePackage: 'my-app-template',
   nameCompany: 'PL',
-  prefixClass: 'Pl',
   prefix: 'app',
   browserSupported: 'BROWSER.ALL',
   loginSupportConfiguration: 'NONE',

@@ -45,10 +45,6 @@ export interface PlSchematicsOptions {
    */
   namePackage: string;
 
-  /**
-   * Prefisso classi generate.
-   */
-  prefixClass?: string;
 
   /**
    * Nome azienda/autore.

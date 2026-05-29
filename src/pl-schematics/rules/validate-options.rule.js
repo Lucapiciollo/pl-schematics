@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validateOptions = void 0;
 function validateOptions(options) {
     return (host, context) => {
         if (!options.namePackage) {
@@ -7,9 +8,6 @@ function validateOptions(options) {
         }
         if (!/^[a-zA-Z0-9-_]+$/.test(options.namePackage)) {
             throw new Error('Option "namePackage" can contain only letters, numbers, dash and underscore.');
-        }
-        if (options.prefixClass && !/^[a-zA-Z0-9_]+$/.test(options.prefixClass)) {
-            throw new Error('Option "prefixClass" can contain only letters, numbers and underscore.');
         }
         if (options.architecture === 'standalone' && options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
             context.logger.warn('Standalone architecture with legacy Azure MSAL is not fully supported yet. It will be handled in a future rule.');
