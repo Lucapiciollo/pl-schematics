@@ -1,46 +1,71 @@
+### Continuous Integration: Azure DevOps & GitHub Actions
 
+- **CI Azure DevOps (`files/ci-azure-devops/`)**  
+    Genera template di pipeline YAML per Azure DevOps, già configurati per build, test, lint, deploy e step personalizzati. Pronti all’uso e facilmente estendibili.
+  
+    _Esempio:_
+    ```yaml
+    # azure-pipelines.yml generato
+    trigger:
+        - main
+    pool:
+        vmImage: 'ubuntu-latest'
+    steps:
+        - script: npm install
+        - script: npm run build
+        - script: npm test
+    ```
 
-1. <a href="#presentazione">Presentazione pl-schematics</a>
-   1. <a href="#applicazionenuova">Applicazione della libreria su un nuovo progetto</a>
-   1. <a href="#applicazionenuova">Applicazione della libreria su un progetto gia in essere</a>
-   1. <a href="#nuovaalberatura">Nuova alberatura del progetto</a>
-   1. <a href="#packagecore">Presentazione del package core</a>
-        1. <a href="#alberaturaclassi"> Alberatura e classi</a>
-        1. <a href="#packagebean"> Package bean</a>
-        1. <a href="#packageinitializer"> Package initializer</a>
-        1. <a href="#packageinterceptor"> Package interceptor</a>
-        1. <a href="#packagemodule"> Package module</a>
-        1. <a href="#packageservice"> Package service</a>
-        1. <a href="#packagetype"> Package type</a>
-        1. <a href="#packageutils"> Package utils</a>
-    1. <a href="#packageshare"> Package shared</a>
-    1. <a href="#packagejson"> package.json</a>
-    1. <a href="#sonar"> SONAR</a>
-1. <a href="#tutorial">TUTORIAL</a> 
-    1. <a href="#chiamatehttp">Chiamate HTTP</a>   
-    1. <a href="#cache">Cache HTTP</a> 
-    1. <a href="#decoratori">Decorator</a>
-    1. <a href="#funzioniaggiuntive">Funzionalità aggiuntive</a>
-    1. <a href="#mockhttp">MockUp HTTP REST</a>
-    1. <a href="#funzioniutili">Funzionalità utili</a>
-    1. <a href="#alert">Alert message personale</a>
-    1. <a href="#basecomponent">Support BaseComponent</a>
-    1. <a href="#rxjs">Rxjs polling ed uuid</a> 
-    1. <a href="#opzioniconfigurabili">Configurazione opzioni di avvio applicazione</a> 
-1. <a href="#documentazione">Documentazione on line </a>   
-1. <a href="#author">Author</a>   
- 
----
+- **CI GitHub Actions (`files/ci-github-actions/`)**  
+    Genera workflow YAML per GitHub Actions, con job per installazione, build, test, lint e deploy. Subito pronto per progetti Angular.
+  
+    _Esempio:_
+    ```yaml
+    # .github/workflows/ci.yml generato
+    name: CI
+    on:
+        push:
+            branches: [ main ]
+    jobs:
+        build:
+            runs-on: ubuntu-latest
+            steps:
+                - uses: actions/checkout@v2
+                - name: Install
+                    run: npm install
+                - name: Build
+                    run: npm run build
+                - name: Test
+                    run: npm test
+    ```
 
+_Vantaggi:_
+- Pipeline pronte e standard
+- Facilità di integrazione continua e deploy automatico
+- Riduzione errori di configurazione
+### Mock API per sviluppo locale (`files/mock-api-node/`)
+
+- **Mock API Node**  
+    Genera servizi backend simulati per localhost, utili per sviluppare e testare frontend senza dipendenze da API reali. Permette di definire risposte, delay, errori simulati e persistenza temporanea dei dati.
+  
+    _Esempio:_
+    ```sh
+    npm run mock:api
+    # Avvia un server mock su http://localhost:3000 con le route definite in files/mock-api-node/
+    ```
+    _Vantaggi:_
+    - Sviluppo frontend indipendente dal backend
+    - Test di casi limite e errori
+    - Demo e prototipazione rapida
 #  <p id="presentazione">Portable Library Schematics</p>
 
   
-pl-schematics nasce dall'esigenza di standardizzare il preocesso di creazione di applicazioni angular > 2, ha lo scopo di velocizzare la realizzazione della struttura core applicativa, mettendo a diaposizione un pattern di sviluppo ben preciso e collaudato.. inoltre predispone una serie di funzionalità gia pronte all'uso che non necessitano di configurazioni, come intercettori di rete, di rotte, servizi http con kill di processo in caso di cambio rotta, funzionalita di download e uploadfile e tanto altro.
+pl-schematics nasce dall'esigenza di standardizzare il preocesso di creazione di applicazioni angular > 2, ha lo scopo di velocizzare la realizzazione della struttura core applicativa, mettendo a diaposizione un pattern di sviluppo ben preciso e collaudato.. inoltre predispone una serie di funzionalità gia pronte all'uso che non necessitano di configurazioni, come intercettori di rete, di rotte, servizi http con kill di processo in caso di cambio rotta, funzionalità di download e uploadfile e tanto altro.
 
 
 L'obbiettivo di questa libreria è abbattere le tempistiche di realizzazione di un applicazione angular di molti giorni uomo, riducendo drasticamente il tempo di startup del sistema, dando la possibilità anche ai piu junior di dedicarsi allo siluppo in modo semplificato, utilizzando le risorse messe a disposizione, lasciando solo il compito di creare componenti grafici.
 
-pl-schematics è l'autrice della manipolazione del pacchetto angular, sia di nuova fattura che su di un progetto esistente.. ma per un funzionamento completo si avvale di un'altra libreria, pl-core-utils che si occupa di mredisporre le vere funzionalita core.
+pl-schematics è l'autrice della manipolazione del pacchetto angular, sia di nuova fattura che su di un progetto esistente.. ma per un funzionamento completo si avvale di un'altra libreria, pl-core-utils che si occupa di mredisporre le vere funzionalità core.
 
 ---
 
@@ -134,287 +159,481 @@ Questi package hanno funzionalità specifiche.
 
 <br><br>
 
-## Si riporta graficamente l'alberatura interna delle cartelle create
+# pl-schematics
 
- 
+> **Schematics Angular per architetture enterprise-ready**
 
- > Package component.. qui andranno tutti i componenti di navigazione.
+---
 
-<br>
+## Sommario
 
+- [Cos'è pl-schematics](#cosè-pl-schematics)
+- [Struttura e funzionalità](#struttura-e-funzionalità)
+- [Esempi di utilizzo](#esempi-di-utilizzo)
+- [Perché standardizzare con schematics](#perché-standardizzare-con-schematics)
+- [Comando schematic](#comando-schematic)
+- [Autore](#autore)
 
-![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Falberatura-component.PNG?alt=media&token=337a3e60-45df-4d09-99e3-34593557df10)
+---
 
-<br>
+## Cos'è pl-schematics
 
-> Package core, in questa sezione vi è tutta la parte applicativa che si occupa della gestione del controllo delle rorre, http  inizializzazione dell'ambiente, login intercettazione di erori e tanto altro.
+**pl-schematics** è una raccolta di schematics Angular che automatizza la generazione di una struttura applicativa solida, modulare e scalabile. Ogni schematic produce codice conforme alle best practice enterprise, riducendo tempi di setup e garantendo coerenza tra progetti.
 
-<br>
+---
 
-![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Falberatura-core.PNG?alt=media&token=a53a4178-7ca8-43ef-97b6-f8ed86a471c6)
+## Struttura e funzionalità
 
-<br>
+### Core Services (`files/core/service/`)
 
-> Package shared, utilizzato per contenere elementi grafici, da condividere con il resto del sistema, quindi si avranno button combobox, classi di utility, servicem bean di trastoporto per chiamate rest, pipe, direttive e atanto altro.
-
-<br>
-
-
-![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Falberatura-shared.PNG?alt=media&token=3d6508c6-89ea-44c6-8602-1b5257963350)
-
-
-
-
-# <p id="packagecore">Presentazione del package core</p>
-
-
-pl-schematics, come gia detto , si occupa oltre a standardizzare un pattern di sviluppo.. anche di mettere a disposizione dello sviluppatore risorse pronte all'uso, grazie al supporto della pl-core-utils-libray.
-
-
-##  <p id="alberaturaclassi"> Alberatura e classi</p>
-
- 
-
-![](https://firebasestorage.googleapis.com/v0/b/workspace-pl.appspot.com/o/img%2Fschematics%2Fdettaglio-core.PNG?alt=media&token=95344798-dadc-4e81-857c-4031a4853b6a)
-
-<br>
-
-Come è possibile notare, sono presenti diversi package, ogniuno con il proprio compito.
-
-## <p id="packagebean"> Package <strong>bean</strong></p>
-
- Qui devono essere inseriti tutti i bean utilizzati dal core, in questo caso vi è la classe ErrorBean che si occupa di wrpappare le eccezioni riscontrate durante il funzionamento o di lanciarne delle proprie.
- Tutte le eccezioni vengono catturate dal servizio ErrorService che si occupa poi di gestire l'errore rilasciando eventi di broadcast agli ascoltatori
-
-	throw new ErrorBean(err.message, ErrorCode.NETWORKERROR, false, true) 
-il costruttore prevede 4 parametri
-
-| parametro|descrizione|
-|--|--|
-|messaggio|stringa che descrive l'errore riscontrato|
-|tipo|Tipo dell'errore riscontrato, vengono gia confezionati diversi tipi di errore nell'enumeration ErrorCode, ma è possibile inserirne degli altri, in questo caso si consiglia di modificare la classe ErrorCode, inserendo gli errori custom|
-|redirect|valore booleano, indica al servizio ErrorService, che si intende avere una redirect applicativa in caso il valore sia positivo, ad esempio ad una pagina di errore.. questo meccanismo va configurato con la creazione di un ascoltatore di evento broadcast il quale poi gestisc la redirect, si occupera quindi la ErrorService a lanciare la richiesta di redirect grazie alla configurazione di questo parametro|
-|dialog|indica alla al servizio ErrorService, che si vuole una modale che  visualizzi al suo interno il messaggio di erre riscontrato, anche in questo caso il processo è lo stesso della redirect|
-
-> Tutti gli eventi che vengono lanciati dalla ErrorBean, sono registati nella GlobaService, messa a disposizione sempre da pl-schematics.
-
-Gli eventi rilanciati dalla ErrorService, quindi sono:
-
-1. Per la modalità di apertura del dialogo
-- > PlCoreUtils.Broadcast().execEvent(<strong>CORE_TYPE_EVENT.CORE_ERROR_SERVICE_DIALOG</strong>, errorBean)
-
-2. Per la richiesta di redirect:
-
-- >  PlCoreUtils.Broadcast().execEvent(<strong>CORE_TYPE_EVENT.CORE_ERROR_SERVICE_REDIRECT</strong>, errorBean);
-
-3. per tutti gli altri errori:
-
-- > PlCoreUtils.Broadcast().execEvent(<strong>CORE_TYPE_EVENT.CORE_ERROR_SERVICE</strong> , errorBean);
-
-
- 
-
-## <p id="packageinitializer">  Package <strong>initializer</strong></p>
-
-Le classi messe a disposizione dal sistema, in questo pacchetto, si occupano della configurazione iniziale di tutto il sistema, sono presenti due classi.
-
-|classe|descrizione|
-|--|--|
-|AmbientModeLoader|Lesecuzione di questa classe, è determinata in fase di startup applicativa, si antepone al sistema di loadin del bootstrap angular e si occupa di identificare il sistema in cui sti sta eseguendo il programma. Quindi si identifica il browser in uso e si specializzano nuove funzionalità per il browser.  l'esecuzione di questo inizializzatore scatena una routin della pl-core-utils.library, e precisamente PlAmbientModeLoaderService. Questo servizio, si occupa quindi di sovrascrivere funzinalità come il download di un file, rendendolo compatibile con IE, inoltre aggiunge funzionalita a stringhe, json , array e observer. |
-|AutenticationLoader|L'esecuzione di questa funzionalità è determinata in fase di startup applicativa, piu precisamente nella fase di caricamento dei moduli angular, ponendo all'utente la richiesta di autenticazione, in caso sia delegata all'utente tramite un amaschera di login, oppure di autenticazione automatica con qualche provider come AZURE. Quesa classe deve essere specializzata in base alle proprie esigenze, in caso di login diversa da AZURE.|
-
-<br>
-
-> Entrambe le funzionalità sopra elencate, inibiscono il caricamento del programma, in caso di esito negativo della login, o in di errore nell'idetificare il sistema in uso. Questo meccanismo evita il caricamento non autorizzato dell'applicativo e quindi la sua navigazione.
-
-<br>
-
-La classe di autenticazione, gestisce i seguenti eventi di broadcast
-
- 
-
-
-     /**registrazione ad eventi lanciati dalla libreria azure per il  
-      this.broadcastService.subscribe("msal:acquireTokenFailure", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:loginFailure", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:stateMismatch", (error) => {
-        this.logout();
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:acquireTokenSucces", (OK) => {
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_ACQUIRE_TOKEN_SUCCESS, OK);
-      })
-      /**registrazione ad eventi lanciati dalla libreria azure per il controllo della login */
-      this.broadcastService.subscribe("msal:loginSucces", (OK) => {
-        PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_LOGIN_SUCCESS, OK);
-      })
-
-
- 
-
-## <p id="packageinterceptor"> Package <strong>interceptor</strong></p>
- 
-in questo package viene fornito un intercettore di rete, qui vengono appunto intercettate tutte le chiamate al BE che vengono effettuate durante il ciclo di vita dell'applicativo.
-Tutte le chiamate get, post, delete, pathc, put vengono centralizzate ed analizzate da questo intercettore, qui è possibile quindi, aggiungere, modificare o sottrarre informazioni all'header delle chianate, oppure veicolare le chiamate ad altri puntamenti, gestire gli errore di risposta dei servizi e tanto altro.
-
-In questo caso , l'interettore viene utilizzato per dare un'analisi sulle tempistiche di esecuzione di ogni API, e di corredare l'header di un eventuale token di autenticazione AZURE o di altro sistema, in questo caso occorre modificare l'intercettore.. specializzandolo con il sitema login scelto.
-
-Inoltre l'intercettore gestisce la cache delle chiamate API, si occupa di prelevare dalla cache eventuali richieste gia effettuate, oppure di invocare il BE e di mettere poi in cache la rispota per prelevarla ad una successiva chiamata, ovviamente la cache ha una durata di tempo configurabile nel modulo di inizializzazione del core e le api possono essere configurate per abilitare la cache o meno.
-
-In caso di eccezioni nella chiamata API, viene rilasciato il seguente evento:
-
- > PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, err);
-
- 
-
-## <p id="packagemodule"> Package <strong>module</strong></p>
- 
-il caricamento della parte core, prevede una configurazione iniziale, dove è possibile specificare diversi parametri di avvio.
-A tale scopo viene creata la classe Initializer.module, qui come gia detto è presente una pre-configurazione dell'ambiente, ma è possibile modificare i parametri a propria discrezione.
-
-Questo modulo, viene caricato dal modulo proncipale app.module.ts, oppure dallo shared.module.ts
-
-i parametri di configurazione sono:
-
-|parametro|descrizione|
-|--|--|
-|BASE_URL_API| Questo provider specifica la base url da utilizzare per le chiamate http. il suo valore iniziale è <b>environment.baseUrlRemoteApi</b> la quale proprietà è valorizata con localhost:XXXX, dove XXXX è la porta d'ascolto del BE. tutte le chiamate quindi,verranno effettuate secondo il dominio impostato in quella proprieta.|
-|BROWSER_VALID|QUesta proprietà indica il browser abilitato alla presentazione del programma, viene valorizzato inizialmente con la scelta effettuata al momento dell'installazione della libreria, ma è possibile modificarlo in un secondo momenti, cambiando appunto questo valore. La proprietà accetta una lista di browser appure ALL, per indicare che tutti i browser sono abilitati a presentare il programma. |
-|DISABLE_LOG|questa variabile è molto utile in un contesto di produzione, in quanto per le policy di sicurezza, un applicazione web non deve avere alcun tipo di log in console, qundi questa variabile puo contenere true o false. di default è valorizzata con <b>environment.production</b> che in base alla compilazione del pacchetto, se per prod o per svil, assumerà il valore true o false inibendo o meno poi i log in console.|
-|MAX_CACHE_AGE|Questo valore, che di default è impostato a 300000ms, indica il tempo di validità della cache per le chiamate rest, passato questo tempo, per una determinata chiamata, alla successiva chiamata viene invocato nuovamente il BE, e non il sistema di cache.. alla risposta del be si ricomincia il ciclo di storicizzazione e cosi via|
-|CACHE_TAG|Qui è possibile indicare al sistema di caching come identificare le API che abilitate alla cacahe. Di default il valore è <b>@cachable@</b> quindi , l'intercettore http, controlla la url da invocare, e ricerca questo valore al suo interno.. se lo stesso viene trovato, significa che la url deve essere sottoposta al sistema di cache, altrimenti viene invocato sempre il BE.|
-|DEFAULT_TIMEOUT|QUesto valore, che inizialmente è valorizzato a 300000ms, indica il tempo di attesa prima di mandare in time out le chiamate API REST
-|DEFAULT_PATH_MOCK|Questo provider, specifica il path dove andare a leggere i file per il sistema di mock.. pl-schematics mette a disposizione del sistema, un motore di mock che aiuta lo sviluppatore nel procedere con il proprio lavoro anche se il BE ancora non espone i propri servizi. indicando una url come mocked:true, al momento della chiamata rest, questa viene interettata dal motore e non viente effettuata una chiamata http, ma vien prelevato il file rispettivo al metodo invocato, al path specificato in questa variabile. Lo stesso path deve essere presente sotto la cartella assets e deve essere presente un file get.json in caso di chiamate get, post.json in caso di post e cosi via. E' possibile mockare anche chiamate a file download.|
-|MSAL_CONFIG|In caso di login con il sistema AZURE, questa variabile punta alla configurazione per la connessione dell'applicazione,di default la configurazione viene preimpostata in <b>environment.azure</b>|
-
->In questo modulo ci sono altre inizializzazioni, come configurazione della centralizzazione degli errori, intercettori e altro.. ma non ha significato modificale in quanto sono strutture gia pronte all'uso che non necessitano di configurazine da parte dello sviluppatore.
-
- 
-
-##  <p id="packageservice">  Package <strong>service</strong></p>
- Qi sono presenti i servizi per il sistema core, come il servizio per l'autenticazione, per la centralizzazione delgi errori, e il servizio preconfigurato per le chiamate REST. questi sono preconfigurati e non necessitano di manutenzione da parte dello sviluppatore, ma vanno semplicemente utilizzati.. soprattutto il servizio htt.
-
- 
-
-### <b>Importante</b>
-Per quanto riguarda il servizio HTTP.. questo mette a disposizione una serie di metodi per invocare il BE sia in modalità back ground che in modalità realtime.
-pl-schematics, tra le tante cose, mira ad ottimizzare il flusso dati, evitando appesantimenti inutili di rete, quindi ogni chiamata rest è sottoposta a controllo di interruzione di flusso. Ciò significa che il variare di una rotta di navigazione, comporta l'interruzione della chiamata rest appena avviata. Questo non vale per metodi che finiscono per BG, come GETBG, POSTBG ecc.. , e metodi di download o upload file. Oltre a questo, è possibile monitorare lo stato di avanzamento di qualsiasi chiamata rest, in quanto il sistema al momento dell'invocazione crea una coda di chiamate con un proprio identificativo. Con dei metodi preposti è possibile mettersi in ascolto sullo stato di avanzamento percentile di una determinata chiamata rest. o interrompere il suo flusso manualmente, magari al verificarsi di qualche controllo.
-
- 
-
-##  <p id="packagetype"> Package <strong>type</strong></p>
- Inserire qui file che contengono dichiarazione di tipo, al momento è presente il file type.events il quale contiene alcuni tipi di evento che vengono lanciati in broadcast dal sistema core. come ad esmepio:
-
-    CORE_HTTP_AJAX_ERROR = "CORE:HTTP-AJAX-ERROR",
-    CORE_HTTP_AJAX_CACHE="CORE:HTTP_AJAX_CACHE",
-    CORE_HTTP_AJAX_AUTENTICATE_KO = "CORE:HTTP-AJAX-AUTENTICATE-KO",
-    CORE_ERROR_SERVICE_REDIRECT = "CORE:ERROR_SERVICE_REDIRECT",
-    CORE_ERROR_SERVICE_DIALOG = "CORE:ERROR_SERVICE_DIALOG",
-    CORE_ACQUIRE_TOKEN_SUCCESS = "CORE:ACQUIRE_TOKEN_SUCCESS",
-    CORE_LOGIN_SUCCESS= "CORE:LOGIN_SUCCESS",
-    CORE_ERROR_SERVICE="CORE:ERROR_SERVICE"
-
-
- 
-
-## <p id="packageutils">  Package <strong>utils</strong></p>
- 
-
-Questo package contiene la configurazione iniziale per le barre di caricamento o di attesa, di un eventuale cambio rotta o chiamate di rete. al verificarsi quindi di un cambio di rotta o l'invocazione di una qualsiasi API, verrà mostrato un componente che indica, in maniera animata, all'utente che vi è un operazine in corso e che deve attendere che essa sia terminata, infatti al termine della stessa, l'animazione di interrompe in modo automatico. In questi file è possibile variare alcune configurazioni, come il colore dell'animazione, il tipo la durata, la posizione.. e tanto altro.
-
-# <p id="packageshare"> Presentazione del pacchetto shared</p>
-Come gia detto, questo package contiene diversi tipi di file, ma condividono il fatto che devono essere visti da tutto il sistema. Ci saranno componenti come bottoni, liste ecc.. che verranno poi importti in diverse pagine. Qui entra in gioco lo sviluppatore, il quale dovrà lui gestire la creazione delle grafiche e l'importazione degli eventuali moduli
-
-Il sistema pl-schematics, crea un servizio di utilità, chiamato GlobalService. Questo servizio, ha la funzione di essere richiamato, eventualmente sia necessario, da qualsiasi parte dell'applicazione.. quindi da componenti, da pagine, da direttive e altro.. inoltre presenta dei metodi template per lla configurazione e l'invocazione di sistemi BE.
-
-
-In questo servizio, sono presenti tutti gli ascoltatori ad eventi lanciati dal CORE, come il redirect page per gli errori che necessitano di redirect, oppure l'evento di apertura di una modale o login effettuata in modo corretto.. e altro ancora,  è possibile quindi specializzare il codice da eseguire al verificarsi di questi eventi.
-
-
-# <p id="packagejson">Modifica al package.json</p>
-
-Anche questo file viene modificato, vengono inseriti nuovi script per la compilazione del codice, sia in modalità produzione che in modalità sviluppo. inoltre viene inserito uno script per il lancio del comando SONAR per il controllo della qualità del codice e per la generazione della documentazione con il sistema typedoc.
-
-    "sonar": "sonar-scanner",
-    "build-dev": "ng build",
-    "build-prod": "ng build  --lazyModules --aot  --prod --source-map=false",
-    "typedoc": "compodoc -d  pl-schematics/document/schematics  -p tsconfig.json -s -n Portable-Schematics --theme Postmark --disablePrivate --disableCoverage"
-
-
-
-# <p id="sonar"> Introduzione a SONAR</p>
-Al momento dell'installazione del pattern, viene richiesto, oltre che abilitare il supporto per login azure, e bootstrap 4 anche se configurre il pacchetto per essere sottoposto a controlli SONAR. A tal proposito vengono installate tutte le librerie preposte, viene creato un file che dovrà essere configurato con le proprie informazioni, e in piu viene reso disponibile lo script di avvio nel package JSON.
-
-> "sonar": "sonar-scanner"
-
-quindi è possibile lanciarlo da riga di comando con :
-- npm run sonar
-
-
-per la configurazione viene creato il file <strong>sonar-project.properties</strong> che richiede di configurare le seguenti informazioni
-
-    sonar.host.url=http://localhost:9000
-    sonar.login=admin
-    sonar.password=admin
-    sonar.projectKey=test2
-    sonar.projectName=projectName
-    sonar.projectVersion=1.0
-    sonar.sourceEncoding=UTF-8
-    sonar.sources=src
-    sonar.exclusions=**/node_modules/**,**/atena-component/**,**/src/assets/**,**/*.css
-    sonar.tests=src
-    sonar.test.inclusions=**/*.spec.ts
-    sonar.typescript.lcov.reportPaths=coverage/lcov.info
-    sonar.nodejs.executable=/program Files/nodejs/node.exe 
- 
- quindi al lancio del comando il pacchetto viene sottoposto a scanner sonar e il risultato viene pubblicato nel server preposto.
-
-
-# <p id="tutorial">Tutorial su alcune funzionalit</p>
-
-## <p id="chiamatehttp">Chiamate HTTP</p>
-
+- **AuthService**  
+    Gestione centralizzata autenticazione (login/logout, MSAL/Azure AD, adapter per NgRx/altro state management).
   
+    _Esempio:_
+    ```typescript
+    this.authService.login();
+    this.authService.logout();
+    ```
 
-Il sistema viene equipagiato con servizi utili per le chiamate al BE, tali chiamate hanno la possibilità di essere terminate in caso di determinati eventi
-
+- **ErrorService**  
+    Gestione errori centralizzata, broadcast, wrappa errori con info aggiuntive.
   
+    _Esempio:_
+    ```typescript
+    throw new ErrorBean('Errore di rete', ErrorCode.NETWORKERROR, true, false);
+    ```
 
-    callMock(p1: any, p2: any): Observable<any> {
-        return new Observable<any>(obs => {
-            let plHttpRequest: PlHttpRequest = new PlHttpRequest(
-                environment.http.api.mock,
-                Object({ api: "api", files: "files" }),
-                Object({ api: p1, files: p2 }),
-                null);
-        this.httpService.GETFILE(plHttpRequest, RESPONSE_TYPE.ARRAYBUFFER, (idAjax => {
-            setTimeout((id) => {
-               PlCoreUtils.progressBars[id].interrupt.next(true);
-            }, 10,idAjax);
-        }), null).subscribe(sb => {
-        obs.next(sb);
-        obs.complete()
-        }, error => {
-            obs.error(error);
-        }, () => { })
-        })
-    }
-
-in questo esempio si termina il servizio dopo 10 millisecondi, ovviamente in caso di un download di file, questo termina lo scaricamento dello stesso. L'evento di termine puo essere anche avviato diversamente, tramite un pulsante ad esempio.
-
+- **HttpService**  
+    Chiamate HTTP GET/POST/PUT/DELETE con cache, timeout, kill su cambio rotta, mock API, monitoraggio avanzamento.
   
+    _Esempio:_
+    ```typescript
+    this.httpService.GETBG(request, type, onProgress, onError).subscribe(...);
+    ```
 
-E' possibile dichiarare url contenenti dei pathParams, il sistema provvederò in autonomia alla sua valorizzazione.
+- **RouteFakeGuard**  
+    Simula la protezione delle rotte in sviluppo.
 
+### Interceptor (`files/core/interceptor/`)
+
+- **HttpInterceptorService**  
+    Intercetta tutte le chiamate HTTP, aggiunge header, gestisce token, errori, cache.
+- **HttpInterceptorFakeService**  
+    Simula risposte HTTP per test e sviluppo offline.
+
+### Shared Services (`files/shared/service/`)
+
+- **GlobalService**  
+    Utility globale, ascolto eventi core, gestione redirect, modali, login, ecc.
   
-  
+    _Esempio:_
+    ```typescript
+    this.globalService.onEvent('CORE_ERROR_SERVICE_DIALOG', handler);
+    ```
 
+### Pipe (`files/shared/pipe/`)
+
+- **PipeModule**  
+    Esporta tutte le pipe utili (formattazione date, numeri, enum, ecc.).
+
+    _Principali pipe:_
+    - `CommaDecimalPipe`, `CountYearsPipe`, `CurrencyFormatPipe`, `DecimalFixPipe`, `EnumToDescPipe`, `ExpiredDatePipe`, `FirstCharPipe`, `LocalizedDatePipe`, `NormalizePipe`, `RemoveLeadingZerosPipe`, `RoundPipe`, `SafePipe`, `SortPipe`, `TranslateAsyncPipe`, `TruncatePipe`, ecc.
+
+    _Esempio:_
+    ```html
+    {{ valore | commaDecimal }}
+    {{ data | localizedDate:'it-IT' }}
+    ```
+
+### Utils (`files/shared/utils/`)
+
+- **Utils**  
+    Metodi statici per manipolazione stringhe, array, oggetti, ecc.
+- **Device Detector**  
+    Funzioni per rilevare device, browser, sistema operativo.
+  
+    _Esempio:_
+    ```typescript
+    const info = detectDeviceInfo();
+    ```
+
+
+### State Management NgRx (`files/ngrx/`)
+
+- **StoreModule, Effects, Adapter, Helpers**  
+    Struttura pronta per la gestione dello stato con NgRx: store, effetti, selettori, azioni, adapter e helper per ridurre la boilerplate e standardizzare la gestione dello stato.
+  
+    _Esempio:_
+    ```typescript
+    import { Store } from '@ngrx/store';
+    this.store.dispatch(MyActions.loadData());
+    this.store.select(MySelectors.selectData).subscribe(...);
+    ```
+  
+    _Vantaggi:_
+    - Separazione chiara tra stato, effetti e UI
+    - Facilità di testing e debugging
+    - Struttura scalabile e riutilizzabile
+
+### Advanced Logging (`files/advanced-logging/`)
+
+- **LoggerService**  
+    Logging avanzato con livelli, feature, provider custom.
+  
+    _Esempio:_
+    ```typescript
+    this.loggerService.log('Messaggio', LoggerLevel.INFO);
+    ```
+
+### Moduli e Inizializzatori
+
+- **SharedModule**  
+    Modulo comune che importa/espone CommonModule, HttpClientModule, FormsModule, PipeModule, TranslateModule, MaterialModule (opzionale), StateModule (opzionale).
+  
+    _Esempio:_
+    ```typescript
+    import { SharedModule } from 'src/app/tuo-package/shared/module/shared.module';
+    @NgModule({ imports: [SharedModule] })
+    ```
+
+- **InitializerModule**  
+    Configura provider core (API base, browser, cache, mock, MSAL, ecc.).
+- **AmbientModeLoader, AutenticationLoader**  
+    Inizializzano ambiente e autenticazione all’avvio.
+
+---
+
+## Esempi di utilizzo
+
+### Import moduli e servizi
+
+```typescript
+import { SharedModule } from 'src/app/tuo-package/shared/module/shared.module';
+import { CoreModule } from 'src/app/tuo-package/core/module/initializer.module';
+```
+
+### Dependency injection servizi
+
+```typescript
+constructor(private authService: AuthService, private globalService: GlobalService) {}
+```
+
+### Pipe nei template
+
+```html
+{{ valore | commaDecimal }}
+```
+
+### Utility per device detection
+
+```typescript
+const device = detectDeviceType(navigator.userAgent);
+```
+
+---
+
+## Perché standardizzare con schematics
+
+- **Standardizzazione:** Struttura solida, coerente e scalabile per ogni progetto.
+- **Velocità:** Setup e onboarding rapidissimi.
+- **Best Practice:** Codice generato secondo pattern enterprise e Angular style guide.
+- **Manutenzione:** Aggiornamenti e estensioni centralizzati e semplici.
+
+---
+
+## Comando schematic
+
+Per generare la struttura base:
+
+```sh
+schematics pl-schematics:pl-schematics --force
+```
+
+---
+
+## Autore
+
+- **Luca Piciollo**  
+    [lucapiciolo@gmail.com](mailto:lucapiciolo@gmail.com)
+        Permette di simulare la protezione delle rotte in ambienti di sviluppo.
+
+    ### 2. Interceptor (`files/core/interceptor/`)
+
+    - **HttpInterceptorService**  
+        Intercetta tutte le chiamate HTTP, aggiunge header, gestisce token, errori, cache.
+    - **HttpInterceptorFakeService**  
+        Simula risposte HTTP per test e sviluppo offline.
+
+    ### 3. Shared Services (`files/shared/service/`)
+
+    - **GlobalService**  
+        Espone metodi di utilità globale, ascolta eventi core, gestisce redirect, modali, login, ecc.
+  
+        **Esempio:**
+        ```typescript
+        this.globalService.onEvent('CORE_ERROR_SERVICE_DIALOG', handler);
+        ```
+
+    ### 4. Pipe (Shared) (`files/shared/pipe/`)
+
+    - **PipeModule**  
+        Esporta tutte le pipe utili (formattazione date, numeri, enum, ecc.).
+
+    - **Esempi di pipe:**
+        - `CommaDecimalPipe`, `CountYearsPipe`, `CurrencyFormatPipe`, `DecimalFixPipe`, `EnumToDescPipe`, `ExpiredDatePipe`, `FirstCharPipe`, `LocalizedDatePipe`, `NormalizePipe`, `RemoveLeadingZerosPipe`, `RoundPipe`, `SafePipe`, `SortPipe`, `TranslateAsyncPipe`, `TruncatePipe`, ecc.
+
+        **Esempio d’uso:**
+        ```html
+        {{ valore | commaDecimal }}
+        {{ data | localizedDate:'it-IT' }}
+        ```
+
+    ### 5. Utils (`files/shared/utils/`)
+
+    - **Utils**  
+        Metodi statici per manipolazione stringhe, array, oggetti, ecc.
+    - **Device Detector**  
+        Funzioni per rilevare device, browser, sistema operativo.
+  
+        **Esempio:**
+        ```typescript
+        const info = detectDeviceInfo();
+        ```
+
+    ### 6. Advanced Logging (`files/advanced-logging/`)
+
+    - **LoggerService**  
+        Logging avanzato con livelli, feature, provider custom.
+  
+        **Esempio:**
+        ```typescript
+        this.loggerService.log('Messaggio', LoggerLevel.INFO);
+        ```
+
+    ### 7. Moduli e Inizializzatori
+
+    - **SharedModule**  
+        Modulo comune che importa/espone CommonModule, HttpClientModule, FormsModule, PipeModule, TranslateModule, MaterialModule (opzionale), StateModule (opzionale).
+  
+        **Esempio di import:**
+        ```typescript
+        import { SharedModule } from 'src/app/tuo-package/shared/module/shared.module';
+        @NgModule({ imports: [SharedModule] })
+        ```
+
+    - **InitializerModule**  
+        Configura provider core (API base, browser, cache, mock, MSAL, ecc.).
+    - **AmbientModeLoader, AutenticationLoader**  
+        Inizializzano ambiente e autenticazione all’avvio.
+
+    ---
+
+    ## Esempi di utilizzo
+
+    1. **Importa i moduli e servizi nei tuoi moduli Angular:**
+         ```typescript
+         import { SharedModule } from 'src/app/tuo-package/shared/module/shared.module';
+         import { CoreModule } from 'src/app/tuo-package/core/module/initializer.module';
+         ```
+
+    2. **Usa i servizi tramite dependency injection:**
+         ```typescript
+         constructor(private authService: AuthService, private globalService: GlobalService) {}
+         ```
+
+    3. **Applica le pipe direttamente nei template:**
+         ```html
+         {{ valore | commaDecimal }}
+         ```
+
+    4. **Utilizza le utility per device detection o manipolazione dati:**
+         ```typescript
+         const device = detectDeviceType(navigator.userAgent);
+         ```
+
+    ---
+
+    ## Perché usare schematics
+
+    - **Standardizzazione:** Ogni progetto parte con una struttura solida, coerente e scalabile.
+    - **Velocità:** Riduce drasticamente il tempo di setup e onboarding di nuovi sviluppatori.
+    - **Best Practice:** Tutto il codice generato segue pattern enterprise e Angular style guide.
+    - **Manutenzione:** Aggiornare o estendere la base è semplice e centralizzato.
+
+    ---
+
+    ## Comando schematic
+
+    Per generare la struttura base:
+
+    ```sh
+    schematics pl-schematics:pl-schematics --force
+    ```
+
+    ---
+
+    **Autore:** Luca Piciollo  
+    **Email:** lucapiciolo@gmail.com
+
+    **pl-schematics** è una libreria avanzata per Angular che automatizza la creazione della struttura core di un'applicazione, standardizza pattern architetturali, integra servizi fondamentali (autenticazione, error handling, http, cache, mock, Sonar, ecc.) e velocizza lo startup di progetti enterprise-ready.
+
+    ---
+
+    ## Caratteristiche principali
+
+    - Generazione automatica di struttura modulare (core, shared, component)
+    - Integrazione servizi di autenticazione (MSAL/Azure AD)
+    - Intercettori HTTP avanzati, gestione cache e mock API
+    - Error handling centralizzato e broadcast eventi
+    - Decoratori utili per lifecycle, permessi, log, unsubscribe, ecc.
+    - Supporto SonarQube, script di build, typedoc
+    - Pattern e best practice per progetti Angular enterprise
+
+    ---
+
+    ## Installazione e utilizzo rapido
+
+    1. **Crea un nuovo progetto Angular**
+         ```sh
+         ng new nome-progetto
+         ```
+    2. **Installa la libreria**
+         ```sh
+         npm i pl-schematics
+         ```
+    3. **Applica lo schematic**
+         ```sh
+         schematics pl-schematics:pl-schematics --force
+         ```
+         Durante l'installazione ti verranno richieste alcune opzioni (login, Sonar, browser, ecc.).
+
+    ---
+
+    ## Cosa viene generato/modificato
+
+    - Struttura a pacchetti: `core/`, `shared/`, `component/`
+    - File chiave: `app.module.ts`, `app.component.html`, `environment.ts`, `environment.prod.ts`, `app-routing.module.ts`, `sonar-project.properties`
+    - Script utili in `package.json` (build, sonar, typedoc)
+    - Configurazione SonarQube e typedoc
+
+    ---
+
+    ## Architettura e struttura generata
+
+    ```
+    src/app/
+        ├── core/
+        ├── shared/
+        └── component/
+    ```
+
+    - **core/**: servizi di autenticazione, error handling, http, initializer, interceptor, moduli di configurazione
+    - **shared/**: pipe, utility, bean, servizi condivisi, moduli riutilizzabili
+    - **component/**: macro-componenti, pagine, sezioni principali
+
+    ---
+
+    ## Funzionalità e servizi principali
+
+    ### Autenticazione (MSAL/Azure AD)
+    - Login/logout, gestione token, broadcast eventi login
+    - Esempio:
+        ```typescript
+        this.authService.login();
+        this.authService.logout();
+        ```
+
+    ### Error Handling centralizzato
+    - Classe `ErrorBean` e servizio `ErrorService` per gestione errori, redirect, dialog, broadcast eventi
+    - Esempio:
+        ```typescript
+        throw new ErrorBean('Errore di rete', ErrorCode.NETWORKERROR, true, false);
+        ```
+
+    ### HTTP Service avanzato
+    - Metodi GET/POST/PUT/DELETE con cache, timeout, kill su cambio rotta, mock API, monitoraggio avanzamento
+    - Esempio:
+        ```typescript
+        this.httpService.GETBG(request, type, onProgress, onError).subscribe(...);
+        ```
+
+    ### Interceptor e cache
+    - Intercettazione centralizzata di tutte le chiamate, gestione header, token, errori, cache configurabile tramite tag `@cachable@`
+    - Esempio:
+        ```typescript
+        { provide: CACHE_TAG, useValue: "@cachable@" }
+        ```
+
+    ### Mock API
+    - Simulazione risposte backend tramite file JSON in assets
+    - Esempio:
+        ```typescript
+        let req = new PlHttpRequest('mock', {api: 'test'}, {api: 'val'}, null);
+        this.httpService.GETFILE(req, ...)
+        ```
+
+    ### Decoratori utili
+    - `@PLFormatDate`, `@PLTraceHooks`, `@PLUnsubscribe`, `@PLPermission`, `@PLDelay`
+    - Esempio:
+        ```typescript
+        @PLFormatDate(FORMAT_DATE.FULLDATE)
+        data: Date;
+        @PLUnsubscribe()
+        class MyComponent {}
+        ```
+
+    ### Utility su String, Array, JSON
+    - Metodi estesi: `format`, `isNullOrEmpty`, `moveUp`, `changeValuesByKey`, ecc.
+    - Esempio:
+        ```typescript
+        let url = environment.exampleApi.format('P1', 'P2');
+        let arr = [1,2,3]; arr.moveUp(2);
+        let obj = JSON.changeValuesByKey(user, 'cognome', 'NuovoCognome');
+        ```
+
+    ---
+
+    ## Esempi pratici
+
+    ### Chiamata HTTP con kill su cambio rotta
+    ```typescript
+    this.httpService.GETBG(request, type, onProgress, onError).subscribe(...);
+    // Se cambi pagina, la chiamata viene interrotta automaticamente
+    ```
+
+    ### Mock di una chiamata REST
+    ```typescript
+    let req = new PlHttpRequest('mock', {api: 'test'}, {api: 'val'}, null);
+    this.httpService.GETFILE(req, ...)
+    ```
+
+    ### Decoratore per auto-unsubscribe
+    ```typescript
+    @PLUnsubscribe()
+    class MyComponent {}
+    ```
+
+    ---
+
+    ## Best practice e cosa NON fa la libreria
+
+    - Non genera componenti grafici custom
+    - Non implementa logiche di business specifiche
+    - Non gestisce provider di autenticazione diversi da quelli previsti
+    - Non configura pipeline CI/CD custom (fornisce solo template base)
+    - Non gestisce database o storage
+
+    ---
+
+    ## Supporto, documentazione e autori
+
+    - Documentazione inline nei file e in questo README
+    - Per domande o supporto: lucapiciolo@gmail.com
+    - Autore: Luca Piciollo
+
+    ---
+
+    **pl-schematics**: la base solida e moderna per ogni progetto Angular enterprise.
     mock: {
         url: "@cachable@/example/:api/:files",
         mocked: true,
@@ -763,9 +982,9 @@ E' possibile avvalersi di alcune funzionalità utili come la gestione delle imma
 
 Introdotto un sistema di alert() custom, al momento della chiamata alla funzione alert() di window.. verrà scatenata una routine, che mostrerà una finestra di dialogo modale in formato bootstrap.  La funzionalità è nata per velocizzare la chiamata ad un message .
 
-	showMessage(){
-		alert(title,message);
-	}  
+.showMessage(){
+    alert(title,message);
+}
 
 ![alt text](https://firebasestorage.googleapis.com/v0/b/pl-schematics.appspot.com/o/img%2FAlert.PNG?alt=media&token=98a8d646-41ae-4e59-9442-fae7a293d7fc)
     
@@ -893,3 +1112,121 @@ Sotto alcuni documenti sull'utilizzo di alcune funzionalità della libreria
 ## <p id="author">Author</p>
 Created by @l.piciollo 
 E-Mail: lucapiciollo@gmail.com
+
+# Dettaglio Funzioni e Servizi di pl-schematics
+
+Questa sezione elenca e spiega tutte le principali funzionalità, servizi, moduli, pipe e utilità fornite dalla libreria pl-schematics, con esempi pratici di utilizzo e chiarimenti su cosa fanno e cosa non fanno.
+
+## Schematics principali
+
+### plSchematics (schematic principale)
+- **Cosa fa:** Inizializza la struttura core di un progetto Angular, crea cartelle `core`, `shared`, `component`, aggiunge moduli, servizi, interceptor, pipe, configurazioni di ambiente, supporto login Azure/MSAL, Sonar, Bootstrap, mock API, ecc.
+- **Cosa non fa:** Non genera componenti grafici personalizzati, non configura routing avanzato custom, non implementa logiche di business specifiche.
+- **Esempio:**
+  ```sh
+  schematics pl-schematics:pl-schematics --force
+  ```
+
+## Servizi core
+
+### AuthService
+- **Cosa fa:** Gestisce autenticazione (es. Azure AD/MSAL), login/logout, gestione token, broadcast eventi di login.
+- **Cosa non fa:** Non implementa provider custom diversi da quelli previsti (es. Google, Facebook, ecc. vanno aggiunti a mano).
+- **Esempio:**
+  ```typescript
+  this.authService.login();
+  this.authService.logout();
+  ```
+
+### ErrorService & ErrorBean
+- **Cosa fa:** Centralizza la gestione degli errori, lancia eventi broadcast per redirect o dialog, wrappa errori con informazioni aggiuntive.
+- **Cosa non fa:** Non gestisce errori di business custom senza estensione della classe.
+- **Esempio:**
+  ```typescript
+  throw new ErrorBean('Errore di rete', ErrorCode.NETWORKERROR, true, false);
+  ```
+
+### HttpService
+- **Cosa fa:** Fornisce metodi GET/POST/PUT/DELETE con gestione automatica di cache, timeout, kill su cambio rotta, mock API, monitoraggio avanzamento.
+- **Cosa non fa:** Non gestisce websocket, non implementa retry custom avanzati.
+- **Esempio:**
+  ```typescript
+  this.httpService.GETBG(request, type, onProgress, onError).subscribe(...);
+  ```
+
+### GlobalService
+- **Cosa fa:** Espone metodi di utilità globale, ascolta eventi core, gestisce redirect, modali, login, ecc.
+- **Cosa non fa:** Non implementa logiche di business custom.
+- **Esempio:**
+  ```typescript
+  this.globalService.onEvent('CORE_ERROR_SERVICE_DIALOG', handler);
+  ```
+
+## Moduli e Pipe
+
+### InitializerModule
+- **Cosa fa:** Inizializza provider core (API base, browser, cache, mock, MSAL, ecc.).
+- **Cosa non fa:** Non configura provider custom non previsti.
+- **Esempio:**
+  ```typescript
+  imports: [InitializerModule]
+  ```
+
+### PipeModule
+- **Cosa fa:** Esporta pipe utili (formattazione date, numeri, enum, ecc.).
+- **Cosa non fa:** Non aggiunge pipe custom non incluse.
+- **Esempio:**
+  ```html
+  {{ valore | commaDecimal }}
+  ```
+
+## Decoratori
+
+- **@PLFormatDate:** Formatta automaticamente le date.
+- **@PLTraceHooks:** Logga i cicli di vita dei componenti.
+- **@PLUnsubscribe:** Unsubscribe automatico dagli observable.
+- **@PLPermission:** Gestisce permessi su elementi DOM.
+- **@PLDelay:** Esegue una funzione con ritardo.
+
+**Esempio:**
+```typescript
+@PLFormatDate(FORMAT_DATE.FULLDATE)
+data: Date;
+
+@PLUnsubscribe()
+class MyComponent {}
+```
+
+## Funzionalità aggiuntive su String, Array, JSON
+
+- **String.format, isNullOrEmpty, truncateUrlIfNoParams, truncateUrlCache**
+- **Array.moveDown, moveTo, moveUp, delete, differences, inArray, insert**
+- **JSON.changeValues, changeValuesByKey, findByValue, json2flat, json2array, findKey**
+
+**Esempio:**
+```typescript
+let url = environment.exampleApi.format('P1', 'P2');
+let arr = [1,2,3]; arr.moveUp(2);
+let obj = JSON.changeValuesByKey(user, 'cognome', 'NuovoCognome');
+```
+
+## Mock API
+
+- **Cosa fa:** Permette di simulare risposte di backend tramite file JSON in assets.
+- **Cosa non fa:** Non genera automaticamente i file di mock, non simula logiche complesse.
+- **Esempio:**
+```typescript
+let req = new PlHttpRequest('mock', {api: 'test'}, {api: 'val'}, null);
+this.httpService.GETFILE(req, ...)
+```
+
+## Cosa NON fa la libreria
+- Non genera componenti grafici custom.
+- Non implementa logiche di business specifiche.
+- Non gestisce provider di autenticazione diversi da quelli previsti.
+- Non configura pipeline CI/CD custom (fornisce solo template base).
+- Non gestisce database o storage.
+
+---
+
+Per ulteriori dettagli, consultare la documentazione inline nei file o le sezioni precedenti di questo README.
