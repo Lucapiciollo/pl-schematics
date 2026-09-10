@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scaffoldSchematics = void 0;
+exports.scaffoldLibrarySchematics = exports.scaffoldSchematics = void 0;
 const workspace_utils_1 = require("../utils/workspace.utils");
 function scaffoldSchematics(options, destPath) {
     return (host, context) => {
@@ -19,3 +19,16 @@ function scaffoldSchematics(options, destPath) {
     };
 }
 exports.scaffoldSchematics = scaffoldSchematics;
+function scaffoldLibrarySchematics(libraryAbsoluteDestPath) {
+    return (host, context) => {
+        const filePath = libraryAbsoluteDestPath + '/.gitkeep';
+        if (host.exists(filePath)) {
+            context.logger.info('Empty folder already exists: "' + filePath + '"');
+            return host;
+        }
+        host.create(filePath, '');
+        context.logger.info('Created empty folder: "' + filePath + '"');
+        return host;
+    };
+}
+exports.scaffoldLibrarySchematics = scaffoldLibrarySchematics;

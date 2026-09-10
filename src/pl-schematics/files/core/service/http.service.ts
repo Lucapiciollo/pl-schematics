@@ -8,11 +8,11 @@
  */
 
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { effect, inject, Injectable, InjectionToken, Injector } from '@angular/core';
-import {   ErrorBean,   ErrorCode } from '@core/bean/error-bean';
+import { effect, inject, Injectable, Injector } from '@angular/core';
+import {   ErrorBean,   ErrorCode, BASE_URL_API } from '<%= sharedLibName %>';
  
 import { CONTENT_TYPE, PlCoreModule, PlCoreUtils, PlHttpRequest, PlHttpService, RESPONSE_TYPE } from 'pl-core-utils-library';
-import { Observable, Subject,   empty  } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
  
 import { toSignal } from '@angular/core/rxjs-interop';
  
@@ -20,9 +20,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * @author l.piciollo
  * injectiontoken per la valorizzazione della baseurl per l'invocazione dei servizi del BE.
  * E.S http://baseurl:8080/api/v1/
+ * Definito nella libreria condivisa (<%= sharedLibName %>): vedi lib/tokens/base-url-api.token.ts
  */
-
-export const BASE_URL_API = new InjectionToken<any>("Puntamento all'indirizzo del BE");
 
 /**
  * @author l.piciollo
@@ -165,7 +164,7 @@ export class   HttpService {
       }, { injector: this.injector });
 
       return new Observable(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.STREAM(plttpRequest, abortController.signal, decodeChunk).subscribe({
             next: (item: T) => observer.next(item),
             error: (err) => observer.error(this.checkError(err)),
@@ -185,7 +184,7 @@ export class   HttpService {
     */
    BASICHTTP(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<any> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.nativeHttp(plttpRequest, responsetype || 'json', PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -212,7 +211,7 @@ export class   HttpService {
     */
    GET<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<T> {
       return new Observable<T>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
 
          this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
@@ -240,7 +239,7 @@ export class   HttpService {
     */
    GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          try {
             let obs = this.plHttpService.GET(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this));
             obs.subscribe(
@@ -279,7 +278,7 @@ export class   HttpService {
     */
    PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -306,7 +305,7 @@ export class   HttpService {
     */
    PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.PATCH(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -333,7 +332,7 @@ export class   HttpService {
     */
    POST<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, interrupt?: Subject<any>): Observable<T> {
       return new Observable<T>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, interrupt || PlCoreModule.Routing().getIinterrupt(), contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res.body as any);
@@ -360,7 +359,7 @@ export class   HttpService {
     */
    POSTBG<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<T>> {
       return new Observable<HttpResponse<T>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.POST(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -387,7 +386,7 @@ export class   HttpService {
     */
    POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.POST(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -414,7 +413,7 @@ export class   HttpService {
     */
    GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.GET(plttpRequest, responseType, null, contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -441,7 +440,7 @@ export class   HttpService {
     */
    PUT<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<T>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.PUT(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -468,7 +467,7 @@ export class   HttpService {
     */
    PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.PUT(plttpRequest, responseType || RESPONSE_TYPE.JSON, null, contentType || null, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);
@@ -495,7 +494,7 @@ export class   HttpService {
     */
    DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
-         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : empty();
+         ['http', 'https'].indexOf(plttpRequest.url) < 0 ? (plttpRequest.url = this.injector.get(BASE_URL_API).concat(plttpRequest.url.replace(/\/\//gi, ''))) : undefined;
          this.plHttpService.DELETE(plttpRequest, responseType, PlCoreModule.Routing().getIinterrupt(), contentType, callBack || this.logTraceHttp.bind(this)).subscribe(
             res => {
                observer.next(res as any);

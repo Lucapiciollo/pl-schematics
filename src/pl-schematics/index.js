@@ -18,15 +18,20 @@ const update_package_json_rule_1 = require("./rules/update-package-json.rule");
 const validate_options_rule_1 = require("./rules/validate-options.rule");
 const update_angular_json_environments_rule_1 = require("./rules/update-angular-json-environments.rule");
 const add_ngrx_module_imports_rule_1 = require("./rules/add-ngrx-module-imports.rule");
+const add_shared_library_rule_1 = require("./rules/add-shared-library.rule");
+const add_ngrx_library_rule_1 = require("./rules/add-ngrx-library.rule");
 function plSchematics(options) {
+    (0, normalize_options_rule_1.normalizeOptionsSync)(options);
     return (0, schematics_1.chain)([
-        (0, normalize_options_rule_1.normalizeOptions)(options),
+        (0, normalize_options_rule_1.normalizeProjectAndPrefix)(options),
         (0, validate_options_rule_1.validateOptions)(options),
         (0, get_prefix_from_angular_json_rule_1.getPrefixFromAngularJson)(options),
         (0, add_ngrx_module_imports_rule_1.addNgrxModuleImports)(options),
         (0, add_package_json_dependencies_rule_1.addPackageJsonDependencies)(options),
         (0, install_package_json_dependencies_rule_1.installPackageJsonDependencies)(),
         (0, log_options_rule_1.logOptions)(options),
+        options.state === 'ngrx' ? (0, add_ngrx_library_rule_1.addNgrxLibrary)(options) : (0, schematics_1.noop)(),
+        (0, add_shared_library_rule_1.addSharedLibrary)(options),
         (0, add_template_files_rule_1.addTemplateFiles)(options),
         (0, update_angular_json_environments_rule_1.updateAngularJsonForEnvironments)(options),
         (0, update_angular_json_material_rule_1.updateAngularJsonForMaterial)(options),

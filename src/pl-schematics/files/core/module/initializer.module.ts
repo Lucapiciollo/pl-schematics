@@ -10,21 +10,29 @@
  * ]
  */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core'; 
+import { APP_INITIALIZER, inject, NgModule, Optional } from '@angular/core'; 
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule, DEFAULT_PATH_MOCK,BROWSER} from 'pl-core-utils-library';
-import { BASE_URL_API } from '../../shared/http/http-interceptor.tokens';
+import { BASE_URL_API, APP_BOOTSTRAP_TASKS } from '<%= sharedLibName %>';
 import { UiLoaderConfig } from '../utils/UiLoaderConfig';
 import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
 import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
 import { environment } from '../../../../environments/environment';
-import { HttpInterceptorService } from '../interceptor/http-interceptor.service';
 import { AuthService } from '../service/auth.service';
+import { GlobalService } from '../service/global.service';
 import AmbientModeProviderFactory from '../initializer/AmbientModeLoader';
 import AutenticationLoader from "../initializer/AutenticationLoader";
-import { HttpInterceptorFakeService } from "../interceptor/http-interceptor-fake.service";
+
+<% if (http !== 'none' && loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
+import { HttpInterceptorFakeService } from '<%= sharedLibName %>';
+<% } %>
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
+  import { Router } from '@angular/router';
+  import { Subject } from 'rxjs';
+  import { filter, takeUntil } from 'rxjs/operators';
+  import { InteractionStatus } from '@azure/msal-browser';
+  import { MsalBroadcastService, MsalInterceptor, MsalModule, MsalService } from '@azure/msal-angular';
   import { MsalAuthModule } from './msal/msal-auth.module';
  /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
@@ -59,32 +67,21 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
      */ 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
      MsalAuthModule.forRoot(),
-,
     <% } %>
   ],
   providers: [  
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
-      /** Configurazione istanza MSAL per autenticazione Azure AD. */
-      {
-         provide: MSAL_INSTANCE,
-         useFactory: MSALInstanceFactory,
-      },
-      /** Configurazione guard MSAL (interaction, scopes, fallback route). */
-      {
-         provide: MSAL_GUARD_CONFIG,
-         useFactory: MSALGuardConfigFactory,
-      },
-      /** Configurazione interceptor MSAL e mappa resource->scopes. */
-      {
-         provide: MSAL_INTERCEPTOR_CONFIG,
-         useFactory: MSALInterceptorConfigFactory,
-      },
-      MsalService,
-      MsalGuard,
-      MsalBroadcastService,
-       HttpInterceptorFakeService,
+      /**
+       * @author l.piciollo
+       * Istanza MSAL, guard config e interceptor config sono gia' fornite da MsalAuthModule.forRoot()
+       * (vedi 'imports' sopra) tramite injection token PL_MSAL_*_FACTORY, sovrascrivibili dall'esterno.
+       * MsalInterceptor va comunque dichiarato qui perche' usato come dipendenza in myServiceFactory.
+       */
+      MsalInterceptor,
+      <% if (http !== 'none') { %>
+      HttpInterceptorFakeService,
+      <% } %>
     <%}%>
-     HttpInterceptorService,
     /**
     * @author l.piciollo
     * inizializzazione della base url per le chiamate al BE, la configurazione prevede che venga valorizzata la chiave di accesso
@@ -102,7 +99,7 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
     { provide: MAX_CACHE_AGE, useValue: 300000 }, // viene impostato il tempo di validità per la cache di rete
     { provide: CACHE_TAG, useValue: '@cachable@' }, //indica come identificare le api che è possibile mettere in cache
  
-    <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
+    <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT" && http !== 'none') {%>
     /**
      * @author l.piciollo
      * intercettore msal per i reperimento del token in base allo scope per invocazione a microsoft graph
@@ -110,17 +107,22 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
      { provide: HTTP_INTERCEPTORS, useFactory: myServiceFactory, multi: true, deps: [ HttpInterceptorFakeService, MsalInterceptor] },
     <%}%>
 
-       /**
+    /**
      * @author l.piciollo
-     * specializzazione di un intercettore di rete, per la gestione di request e response centralizzate.
+     * Nota: la registrazione di HttpInterceptorService come HTTP_INTERCEPTORS avviene
+     * in SharedModule.forRoot() (tramite provideHttpInterceptor), NON qui: registrarla
+     * anche in InitializerModule causerebbe l'esecuzione doppia dell'interceptor (e quindi
+     * doppio retry, doppio refresh-token, doppio timeout) per ogni singola richiesta HTTP.
      */
-        { provide: HTTP_INTERCEPTORS, useClass:  HttpInterceptorService, multi: true },
     /**
      * @author l.piciollo
      * viene iniettato il processo di login..
-     * il servizio deve ritornare un ok che indica l'avvenuta login, altrimenti il portale non si avvia 
+     * il servizio deve ritornare un ok che indica l'avvenuta login, altrimenti il portale non si avvia
+     * Oltre alla login, vengono eseguite anche le eventuali funzioni di bootstrap custom
+     * registrate tramite APP_BOOTSTRAP_TASKS (opzionale: se nessuna e' fornita, il
+     * comportamento e' invariato rispetto alla sola login).
      */
-    { provide: APP_INITIALIZER, useFactory:  AutenticationLoader, deps: [ AuthService ], multi: true },
+    { provide: APP_INITIALIZER, useFactory:  AutenticationLoader, deps: [ AuthService, [new Optional(), APP_BOOTSTRAP_TASKS] ], multi: true },
     /**
     * @author l.piciollo
     * viene intercettata la creazione del portale.. 
@@ -146,7 +148,17 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
   ]
 })
 export class    InitializerModule {
-  
+
+  /**
+   * @author l.piciollo
+   * Forza l'istanziazione eager di GlobalService all'avvio dell'applicazione
+   * (indipendentemente da AZURE-ACTIVE-DIRECT/classic), cosi' che i listener di
+   * eventi core (errori, cache HTTP, redirect, login su 401) vengano registrati
+   * fin da subito, invece di attendere la prima injection "a domanda" da parte
+   * di un componente qualsiasi.
+   */
+  private readonly globalService = inject(GlobalService);
+
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
   private readonly destroying$ = new Subject<void>();
 

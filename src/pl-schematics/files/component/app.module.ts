@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule,ErrorHandler } from '@angular/core';
-import { ErrorService } from './core/service/error.service';
+import { ErrorService } from './<%= namePackage %>/core/service/error.service';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/module/shared.module';
+import { SharedModule } from '<%= sharedLibName %>';
 import { AppRoutingModule } from './app-routing.module';
-import { InitializerModule } from './core/module/initializer.module';
+import { InitializerModule } from './<%= namePackage %>/core/module/initializer.module';
 
  
 

@@ -13,7 +13,7 @@ export function addRootModuleImports(options: PlSchematicsOptions): Rule {
     addModuleToImports(
       options,
       'SharedModule',
-      './' + options.namePackage + '/shared/module/shared.module',
+      options.sharedLibName as string,
     ),
 
     addModuleToImports(

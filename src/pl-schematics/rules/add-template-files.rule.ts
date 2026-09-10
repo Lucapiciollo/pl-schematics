@@ -12,27 +12,18 @@ interface TemplateFolderConfig {
   enabled?: (options: PlSchematicsOptions) => boolean;
 }
 
-function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
-  return options.http === 'interceptor-classic' ||
-    options.http === 'interceptor-functional';
-}
-
-function hasAdvancedLogging(options: PlSchematicsOptions): boolean {
-  return options.logging === 'advanced';
-}
-
-function hasMaterial(options: PlSchematicsOptions): boolean {
-  return options.ui === 'material';
-}
-
-function hasNgrx(options: PlSchematicsOptions): boolean {
-  return options.state === 'ngrx';
-}
-
 function hasMockApi(options: PlSchematicsOptions): boolean {
   return options.mockApi === 'node-express';
 }
 
+/**
+ * @author l.piciollo
+ * NOTA: il contenuto un tempo generato qui come semplice cartella applicativa
+ * (core/bean, core/interceptor, shared/*, advanced-logging, material, ngrx) e'
+ * ora generato come libreria Angular vera e propria da addSharedLibrary()/
+ * addNgrxLibrary() (vedi index.ts), che vengono eseguite PRIMA di questa rule.
+ * Qui restano solo i file destinati al progetto applicativo.
+ */
 const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
     source: './files/core/service',
@@ -43,16 +34,12 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     destination: '<namePackage>/core/initializer/',
   },
   {
-    source: './files/core/bean',
-    destination: '<namePackage>/core/bean/',
-  },
-  {
     source: './files/core/module',
     destination: '<namePackage>/core/module/',
   },
   {
-    source: './files/core/module/msal',
-    destination: '<namePackage>/core/module/',
+    source: './files/core/msal',
+    destination: '<namePackage>/core/module/msal/',
     enabled: hasAzureActiveDirectory,
   },
   {
@@ -62,45 +49,6 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
   {
     source: './files/core/type',
     destination: '<namePackage>/core/type/',
-  },
-
-  /**
-   * Interceptor core solo se scelto da prompt/opzione.
-   */
-  {
-    source: './files/core/interceptor',
-    destination: '<namePackage>/core/interceptor/',
-    enabled: hasHttpInterceptor,
-  },
-
-  {
-    source: './files/shared/module',
-    destination: '<namePackage>/shared/module/',
-  },
-  {
-    source: './files/shared/utils',
-    destination: '<namePackage>/shared/utils/',
-  },
-  {
-    source: './files/shared/service',
-    destination: '<namePackage>/shared/service/',
-  },
-  {
-    source: './files/shared/component',
-    destination: '<namePackage>/shared/component/',
-  },
-  {
-    source: './files/shared/pipe',
-    destination: '<namePackage>/shared/pipe/',
-  },
-
-  /**
-   * Token/provider/adapter HTTP solo se si usa interceptor.
-   */
-  {
-    source: './files/shared/http',
-    destination: '<namePackage>/shared/http/',
-    enabled: hasHttpInterceptor,
   },
 
   {
@@ -141,21 +89,6 @@ const TEMPLATE_FOLDERS: TemplateFolderConfig[] = [
     enabled: function(options: PlSchematicsOptions): boolean {
       return options.includeDocumentation === true;
     },
-  },
-  {
-    source: './files/advanced-logging',
-    destination: '<namePackage>/core/logging/',
-    enabled: hasAdvancedLogging,
-  },
-  {
-    source: './files/material',
-    destination: '<namePackage>/shared/material/',
-    enabled: hasMaterial,
-  },
-  {
-    source: './files/ngrx',
-    destination: '<namePackage>/',
-    enabled: hasNgrx,
   },
   {
     source: './files/mock-api-node',

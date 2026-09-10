@@ -16,13 +16,9 @@ import { inject } from '@angular/core';
 
 import { PlCoreUtils } from 'pl-core-utils-library';
 
-import {  ErrorBean } from '../bean/error-bean';
 import { CORE_TYPE_EVENT } from '../type/type.event';
 
-<% if (logging === "advanced") { %>
-import { LoggerService } from '../logging/logger.service';
-import { LoggerFeature } from '../logging/logger-feature.enum';
-<% } %>
+import { ErrorBean<% if (logging === "advanced") { %>, LoggerService, LoggerFeature<% } %> } from '<%= sharedLibName %>';
 
 @Injectable({
   providedIn: 'root',

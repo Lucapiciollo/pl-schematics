@@ -20,8 +20,7 @@ function check(obj) {
                     }
                 }
                 else {
-                    console.error('error updating ' + key + ' version. aborting');
-                    process.exit(-1);
+                    context.logger.warn(`Impossibile verificare la versione disponibile per '${key}' (npm view ha fallito). Si prosegue senza aggiornare la versione.`);
                 }
             }
         }

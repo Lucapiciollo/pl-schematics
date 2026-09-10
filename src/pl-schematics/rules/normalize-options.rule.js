@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizeOptions = void 0;
+exports.normalizeProjectAndPrefix = exports.normalizeOptionsSync = void 0;
 const json_utils_1 = require("../utils/json.utils");
 function normalizeString(value, defaultValue) {
     if (value === undefined || value === null || value === '') {
@@ -68,75 +68,85 @@ function getProjectPrefix(host, projectName) {
     }
     return workspace.projects[projectName].prefix || 'app';
 }
-function normalizeOptions(options) {
+function normalizeOptionsSync(options) {
+    options.nameCompany = normalizeString(options.nameCompany, 'mycompany');
+    options.ui = normalizeOptionValue(options.ui, 'none', [
+        'none',
+        'material',
+        'bootstrap',
+    ]);
+    options.state = normalizeOptionValue(options.state, 'none', [
+        'none',
+        'ngrx',
+    ]);
+    options.logging = normalizeOptionValue(options.logging, 'console', [
+        'none',
+        'console',
+        'advanced',
+    ]);
+    options.mockApi = normalizeOptionValue(options.mockApi, 'none', [
+        'none',
+        'node-express',
+    ]);
+    options.ci = normalizeOptionValue(options.ci, 'none', [
+        'none',
+        'github-actions',
+        'azure-devops',
+    ]);
+    options.http = normalizeOptionValue(options.http, 'none', [
+        'none',
+        'interceptor-classic',
+        'interceptor-functional',
+    ]);
+    options.architecture = normalizeOptionValue(options.architecture, 'classic', [
+        'classic',
+        'standalone',
+    ]);
+    options.i18n = normalizeOptionValue(options.i18n, 'ngx-translate', [
+        'none',
+        'ngx-translate',
+    ]);
+    options.tests = normalizeOptionValue(options.tests, 'jasmine', [
+        'none',
+        'jasmine',
+        'jest',
+    ]);
+    options.loginSupportConfiguration = normalizeOptionValue(options.loginSupportConfiguration, 'NONE', [
+        'NONE',
+        'AZURE-ACTIVE-DIRECT',
+    ]);
+    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT' &&
+        options.http === 'none') {
+        options.http = 'interceptor-classic';
+    }
+    options.browserSupported = normalizeOptionValue(options.browserSupported, 'BROWSER.ALL', [
+        'BROWSER.ALL',
+        'BROWSER.CHROME',
+        'BROWSER.FIREFOX',
+        'BROWSER.EDGE',
+        'BROWSER.SAFARI',
+    ]);
+    options.includeDocumentation = normalizeBoolean(options.includeDocumentation);
+    options.strict = normalizeBoolean(options.strict);
+    options.enableSonarQube = normalizeYesNo(options.enableSonarQube);
+    if (options.ui === 'bootstrap') {
+        options.addSupportBootstrap = 'Y';
+    }
+    else {
+        options.addSupportBootstrap = 'N';
+    }
+    const dasherizedPackageName = options.namePackage.toLowerCase();
+    options.sharedLibName = dasherizedPackageName + '-shared';
+    options.ngrxLibName = dasherizedPackageName + '-ngrx';
+}
+exports.normalizeOptionsSync = normalizeOptionsSync;
+function normalizeProjectAndPrefix(options) {
     return (host, context) => {
         const resolvedProject = normalizeString(options.project, getDefaultProjectName(host));
         options.project = resolvedProject;
         options.prefix = normalizeString(options.prefix, getProjectPrefix(host, resolvedProject));
-        options.nameCompany = normalizeString(options.nameCompany, 'mycompany');
-        options.ui = normalizeOptionValue(options.ui, 'none', [
-            'none',
-            'material',
-            'bootstrap',
-        ]);
-        options.state = normalizeOptionValue(options.state, 'none', [
-            'none',
-            'ngrx',
-        ]);
-        options.logging = normalizeOptionValue(options.logging, 'console', [
-            'none',
-            'console',
-            'advanced',
-        ]);
-        options.mockApi = normalizeOptionValue(options.mockApi, 'none', [
-            'none',
-            'node-express',
-        ]);
-        options.ci = normalizeOptionValue(options.ci, 'none', [
-            'none',
-            'github-actions',
-            'azure-devops',
-        ]);
-        options.http = normalizeOptionValue(options.http, 'none', [
-            'none',
-            'interceptor-classic',
-            'interceptor-functional',
-        ]);
-        options.architecture = normalizeOptionValue(options.architecture, 'classic', [
-            'classic',
-            'standalone',
-        ]);
-        options.i18n = normalizeOptionValue(options.i18n, 'ngx-translate', [
-            'none',
-            'ngx-translate',
-        ]);
-        options.tests = normalizeOptionValue(options.tests, 'jasmine', [
-            'none',
-            'jasmine',
-            'jest',
-        ]);
-        options.loginSupportConfiguration = normalizeOptionValue(options.loginSupportConfiguration, 'NONE', [
-            'NONE',
-            'AZURE-ACTIVE-DIRECT',
-        ]);
-        options.browserSupported = normalizeOptionValue(options.browserSupported, 'BROWSER.ALL', [
-            'BROWSER.ALL',
-            'BROWSER.CHROME',
-            'BROWSER.FIREFOX',
-            'BROWSER.EDGE',
-            'BROWSER.SAFARI',
-        ]);
-        options.includeDocumentation = normalizeBoolean(options.includeDocumentation);
-        options.strict = normalizeBoolean(options.strict);
-        options.enableSonarQube = normalizeYesNo(options.enableSonarQube);
-        if (options.ui === 'bootstrap') {
-            options.addSupportBootstrap = 'Y';
-        }
-        else {
-            options.addSupportBootstrap = 'N';
-        }
         context.logger.info('Options normalized for project: "' + options.project + '"');
         return host;
     };
 }
-exports.normalizeOptions = normalizeOptions;
+exports.normalizeProjectAndPrefix = normalizeProjectAndPrefix;

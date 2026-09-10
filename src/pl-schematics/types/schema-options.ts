@@ -135,4 +135,17 @@ export interface PlSchematicsOptions {
    * Strict mode.
    */
   strict?: boolean | string;
+
+  /**
+   * Nome del progetto libreria Angular 'shared' (calcolato in normalize-options,
+   * es. 'my-app-template-shared'). Usato sia per generare projects/<sharedLibName>
+   * sia come specifier di import (path mapping in tsconfig.json).
+   */
+  sharedLibName?: string;
+
+  /**
+   * Nome del progetto libreria Angular 'ngrx' (calcolato in normalize-options,
+   * es. 'my-app-template-ngrx'), generato solo quando state === 'ngrx'.
+   */
+  ngrxLibName?: string;
 }

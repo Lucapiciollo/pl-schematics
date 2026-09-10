@@ -6,19 +6,6 @@ function hasAzureActiveDirectory(options) {
 }
 const schematics_1 = require("@angular-devkit/schematics");
 const add_class_rule_1 = require("./add-class.rule");
-function hasHttpInterceptor(options) {
-    return options.http === 'interceptor-classic' ||
-        options.http === 'interceptor-functional';
-}
-function hasAdvancedLogging(options) {
-    return options.logging === 'advanced';
-}
-function hasMaterial(options) {
-    return options.ui === 'material';
-}
-function hasNgrx(options) {
-    return options.state === 'ngrx';
-}
 function hasMockApi(options) {
     return options.mockApi === 'node-express';
 }
@@ -32,16 +19,12 @@ const TEMPLATE_FOLDERS = [
         destination: '<namePackage>/core/initializer/',
     },
     {
-        source: './files/core/bean',
-        destination: '<namePackage>/core/bean/',
-    },
-    {
         source: './files/core/module',
         destination: '<namePackage>/core/module/',
     },
     {
-        source: './files/core/module/msal',
-        destination: '<namePackage>/core/module/',
+        source: './files/core/msal',
+        destination: '<namePackage>/core/module/msal/',
         enabled: hasAzureActiveDirectory,
     },
     {
@@ -51,36 +34,6 @@ const TEMPLATE_FOLDERS = [
     {
         source: './files/core/type',
         destination: '<namePackage>/core/type/',
-    },
-    {
-        source: './files/core/interceptor',
-        destination: '<namePackage>/core/interceptor/',
-        enabled: hasHttpInterceptor,
-    },
-    {
-        source: './files/shared/module',
-        destination: '<namePackage>/shared/module/',
-    },
-    {
-        source: './files/shared/utils',
-        destination: '<namePackage>/shared/utils/',
-    },
-    {
-        source: './files/shared/service',
-        destination: '<namePackage>/shared/service/',
-    },
-    {
-        source: './files/shared/component',
-        destination: '<namePackage>/shared/component/',
-    },
-    {
-        source: './files/shared/pipe',
-        destination: '<namePackage>/shared/pipe/',
-    },
-    {
-        source: './files/shared/http',
-        destination: '<namePackage>/shared/http/',
-        enabled: hasHttpInterceptor,
     },
     {
         source: './files/home',
@@ -119,21 +72,6 @@ const TEMPLATE_FOLDERS = [
         enabled: function (options) {
             return options.includeDocumentation === true;
         },
-    },
-    {
-        source: './files/advanced-logging',
-        destination: '<namePackage>/core/logging/',
-        enabled: hasAdvancedLogging,
-    },
-    {
-        source: './files/material',
-        destination: '<namePackage>/shared/material/',
-        enabled: hasMaterial,
-    },
-    {
-        source: './files/ngrx',
-        destination: '<namePackage>/',
-        enabled: hasNgrx,
     },
     {
         source: './files/mock-api-node',

@@ -1,0 +1,10 @@
+{
+  "name": "<%= ngrxLibName %>",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0",
+    "@ngrx/effects": ">=17.0.0",
+    "@ngrx/store": ">=17.0.0"
+  }
+}

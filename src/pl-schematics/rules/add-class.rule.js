@@ -16,7 +16,7 @@ function addClass(options, urlFile, destPath) {
             (0, schematics_1.move)(defaultPath + '/' + destPath),
         ]);
         context.logger.info('Class created from: "' + urlFile + '"');
-        return (0, schematics_1.mergeWith)(source);
+        return (0, schematics_1.mergeWith)(source, schematics_1.MergeStrategy.Overwrite);
     };
 }
 exports.addClass = addClass;

@@ -2,17 +2,51 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addPackageJsonDependencies = void 0;
 const schematics_utilities_1 = require("schematics-utilities");
+const json_utils_1 = require("../utils/json.utils");
 function hasHttpInterceptor(options) {
     return options.http === 'interceptor-classic' ||
         options.http === 'interceptor-functional';
 }
+function getAngularMajorVersion(host) {
+    const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json');
+    if (!packageJson) {
+        return null;
+    }
+    const raw = (packageJson.dependencies && packageJson.dependencies['@angular/core']) ||
+        (packageJson.devDependencies && packageJson.devDependencies['@angular/core']);
+    if (!raw) {
+        return null;
+    }
+    const match = String(raw).match(/(\d+)/);
+    if (!match) {
+        return null;
+    }
+    const major = parseInt(match[1], 10);
+    return isNaN(major) ? null : major;
+}
+function angularCompatibleRange(angularMajor) {
+    return angularMajor ? '^' + angularMajor + '.0.0' : 'latest';
+}
 function addPackageJsonDependencies(options) {
     return (host, context) => {
+        const angularMajor = getAngularMajorVersion(host);
+        const angularRange = angularCompatibleRange(angularMajor);
+        if (angularMajor) {
+            context.logger.info('Angular v' + angularMajor + ' rilevato: Material/CDK/NgRx/ng-packagr saranno installati con range "' + angularRange + '".');
+        }
+        else {
+            context.logger.warn('Impossibile rilevare la versione di @angular/core dal package.json del progetto target: Material/CDK/NgRx/ng-packagr useranno "latest" (rischio di conflitti di peer-dependency).');
+        }
         const dependencies = [
             {
                 type: schematics_utilities_1.NodeDependencyType.Default,
                 version: 'latest',
                 name: 'pl-core-utils-library',
+            },
+            {
+                type: schematics_utilities_1.NodeDependencyType.Dev,
+                version: angularRange,
+                name: 'ng-packagr',
             },
         ];
         if (options.i18n === 'ngx-translate') {
@@ -29,15 +63,15 @@ function addPackageJsonDependencies(options) {
         if (options.ui === 'material') {
             dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@angular/material',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@angular/cdk',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@angular/animations',
             });
         }
@@ -63,19 +97,19 @@ function addPackageJsonDependencies(options) {
         if (options.state === 'ngrx') {
             dependencies.push({
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@ngrx/store',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@ngrx/effects',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@ngrx/entity',
             }, {
                 type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
+                version: angularRange,
                 name: '@ngrx/store-devtools',
             });
         }

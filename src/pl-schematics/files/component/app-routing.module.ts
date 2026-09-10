@@ -9,7 +9,7 @@
  */
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { RouteFakeGuard } from './core/service/router.fake.guard';
+import { RouteFakeGuard } from './<%= namePackage %>/core/service/router.fake.guard';
 
 /**
  * @author l.piciollo
@@ -17,7 +17,7 @@ import { RouteFakeGuard } from './core/service/router.fake.guard';
  */
 const routes: Routes = [{
   path: "home",
-  loadChildren: () => import('./component/page/home/home.module').then(module => module.HomeModule),
+  loadChildren: () => import('./<%= namePackage %>/component/page/home/home.module').then(module => module.HomeModule),
   canActivate: [ RouteFakeGuard],
 }];
  /**

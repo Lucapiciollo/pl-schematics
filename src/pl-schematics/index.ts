@@ -11,7 +11,7 @@ import { addTemplateFiles } from './rules/add-template-files.rule';
 import { getPrefixFromAngularJson } from './rules/get-prefix-from-angular-json.rule';
 import { installPackageJsonDependencies } from './rules/install-package-json-dependencies.rule';
 import { logOptions } from './rules/log-options.rule';
-import { normalizeOptions } from './rules/normalize-options.rule';
+import { normalizeOptionsSync, normalizeProjectAndPrefix } from './rules/normalize-options.rule';
 import { scaffoldEmptyFolders } from './rules/scaffold-empty-folders.rule';
 import { updateAngularJsonForBootstrap } from './rules/update-angular-json-bootstrap.rule';
 import { updateAngularJsonForMaterial } from './rules/update-angular-json-material.rule';
@@ -24,12 +24,27 @@ import { validateOptions } from './rules/validate-options.rule';
 import { updateAngularJsonForEnvironments } from './rules/update-angular-json-environments.rule';
 import { PlSchematicsOptions } from './types/schema-options';
 import { addNgrxModuleImports } from './rules/add-ngrx-module-imports.rule';
+import { addSharedLibrary } from './rules/add-shared-library.rule';
+import { addNgrxLibrary } from './rules/add-ngrx-library.rule';
 
 export default function plSchematics(options: PlSchematicsOptions): Rule {
+  /**
+   * @author l.piciollo
+   * ATTENZIONE: normalizeOptionsSync() va chiamata qui, in modo sincrono e PRIMA
+   * di costruire l'array passato a chain([...]) qui sotto. Diverse voci della
+   * chain (es. addSharedLibrary/addNgrxLibrary, che leggono subito
+   * options.sharedLibName/options.ngrxLibName; i ternari su
+   * options.addSupportBootstrap/options.enableSonarQube piu' sotto) leggono i
+   * valori normalizzati in modo sincrono, PRIMA che una qualsiasi Rule (lazy per
+   * definizione) abbia la possibilita' di eseguire il proprio corpo. Vedi i
+   * commenti in normalize-options.rule.ts per il dettaglio.
+   */
+  normalizeOptionsSync(options);
+
   return chain([
-    normalizeOptions(options),
+    normalizeProjectAndPrefix(options),
     validateOptions(options),
-    
+
     getPrefixFromAngularJson(options),
     addNgrxModuleImports(options),
     addPackageJsonDependencies(options),
@@ -37,15 +52,23 @@ export default function plSchematics(options: PlSchematicsOptions): Rule {
     logOptions(options),
 
     /**
+     * Librerie Angular vere e proprie (projects/<namePackage>-shared,
+     * projects/<namePackage>-ngrx), generate PRIMA dei template applicativi:
+     * componenti/moduli/pipe/servizi condivisi e, se abilitato, lo store NgRx.
+     * La libreria shared importa StateModule dalla libreria ngrx quando
+     * presente, quindi quest'ultima va registrata per prima.
+     */
+    options.state === 'ngrx' ? addNgrxLibrary(options) : noop(),
+    addSharedLibrary(options),
+
+    /**
      * Copia tutti i template configurati in:
      * src/pl-schematics/config/template-folders.config.ts
      *
      * Qui dentro ora gestiamo anche:
-     * - advanced-logging
      * - mock-api-node
      * - ci-azure-devops
      * - ci-github-actions
-     * - material
      * - documentation opzionale
      */
     addTemplateFiles(options),

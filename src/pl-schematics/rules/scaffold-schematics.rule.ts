@@ -29,3 +29,28 @@ export function scaffoldSchematics(
     return host;
   };
 }
+
+/**
+ * @author l.piciollo
+ * Variante di scaffoldSchematics per creare cartelle vuote DENTRO una libreria
+ * Angular (path assoluto rispetto alla root del workspace), invece che dentro
+ * il progetto applicativo.
+ */
+export function scaffoldLibrarySchematics(
+  libraryAbsoluteDestPath: string,
+): Rule {
+  return (host: Tree, context: SchematicContext) => {
+    const filePath = libraryAbsoluteDestPath + '/.gitkeep';
+
+    if (host.exists(filePath)) {
+      context.logger.info('Empty folder already exists: "' + filePath + '"');
+      return host;
+    }
+
+    host.create(filePath, '');
+
+    context.logger.info('Created empty folder: "' + filePath + '"');
+
+    return host;
+  };
+}

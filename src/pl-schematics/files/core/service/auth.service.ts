@@ -14,21 +14,19 @@ import { Observable, Subject, Subscriber, Subscription } from 'rxjs';
 
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-import { inject, Inject, Optional } from '@angular/core';
-import { MsalBroadcastService, MsalGuard, MsalService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
+import { inject, Inject } from '@angular/core';
+import { filter } from 'rxjs/operators';
+import { MsalBroadcastService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
 import { MsalGuardConfiguration, MsalInterceptorConfiguration } from '@azure/msal-angular';
 import { AccountInfo, AuthenticationResult, InteractionStatus, InteractionType, PublicClientApplication, LogLevel ,PopupRequest} from '@azure/msal-browser';
 import { Client, AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client';
 import { environment } from '../../../../environments/environment';
-import { MSALGuardConfigFactory } from '../module/MSALGuardConfigFactory';
-import { MSALInstanceFactory } from '../module/MSALInstanceFactory';
-import { MSALInterceptorConfigFactory } from '../module/MSALInterceptorConfigFactory';
 <% } %>
 
 
 <% if (logging === "advanced") { %>
-import { LoggerFeature } from '../logging/logger-feature.enum';
-import { LoggerService } from '../logging/logger.service';
+import { LoggerFeature } from '<%= sharedLibName %>';
+import { LoggerService } from '<%= sharedLibName %>';
 <% } %>
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>

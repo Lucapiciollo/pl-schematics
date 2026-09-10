@@ -10,21 +10,94 @@ import {
 } from 'schematics-utilities';
 
 import { PlSchematicsOptions } from '../types/schema-options';
+import { readJsonFile } from '../utils/json.utils';
 
 function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
   return options.http === 'interceptor-classic' ||
     options.http === 'interceptor-functional';
 }
 
+/**
+ * @author l.piciollo
+ * Legge la versione di @angular/core gia' installata nel progetto target per
+ * derivare un range compatibile per i pacchetti che seguono lo stesso
+ * versionamento major di Angular (Material, CDK, Animations, NgRx, ng-packagr).
+ * Usare 'latest' per questi pacchetti e' pericoloso: se il progetto target e'
+ * pinnato su una versione di Angular non piu' recentissima, 'latest' rischia
+ * di risolvere una versione che richiede un @angular/core piu' nuovo di quello
+ * installato, causando un conflitto ERESOLVE al primo 'npm install' (bug
+ * riscontrato durante i test di validazione di questo schematic).
+ */
+function getAngularMajorVersion(host: Tree): number | null {
+  const packageJson = readJsonFile(host, 'package.json');
+
+  if (!packageJson) {
+    return null;
+  }
+
+  const raw =
+    (packageJson.dependencies && packageJson.dependencies['@angular/core']) ||
+    (packageJson.devDependencies && packageJson.devDependencies['@angular/core']);
+
+  if (!raw) {
+    return null;
+  }
+
+  const match = String(raw).match(/(\d+)/);
+
+  if (!match) {
+    return null;
+  }
+
+  const major = parseInt(match[1], 10);
+
+  return isNaN(major) ? null : major;
+}
+
+/**
+ * @author l.piciollo
+ * Ritorna un range npm coerente con la major version di Angular rilevata
+ * (es. '^17.0.0'), oppure 'latest' come fallback quando non e' stato
+ * possibile determinarla (es. angular.json/package.json non standard).
+ */
+function angularCompatibleRange(angularMajor: number | null): string {
+  return angularMajor ? '^' + angularMajor + '.0.0' : 'latest';
+}
+
 export function addPackageJsonDependencies(
   options: PlSchematicsOptions,
 ): Rule {
   return (host: Tree, context: SchematicContext) => {
+    const angularMajor = getAngularMajorVersion(host);
+    const angularRange = angularCompatibleRange(angularMajor);
+
+    if (angularMajor) {
+      context.logger.info(
+        'Angular v' + angularMajor + ' rilevato: Material/CDK/NgRx/ng-packagr saranno installati con range "' + angularRange + '".',
+      );
+    } else {
+      context.logger.warn(
+        'Impossibile rilevare la versione di @angular/core dal package.json del progetto target: Material/CDK/NgRx/ng-packagr useranno "latest" (rischio di conflitti di peer-dependency).',
+      );
+    }
+
     const dependencies: NodeDependency[] = [
       {
         type: NodeDependencyType.Default,
         version: 'latest',
         name: 'pl-core-utils-library',
+      },
+      /**
+       * @author l.piciollo
+       * ng-packagr e' richiesto per compilare le librerie Angular generate
+       * dallo schematic (projects/<namePackage>-shared, projects/<namePackage>-ngrx),
+       * tramite il builder '@angular-devkit/build-angular:ng-packagr'. Segue lo
+       * stesso versionamento major di Angular.
+       */
+      {
+        type: NodeDependencyType.Dev,
+        version: angularRange,
+        name: 'ng-packagr',
       },
     ];
 
@@ -47,17 +120,17 @@ export function addPackageJsonDependencies(
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@angular/material',
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@angular/cdk',
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@angular/animations',
         },
       );
@@ -92,22 +165,22 @@ export function addPackageJsonDependencies(
       dependencies.push(
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@ngrx/store',
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@ngrx/effects',
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@ngrx/entity',
         },
         {
           type: NodeDependencyType.Default,
-          version: 'latest',
+          version: angularRange,
           name: '@ngrx/store-devtools',
         },
       );

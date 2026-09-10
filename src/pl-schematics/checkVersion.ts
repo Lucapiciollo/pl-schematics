@@ -22,8 +22,15 @@ export function check(obj: any): Rule {
                         }
                     }
                 } else {
-                    console.error('error updating ' + key + ' version. aborting');
-                    process.exit(-1);
+                    /**
+                     * @author l.piciollo
+                     * non interrompere il processo host in caso di errore di rete/npm registry non raggiungibile:
+                     * uno schematic non deve mai terminare il processo che lo ospita (process.exit).
+                     * Si logga un warning e si prosegue senza bloccare la generazione del progetto.
+                     */
+                    context.logger.warn(
+                        `Impossibile verificare la versione disponibile per '${key}' (npm view ha fallito). Si prosegue senza aggiornare la versione.`,
+                    );
                 }
             }
         }
