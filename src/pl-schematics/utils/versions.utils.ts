@@ -1,14 +1,28 @@
 // src/pl-schematics/utils/versions.utils.ts
 
+/**
+ * @author l.piciollo
+ * Utility per le versioni delle dipendenze: tabella dei range pinnati per major di
+ * Angular e rilevamento della versione di Angular del progetto target. Non e' una rule
+ * della chain: e' usata da addPackageJsonDependencies() e da normalize-options.rule.ts.
+ */
+
 import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import { readJsonFile } from './json.utils';
 
 /**
+ * @author l.piciollo
  * Major di Angular supportate (e verificate dalla matrice `npm run test:e2e`).
- * Nessuna dipendenza usa 'latest': ogni versione e' un range esplicito.
+ * Ogni dipendenza usa un range esplicito, con l'unica eccezione di pl-core-utils-library,
+ * pl-decorator e pl-loading-trace (librerie interne, sempre 'latest' per scelta esplicita).
  */
 export const SUPPORTED_ANGULAR_MAJORS = [19, 20, 21];
 
+/**
+ * @author l.piciollo
+ * Range di versione (semver) delle dipendenze aggiunte al progetto target, calcolati
+ * per una specifica major/minor di Angular.
+ */
 export interface DependencyVersions {
   /** Pacchetti con versionamento allineato ad Angular (ngrx, ng-packagr): ^<major>.0.0. */
   angularAligned: string;
@@ -19,26 +33,45 @@ export interface DependencyVersions {
    * con peer pinnati su @angular/common).
    */
   angularFramework: string;
+  /** @ngx-translate/core. */
   ngxTranslateCore: string;
+  /** @ngx-translate/http-loader. */
   ngxTranslateHttpLoader: string;
+  /** ngx-ui-loader (non e' piu' montato nella UI, ma e' peer di pl-core-utils-library). */
   ngxUiLoader: string;
+  /** pl-core-utils-library ('latest'). */
   plCoreUtilsLibrary: string;
+  /** pl-decorator ('latest'). */
   plDecorator: string;
+  /** pl-loading-trace, loader grafico (barra di rotta + spinner HTTP) ('latest'). */
+  plLoadingTrace: string;
+  /** bootstrap. */
   bootstrap: string;
+  /** @popperjs/core. */
   popperCore: string;
+  /** @ng-bootstrap/ng-bootstrap (dipende dalla major di Angular). */
   ngBootstrap: string;
+  /** jquery. */
   jquery: string;
+  /** @fortawesome/fontawesome-free. */
   fontawesome: string;
+  /** @azure/msal-angular. */
   msalAngular: string;
+  /** @azure/msal-browser. */
   msalBrowser: string;
+  /** @microsoft/microsoft-graph-client. */
   graphClient: string;
+  /** sonar-scanner. */
   sonarScanner: string;
 }
 
+/********************************************************************************************************************/
+
 /**
  * Tabella delle versioni per major di Angular. I valori coerenti con i peer di
- * pl-core-utils-library 2.1.3 (bootstrap ^5.1.3, pl-decorator ^1.4.x,
- * @compodoc/compodoc ^1.1.19) sono indicati nel README.
+ * pl-core-utils-library (bootstrap ^5.1.3, ngx-ui-loader, @compodoc/compodoc ^1.1.19)
+ * sono indicati nel README. pl-core-utils-library, pl-decorator e pl-loading-trace
+ * sono sempre 'latest' (eccezione esplicita alla regola dei range pinnati).
  */
 /** @ng-bootstrap/ng-bootstrap: 18 -> Angular 19, 19 -> Angular 20, 20 -> Angular 21. */
 const NG_BOOTSTRAP_BY_ANGULAR: Record<number, string> = {
@@ -47,6 +80,15 @@ const NG_BOOTSTRAP_BY_ANGULAR: Record<number, string> = {
   21: '^20.0.0',
 };
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Costruisce l'insieme dei range di versione per la major/minor di Angular indicata.
+ * @param major  :major di Angular del progetto target
+ * @param minor  :minor di Angular, usata per i pacchetti @angular/* con la stessa numerazione di core
+ * @returns i range di versione di tutte le dipendenze
+ */
 function buildVersions(major: number, minor: number): DependencyVersions {
   return {
     angularAligned: '^' + major + '.0.0',
@@ -54,8 +96,9 @@ function buildVersions(major: number, minor: number): DependencyVersions {
     ngxTranslateCore: '^17.0.0',
     ngxTranslateHttpLoader: '^17.0.0',
     ngxUiLoader: '^19.0.0',
-    plCoreUtilsLibrary: '~2.1.3',
-    plDecorator: '^1.4.28',
+    plCoreUtilsLibrary: 'latest',
+    plDecorator: 'latest',
+    plLoadingTrace: 'latest',
     bootstrap: '^5.3.0',
     popperCore: '^2.11.8',
     ngBootstrap: NG_BOOTSTRAP_BY_ANGULAR[major],
@@ -68,6 +111,16 @@ function buildVersions(major: number, minor: number): DependencyVersions {
   };
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Restituisce i range di versione per una major di Angular supportata.
+ * Lancia SchematicsException se la major non e' in SUPPORTED_ANGULAR_MAJORS.
+ * @param major  :major di Angular
+ * @param minor  :minor di Angular (default 0)
+ * @returns i range di versione delle dipendenze
+ */
 export function getVersions(major: number, minor: number = 0): DependencyVersions {
   if (SUPPORTED_ANGULAR_MAJORS.indexOf(major) < 0) {
     throw new SchematicsException(
@@ -79,9 +132,14 @@ export function getVersions(major: number, minor: number = 0): DependencyVersion
   return buildVersions(major, minor);
 }
 
+/********************************************************************************************************************/
+
 /**
+ * @author l.piciollo
  * Legge la major di @angular/core dal package.json del progetto target. Se non
- * e' determinabile o non e' supportata lancia un errore chiaro (mai fallback su 'latest').
+ * e' determinabile o non e' supportata lancia un errore chiaro (nessun fallback implicito).
+ * @param host  :Tree del workspace (si legge package.json)
+ * @returns major e minor di @angular/core (minor 0 se non indicata)
  */
 export function getAngularVersion(host: Tree): { major: number; minor: number } {
   const packageJson = readJsonFile(host, 'package.json');
@@ -109,6 +167,14 @@ export function getAngularVersion(host: Tree): { major: number; minor: number } 
   return { major, minor: match[2] ? parseInt(match[2], 10) : 0 };
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Scorciatoia che restituisce solo la major di Angular del progetto target.
+ * @param host  :Tree del workspace (si legge package.json)
+ * @returns la major di @angular/core
+ */
 export function getAngularMajorVersion(host: Tree): number {
   return getAngularVersion(host).major;
 }

@@ -1,3 +1,10 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo updateAngularJsonForEnvironments e
+ * prima di updateAngularJsonForLocalize. Garantisce che gli asset generati siano
+ * pubblicati dal build dell'app.
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { ensureArray, overwriteJsonFile, readJsonFile } from '../utils/json.utils';
@@ -9,6 +16,8 @@ import { getBuildOptions, getProjectObject } from '../utils/workspace.utils';
  * progetti creati da Angular 18+ servono pero' solo la cartella `public/`.
  * Aggiunge a angular.json la voce asset che pubblica <sourceRoot>/assets su /assets,
  * cosi' l'URL usato a runtime (assets/public/i18n/it.json) esiste davvero.
+ * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
+ * @returns Rule che aggiorna angular.json (se la voce manca) e restituisce il Tree
  */
 export function updateAngularJsonForAssets(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {

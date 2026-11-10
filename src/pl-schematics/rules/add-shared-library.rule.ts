@@ -1,5 +1,13 @@
 // src/pl-schematics/rules/add-shared-library.rule.ts
 
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo addNgrxLibrary (se abilitata) e
+ * prima di addTemplateFiles. Registra e popola la libreria Angular "shared" del
+ * workspace, includendo le parti opzionali (logging, HTTP, Material, i18n) in base
+ * alle opzioni.
+ */
+
 import { chain, noop, Rule } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { addLibraryClass } from './add-library-class.rule';
@@ -10,6 +18,12 @@ import {
   registerLibrary,
 } from '../utils/library.utils';
 
+/**
+ * @author l.piciollo
+ * Indica se e' richiesto un interceptor HTTP (classico o funzionale).
+ * @param options  :opzioni normalizzate (campo http)
+ * @returns true se e' stato scelto un interceptor
+ */
 function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
   return (
     options.http === 'interceptor-classic' ||
@@ -17,13 +31,31 @@ function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
   );
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Indica se e' richiesto Angular Material come UI.
+ * @param options  :opzioni normalizzate (campo ui)
+ * @returns true se ui === 'material'
+ */
 function hasMaterial(options: PlSchematicsOptions): boolean {
   return options.ui === 'material';
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Indica se e' richiesto il logging avanzato.
+ * @param options  :opzioni normalizzate (campo logging)
+ * @returns true se logging === 'advanced'
+ */
 function hasAdvancedLogging(options: PlSchematicsOptions): boolean {
   return options.logging === 'advanced';
 }
+
+/********************************************************************************************************************/
 
 /**
  * @author l.piciollo
@@ -32,6 +64,8 @@ function hasAdvancedLogging(options: PlSchematicsOptions): boolean {
  * qualunque app del workspace. Sostituisce la vecchia cartella
  * src/app/<namePackage>/shared, che non era una libreria ma solo codice
  * sorgente copiato dentro il progetto applicativo.
+ * @param options  :opzioni normalizzate; richiede sharedLibName valorizzato da normalize-options
+ * @returns Rule che registra la libreria nel workspace e copia i template shared-lib*
  */
 export function addSharedLibrary(options: PlSchematicsOptions): Rule {
   const libName = options.sharedLibName as string;

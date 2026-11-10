@@ -7,12 +7,19 @@
 import { Routes } from '@angular/router';
 import { RouteFakeGuard } from './<%= namePackage %>/core/service/router.fake.guard';
 
+/**
+ * @author l.piciollo
+ * Rotte applicative dell'architettura standalone: la rotta 'home' carica in modo lazy HomeComponent
+ * (breadcrumb 'Home') ed e' protetta da RouteFakeGuard. Va passata al router in app.config.ts.
+ */
 export const routes: Routes = [
   {
     path: 'home',
     data: { breadcrumb: 'Home' },
     loadComponent: () =>
       import('./<%= namePackage %>/component/page/home/home.component').then((module) => module.HomeComponent),
+    /** canMatch: valutata prima del caricamento lazy della rotta; canActivate: prima dell'attivazione (di default entrambe true). */
+    canMatch: [RouteFakeGuard],
     canActivate: [RouteFakeGuard],
   },
 ];

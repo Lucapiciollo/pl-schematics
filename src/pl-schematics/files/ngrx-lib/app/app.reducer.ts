@@ -8,8 +8,16 @@ import {
 } from './app.actions';
 import { AppState, initialAppState } from './app.state';
 
+/**
+ * @author l.piciollo
+ * Chiave della feature 'app' nello store: nome dello slice usato in rootReducers e nei selector.
+ */
 export const appFeatureKey = 'app';
 
+/**
+ * @author l.piciollo
+ * Reducer dello slice app: gestisce initialized, loading ed error in risposta alle action di inizializzazione.
+ */
 export const appReducer = createReducer(
   initialAppState,
 

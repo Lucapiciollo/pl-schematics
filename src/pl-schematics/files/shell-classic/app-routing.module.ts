@@ -14,14 +14,19 @@ import { RouteFakeGuard } from './<%= namePackage %>/core/service/router.fake.gu
 /**
  * @author l.piciollo
  * prototipo di rotta con il caricameno lento
+ * Rotta applicativa 'home': carica in modo lazy HomeModule ed e' protetta da RouteFakeGuard.
  */
 const routes: Routes = [{
   path: "home",
   loadChildren: () => import('./<%= namePackage %>/component/page/home/home.module').then(module => module.HomeModule),
+  /** canMatch: valutata prima del caricamento lazy del modulo; canActivate: prima dell'attivazione (di default entrambe true). */
+  canMatch: [ RouteFakeGuard],
   canActivate: [ RouteFakeGuard],
 }];
- /**
+/**
  * @author l.piciollo
+ * NgModule di routing della shell classic: registra le rotte applicative con RouterModule.forRoot
+ * (strategia con hash nell'url) e re-esporta RouterModule.
  */
 @NgModule({
   imports: [RouterModule.forRoot(routes,{ useHash: true }) ],

@@ -40,15 +40,25 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * QUAL'ORA FOSSENECESSARIO AGGIUNGERE ALTRI MEDODI , OCCORRE ESTENDERE LA CLASSE IN UN NUOVO SERVIZIO
  */
 export class   HttpService {
+   /**
+    * @author l.piciollo
+    * Costruttore del servizio: riceve per iniezione le dipendenze usate per delegare le chiamate di rete.
+    * @param http :HttpClient di Angular (le chiamate effettive passano da plHttpService)
+    * @param injector :injector Angular, usato per leggere BASE_URL_API e per creare signal/effect fuori dal contesto di iniezione
+    * @param plHttpService :servizio della libreria pl-core-utils-library che esegue realmente le richieste
+    */
    constructor(
       private http: HttpClient,
       private injector: Injector,
       public plHttpService: PlHttpService,
    ) {}
+
+   /************************************************************************************************************************/
+
    /**
     * @author l.piciollo
     * logtrace per visualizzare di default lo stato di avanzamento delle http
-    * @param IDAjax
+    * @param IDAjax :id della chiamata ajax di cui tracciare l'avanzamento (al momento la traccia e' disattivata: il corpo e' interamente commentato)
     */
    private logTraceHttp(IDAjax: any) {
       // let trace = this.TAILAJXCALL(IDAjax).pipe(takeUntil(PlCoreUtils.progressBars[IDAjax].interrupt)).subscribe(object => {
@@ -64,6 +74,7 @@ export class   HttpService {
     * per il caricamento/scaricamento file. la funzione ritorna un Subject... dove possibile sottoscriversi per icevere i dati
     * in modalità realtime. utile per costruire barre di progressione a runtime.
     * @param IDAjax : id della chiamata ajax precedentemente chiamata, l'id viene restituido dalla callback in ingresso alle chiamate
+    * @returns Subject che emette gli aggiornamenti di avanzamento della chiamata; se l'id non e' valido viene lanciato un ErrorBean
     */
    TAILAJXCALL(IDAjax: string): Subject<any> {
       try {
@@ -95,8 +106,9 @@ export class   HttpService {
     * @author l.piciollo
     * funzione per il download dello straming in formato file
     * @param streamData :buffer di byte
-    * @param headers   : headers  ajax
-    * @param filename : nome file
+    * @param contentType : tipo di contenuto (CONTENT_TYPE o stringa mime) del file da scaricare
+    * @param fileName : nome file (opzionale)
+    * @returns Promise restituita da PlHttpService.DOWNLOAD al termine dell'operazione
     */
    DOWNLOAD(streamData: ArrayBuffer, contentType: CONTENT_TYPE | string, fileName?: string): Promise<any> {
       return this.plHttpService.DOWNLOAD(streamData, contentType, fileName);
@@ -118,12 +130,26 @@ export class   HttpService {
    /********************************************************************************************************************/
 
 
+   /** profondita' corrente di annidamento delle graffe durante il parsing dello stream JSON */
    private level = 0;
+   /** frammento di oggetto JSON non ancora completo, ricevuto a cavallo di due chunk */
    private partialItem = '';
+   /** decoder utilizzato per convertire i byte dello stream in testo */
    private decoder = new TextDecoder();
+   /** carattere che apre un oggetto JSON */
    private JTOKEN_START_OBJECT = '{';
+   /** carattere che chiude un oggetto JSON */
    private JTOKEN_END_OBJECT = '}';
 
+   /************************************************************************************************************************/
+
+   /**
+    * @author l.piciollo
+    * Decodifica un chunk di byte di uno stream di oggetti JSON concatenati: individua gli oggetti completi contando le graffe,
+    * ricompone quelli spezzati tra due chunk (partialItem) e invoca la callback per ciascun oggetto completo.
+    * @param value :chunk di byte ricevuto dallo stream
+    * @param decodedItemCallback :funzione invocata con ogni oggetto JSON completo gia' deserializzato
+    */
    private decodeChunk<T>(value: Uint8Array, decodedItemCallback: (item: T) => void): void {
       const chunk = this.decoder.decode(value);
       let itemStart = 0;
@@ -151,7 +177,19 @@ export class   HttpService {
       }
    }
 
+   /************************************************************************************************************************/
 
+   /**
+    * @author l.piciollo
+    * Apre una chiamata in streaming verso il BE e restituisce un Observable che emette ogni elemento decodificato dallo stream.
+    * L'url viene completato con la BASE_URL_API e la richiesta viene abortita quando il routing segnala l'interruzione (cambio di rotta).
+    * @param plttpRequest :richiesta http (url, query params, body, headers)
+    * @param responsetype :tipo di risposta (non utilizzato nell'implementazione attuale)
+    * @param callBack     :funzione di avvio richiesta (non utilizzata nell'implementazione attuale)
+    * @param contentType  :tipo di contenuto (non utilizzato nell'implementazione attuale)
+    * @param decodeChunk  :decoder custom opzionale dei chunk, inoltrato a PlHttpService.STREAM
+    * @returns Observable che emette ogni elemento T decodificato; in caso di errore emette un ErrorBean
+    */
    STREAM<T>(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, decodeChunk?: (value: Uint8Array, decodedItemCallback: (item: T) => void) => void): Observable<T> {
       const abortController = new AbortController();
       const abortSignal = abortController.signal;
@@ -173,14 +211,16 @@ export class   HttpService {
       });
    }
 
+   /************************************************************************************************************************/
+
    /**
     * @author l.piciollo
     * Servizio BASICHTTP, richiama funzionalità di rete in modo generico, utilile per problemi di CORS.
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la risposta ottenuta (secondo responsetype) e poi completa; in caso di errore emette un ErrorBean
     */
    BASICHTTP(plttpRequest: PlHttpRequest, responsetype?: XMLHttpRequestResponseType, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<any> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -203,11 +243,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio GET
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette il body della risposta e poi completa; in caso di errore emette un ErrorBean
     */
    GET<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<T> {
       return new Observable<T>(observer => {
@@ -231,11 +271,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    GETBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -270,11 +310,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio PATCH
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    PATCH(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -297,11 +337,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio PATCHBG REST non influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    PATCHBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -324,11 +364,12 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio POST
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @param interrupt    :Subject opzionale che interrompe la chiamata; se assente viene usato l'interrupt del routing (cambio di rotta)
+    * @returns Observable che emette il body della risposta e poi completa; in caso di errore emette un ErrorBean
     */
    POST<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, interrupt?: Subject<any>): Observable<T> {
       return new Observable<T>(observer => {
@@ -350,12 +391,12 @@ export class   HttpService {
 
    /**
     * @author l.piciollo
-    * Servizio POSTBG REST  influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
+    * Servizio POSTBG REST NON influente al cambio di rotta.. il servizio gira in background
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    POSTBG<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<T>> {
       return new Observable<HttpResponse<T>>(observer => {
@@ -378,11 +419,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio POST REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    POSTFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -405,11 +446,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio GET REST non influente al cambio di rotta.. il servizio gira in background utile per la gestione dei file
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    GETFILE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -432,11 +473,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio PUT REST
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    PUT<T>(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<T>>(observer => {
@@ -458,12 +499,12 @@ export class   HttpService {
 
    /**
     * @author l.piciollo
-    * Servizio PUTBG REST  influente al cambio di rotta.. il servizio gira in background
-    * @param url          :Url BE
-    * @param params       :params
+    * Servizio PUTBG REST NON influente al cambio di rotta.. il servizio gira in background
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    PUTBG(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -486,11 +527,11 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio DELETE REST
-    * @param url          :Url BE
-    * @param params       :params
+    * @param plttpRequest :richiesta http (url relativo alla BASE_URL_API, query params, body, headers)
     * @param responseType :tipo di risposta RESPONSE_TYPE
     * @param callBack     :funzione da lanciare al momento dell'avvio della richiesta, riceve l'id ajax per la progressbar
     * @param contentType  :tipo di contenuto ricevuto
+    * @returns Observable che emette la HttpResponse completa e poi completa; in caso di errore emette un ErrorBean
     */
    DELETE(plttpRequest: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<HttpResponse<any>> {
       return new Observable<HttpResponse<any>>(observer => {
@@ -513,8 +554,9 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * Servizio FORKJOIN REST
-    * @param serviceUrls  :lista di url da richiamare in parallelo
-    * @param params       :params
+    * @param plttpRequest :lista di richieste da eseguire in parallelo (l'url di ciascuna viene completato con la BASE_URL_API)
+    * @param interrupt    :Subject opzionale che, se emette, interrompe le chiamate
+    * @returns Observable che emette l'array delle risposte e poi completa
     */
    FORKJOIN(plttpRequest: Array<PlHttpRequest>, interrupt?: Subject<boolean>): Observable<Array<HttpResponse<any>>> {
       plttpRequest = plttpRequest.map(request => {
@@ -542,7 +584,8 @@ export class   HttpService {
    /**
     * @author l.piciollo
     * funzione di utilita per la cattura delle eccezioni o errori riscontrati durante le chiamte al BE
-    * @param error
+    * @param error :errore ricevuto dalla chiamata (ErrorBean, Error, stringa o altro)
+    * @returns ErrorBean: l'errore stesso se gia' ErrorBean, altrimenti un nuovo ErrorBean di sistema con il messaggio estratto
     */
    private checkError(error: any): ErrorBean {
       if (error instanceof ErrorBean) {

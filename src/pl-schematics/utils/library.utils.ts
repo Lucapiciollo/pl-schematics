@@ -1,12 +1,23 @@
 // src/pl-schematics/utils/library.utils.ts
 
+/**
+ * @author l.piciollo
+ * Utility per le librerie Angular generate dallo schematic (shared e ngrx): calcolo dei
+ * percorsi sotto projects/<libName>, registrazione in angular.json e path mapping in
+ * tsconfig.json. Non e' una rule della chain: e' usata da addSharedLibrary() e
+ * addNgrxLibrary() (tramite registerLibrary) e da scaffoldEmptyFolders().
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { overwriteJsonFile, readJsonFile } from './json.utils';
 
 /**
+ * @author l.piciollo
  * Builder ng-packagr: i progetti creati con Angular 19 usano ancora
  * @angular-devkit/build-angular, da Angular 20 il builder e' @angular/build.
+ * @param host  :Tree del workspace (si legge package.json)
+ * @returns il nome del builder ng-packagr adatto al workspace
  */
 export function getNgPackagrBuilder(host: Tree): string {
   const packageJson = readJsonFile(host, 'package.json') || {};
@@ -19,39 +30,57 @@ export function getNgPackagrBuilder(host: Tree): string {
     : '@angular/build:ng-packagr';
 }
 
+/********************************************************************************************************************/
+
 /**
  * @author l.piciollo
  * Percorso radice (root) di un progetto libreria generato dallo schematic,
  * relativo alla radice del workspace Angular. Segue la convenzione standard
  * di Angular CLI: projects/<libName>.
+ * @param libName  :nome del progetto libreria
+ * @returns il percorso 'projects/<libName>'
  */
 export function getLibraryRoot(libName: string): string {
   return 'projects/' + libName;
 }
 
+/********************************************************************************************************************/
+
 /**
  * @author l.piciollo
  * Percorso della cartella sorgente (src/lib) di una libreria, dove viene
  * copiato tutto il contenuto condiviso (moduli, pipe, servizi, ecc.).
+ * @param libName  :nome del progetto libreria
+ * @returns il percorso 'projects/<libName>/src/lib'
  */
 export function getLibrarySourceRoot(libName: string): string {
   return getLibraryRoot(libName) + '/src/lib';
 }
 
+/********************************************************************************************************************/
+
 /**
  * @author l.piciollo
  * Percorso della cartella 'src' di una libreria (un livello sopra 'src/lib'),
  * dove risiede il file di entry point pubblico (public-api.ts).
+ * @param libName  :nome del progetto libreria
+ * @returns il percorso 'projects/<libName>/src'
  */
 export function getLibrarySourceDir(libName: string): string {
   return getLibraryRoot(libName) + '/src';
 }
+
+/********************************************************************************************************************/
 
 /**
  * @author l.piciollo
  * Registra un nuovo progetto di tipo 'library' in angular.json, con builder
  * ng-packagr. Non sovrascrive un progetto gia' presente con lo stesso nome
  * (idempotente, utile se lo schematic viene rieseguito).
+ * @param host     :Tree del workspace
+ * @param context  :contesto dello schematic, usato per il log
+ * @param libName  :nome del progetto libreria da registrare
+ * @param prefix   :prefix dei selettori della libreria (se vuoto si usa 'lib')
  */
 export function addLibraryProjectToWorkspace(
   host: Tree,
@@ -115,6 +144,8 @@ export function addLibraryProjectToWorkspace(
   );
 }
 
+/********************************************************************************************************************/
+
 /**
  * @author l.piciollo
  * Aggiunge il path mapping in tsconfig.json (root del workspace) in modo che
@@ -122,6 +153,9 @@ export function addLibraryProjectToWorkspace(
  * invece di un percorso relativo. Punta direttamente al sorgente (public-api.ts)
  * e non a dist/, cosi' non e' necessario compilare la libreria separatamente
  * prima di poter avviare 'ng serve' in sviluppo.
+ * @param host     :Tree del workspace
+ * @param context  :contesto dello schematic, usato per il log
+ * @param libName  :nome del progetto libreria (usato anche come specifier di import)
  */
 export function addLibraryTsConfigPath(
   host: Tree,
@@ -159,12 +193,17 @@ export function addLibraryTsConfigPath(
   );
 }
 
+/********************************************************************************************************************/
+
 /**
  * @author l.piciollo
  * Rule di comodo che combina registrazione angular.json + path mapping tsconfig
  * per una libreria. Va richiamata PRIMA di copiare i file sorgente della libreria,
  * cosi' che le rule successive (build package.json, ecc.) trovino il progetto gia'
  * presente.
+ * @param options  :opzioni normalizzate (si usa il prefix del progetto)
+ * @param libName  :nome del progetto libreria da registrare
+ * @returns Rule che registra la libreria e restituisce il Tree
  */
 export function registerLibrary(
   options: PlSchematicsOptions,

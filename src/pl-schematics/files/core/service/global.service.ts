@@ -41,31 +41,54 @@ import {  AuthService } from './auth.service';
 
 import { ErrorBean, ErrorCode<% if (logging === "advanced") { %>, LoggerFeature, LoggerService<% } %> } from '<%= sharedLibName %>';
 
+/**
+ * @author l.piciollo
+ * Servizio globale dell'applicazione: punto centrale di smistamento delle chiamate al BE (wrapper di HttpService) e dei
+ * listener degli eventi broadcast core (errori, cache HTTP, re-login su 401, eventi Azure quando abilitati).
+ * Viene istanziato alla prima iniezione e registra subito i listener degli eventi core.
+ */
 @Injectable({
   providedIn: 'root',
 })
 @Unsubscribe()
 export class  GlobalService implements OnDestroy {
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+  /** client Microsoft Graph, creato al primo utilizzo in getUserName */
   private graphClient: Client | null = null;
+  /** servizio di autenticazione, usato per Graph e per il re-login su 401 */
   private readonly authService = inject( AuthService);
   <% } %>
 
+  /** servizio http di base verso cui vengono inoltrate tutte le chiamate */
   private readonly httpService = inject( HttpService);
+  /** injector Angular, usato per recuperare servizi in modo lazy (es. AuthService) */
   private readonly injector = inject(Injector);
   <% if (logging === "advanced") { %>
+  /** logger applicativo avanzato */
   private readonly logger = inject( LoggerService);
   <% } %>
 
+  /**
+   * @author l.piciollo
+   * Costruttore: registra i listener degli eventi broadcast core (vedi registerCoreEvents).
+   */
   constructor(
      
   ) {
     this.registerCoreEvents();
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Hook di distruzione del servizio: registra solo un log di debug.
+   */
   ngOnDestroy(): void {
     this.logDebug('GlobalService destroyed');
   }
+
+  /************************************************************************************************************************/
 
   /*****************************************************************************************
    * @author l.piciollo
@@ -78,55 +101,147 @@ export class  GlobalService implements OnDestroy {
    * BASICHTTP) e' comunque possibile iniettare HttpService direttamente.
    *****************************************************************************************/
 
-  /** Chiamata GET, interrotta automaticamente al cambio di rotta. */
+  /**
+   * @author l.piciollo
+   * Chiamata GET, interrotta automaticamente al cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette il body della risposta e poi completa
+   */
   get<T>(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string): Observable<T> {
     return this.httpService.GET<T>(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata GET in background, NON interrotta dal cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata GET in background, NON interrotta dal cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   getBg(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.GETBG(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata POST, interrotta automaticamente al cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata POST, interrotta automaticamente al cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @param interrupt    :Subject opzionale che interrompe la chiamata; se assente viene usato l'interrupt del routing
+   * @returns Observable che emette il body della risposta e poi completa
+   */
   post<T>(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string, interrupt?: Subject<any>): Observable<T> {
     return this.httpService.POST<T>(request, responseType, callBack, contentType, interrupt);
   }
 
-  /** Chiamata POST in background, NON interrotta dal cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata POST in background, NON interrotta dal cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   postBg<T>(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.POSTBG<T>(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata PUT, interrotta automaticamente al cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata PUT, interrotta automaticamente al cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   put<T>(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.PUT<T>(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata PUT in background, NON interrotta dal cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata PUT in background, NON interrotta dal cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   putBg(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.PUTBG(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata PATCH, interrotta automaticamente al cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata PATCH, interrotta automaticamente al cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   patch(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.PATCH(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata PATCH in background, NON interrotta dal cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata PATCH in background, NON interrotta dal cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   patchBg(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.PATCHBG(request, responseType, callBack, contentType);
   }
 
-  /** Chiamata DELETE, interrotta automaticamente al cambio di rotta. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamata DELETE, interrotta automaticamente al cambio di rotta.
+   * @param request      :richiesta http (url, query params, body, headers)
+   * @param responseType :tipo di risposta RESPONSE_TYPE
+   * @param callBack     :funzione invocata all'avvio della richiesta, riceve l'id ajax per la progressbar
+   * @param contentType  :tipo di contenuto ricevuto
+   * @returns Observable che emette la HttpResponse completa
+   */
   delete(request: PlHttpRequest, responseType?: RESPONSE_TYPE, callBack?: (id: any) => void, contentType?: CONTENT_TYPE | string) {
     return this.httpService.DELETE(request, responseType, callBack, contentType);
   }
 
-  /*****************************************************************************************/
+  /************************************************************************************************************************/
 
   /**
-   * Ritorna il Subject legato alla progressione di una chiamata HTTP.
+   * @author l.piciollo
+   * Ritorna il Subject legato alla progressione di una chiamata HTTP (utile per barre di avanzamento di upload/download).
+   * @param idAjax :id della chiamata ajax, restituito dalla callBack delle chiamate
+   * @returns Subject che emette gli aggiornamenti di avanzamento; in caso di errore lancia un ErrorBean
    */
   getProgression(idAjax: string): Subject<any> {
     try {
@@ -136,8 +251,14 @@ export class  GlobalService implements OnDestroy {
     }
   }
 
+  /************************************************************************************************************************/
+
   /**
+   * @author l.piciollo
    * Esempio di chiamata HTTP verso file mock.
+   * @param p1 :valore del parametro 'api' dell'url mock
+   * @param p2 :valore del parametro 'files' dell'url mock
+   * @returns Observable che emette il contenuto del file mock (ArrayBuffer) e poi completa
    */
   callMock(p1: string, p2: string): Observable<ArrayBuffer> {
     return new Observable<ArrayBuffer>((observer) => {
@@ -164,8 +285,12 @@ export class  GlobalService implements OnDestroy {
 
 
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
+  /************************************************************************************************************************/
+
   /**
-   * Esempio di chiamata Microsoft Graph.
+   * @author l.piciollo
+   * Esempio di chiamata Microsoft Graph: legge il profilo (/me) dell'utente autenticato.
+   * @returns Promise con il displayName dell'utente, stringa vuota se assente; in caso di errore lancia un ErrorBean
    */
   async getUserName(): Promise<string> {
     try {
@@ -184,6 +309,13 @@ export class  GlobalService implements OnDestroy {
   }
   <% } %>
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Registra i listener degli eventi broadcast core (rete, errori, cache HTTP, eventi Azure se abilitati, errori ajax).
+   * Viene invocato una sola volta dal costruttore.
+   */
   private registerCoreEvents(): void {
     PlCoreUtils.Broadcast().listenEvent(
       TYPE_EVENT_NETWORK.PL_BREACK_NET,
@@ -244,6 +376,13 @@ export class  GlobalService implements OnDestroy {
     );
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Gestisce gli errori ajax notificati via broadcast: con login Azure e stato 401 avvia di nuovo la login, altrimenti li registra nel log.
+   * @param error :dettaglio dell'evento di errore ajax (contiene ad esempio lo status http)
+   */
   private handleHttpAjaxError(error: any): void {
     <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
     if (error && error.status === 401) {
@@ -259,6 +398,14 @@ export class  GlobalService implements OnDestroy {
     this.logError('HTTP ajax error', error);
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Converte un errore generico in un ErrorBean di sistema.
+   * @param error :errore originale (Error, stringa o oggetto con message)
+   * @returns ErrorBean con il messaggio estratto dall'errore
+   */
   private toErrorBean(error: unknown):  ErrorBean {
     const message = this.getErrorMessage(error);
 
@@ -270,6 +417,14 @@ export class  GlobalService implements OnDestroy {
     );
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Estrae un messaggio testuale da un errore di tipo qualsiasi.
+   * @param error :errore originale (Error, stringa o oggetto con message)
+   * @returns messaggio dell'errore, oppure un messaggio generico se non ricavabile
+   */
   private getErrorMessage(error: unknown): string {
     if (error instanceof Error) {
       return error.message;
@@ -286,6 +441,14 @@ export class  GlobalService implements OnDestroy {
     return 'Unexpected global service error';
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Registra un messaggio di debug (logger advanced oppure console.debug).
+   * @param message :messaggio descrittivo
+   * @param payload :dati da allegare (opzionale)
+   */
   private logDebug(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.debug(
@@ -298,6 +461,14 @@ export class  GlobalService implements OnDestroy {
     <% } %>
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Registra un avviso (logger advanced oppure console.warn).
+   * @param message :messaggio descrittivo
+   * @param payload :dati da allegare (opzionale)
+   */
   private logWarn(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.warn(
@@ -310,6 +481,14 @@ export class  GlobalService implements OnDestroy {
     <% } %>
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Registra un errore (logger advanced oppure console.error).
+   * @param message :messaggio descrittivo
+   * @param payload :dati o errore originale da allegare (opzionale)
+   */
   private logError(message: string, payload?: unknown): void {
     <% if (logging === "advanced") { %>
     this.logger.error(

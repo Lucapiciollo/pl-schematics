@@ -131,9 +131,17 @@ describe('versions', () => {
     expect(() => getAngularMajorVersion(latest)).toThrowError(/Cannot determine the Angular version/);
   });
 
-  it('never returns "latest"', () => {
+  it('returns "latest" only for the internal libraries (pl-core-utils-library, pl-decorator, pl-loading-trace)', () => {
+    const internal = ['plCoreUtilsLibrary', 'plDecorator', 'plLoadingTrace'];
     [19, 20, 21].forEach((major) => {
-      Object.values(getVersions(major)).forEach((value) => expect(String(value)).not.toMatch(/latest/));
+      const versions = getVersions(major);
+      Object.keys(versions).forEach((key) => {
+        if (internal.indexOf(key) >= 0) {
+          expect(versions[key]).toBe('latest');
+        } else {
+          expect(String(versions[key])).not.toMatch(/latest/);
+        }
+      });
     });
   });
 });

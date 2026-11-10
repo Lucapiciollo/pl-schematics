@@ -23,31 +23,45 @@ import { provideHttpInterceptor } from '../http/http-interceptor.provider';
  * SHARED_LIB_CONFIG.
  */
 export interface SharedLibConfig {
+  /** impostazioni di internazionalizzazione (usate solo con ngx-translate) */
   i18n?: {
     /** Lingua di default e di fallback (es. 'it'). */
     defaultLanguage: string;
     /** Cartella dei file di traduzione servita dall'app (es. 'assets/public/i18n/'). */
     assetsPath: string;
   };
+  /** impostazioni dell'intercettore HTTP (usate solo se l'intercettore e' abilitato) */
   http?: {
     /** Timeout di default in ms delle chiamate HTTP. */
     timeout: number;
     /** Frammento di URL che identifica la chiamata di refresh-token. */
     refreshToken: string;
+    /** abilita il log del tempo di esecuzione delle chiamate */
     enableExecutionTimeLog: boolean;
   };
+  /** impostazioni del logger applicativo (usate solo con logging avanzato) */
   logging?: {
+    /** interruttore generale del logging */
     enabled: boolean;
     /** 'TRACE' | 'DEBUG' | 'INFO' | 'WARN' | 'ERROR' | 'OFF' */
     level: string;
   };
 }
 
+/**
+ * @author l.piciollo
+ * InjectionToken con cui l'app puo' fornire la configurazione della libreria condivisa (SharedLibConfig).
+ * Viene valorizzato da providePlShared (e quindi anche da SharedModule.forRoot).
+ */
 export const SHARED_LIB_CONFIG = new InjectionToken<SharedLibConfig>('SHARED_LIB_CONFIG');
 
 /**
+ * @author l.piciollo
  * Provider della libreria condivisa: HttpClient (con gli interceptor registrati
  * nel DI<% if (http === "interceptor-functional" && standalone) { %> e quello funzionale<% } %>)<% if (i18n === "ngx-translate") { %>, ngx-translate<% } %>.
+ * Da usare nei providers dell'applicazione standalone (nelle app classic si usa SharedModule.forRoot).
+ * @param config   :configurazione della libreria condivisa (lingua, timeout HTTP, logging)
+ * @returns provider di ambiente Angular da registrare nel bootstrap
  */
 export function providePlShared(config: SharedLibConfig): EnvironmentProviders {
   const providers: (Provider | EnvironmentProviders)[] = [
@@ -76,9 +90,16 @@ export function providePlShared(config: SharedLibConfig): EnvironmentProviders {
       }
     : { reloadOnRefreshFailure: true };
   <% if (http === "interceptor-functional" && standalone) { %>
+  /**
+   * withInterceptorsFromDi() PRIMA di withInterceptors(): gli interceptor registrati nel DI (in particolare quello del
+   * loader pl-loading-trace) avvolgono httpInterceptorFn (retry/refresh-token) e contano una sola richiesta.
+   * Con l'ordine inverso il loader sarebbe interno ai retry e rilascerebbe il contatore a ogni tentativo fallito.
+   * Gli interceptor DI comprendono anche quello MSAL (se il login Azure e' attivo, vedi provide-core.ts): la sua
+   * registrazione resta unica e withInterceptorsFromDi() e' sempre presente, quindi viene comunque applicato.
+   */
   providers.push(
     provideHttpInterceptorConfig(httpConfig),
-    provideHttpClient(withInterceptors([httpInterceptorFn]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withInterceptors([httpInterceptorFn])),
   );
   <% } else { %>
   providers.push(

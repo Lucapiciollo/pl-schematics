@@ -4,15 +4,29 @@
 // (app.module.ts, app.config.ts, componente root). Non sono un parser TS
 // completo: operano su pattern semplici e stabili (import nominali, array di
 // proprieta' di @NgModule/@Component/ApplicationConfig) e sono idempotenti.
+//
+// Usate da update-app-shell.rule.ts, l'ultima rule della chain di index.ts.
 
+/**
+ * @author l.piciollo
+ * Richiesta di import nominale: simboli da importare e modulo di provenienza.
+ */
 export interface ImportRequest {
+  /** Nomi dei simboli da importare. */
   symbols: string[];
+  /** Specifier del modulo da cui importare (pacchetto o percorso relativo). */
   from: string;
 }
 
+/********************************************************************************************************************/
+
 /**
+ * @author l.piciollo
  * Aggiunge (o completa) un import nominale. Se esiste gia' un import dallo
  * stesso specifier, i simboli mancanti vengono aggiunti a quello esistente.
+ * @param content  :contenuto del file TypeScript
+ * @param request  :simboli e modulo da importare
+ * @returns il contenuto con l'import aggiunto/completato (invariato se gia' presente)
  */
 export function addImports(content: string, request: ImportRequest): string {
   const escaped = request.from.replace(/[.*+?^${}()|[\]\\\/]/g, '\\$&');
@@ -56,9 +70,15 @@ export function addImports(content: string, request: ImportRequest): string {
   return content.slice(0, lastEnd) + statement + content.slice(lastEnd);
 }
 
+/********************************************************************************************************************/
+
 /**
+ * @author l.piciollo
  * Indice della parentesi di chiusura che bilancia quella aperta in `openIndex`
  * (gestisce annidamenti e stringhe).
+ * @param content    :testo in cui cercare
+ * @param openIndex  :indice del carattere di apertura ('[', '(' oppure '{')
+ * @returns indice della parentesi di chiusura corrispondente, oppure -1 se non trovata
  */
 export function findClosing(content: string, openIndex: number): number {
   const open = content.charAt(openIndex);
@@ -94,6 +114,12 @@ export function findClosing(content: string, openIndex: number): number {
   return -1;
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Descrive l'aggiunta di elementi a una proprieta' di tipo array (es. imports, providers).
+ */
 export interface ArrayEdit {
   /** Nome della proprieta' (imports, providers, ...). */
   property: string;
@@ -106,6 +132,17 @@ export interface ArrayEdit {
   anchor: RegExp;
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Aggiunge elementi a una proprieta' array (es. imports di @NgModule, providers di
+ * ApplicationConfig). Salta gli elementi la cui chiave e' gia' presente; se la proprieta'
+ * non esiste la crea subito dopo il match di `anchor`. Lancia un errore se l'anchor non e' trovato.
+ * @param content  :contenuto del file TypeScript
+ * @param edit     :proprieta', elementi da aggiungere e ancora di inserimento
+ * @returns il contenuto aggiornato (invariato se non c'e' nulla da aggiungere)
+ */
 export function addToArrayProperty(content: string, edit: ArrayEdit): string {
   const propRegex = new RegExp('(^|[\\s{,])' + edit.property + '\\s*:\\s*\\[');
   const propMatch = propRegex.exec(content);

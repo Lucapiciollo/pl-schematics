@@ -35,13 +35,28 @@ import { MSALGuardConfigFactory } from './MSALGuardConfigFactory';
 import { MSALInstanceFactory } from './MSALInstanceFactory';
 import { MSALInterceptorConfigFactory } from './MSALInterceptorConfigFactory';
 
-/** Configurazione opzionale per sovrascrivere le factory di default. */
+/**
+ * @author l.piciollo
+ * Configurazione opzionale per sovrascrivere le factory MSAL di default.
+ * Viene passata a providePlMsal (standalone) o a MsalAuthModule.forRoot (classic).
+ */
 export interface MsalAuthConfig {
+  /** Factory alternativa che restituisce l'istanza MSAL (default: MSALInstanceFactory). */
   instanceFactory?: () => IPublicClientApplication;
+  /** Factory alternativa per la configurazione di MsalGuard (default: MSALGuardConfigFactory). */
   guardConfigFactory?: () => MsalGuardConfiguration;
+  /** Factory alternativa per la configurazione di MsalInterceptor (default: MSALInterceptorConfigFactory). */
   interceptorConfigFactory?: () => MsalInterceptorConfiguration;
 }
 
+/**
+ * @author l.piciollo
+ * Costruisce l'elenco dei provider MSAL (istanza, guard config, interceptor config e servizi MSAL)
+ * leggendo le factory dagli InjectionToken PL_MSAL_*_FACTORY, valorizzati con quelle passate in config
+ * oppure con i default del core. Usata sia da MsalAuthModule.forRoot (classic) sia da provideCore (standalone).
+ * @param config :factory opzionali per sovrascrivere i default (se omesso si usano le factory di default)
+ * @returns array di Provider da registrare nell'injector applicativo
+ */
 export function providePlMsal(config: MsalAuthConfig = {}): Provider[] {
   return [
     {

@@ -15,18 +15,24 @@
   * è possibile inserire qui altri tipi custom
   */
 export enum  ErrorCode {
+      /** errore generico di sistema (valore di default del bean ErrorBean) */
       SYSTEMERRORCODE = "SYSTEMERROR",
+      /** errore di rete / comunicazione con il backend */
       NETWORKERROR = "NETWORKERROR"
 }
 
 /**
  * @author l.piciollo
  * bean di trasporto per l'errore.
+ * Estende Error e aggiunge il codice di errore (ErrorCode) e due flag che indicano se l'applicazione deve
+ * reindirizzare alla pagina di errore e/o mostrare una modale. Viene lanciato nei blocchi try/catch dei servizi
+ * e delle utility e gestito in modo centralizzato (es. error.service).
  */
 export class  ErrorBean extends Error {
 
       /**
        * @author l.piciollo
+       * Costruttore: crea l'errore valorizzando messaggio, codice e flag di gestione (redirect e dialog).
        * @param message  :messaggio di errore 
        * @param eCode    :codice di errore
        * @param redirect :valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)

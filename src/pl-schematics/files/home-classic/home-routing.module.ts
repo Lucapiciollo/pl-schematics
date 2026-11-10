@@ -11,10 +11,16 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 
+/**
+ * @author l.piciollo
+ * Rotte del modulo home: la rotta vuota carica HomeComponent (breadcrumb 'Home'), senza guard aggiuntivi.
+ */
 const routes: Routes = [{
   path: "",
   data: { breadcrumb: 'Home'},
   component: HomeComponent,
+  /** guard di abbinamento e di attivazione della rotta: vuoti, la protezione e' gia' applicata dalla rotta padre 'home' */
+  canMatch: [],
   canActivate: []
 }];
 

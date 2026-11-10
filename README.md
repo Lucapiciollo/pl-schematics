@@ -9,15 +9,15 @@
 | **4.0.x** | **19, 20, 21** | ^20.19 / ^22.12 / >=24 | classic + standalone (rilevamento automatico) | verificato con `npm run test:e2e` (vedi sotto) |
 | 3.x e precedenti | non supportato | - | - | generavano progetti non compilabili su Angular 19+ |
 
-Versioni delle dipendenze aggiunte al progetto (tabella in `src/pl-schematics/utils/versions.utils.ts`, nessun `latest`):
+Versioni delle dipendenze aggiunte al progetto (tabella in `src/pl-schematics/utils/versions.utils.ts`; range pinnati per major di Angular, **eccezione esplicita**: `pl-core-utils-library`, `pl-decorator` e `pl-loading-trace` sono sempre `latest`):
 
 | Pacchetto | Angular 19 | Angular 20 | Angular 21 |
 |---|---|---|---|
 | `@angular/material`, `@angular/cdk`, `@angular/animations`, `@angular/localize`, `ng-packagr`, `@ngrx/*` | ^19.0.0 | ^20.0.0 | ^21.0.0 |
 | `@ng-bootstrap/ng-bootstrap` (richiesto da pl-core-utils-library) | ^18.0.0 | ^19.0.1 | ^20.0.0 |
 | `@ngx-translate/core`, `@ngx-translate/http-loader` (API `provideTranslateService`/`fallbackLang`) | ^17.0.0 | ^17.0.0 | ^17.0.0 |
-| `ngx-ui-loader` | ^19.0.0 | ^19.0.0 | ^19.0.0 |
-| `pl-core-utils-library` / `pl-decorator` | ~2.1.3 / ^1.4.28 | idem | idem |
+| `ngx-ui-loader` (peer di pl-core-utils-library; non piu' montato nella UI generata) | ^19.0.0 | ^19.0.0 | ^19.0.0 |
+| `pl-core-utils-library` / `pl-decorator` / `pl-loading-trace` (loader grafico) | latest | latest | latest |
 | `bootstrap` (peer di pl-core-utils-library ^5.1.3), `@popperjs/core` | ^5.3.0, ^2.11.8 | idem | idem |
 | `@azure/msal-angular` / `@azure/msal-browser` (solo login Azure) | ^6.3.0 / ^5.29.0 | idem | idem |
 | `@microsoft/microsoft-graph-client` (solo login Azure) | ^3.0.7 | idem | idem |
@@ -34,7 +34,7 @@ npx schematics pl-schematics:pl-schematics --name-package=my-app --no-dry-run --
 - Con `schematics-cli` 21 le opzioni vanno in **kebab-case** (`--name-package`, `--enable-sonar-qube`, ...) e, per scrivere su disco, servono `--no-dry-run --no-debug`.
 - `--architecture` vale `auto` (default: classic/standalone viene **rilevato** da `main.ts`: `bootstrapApplication` oppure `bootstrapModule`). Se si forza un valore diverso da quello rilevato lo schematic si ferma con un errore chiaro (non genera file inutilizzati).
 - **App classic**: modifica `app.module.ts` / `app-module.ts` (Angular 20+), crea/aggiorna il routing module, aggiunge `InitializerModule`, `SharedModule.forRoot(...)` e il provider `ErrorHandler`.
-- **App standalone**: modifica `app.config.ts` (`provideRouter(..., withHashLocation())`, `providePlShared(...)`, `provideCore()` con `provideAppInitializer`, `ErrorHandler`, `importProvidersFrom(StateModule)` se NgRx) e `app.routes.ts`, e importa `NgxUiLoaderModule`/`RouterOutlet` nel componente root. Non vengono generati NgModule inutilizzati.
+- **App standalone**: modifica `app.config.ts` (`provideRouter(..., withHashLocation())`, `providePlShared(...)`, `provideCore()` con `provideAppInitializer`, `ErrorHandler`, `importProvidersFrom(StateModule)` se NgRx) e `app.routes.ts`, e importa `PlLoadingOverlayComponent`/`RouterOutlet` nel componente root. Non vengono generati NgModule inutilizzati.
 - I nomi reali dei file (Angular 19: `app.component.ts`, `app.module.ts`; Angular 20+: `app.ts`, `app.html`, `app-module.ts`) vengono letti dal progetto.
 
 ### `namePackage` con percorso
@@ -43,6 +43,15 @@ npx schematics pl-schematics:pl-schematics --name-package=my-app --no-dry-run --
 - La cartella applicativa e' `src/app/cloud/agic/` (percorso invariato, come nella v3).
 - I nomi delle librerie derivano da una versione sanitizzata (minuscolo, `_` -> `-`, segmenti uniti con `-`): `cloud-agic-shared` e `cloud-agic-ngrx`.
 - Valori non validi (`a//b`, `../x`, spazi, ...) vengono rifiutati con un errore.
+
+### Loader grafico (`pl-loading-trace`)
+
+Il loader visibile e' la libreria [`pl-loading-trace`](https://www.npmjs.com/package/pl-loading-trace) (al posto di `ngx-ui-loader`, che resta solo come dipendenza richiesta da `pl-core-utils-library`):
+- il template del componente root contiene `<pl-loading-overlay source="router" />` (barra al cambio di rotta) e `<pl-loading-overlay source="http" />` (spinner durante le chiamate di rete);
+- la configurazione e' in `<namePackage>/core/utils/pl-loading.config.ts` (`plLoadingTraceOptions`, tipo `PlLoadingTraceOptions`: `shared` / `http` / `router`); sostituisce i vecchi `UiLoader*Config.ts`;
+- classic: nuovo `PlLoadingModule` (`core/module/pl-loading.module.ts`: `PlLoadingTraceModule.forRoot(plLoadingTraceOptions)` + `PlLoadingRegistryService`, riesporta `PlLoadingTraceModule` cosi' `AppModule` vede `<pl-loading-overlay>`), importato in `AppModule` **prima** di `SharedModule.forRoot`; standalone: `providePlLoadingTrace(plLoadingTraceOptions)` in `app.config.ts` **prima** di `providePlShared`, e il componente root importa `PlLoadingOverlayComponent`;
+- l'interceptor HTTP del loader (`PlLoadingHttpInterceptor`) viene registrato **una sola volta** dalla libreria stessa (`forRoot` / `providePlLoadingTrace` lo mettono in `HTTP_INTERCEPTORS`; `HttpClient` lo raccoglie con `withInterceptorsFromDi()`): non aggiungere `plLoadingHttpInterceptor` a `withInterceptors(...)`;
+- **ordine**: l'interceptor del loader deve **avvolgere** quello di retry/refresh-token (`HttpInterceptorService` / `httpInterceptorFn`). Il loader conta le richieste con un contatore che a ogni `finalize` decrementa: se fosse *dentro* i retry, ogni tentativo fallito lo decrementerebbe (spinner nascosto durante i retry o per altre richieste ancora in corso). Per questo il modulo/provider del loader sta prima di quello shared e, con `http=interceptor-functional`, `providePlShared` usa `provideHttpClient(withInterceptorsFromDi(), withInterceptors([httpInterceptorFn]))` (DI prima del funzionale).
 
 ### Libreria condivisa e configurazione
 
@@ -284,7 +293,7 @@ Questi package hanno funzionalità specifiche.
     ```
 
 - **RouteFakeGuard**  
-    Simula la protezione delle rotte in sviluppo.
+    Guard di rotta di default (CanMatch, CanActivate, CanActivateChild): ritorna sempre `true`; con login Azure delega a `MsalGuard` (solo runtime web). Le rotte generate lo usano con `canMatch` e `canActivate`.
 
 ### Interceptor (`files/core/interceptor/`)
 

@@ -51,9 +51,16 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatTreeModule} from '@angular/material/tree';
 
+/**
+ * @author l.piciollo
+ * Modulo che raccoglie e riesporta tutti i moduli Angular Material e CDK usati dall'applicazione, cosi' da
+ * importarli con un solo import nei moduli di feature. Configura inoltre le opzioni di default dei form field
+ * (aspetto outline, area hint/errore a dimensione fissa, label sempre flottante).
+ */
 @NgModule({
    exports: [MatToolbarModule, MatStepperModule, MatSidenavModule, A11yModule, ClipboardModule, CdkStepperModule, CdkTableModule, CdkTreeModule, DragDropModule, MatAutocompleteModule, MatBadgeModule, MatBottomSheetModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatChipsModule, MatDatepickerModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatGridListModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule, MatRadioModule, MatRippleModule, MatSelectModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTableModule, MatTabsModule, MatToolbarModule, MatTooltipModule, MatTreeModule, ScrollingModule],
    providers: [
+      /** opzioni di default applicate a tutti i mat-form-field dell'applicazione */
       {
          provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
          useValue: {appearance: 'outline', subscriptSizing: 'fixed', floatLabel: 'always'},

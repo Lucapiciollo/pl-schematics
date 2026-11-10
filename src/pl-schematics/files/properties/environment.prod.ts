@@ -1,5 +1,10 @@
 import { AppEnvironment } from './environment.model';
 
+/**
+ * @author l.piciollo
+ * Environment di produzione: url relativi, log disabilitati e mock API spento.
+ * Sostituisce environment.ts nella build di produzione.
+ */
 export const environment: AppEnvironment = {
   production: true,
   appName: '<%= libBaseName %>',

@@ -1,5 +1,10 @@
 import { AppEnvironment } from './environment.model';
 
+/**
+ * @author l.piciollo
+ * Environment di sviluppo: valori per l'esecuzione locale (API su localhost, log abilitati).
+ * Viene sostituito da environment.prod.ts nella build di produzione tramite fileReplacements.
+ */
 export const environment: AppEnvironment = {
   production: false,
   appName: '<%= libBaseName %>',

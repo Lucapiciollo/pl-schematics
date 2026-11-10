@@ -1,7 +1,7 @@
 /**
  * @author @l.piciollo
  * @desc [provider di avvio applicativo per architettura STANDALONE: equivalente dell'InitializerModule
- * delle app classic. Registra gestione errori, ambiente, rete, loader grafico e
+ * delle app classic. Registra gestione errori, ambiente, rete e
  * (se abilitato) MSAL. Va aggiunto una sola volta ai providers di app.config.ts: provideCore().
  *
  * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA FUNZIONE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.]
@@ -14,7 +14,6 @@ import {
   makeEnvironmentProviders,
   provideAppInitializer,
 } from '@angular/core';
-import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import {
   BROWSER,
   BROWSER_VALID,
@@ -33,9 +32,6 @@ import AutenticationLoader from './initializer/AutenticationLoader';
 import { AuthService } from './service/auth.service';
 import { ErrorService } from './service/error.service';
 import { GlobalService } from './service/global.service';
-import { UiLoaderConfig } from './utils/UiLoaderConfig';
-import { UiLoaderHttpConfig } from './utils/UiLoaderHttpConfig';
-import { UiLoaderRouterConfig } from './utils/UiLoaderRouterConfig';
 
 <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -48,27 +44,31 @@ import { HttpInterceptorFakeService } from '<%= sharedLibName %>';
 <% } %>
 
 <% if (http !== 'none') { %>
-/** Se l'app gira in Teams non si usa l'interceptor MSAL ma quello "fake"; su web si usa MSAL. */
+/**
+ * @author l.piciollo
+ * Se l'app gira in Teams non si usa l'interceptor MSAL ma quello "fake"; su web si usa MSAL.
+ * @param httpInterceptorFakeService :interceptor fittizio da usare quando l'app gira in Teams
+ * @param msalInterceptor            :interceptor MSAL da usare quando l'app gira sul web
+ * @returns l'interceptor da registrare in base al tipo di applicazione
+ */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
   return AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
 };
 <% } %>
 <% } %>
 
+/**
+ * @author l.piciollo
+ * Provider di avvio applicativo per l'architettura STANDALONE (equivalente dell'InitializerModule delle app classic).
+ * Registra base url del BE, configurazione della pl-library, gestione errori, processo di login,
+ * rilevamento del browser, istanziazione eager di GlobalService e, se abilitato, MSAL.
+ * Va aggiunto una sola volta ai providers di app.config.ts: provideCore().
+ * @returns gli EnvironmentProviders da registrare nel bootstrap dell'applicazione
+ */
 export function provideCore(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    /**
-     * @author l.piciollo
-     * inizializzazione di barre progressive, sono in ascolto sia sul cambio di rotta che durante le chiamate di rete
-     * le progressioni sono configurabili tramite i file di configurazione
-     * https://github.com/t-ho/ngx-ui-loader/wiki/Custom-configuration-for-NgxUiLoaderModule
-     */
-    importProvidersFrom(
-      PlCoreModule,
-      NgxUiLoaderModule.forRoot(UiLoaderConfig),
-      NgxUiLoaderHttpModule.forRoot(UiLoaderHttpConfig),
-      NgxUiLoaderRouterModule.forRoot(UiLoaderRouterConfig),
-    ),
+    /** modulo comune della pl-core-utils-library. Il loader grafico (pl-loading-trace) e' registrato in app.config.ts. */
+    importProvidersFrom(PlCoreModule),
 
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
     /** MSAL: istanza, guard e interceptor config (sovrascrivibili tramite i token PL_MSAL_*_FACTORY). */

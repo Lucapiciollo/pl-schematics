@@ -30,10 +30,21 @@ import { PlBaseComponent } from 'pl-core-utils-library';
 })
 export class HomeComponent extends PlBaseComponent implements OnInit {
 
+  /**
+   * @author l.piciollo
+   * Costruttore: passa l'injector alla classe base PlBaseComponent.
+   * @param injector :injector di Angular usato dalla classe base per risolvere i servizi del core
+   */
   constructor( protected override injector: Injector  ) {
     super(injector)
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Hook di inizializzazione del componente: al momento vuoto, e' il punto in cui inserire il caricamento dei dati della home.
+   */
   override ngOnInit() {
   }
 

@@ -5,9 +5,11 @@
  * del workspace) deve essere ri-esportato qui.
  */
 
+// Modulo condiviso e configurazione della libreria (SharedModule, providePlShared, SHARED_LIB_CONFIG)
 export * from './lib/module/shared.module';
 export * from './lib/config/shared-lib.config';
 
+// Pipe condivise e relativo modulo
 export * from './lib/pipe/pipe.module';
 export * from './lib/pipe/comma-decimal.pipe';
 export * from './lib/pipe/convert.pipe';
@@ -29,15 +31,19 @@ export * from './lib/pipe/translate-async.pipe';
 export * from './lib/pipe/truncate-name-file.pipe';
 export * from './lib/pipe/truncate.pipe';
 
+// Utility e costanti di rilevamento del dispositivo
 export * from './lib/utils/utils';
 export * from './lib/utils/device-detector.constants';
 
+// Bean degli errori applicativi (ErrorBean, ErrorCode)
 export * from './lib/bean/error-bean';
 
+// InjectionToken condivisi (indirizzo del BE e task di bootstrap)
 export * from './lib/tokens/base-url-api.token';
 export * from './lib/tokens/app-bootstrap-task.token';
 
 <% if (logging === "advanced") { %>
+// Logger applicativo: servizio, enum, interfacce, porta di uscita su console e provider (solo logging avanzato)
 export * from './lib/logging/logger.service';
 export * from './lib/logging/logger-feature.enum';
 export * from './lib/logging/logger-level.enum';
@@ -49,6 +55,7 @@ export * from './lib/logging/logger-provider';
 <% } %>
 
 <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
+// Intercettore HTTP: token e configurazione, provider, adapter di autenticazione e servizi (solo con intercettore abilitato)
 export * from './lib/http/http-interceptor.tokens';
 export * from './lib/http/http-interceptor.provider';
 export * from './lib/http/local-storage-auth-adapter.service';
@@ -57,5 +64,6 @@ export * from './lib/interceptor/http-interceptor-fake.service';
 <% } %>
 
 <% if (ui === "material") { %>
+// Modulo con i componenti Angular Material (solo con UI material)
 export * from './lib/material/material.module';
 <% } %>

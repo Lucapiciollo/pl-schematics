@@ -20,16 +20,16 @@ function updateAngularJsonForBudgets(options) {
         let changed = false;
         production.budgets.forEach((budget) => {
             if (budget && budget.type === 'initial') {
-                if (budget.maximumWarning !== '2MB' || budget.maximumError !== '4MB') {
-                    budget.maximumWarning = '2MB';
-                    budget.maximumError = '4MB';
+                if (budget.maximumWarning !== '3MB' || budget.maximumError !== '5MB') {
+                    budget.maximumWarning = '3MB';
+                    budget.maximumError = '5MB';
                     changed = true;
                 }
             }
         });
         if (changed) {
             (0, json_utils_1.overwriteJsonFile)(host, 'angular.json', workspaceJson);
-            context.logger.info('Raised the "initial" bundle budget to 2MB/4MB in angular.json.');
+            context.logger.info('Raised the "initial" bundle budget to 3MB/5MB in angular.json.');
         }
         return host;
     };

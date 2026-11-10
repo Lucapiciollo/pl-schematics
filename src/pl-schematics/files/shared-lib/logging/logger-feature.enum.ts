@@ -1,3 +1,8 @@
+/**
+ * @author l.piciollo
+ * Elenco delle aree applicative (feature) che possono produrre log.
+ * Usato dal LoggerService per filtrare i messaggi tramite LoggerConfig.features.
+ */
 export enum  LoggerFeature {
 	APP = 'APP',
 	AUTH = 'AUTH',

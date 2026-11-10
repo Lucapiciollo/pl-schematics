@@ -1,5 +1,12 @@
 // src/pl-schematics/rules/update-angular-json-bootstrap.rule.ts
 
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo updateIndexHtmlForMaterial, SOLO
+ * se options.addSupportBootstrap === 'Y' (altrimenti noop). Aggiunge a angular.json gli
+ * script e gli stili necessari a Bootstrap, jQuery e Font Awesome.
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import {
@@ -10,6 +17,13 @@ import {
 } from '../utils/json.utils';
 import { getDefaultProjectName } from '../utils/workspace.utils';
 
+/**
+ * @author l.piciollo
+ * Aggiunge (senza duplicare) a angular.json script e stili di Bootstrap, jQuery e
+ * Font Awesome nelle opzioni di build del progetto.
+ * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
+ * @returns Rule che aggiorna angular.json e restituisce il Tree
+ */
 export function updateAngularJsonForBootstrap(
   options: PlSchematicsOptions,
 ): Rule {

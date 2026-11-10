@@ -10,13 +10,9 @@
  * ]
  */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, inject, NgModule, Optional } from '@angular/core'; 
-import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
+import { APP_INITIALIZER, inject, ModuleWithProviders, NgModule, Optional } from '@angular/core'; 
 import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule, DEFAULT_PATH_MOCK,BROWSER} from 'pl-core-utils-library';
 import { BASE_URL_API, APP_BOOTSTRAP_TASKS } from '<%= sharedLibName %>';
-import { UiLoaderConfig } from '../utils/UiLoaderConfig';
-import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
-import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
 import { environment } from '../../../../<%= nsUp %>environments/environment';
 import { AuthService } from '../service/auth.service';
 import { GlobalService } from '../service/global.service';
@@ -34,7 +30,15 @@ import { HttpInterceptorFakeService } from '<%= sharedLibName %>';
   import { InteractionStatus } from '@azure/msal-browser';
   import { MsalBroadcastService, MsalInterceptor, MsalModule, MsalService } from '@azure/msal-angular';
   import { MsalAuthModule } from '../msal/msal-auth.module';
- /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
+/**
+ * @author l.piciollo
+ * Factory dell'interceptor HTTP usato come HTTP_INTERCEPTORS: se l'applicazione e' stata avviata
+ * in Teams restituisce l'interceptor "fake" (nessun token MSAL), altrimenti l'interceptor MSAL
+ * che recupera il token in base allo scope.
+ * @param httpInterceptorFakeService :interceptor fittizio da usare quando l'app gira in Teams
+ * @param msalInterceptor            :interceptor MSAL da usare quando l'app gira sul web
+ * @returns l'interceptor da registrare in base al tipo di applicazione
+ */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
   return  AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
 };
@@ -52,15 +56,6 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
   declarations: [],
   imports: [
     PlCoreModule,
-    /**
-     * @author l.piciollo
-     * inizializzazione di barre progressive, sono in ascolto sia sul cambio di rotta che durante le chiamate di rete
-     * le progressioni sono configurabili tramite i file di configurazione
-     * è possibile fare riferimento a https://github.com/t-ho/ngx-ui-loader/wiki/Custom-configuration-for-NgxUiLoaderModule
-     */
-    NgxUiLoaderModule.forRoot(UiLoaderConfig),
-    NgxUiLoaderHttpModule.forRoot(UiLoaderHttpConfig),
-    NgxUiLoaderRouterModule.forRoot(UiLoaderRouterConfig),    
     /**
      * @author l.piciollo
      * inserimento modulo per azure
@@ -138,9 +133,6 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
   ],
   exports: [
     PlCoreModule,
-    NgxUiLoaderModule,
-    NgxUiLoaderHttpModule,
-    NgxUiLoaderRouterModule,
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
     MsalModule,
     <% } %>
@@ -159,12 +151,19 @@ export class    InitializerModule {
   private readonly globalService = inject(GlobalService);
 
   <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") { %>
+  /**
+   * @author l.piciollo
+   * Subject usato per terminare le sottoscrizioni agli eventi MSAL quando il modulo viene distrutto.
+   */
   private readonly destroying$ = new Subject<void>();
 
     /**
      * @author l.piciollo
      * abilitato il supporto di intercettore di rotta per il controllo della login... in caso di mancata
      * login.. viene effettuato il redirect alla login .. 
+     * @param router               :router di Angular (iniettato)
+     * @param msalService          :servizio MSAL per gestire redirect, account e login
+     * @param msalBroadcastService :servizio MSAL che notifica lo stato delle interazioni (inProgress$)
      */
     constructor(
       private router: Router,
@@ -184,17 +183,29 @@ export class    InitializerModule {
       });
     }
 
+    /************************************************************************************************************************/
+
+    /**
+     * @author l.piciollo
+     * Hook di distruzione del modulo: completa il Subject destroying$ cosi' da chiudere le sottoscrizioni MSAL.
+     */
     ngOnDestroy(): void {
       this.destroying$.next();
       this.destroying$.complete();
     }
     <% } %>
 
-  static forRoot() {
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Metodo statico di convenzione per importare il modulo nell'AppModule (InitializerModule.forRoot()).
+   * @returns ModuleWithProviders con il modulo stesso e nessun provider aggiuntivo
+   */
+  static forRoot(): ModuleWithProviders<InitializerModule> {
     return {
-      ngModule:    InitializerModule,
-      providers: [],
-      import: []
+      ngModule: InitializerModule,
+      providers: []
     }
   }
 }
