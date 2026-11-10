@@ -19,6 +19,8 @@ const routes: Routes = [{
   path: "",
   data: { breadcrumb: 'Home'},
   component: HomeComponent,
+  /** guard di abbinamento e di attivazione della rotta: vuoti, la protezione e' gia' applicata dalla rotta padre 'home' */
+  canMatch: [],
   canActivate: []
 }];
 

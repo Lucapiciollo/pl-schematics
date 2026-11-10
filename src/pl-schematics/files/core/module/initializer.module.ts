@@ -11,12 +11,8 @@
  */
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, inject, ModuleWithProviders, NgModule, Optional } from '@angular/core'; 
-import { NgxUiLoaderHttpModule, NgxUiLoaderModule, NgxUiLoaderRouterModule } from 'ngx-ui-loader';
 import { BROWSER_VALID, CACHE_TAG, DISABLE_LOG, MAX_CACHE_AGE, PlAmbientModeLoaderService, PlCoreModule, DEFAULT_PATH_MOCK,BROWSER} from 'pl-core-utils-library';
 import { BASE_URL_API, APP_BOOTSTRAP_TASKS } from '<%= sharedLibName %>';
-import { UiLoaderConfig } from '../utils/UiLoaderConfig';
-import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
-import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
 import { environment } from '../../../../<%= nsUp %>environments/environment';
 import { AuthService } from '../service/auth.service';
 import { GlobalService } from '../service/global.service';
@@ -60,15 +56,6 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
   declarations: [],
   imports: [
     PlCoreModule,
-    /**
-     * @author l.piciollo
-     * inizializzazione di barre progressive, sono in ascolto sia sul cambio di rotta che durante le chiamate di rete
-     * le progressioni sono configurabili tramite i file di configurazione
-     * è possibile fare riferimento a https://github.com/t-ho/ngx-ui-loader/wiki/Custom-configuration-for-NgxUiLoaderModule
-     */
-    NgxUiLoaderModule.forRoot(UiLoaderConfig),
-    NgxUiLoaderHttpModule.forRoot(UiLoaderHttpConfig),
-    NgxUiLoaderRouterModule.forRoot(UiLoaderRouterConfig),    
     /**
      * @author l.piciollo
      * inserimento modulo per azure
@@ -146,9 +133,6 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
   ],
   exports: [
     PlCoreModule,
-    NgxUiLoaderModule,
-    NgxUiLoaderHttpModule,
-    NgxUiLoaderRouterModule,
     <% if (loginSupportConfiguration == "AZURE-ACTIVE-DIRECT") {%>
     MsalModule,
     <% } %>

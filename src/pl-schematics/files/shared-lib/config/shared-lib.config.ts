@@ -90,9 +90,16 @@ export function providePlShared(config: SharedLibConfig): EnvironmentProviders {
       }
     : { reloadOnRefreshFailure: true };
   <% if (http === "interceptor-functional" && standalone) { %>
+  /**
+   * withInterceptorsFromDi() PRIMA di withInterceptors(): gli interceptor registrati nel DI (in particolare quello del
+   * loader pl-loading-trace) avvolgono httpInterceptorFn (retry/refresh-token) e contano una sola richiesta.
+   * Con l'ordine inverso il loader sarebbe interno ai retry e rilascerebbe il contatore a ogni tentativo fallito.
+   * Gli interceptor DI comprendono anche quello MSAL (se il login Azure e' attivo, vedi provide-core.ts): la sua
+   * registrazione resta unica e withInterceptorsFromDi() e' sempre presente, quindi viene comunque applicato.
+   */
   providers.push(
     provideHttpInterceptorConfig(httpConfig),
-    provideHttpClient(withInterceptors([httpInterceptorFn]), withInterceptorsFromDi()),
+    provideHttpClient(withInterceptorsFromDi(), withInterceptors([httpInterceptorFn])),
   );
   <% } else { %>
   providers.push(

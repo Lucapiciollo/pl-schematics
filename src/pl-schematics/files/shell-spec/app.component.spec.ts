@@ -2,13 +2,15 @@ import { TestBed } from '@angular/core/testing';
 <% if (standalone) { %>
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { providePlLoadingTrace } from 'pl-loading-trace';
 import { <%= rootComponentClass %> } from '<%= rootComponentImport %>';
 
 describe('<%= rootComponentClass %>', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [<%= rootComponentClass %>],
-      providers: [provideRouter([]), provideHttpClient()],
+      // il root contiene <pl-loading-overlay>: servono i provider del loader (config di default)
+      providers: [provideRouter([]), provideHttpClient(), providePlLoadingTrace()],
     }).compileComponents();
   });
 

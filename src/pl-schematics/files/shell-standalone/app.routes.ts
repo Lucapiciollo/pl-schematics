@@ -18,6 +18,8 @@ export const routes: Routes = [
     data: { breadcrumb: 'Home' },
     loadComponent: () =>
       import('./<%= namePackage %>/component/page/home/home.component').then((module) => module.HomeComponent),
+    /** canMatch: valutata prima del caricamento lazy della rotta; canActivate: prima dell'attivazione (di default entrambe true). */
+    canMatch: [RouteFakeGuard],
     canActivate: [RouteFakeGuard],
   },
 ];

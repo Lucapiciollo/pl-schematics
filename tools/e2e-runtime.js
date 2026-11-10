@@ -6,7 +6,7 @@
  * Uso: node tools/e2e-runtime.js --dir <app> [--http] [--i18n] [--azure] [--port 4300]
  *   - build development (ng build -c development --output-path dist-rt) e server statico con fallback SPA
  *   - stub API su :3001 (baseUrl dell'environment generato) che conta le richieste
- *   - controlla: nessun errore di console / pageerror, home e <ngx-ui-loader> nel DOM,
+ *   - controlla: nessun errore di console / pageerror, home e <pl-loading-overlay> nel DOM,
  *     it.json caricato (200) e usato, interceptor non eseguito due volte (1 sola richiesta al BE).
  *   - --azure: senza credenziali reali verifica solo che il bootstrap non si rompa: l'app tenta il
  *     redirect verso login.microsoftonline.com (intercettato) e non produce errori applicativi non gestiti.
@@ -81,8 +81,8 @@ function serveStatic(root) {
     if (expectI18n) await page.waitForFunction(() => /\\(Home\\)/.test((document.querySelector('app-home') || {}).innerText || ''), undefined, { timeout: 10000 }).catch(() => undefined);
     const home = await page.locator('app-home').innerText().catch(() => '');
     check('home visibile (app-home)', /home works!/.test(home), JSON.stringify(home));
-    const loaders = await page.locator('ngx-ui-loader').count();
-    check('loader presenti nel DOM (<ngx-ui-loader>)', loaders >= 3, 'count=' + loaders);
+    const loaders = await page.locator('pl-loading-overlay').count();
+    check('loader presenti nel DOM (<pl-loading-overlay>)', loaders >= 2, 'count=' + loaders);
     if (expectI18n) {
       const it = requests.filter((u) => /assets\/public\/i18n\/it\.json/.test(u));
       check('it.json richiesto una volta e 200', it.length === 1, 'richieste=' + it.length);

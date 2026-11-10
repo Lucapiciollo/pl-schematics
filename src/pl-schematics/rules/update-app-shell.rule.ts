@@ -4,7 +4,7 @@
  * @author l.piciollo
  * Rule della chain di index.ts: e' l'ULTIMA della chain, dopo scaffoldEmptyFolders.
  * Adatta i file "shell" dell'app esistente (modulo o config root, routing, componente
- * root) per integrare shared library, state, UI e loader, in modalita' classic
+ * root) per integrare shared library, state, UI e loader grafico, in modalita' classic
  * (NgModule) o standalone a seconda dell'architettura rilevata.
  */
 
@@ -151,6 +151,7 @@ function updateClassicShell(options: PlSchematicsOptions, app: AppInfo): Rule {
           { symbols: ['ErrorHandler'], from: '@angular/core' },
           { symbols: ['ErrorService'], from: './' + ns + '/core/service/error.service' },
           { symbols: ['InitializerModule'], from: './' + ns + '/core/module/initializer.module' },
+          { symbols: ['PlLoadingModule'], from: './' + ns + '/core/module/pl-loading.module' },
           { symbols: ['SharedModule'], from: options.sharedLibName as string },
           { symbols: ['appSharedConfig'], from: './' + ns + '/core/utils/shared.config' },
           {
@@ -159,7 +160,12 @@ function updateClassicShell(options: PlSchematicsOptions, app: AppInfo): Rule {
           },
         ];
 
+        /**
+         * PlLoadingModule va PRIMA di SharedModule.forRoot: l'interceptor HTTP del loader deve avvolgere quello di
+         * retry/refresh-token della libreria shared (l'ordine di HTTP_INTERCEPTORS segue l'ordine degli imports).
+         */
         const items = [
+          { key: 'PlLoadingModule', code: 'PlLoadingModule' },
           { key: 'SharedModule', code: 'SharedModule.forRoot(appSharedConfig)' },
           { key: 'AppRoutingModule', code: 'AppRoutingModule' },
           { key: 'InitializerModule', code: 'InitializerModule' },
@@ -238,11 +244,18 @@ function updateStandaloneShell(options: PlSchematicsOptions, app: AppInfo): Rule
           { symbols: ['provideRouter', 'withHashLocation'], from: '@angular/router' },
           { symbols: ['routes'], from: relativeSpecifier(configFile, routesFile.replace(/\.ts$/, '')) },
           { symbols: ['provideCore'], from: './' + ns + '/core/provide-core' },
+          { symbols: ['providePlLoadingTrace'], from: 'pl-loading-trace' },
+          { symbols: ['plLoadingTraceOptions'], from: './' + ns + '/core/utils/pl-loading.config' },
           { symbols: ['providePlShared'], from: options.sharedLibName as string },
           { symbols: ['appSharedConfig'], from: './' + ns + '/core/utils/shared.config' },
         ];
 
+        /**
+         * providePlLoadingTrace va PRIMA di providePlShared/provideCore: l'interceptor HTTP del loader (registrato in
+         * HTTP_INTERCEPTORS dalla libreria stessa) deve avvolgere quello di retry/refresh-token della libreria shared.
+         */
         const items = [
+          { key: 'providePlLoadingTrace', code: 'providePlLoadingTrace(plLoadingTraceOptions)' },
           { key: 'providePlShared', code: 'providePlShared(appSharedConfig)' },
           { key: 'provideCore', code: 'provideCore()' },
         ];
@@ -286,13 +299,13 @@ function updateStandaloneShell(options: PlSchematicsOptions, app: AppInfo): Rule
 
 /**
  * ---------------------------------------------------------------------------
- * Componente root: template con i loader e, per standalone, i relativi import
+ * Componente root: template con gli overlay del loader e, per standalone, i relativi import
  * ---------------------------------------------------------------------------
  *
  * @author l.piciollo
- * Sostituisce il template HTML del componente root con quello dello schematic (loader),
- * riscrive lo spec se esiste e, per le app standalone, importa RouterOutlet e
- * NgxUiLoaderModule nel componente. Lancia un'eccezione se il template e' inline.
+ * Sostituisce il template HTML del componente root con quello dello schematic (<pl-loading-overlay>
+ * di pl-loading-trace per rotta e HTTP), riscrive lo spec se esiste e, per le app standalone, importa
+ * RouterOutlet e PlLoadingOverlayComponent nel componente. Lancia un'eccezione se il template e' inline.
  * @param options  :opzioni normalizzate (standalone)
  * @param app      :informazioni sull'app rilevata (componente root, file di template)
  * @returns Rule che aggiorna template, spec e decoratore del componente root
@@ -302,7 +315,7 @@ function updateRootComponent(options: PlSchematicsOptions, app: AppInfo): Rule {
 
   if (!root.templateFile) {
     throw new SchematicsException(
-      'The root component "' + root.className + '" uses an inline template: use a templateUrl (default of ng new) so the loaders can be added.',
+      'The root component "' + root.className + '" uses an inline template: use a templateUrl (default of ng new) so the loading overlays can be added.',
     );
   }
 
@@ -316,13 +329,13 @@ function updateRootComponent(options: PlSchematicsOptions, app: AppInfo): Rule {
 
     (host: Tree, context: SchematicContext) => {
       if (!options.standalone) {
-        // Classic: NgxUiLoaderModule arriva da InitializerModule (exports), il componente e' dichiarato in AppModule.
+        // Classic: <pl-loading-overlay> arriva da PlLoadingModule (che riesporta PlLoadingTraceModule), importato in AppModule dove e' dichiarato il componente root.
         return host;
       }
 
       editTsFile(host, root.file, context, (content) => {
         const updated = applyImports(content, [
-          { symbols: ['NgxUiLoaderModule'], from: 'ngx-ui-loader' },
+          { symbols: ['PlLoadingOverlayComponent'], from: 'pl-loading-trace' },
           { symbols: ['RouterOutlet'], from: '@angular/router' },
         ]);
 
@@ -331,7 +344,7 @@ function updateRootComponent(options: PlSchematicsOptions, app: AppInfo): Rule {
           anchor: /@Component\(\{/,
           items: [
             { key: 'RouterOutlet', code: 'RouterOutlet' },
-            { key: 'NgxUiLoaderModule', code: 'NgxUiLoaderModule' },
+            { key: 'PlLoadingOverlayComponent', code: 'PlLoadingOverlayComponent' },
           ],
         });
       });

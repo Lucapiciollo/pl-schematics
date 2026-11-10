@@ -10,6 +10,7 @@ function computeDependencies(options, angularMajor, angularMinor = 0) {
     const dependencies = [
         { type: utility_1.DependencyType.Default, name: 'pl-core-utils-library', version: v.plCoreUtilsLibrary },
         { type: utility_1.DependencyType.Default, name: 'pl-decorator', version: v.plDecorator },
+        { type: utility_1.DependencyType.Default, name: 'pl-loading-trace', version: v.plLoadingTrace },
         { type: utility_1.DependencyType.Default, name: 'ngx-ui-loader', version: v.ngxUiLoader },
         { type: utility_1.DependencyType.Default, name: 'bootstrap', version: v.bootstrap },
         { type: utility_1.DependencyType.Default, name: '@ng-bootstrap/ng-bootstrap', version: v.ngBootstrap },
@@ -48,7 +49,7 @@ function addPackageJsonDependencies(options) {
             : (0, versions_utils_1.getAngularVersion)(host);
         const angularMajor = detected.major;
         const dependencies = computeDependencies(options, angularMajor, detected.minor);
-        context.logger.info('Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies with pinned ranges (no "latest").');
+        context.logger.info('Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies (pinned ranges; "latest" only for pl-core-utils-library, pl-decorator, pl-loading-trace).');
         return (0, schematics_1.chain)(dependencies.map((dependency) => (0, utility_1.addDependency)(dependency.name, dependency.version, {
             type: dependency.type,
             existing: utility_1.ExistingBehavior.Replace,

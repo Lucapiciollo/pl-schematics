@@ -12,9 +12,9 @@ import { getProjectObject } from '../utils/workspace.utils';
 /**
  * @author l.piciollo
  * Il bundle iniziale di un'app che usa pl-core-utils-library (html2canvas,
- * ng-bootstrap, ngx-ui-loader, ...) supera il budget di default di `ng new`
+ * ng-bootstrap, pl-loading-trace, ...) supera il budget di default di `ng new`
  * (500kB warning / 1MB error) e farebbe fallire `ng build`. Alza i limiti del budget
- * "initial" della configurazione production a 2MB (warning) / 4MB (error).
+ * "initial" della configurazione production a 3MB (warning) / 5MB (error) (pl-loading-trace aggiunge circa 0.4MB).
  * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
  * @returns Rule che aggiorna angular.json (se necessario) e restituisce il Tree
  */
@@ -41,9 +41,9 @@ export function updateAngularJsonForBudgets(options: PlSchematicsOptions): Rule 
 
     production.budgets.forEach((budget: any) => {
       if (budget && budget.type === 'initial') {
-        if (budget.maximumWarning !== '2MB' || budget.maximumError !== '4MB') {
-          budget.maximumWarning = '2MB';
-          budget.maximumError = '4MB';
+        if (budget.maximumWarning !== '3MB' || budget.maximumError !== '5MB') {
+          budget.maximumWarning = '3MB';
+          budget.maximumError = '5MB';
           changed = true;
         }
       }
@@ -51,7 +51,7 @@ export function updateAngularJsonForBudgets(options: PlSchematicsOptions): Rule 
 
     if (changed) {
       overwriteJsonFile(host, 'angular.json', workspaceJson);
-      context.logger.info('Raised the "initial" bundle budget to 2MB/4MB in angular.json.');
+      context.logger.info('Raised the "initial" bundle budget to 3MB/5MB in angular.json.');
     }
 
     return host;

@@ -1,11 +1,10 @@
 <!-- 
       @author l.piciollo
-      inizializzazione di barre progressive, utile per indicare all'utento sia il cambio di rotta, che 
-      le chiamate di rete in esecuzione. 
+      loader grafico (pl-loading-trace), utile per indicare all'utente sia il cambio di rotta (barra), che 
+      le chiamate di rete in esecuzione (spinner). Va inserito una sola volta; configurazione in core/utils/pl-loading.config.ts
  -->
-<ngx-ui-loader [loaderId]="'routerLoader'"></ngx-ui-loader>
-<ngx-ui-loader [loaderId]="'httpLoader'"></ngx-ui-loader>
-<ngx-ui-loader></ngx-ui-loader>
+<pl-loading-overlay source="router" />
+<pl-loading-overlay source="http" />
 
 <!-- 
       @author l.piciollo

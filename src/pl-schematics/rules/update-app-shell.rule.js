@@ -54,6 +54,7 @@ function updateClassicShell(options, app) {
                     { symbols: ['ErrorHandler'], from: '@angular/core' },
                     { symbols: ['ErrorService'], from: './' + ns + '/core/service/error.service' },
                     { symbols: ['InitializerModule'], from: './' + ns + '/core/module/initializer.module' },
+                    { symbols: ['PlLoadingModule'], from: './' + ns + '/core/module/pl-loading.module' },
                     { symbols: ['SharedModule'], from: options.sharedLibName },
                     { symbols: ['appSharedConfig'], from: './' + ns + '/core/utils/shared.config' },
                     {
@@ -62,6 +63,7 @@ function updateClassicShell(options, app) {
                     },
                 ];
                 const items = [
+                    { key: 'PlLoadingModule', code: 'PlLoadingModule' },
                     { key: 'SharedModule', code: 'SharedModule.forRoot(appSharedConfig)' },
                     { key: 'AppRoutingModule', code: 'AppRoutingModule' },
                     { key: 'InitializerModule', code: 'InitializerModule' },
@@ -109,10 +111,13 @@ function updateStandaloneShell(options, app) {
                     { symbols: ['provideRouter', 'withHashLocation'], from: '@angular/router' },
                     { symbols: ['routes'], from: relativeSpecifier(configFile, routesFile.replace(/\.ts$/, '')) },
                     { symbols: ['provideCore'], from: './' + ns + '/core/provide-core' },
+                    { symbols: ['providePlLoadingTrace'], from: 'pl-loading-trace' },
+                    { symbols: ['plLoadingTraceOptions'], from: './' + ns + '/core/utils/pl-loading.config' },
                     { symbols: ['providePlShared'], from: options.sharedLibName },
                     { symbols: ['appSharedConfig'], from: './' + ns + '/core/utils/shared.config' },
                 ];
                 const items = [
+                    { key: 'providePlLoadingTrace', code: 'providePlLoadingTrace(plLoadingTraceOptions)' },
                     { key: 'providePlShared', code: 'providePlShared(appSharedConfig)' },
                     { key: 'provideCore', code: 'provideCore()' },
                 ];
@@ -148,7 +153,7 @@ function updateStandaloneShell(options, app) {
 function updateRootComponent(options, app) {
     const root = app.rootComponent;
     if (!root.templateFile) {
-        throw new schematics_1.SchematicsException('The root component "' + root.className + '" uses an inline template: use a templateUrl (default of ng new) so the loaders can be added.');
+        throw new schematics_1.SchematicsException('The root component "' + root.className + '" uses an inline template: use a templateUrl (default of ng new) so the loading overlays can be added.');
     }
     const specFile = root.file.replace(/\.ts$/, '.spec.ts');
     return (0, schematics_1.chain)([
@@ -160,7 +165,7 @@ function updateRootComponent(options, app) {
             }
             editTsFile(host, root.file, context, (content) => {
                 const updated = applyImports(content, [
-                    { symbols: ['NgxUiLoaderModule'], from: 'ngx-ui-loader' },
+                    { symbols: ['PlLoadingOverlayComponent'], from: 'pl-loading-trace' },
                     { symbols: ['RouterOutlet'], from: '@angular/router' },
                 ]);
                 return (0, ts_edit_utils_1.addToArrayProperty)(updated, {
@@ -168,7 +173,7 @@ function updateRootComponent(options, app) {
                     anchor: /@Component\(\{/,
                     items: [
                         { key: 'RouterOutlet', code: 'RouterOutlet' },
-                        { key: 'NgxUiLoaderModule', code: 'NgxUiLoaderModule' },
+                        { key: 'PlLoadingOverlayComponent', code: 'PlLoadingOverlayComponent' },
                     ],
                 });
             });

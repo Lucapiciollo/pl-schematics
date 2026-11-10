@@ -19,6 +19,8 @@ import { RouteFakeGuard } from './<%= namePackage %>/core/service/router.fake.gu
 const routes: Routes = [{
   path: "home",
   loadChildren: () => import('./<%= namePackage %>/component/page/home/home.module').then(module => module.HomeModule),
+  /** canMatch: valutata prima del caricamento lazy del modulo; canActivate: prima dell'attivazione (di default entrambe true). */
+  canMatch: [ RouteFakeGuard],
   canActivate: [ RouteFakeGuard],
 }];
 /**

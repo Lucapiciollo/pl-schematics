@@ -2,8 +2,8 @@
  * @author l.piciollo
  * Rule della chain di index.ts: viene eseguita subito dopo validateOptions e prima di
  * logOptions. Calcola e registra in package.json le dipendenze (versioni pinnate per
- * major di Angular, tabella in utils/versions.utils.ts) tramite addDependency, che
- * schedula una sola installazione finale.
+ * major di Angular, tabella in utils/versions.utils.ts; 'latest' solo per pl-core-utils-library,
+ * pl-decorator e pl-loading-trace) tramite addDependency, che schedula una sola installazione finale.
  */
 
 import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
@@ -35,8 +35,9 @@ interface PlDependency {
 /**
  * @author l.piciollo
  * Calcola la lista delle dipendenze da aggiungere al progetto target. Le versioni
- * derivano da una tabella per major di Angular (utils/versions.utils.ts): nessun
- * 'latest' e nessun accesso alla rete.
+ * derivano da una tabella per major di Angular (utils/versions.utils.ts): range espliciti
+ * (eccezione: 'latest' per pl-core-utils-library, pl-decorator e pl-loading-trace) e nessun
+ * accesso alla rete.
  * @param options        :opzioni normalizzate; ui, state, i18n, login, Sonar e mockApi attivano gruppi di dipendenze
  * @param angularMajor   :major di Angular del progetto target, usata per scegliere le versioni
  * @param angularMinor   :minor di Angular del progetto target (default 0)
@@ -52,7 +53,9 @@ export function computeDependencies(
     { type: DependencyType.Default, name: 'pl-core-utils-library', version: v.plCoreUtilsLibrary },
     /** Decorator `Unsubscribe` usato da GlobalService; e' anche peer di pl-core-utils-library. */
     { type: DependencyType.Default, name: 'pl-decorator', version: v.plDecorator },
-    /** Loader grafico usato da app.component.html e dal modulo/provider di inizializzazione. */
+    /** Loader grafico (<pl-loading-overlay> in app.component.html + config/provider di inizializzazione). */
+    { type: DependencyType.Default, name: 'pl-loading-trace', version: v.plLoadingTrace },
+    /** Non piu' montato nella UI generata, ma richiesto come peer da pl-core-utils-library. */
     { type: DependencyType.Default, name: 'ngx-ui-loader', version: v.ngxUiLoader },
     /** Peer di pl-core-utils-library. */
     { type: DependencyType.Default, name: 'bootstrap', version: v.bootstrap },
@@ -139,7 +142,7 @@ export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
     const dependencies = computeDependencies(options, angularMajor, detected.minor);
 
     context.logger.info(
-      'Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies with pinned ranges (no "latest").',
+      'Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies (pinned ranges; "latest" only for pl-core-utils-library, pl-decorator, pl-loading-trace).',
     );
 
     return chain(

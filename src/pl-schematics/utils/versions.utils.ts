@@ -13,7 +13,8 @@ import { readJsonFile } from './json.utils';
 /**
  * @author l.piciollo
  * Major di Angular supportate (e verificate dalla matrice `npm run test:e2e`).
- * Nessuna dipendenza usa 'latest': ogni versione e' un range esplicito.
+ * Ogni dipendenza usa un range esplicito, con l'unica eccezione di pl-core-utils-library,
+ * pl-decorator e pl-loading-trace (librerie interne, sempre 'latest' per scelta esplicita).
  */
 export const SUPPORTED_ANGULAR_MAJORS = [19, 20, 21];
 
@@ -36,12 +37,14 @@ export interface DependencyVersions {
   ngxTranslateCore: string;
   /** @ngx-translate/http-loader. */
   ngxTranslateHttpLoader: string;
-  /** ngx-ui-loader. */
+  /** ngx-ui-loader (non e' piu' montato nella UI, ma e' peer di pl-core-utils-library). */
   ngxUiLoader: string;
-  /** pl-core-utils-library. */
+  /** pl-core-utils-library ('latest'). */
   plCoreUtilsLibrary: string;
-  /** pl-decorator. */
+  /** pl-decorator ('latest'). */
   plDecorator: string;
+  /** pl-loading-trace, loader grafico (barra di rotta + spinner HTTP) ('latest'). */
+  plLoadingTrace: string;
   /** bootstrap. */
   bootstrap: string;
   /** @popperjs/core. */
@@ -66,8 +69,9 @@ export interface DependencyVersions {
 
 /**
  * Tabella delle versioni per major di Angular. I valori coerenti con i peer di
- * pl-core-utils-library 2.1.3 (bootstrap ^5.1.3, pl-decorator ^1.4.x,
- * @compodoc/compodoc ^1.1.19) sono indicati nel README.
+ * pl-core-utils-library (bootstrap ^5.1.3, ngx-ui-loader, @compodoc/compodoc ^1.1.19)
+ * sono indicati nel README. pl-core-utils-library, pl-decorator e pl-loading-trace
+ * sono sempre 'latest' (eccezione esplicita alla regola dei range pinnati).
  */
 /** @ng-bootstrap/ng-bootstrap: 18 -> Angular 19, 19 -> Angular 20, 20 -> Angular 21. */
 const NG_BOOTSTRAP_BY_ANGULAR: Record<number, string> = {
@@ -92,8 +96,9 @@ function buildVersions(major: number, minor: number): DependencyVersions {
     ngxTranslateCore: '^17.0.0',
     ngxTranslateHttpLoader: '^17.0.0',
     ngxUiLoader: '^19.0.0',
-    plCoreUtilsLibrary: '~2.1.3',
-    plDecorator: '^1.4.28',
+    plCoreUtilsLibrary: 'latest',
+    plDecorator: 'latest',
+    plLoadingTrace: 'latest',
     bootstrap: '^5.3.0',
     popperCore: '^2.11.8',
     ngBootstrap: NG_BOOTSTRAP_BY_ANGULAR[major],
@@ -132,7 +137,7 @@ export function getVersions(major: number, minor: number = 0): DependencyVersion
 /**
  * @author l.piciollo
  * Legge la major di @angular/core dal package.json del progetto target. Se non
- * e' determinabile o non e' supportata lancia un errore chiaro (mai fallback su 'latest').
+ * e' determinabile o non e' supportata lancia un errore chiaro (nessun fallback implicito).
  * @param host  :Tree del workspace (si legge package.json)
  * @returns major e minor di @angular/core (minor 0 se non indicata)
  */
