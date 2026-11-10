@@ -78,6 +78,7 @@ function serveStatic(root) {
     check('MSAL: nessun errore applicativo non gestito', errors.length === 0, errors.join(' | '));
   } else {
     await page.waitForSelector('app-home', { timeout: 15000 }).catch(() => undefined);
+    if (expectI18n) await page.waitForFunction(() => /\\(Home\\)/.test((document.querySelector('app-home') || {}).innerText || ''), undefined, { timeout: 10000 }).catch(() => undefined);
     const home = await page.locator('app-home').innerText().catch(() => '');
     check('home visibile (app-home)', /home works!/.test(home), JSON.stringify(home));
     const loaders = await page.locator('ngx-ui-loader').count();

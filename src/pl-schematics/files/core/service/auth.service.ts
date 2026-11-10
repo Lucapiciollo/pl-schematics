@@ -101,7 +101,8 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
       );
     }
 
-    this.msalInstance.enableAccountStorageEvents();
+    // msal-browser v5 sincronizza gli account tra tab da solo: il metodo esiste solo nelle versioni precedenti.
+    this.msalInstance.enableAccountStorageEvents?.();
 
     this.subscriptions.add(
       this.broadcastService.inProgress$
