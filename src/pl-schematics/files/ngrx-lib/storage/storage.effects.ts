@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { map, tap, withLatestFrom } from 'rxjs/operators';
@@ -33,6 +33,11 @@ import { StorageService } from './storage.service';
  */
 @Injectable()
 export class StorageEffects {
+  /** inject(): i campi effect sono inizializzati prima delle parameter property del costruttore. */
+  private readonly actions$ = inject(Actions);
+  private readonly store = inject(Store);
+  private readonly storageService = inject(StorageService);
+
   /** Alla dispatch di storageHydrate, legge lo stato persistito e lo ripubblica. */
   hydrate$ = createEffect(() => this.actions$.pipe(
     ofType(storageHydrate),
@@ -55,10 +60,4 @@ export class StorageEffects {
     ofType(storageClear),
     tap(() => this.storageService.clear()),
   ), { dispatch: false });
-
-  constructor(
-    private readonly actions$: Actions,
-    private readonly store: Store,
-    private readonly storageService: StorageService,
-  ) {}
 }

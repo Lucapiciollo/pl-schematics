@@ -1,6 +1,6 @@
 {
   "name": "pl-schematics",
-  "version": "2.4.14",
+  "version": "4.0.0",
   "description": "Standardize Angular project template with PL schematics",
   "schematics": "./src/collection.json",
   "keywords": [
@@ -15,41 +15,40 @@
   "files": [
     "src",
     "README.md",
-    "LICENSE"
+    "CHANGELOG.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npm run build && jasmine src/**/*_spec.js",
-    "test:schematic": "npm run build && schematics .:pl-schematics --namePackage=my-app-template --dry-run",
-    "test:schematic:full": "npm run build && schematics .:pl-schematics --namePackage=my-app-template --state=ngrx --nameCompany=PL --architecture=classic --state=none --http=interceptor-classic --ui=bootstrap --i18n=ngx-translate --logging=console --mockApi=none --ci=none --tests=jasmine  --ui=material --strict=false --dry-run",
+    "test": "npm run build && jasmine \"test/unit/**/*.spec.js\"",
+    "test:unit": "npm run test",
+    "test:schematic": "node tools/e2e-matrix.js --angular 19 --case base --strict true",
+    "test:e2e": "node tools/e2e-matrix.js",
+    "test:e2e:pack": "node tools/e2e-pack.js",
+    "test:e2e:19": "node tools/e2e-matrix.js --angular 19",
+    "test:e2e:20": "node tools/e2e-matrix.js --angular 20",
+    "test:e2e:21": "node tools/e2e-matrix.js --angular 21",
     "release-patch": "npm --no-git-tag-version version patch && npm run build",
     "release-minor": "npm --no-git-tag-version version minor && npm run build",
     "release-major": "npm --no-git-tag-version version major && npm run build",
-    "deps:check": "node tools/update-dependencies.interactive.js",
-    "deps:update": "node tools/update-dependencies.interactive.js && npm install"
+    "deps:check": "node src/pl-schematics/tools/update-dependencies.interactive.js",
+    "deps:update": "node src/pl-schematics/tools/update-dependencies.interactive.js && npm install"
   },
   "dependencies": {
-    "@angular-devkit/schematics": ">=8.0.0",
-    "@angular/core": "^21.2.14",
-    "chalk": "4.1.0",
-    "shelljs": "0.8.4"
+    "@angular-devkit/core": ">=19.0.0 <23.0.0",
+    "@angular-devkit/schematics": ">=19.0.0 <23.0.0",
+    "@schematics/angular": ">=19.0.0 <23.0.0",
+    "jsonc-parser": "^3.3.1",
+    "rxjs": "^6.5.3 || ^7.4.0"
   },
   "devDependencies": {
-    "@angular-devkit/core": ">=19.0.0",
-    "@angular-devkit/schematics": ">=19.0.0",
-    "@angular-devkit/schematics-cli": ">=19.0.0",
-    "@types/jasmine": ">=3.3.9",
-    "@types/node": ">=8.0.31",
-    "jasmine": ">=3.3.1",
-    "schematics-utilities": "^2.0.3",
-    "ts-node": "^10.9.2",
-    "typescript": "^4.9.5"
+    "@angular-devkit/schematics-cli": ">=19.0.0 <23.0.0",
+    "@types/jasmine": "^5.1.0",
+    "@types/node": "^20.0.0",
+    "jasmine": "^5.0.0",
+    "playwright-core": "^1.65.0",
+    "typescript": "^5.9.3"
   },
-  "peerDependencies": {
-    "@angular-devkit/schematics": ">=8.0.0",
-    "pl-core-utils-library": "^2.1.3"
- },
   "engines": {
-    "node": ">=10.13.0"
+    "node": "^20.19.0 || ^22.12.0 || >=24.0.0"
   }
 }

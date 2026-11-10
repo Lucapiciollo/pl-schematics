@@ -12,6 +12,8 @@
 import { Component, OnInit ,Injector} from '@angular/core';
 import { HomeService } from './home.service';
 import { PlBaseComponent } from 'pl-core-utils-library';
+<% if (standalone) { %>import { SharedModule } from '<%= sharedLibName %>';
+<% } %>
 /**
  * @author l.piciollo
  * componente pagina home template.. qui viene la creazione del servizio del modulo HomeService.. questo garantisce che 
@@ -20,19 +22,19 @@ import { PlBaseComponent } from 'pl-core-utils-library';
  * di piu componenti home, eliminare la riga  providers:[HomeService] .
  */
 @Component({
-  standalone: false,
+  <% if (standalone) { %>imports: [SharedModule],<% } else { %>standalone: false,<% } %>
   selector: '<%=prefix%>-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   providers:[HomeService]
 })
-export class HomeComponent  extends PlBaseComponent implements OnInit {
+export class HomeComponent extends PlBaseComponent implements OnInit {
 
-  constructor( protected injector: Injector  ) {
+  constructor( protected override injector: Injector  ) {
     super(injector)
   }
 
-  ngOnInit() {
+  override ngOnInit() {
   }
 
 }

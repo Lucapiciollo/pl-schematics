@@ -15,7 +15,9 @@ import { RemoveLeadingZerosPipe } from './remove-leading-zeros.pipe';
 import { RoundPipe } from './round-pipe';
 import { SafePipe } from './safe.pipe';
 import { SortPipe } from './sort.pipe';
+<% if (i18n === "ngx-translate") { %>
 import { TranslateAsyncPipe } from './translate-async.pipe';
+<% } %>
 import { TruncateNameFilePipe } from './truncate-name-file.pipe';
 import { TruncatePipe } from './truncate.pipe';
 
@@ -35,7 +37,9 @@ const PIPES = [
   RoundPipe,
   SafePipe,
   SortPipe,
+  <% if (i18n === "ngx-translate") { %>
   TranslateAsyncPipe,
+  <% } %>
   TruncateNameFilePipe,
   TruncatePipe,
 ];

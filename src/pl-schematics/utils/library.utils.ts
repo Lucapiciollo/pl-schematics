@@ -5,6 +5,21 @@ import { PlSchematicsOptions } from '../types/schema-options';
 import { overwriteJsonFile, readJsonFile } from './json.utils';
 
 /**
+ * Builder ng-packagr: i progetti creati con Angular 19 usano ancora
+ * @angular-devkit/build-angular, da Angular 20 il builder e' @angular/build.
+ */
+export function getNgPackagrBuilder(host: Tree): string {
+  const packageJson = readJsonFile(host, 'package.json') || {};
+  const hasBuildAngular =
+    (packageJson.devDependencies && packageJson.devDependencies['@angular-devkit/build-angular']) ||
+    (packageJson.dependencies && packageJson.dependencies['@angular-devkit/build-angular']);
+
+  return hasBuildAngular
+    ? '@angular-devkit/build-angular:ng-packagr'
+    : '@angular/build:ng-packagr';
+}
+
+/**
  * @author l.piciollo
  * Percorso radice (root) di un progetto libreria generato dallo schematic,
  * relativo alla radice del workspace Angular. Segue la convenzione standard
@@ -75,7 +90,7 @@ export function addLibraryProjectToWorkspace(
     prefix: prefix || 'lib',
     architect: {
       build: {
-        builder: '@angular-devkit/build-angular:ng-packagr',
+        builder: getNgPackagrBuilder(host),
         options: {
           tsConfig: projectRoot + '/tsconfig.lib.json',
           project: projectRoot + '/ng-package.json',
@@ -129,7 +144,9 @@ export function addLibraryTsConfigPath(
   tsConfig.compilerOptions = tsConfig.compilerOptions || {};
   tsConfig.compilerOptions.paths = tsConfig.compilerOptions.paths || {};
 
-  const entryPoint = getLibraryRoot(libName) + '/src/public-api.ts';
+  // Path relativo ('./projects/...'): senza baseUrl un mapping non relativo
+  // produce TS5090.
+  const entryPoint = './' + getLibraryRoot(libName) + '/src/public-api.ts';
 
   if (!tsConfig.compilerOptions.paths[libName]) {
     tsConfig.compilerOptions.paths[libName] = [entryPoint];

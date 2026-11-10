@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePackageJsonForBuild = exports.updatePackageJsonForSonar = void 0;
+exports.updatePackageJsonForSonar = updatePackageJsonForSonar;
+exports.updatePackageJsonForBuild = updatePackageJsonForBuild;
 const json_utils_1 = require("../utils/json.utils");
 function ensureScripts(packageJson) {
     packageJson.scripts = packageJson.scripts || {};
@@ -38,7 +39,6 @@ function updatePackageJsonForSonar() {
         return host;
     };
 }
-exports.updatePackageJsonForSonar = updatePackageJsonForSonar;
 function updatePackageJsonForBuild(options) {
     return (host, context) => {
         const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json');
@@ -68,4 +68,3 @@ function updatePackageJsonForBuild(options) {
         return host;
     };
 }
-exports.updatePackageJsonForBuild = updatePackageJsonForBuild;

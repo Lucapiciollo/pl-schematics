@@ -1,7 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.normalizeProjectAndPrefix = exports.normalizeOptionsSync = void 0;
+exports.NAME_PACKAGE_SEGMENT = void 0;
+exports.validateNamePackage = validateNamePackage;
+exports.getLibBaseName = getLibBaseName;
+exports.normalizeOptionsSync = normalizeOptionsSync;
+exports.resolveWorkspaceOptions = resolveWorkspaceOptions;
+exports.normalizeProjectAndPrefix = normalizeProjectAndPrefix;
+const schematics_1 = require("@angular-devkit/schematics");
 const json_utils_1 = require("../utils/json.utils");
+const versions_utils_1 = require("../utils/versions.utils");
+const workspace_utils_1 = require("../utils/workspace.utils");
 function normalizeString(value, defaultValue) {
     if (value === undefined || value === null || value === '') {
         return defaultValue;
@@ -16,31 +24,10 @@ function normalizeBoolean(value) {
         return false;
     }
     const normalized = String(value || '').toLowerCase();
-    return normalized === 'true' ||
-        normalized === 'y' ||
-        normalized === 'yes' ||
-        normalized === 's' ||
-        normalized === 'si' ||
-        normalized === 'sì' ||
-        normalized === '1';
+    return ['true', 'y', 'yes', 's', 'si', 'sì', '1'].indexOf(normalized) >= 0;
 }
 function normalizeYesNo(value) {
-    if (value === true) {
-        return 'Y';
-    }
-    if (value === false) {
-        return 'N';
-    }
-    const normalized = String(value || '').toUpperCase();
-    return normalized === 'Y' ||
-        normalized === 'YES' ||
-        normalized === 'TRUE' ||
-        normalized === '1' ||
-        normalized === 'S' ||
-        normalized === 'SI' ||
-        normalized === 'SÌ'
-        ? 'Y'
-        : 'N';
+    return normalizeBoolean(value) ? 'Y' : 'N';
 }
 function normalizeOptionValue(value, defaultValue, allowedValues) {
     const normalized = normalizeString(value, defaultValue);
@@ -48,16 +35,24 @@ function normalizeOptionValue(value, defaultValue, allowedValues) {
         ? normalized
         : defaultValue;
 }
-function getDefaultProjectName(host) {
-    const workspace = (0, json_utils_1.readJsonFile)(host, 'angular.json');
-    if (!workspace || !workspace.projects) {
-        return '';
+exports.NAME_PACKAGE_SEGMENT = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+function validateNamePackage(namePackage) {
+    if (typeof namePackage !== 'string' || namePackage.trim() === '') {
+        throw new schematics_1.SchematicsException('Option "namePackage" is required.');
     }
-    if (workspace.defaultProject) {
-        return workspace.defaultProject;
+    const value = namePackage.trim();
+    const segments = value.split('/');
+    if (!segments.every((segment) => exports.NAME_PACKAGE_SEGMENT.test(segment))) {
+        throw new schematics_1.SchematicsException('Option "namePackage" ("' + value + '") is invalid: use one or more segments separated by "/", ' +
+            'each made of letters, numbers, dash and underscore (e.g. "my-app" or "cloud/agic").');
     }
-    const projectNames = Object.keys(workspace.projects);
-    return projectNames.length > 0 ? projectNames[0] : '';
+    return value;
+}
+function getLibBaseName(namePackage) {
+    return namePackage
+        .split('/')
+        .map((segment) => segment.toLowerCase().replace(/_/g, '-'))
+        .join('-');
 }
 function getProjectPrefix(host, projectName) {
     const workspace = (0, json_utils_1.readJsonFile)(host, 'angular.json');
@@ -69,54 +64,33 @@ function getProjectPrefix(host, projectName) {
     return workspace.projects[projectName].prefix || 'app';
 }
 function normalizeOptionsSync(options) {
+    options.namePackage = validateNamePackage(options.namePackage);
     options.nameCompany = normalizeString(options.nameCompany, 'mycompany');
-    options.ui = normalizeOptionValue(options.ui, 'none', [
-        'none',
-        'material',
-        'bootstrap',
-    ]);
-    options.state = normalizeOptionValue(options.state, 'none', [
-        'none',
-        'ngrx',
-    ]);
-    options.logging = normalizeOptionValue(options.logging, 'console', [
-        'none',
-        'console',
-        'advanced',
-    ]);
-    options.mockApi = normalizeOptionValue(options.mockApi, 'none', [
-        'none',
-        'node-express',
-    ]);
-    options.ci = normalizeOptionValue(options.ci, 'none', [
-        'none',
-        'github-actions',
-        'azure-devops',
-    ]);
+    options.ui = normalizeOptionValue(options.ui, 'none', ['none', 'material', 'bootstrap']);
+    options.state = normalizeOptionValue(options.state, 'none', ['none', 'ngrx']);
+    options.logging = normalizeOptionValue(options.logging, 'console', ['none', 'console', 'advanced']);
+    options.mockApi = normalizeOptionValue(options.mockApi, 'none', ['none', 'node-express']);
+    options.ci = normalizeOptionValue(options.ci, 'none', ['none', 'github-actions', 'azure-devops']);
     options.http = normalizeOptionValue(options.http, 'none', [
         'none',
         'interceptor-classic',
         'interceptor-functional',
     ]);
-    options.architecture = normalizeOptionValue(options.architecture, 'classic', [
+    options.architecture = normalizeOptionValue(options.architecture, 'auto', [
+        'auto',
         'classic',
         'standalone',
     ]);
-    options.i18n = normalizeOptionValue(options.i18n, 'ngx-translate', [
-        'none',
-        'ngx-translate',
-    ]);
-    options.tests = normalizeOptionValue(options.tests, 'jasmine', [
-        'none',
-        'jasmine',
-        'jest',
-    ]);
+    options.i18n = normalizeOptionValue(options.i18n, 'ngx-translate', ['none', 'ngx-translate']);
+    if (options.tests === 'jest') {
+        throw new schematics_1.SchematicsException('Option --tests=jest is not supported: pl-schematics does not generate a Jest setup. Use --tests=jasmine (Angular default test runner: Karma/Jasmine on 19-20, Vitest on 21) or --tests=none.');
+    }
+    options.tests = normalizeOptionValue(options.tests, 'jasmine', ['none', 'jasmine', 'jest']);
     options.loginSupportConfiguration = normalizeOptionValue(options.loginSupportConfiguration, 'NONE', [
         'NONE',
         'AZURE-ACTIVE-DIRECT',
     ]);
-    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT' &&
-        options.http === 'none') {
+    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT' && options.http === 'none') {
         options.http = 'interceptor-classic';
     }
     options.browserSupported = normalizeOptionValue(options.browserSupported, 'BROWSER.ALL', [
@@ -129,24 +103,41 @@ function normalizeOptionsSync(options) {
     options.includeDocumentation = normalizeBoolean(options.includeDocumentation);
     options.strict = normalizeBoolean(options.strict);
     options.enableSonarQube = normalizeYesNo(options.enableSonarQube);
-    if (options.ui === 'bootstrap') {
-        options.addSupportBootstrap = 'Y';
-    }
-    else {
-        options.addSupportBootstrap = 'N';
-    }
-    const dasherizedPackageName = options.namePackage.toLowerCase();
-    options.sharedLibName = dasherizedPackageName + '-shared';
-    options.ngrxLibName = dasherizedPackageName + '-ngrx';
+    options.addSupportBootstrap = options.ui === 'bootstrap' ? 'Y' : 'N';
+    const libBaseName = getLibBaseName(options.namePackage);
+    const segments = options.namePackage.split('/').length;
+    options.libBaseName = libBaseName;
+    options.sharedLibName = libBaseName + '-shared';
+    options.ngrxLibName = libBaseName + '-ngrx';
+    options.nsUp = new Array(segments).join('../');
 }
-exports.normalizeOptionsSync = normalizeOptionsSync;
+function resolveWorkspaceOptions(host, options, context) {
+    const workspace = (0, json_utils_1.readJsonFile)(host, 'angular.json');
+    if (!workspace) {
+        throw new schematics_1.SchematicsException('angular.json not found: run the schematic inside an Angular CLI workspace.');
+    }
+    options.project = normalizeString(options.project, (0, workspace_utils_1.getDefaultProjectName)(workspace, options));
+    options.prefix = normalizeString(options.prefix, getProjectPrefix(host, options.project));
+    const angularVersion = (0, versions_utils_1.getAngularVersion)(host);
+    options.angularMajor = angularVersion.major;
+    options.angularMinor = angularVersion.minor;
+    const app = (0, workspace_utils_1.detectApp)(host, options);
+    const architecture = (0, workspace_utils_1.resolveArchitecture)(options.architecture, app.architecture);
+    options.architecture = architecture;
+    options.standalone = architecture === 'standalone';
+    options.appInfo = app;
+    const rootComponentPath = app.rootComponent.file.replace(/\.ts$/, '');
+    const relative = rootComponentPath.substring(app.appDir.length + 1);
+    options.rootComponentClass = app.rootComponent.className;
+    options.rootComponentImport = './' + relative;
+    if (context) {
+        context.logger.info('Detected Angular ' + options.angularMajor + ' ' + architecture + ' application "' + options.project +
+            '" (root component: ' + app.rootComponent.className + ').');
+    }
+}
 function normalizeProjectAndPrefix(options) {
     return (host, context) => {
-        const resolvedProject = normalizeString(options.project, getDefaultProjectName(host));
-        options.project = resolvedProject;
-        options.prefix = normalizeString(options.prefix, getProjectPrefix(host, resolvedProject));
-        context.logger.info('Options normalized for project: "' + options.project + '"');
+        resolveWorkspaceOptions(host, options, context);
         return host;
     };
 }
-exports.normalizeProjectAndPrefix = normalizeProjectAndPrefix;

@@ -52,7 +52,7 @@ export class  Utils {
    * funzionalità utile a reperire cookie
    * @param nameCookie 
    */
-  public static getCookie(nameCookie: string): string {
+  public static getCookie(nameCookie: string): string | null {
     try {
       let name = nameCookie + "=";
       let cookies = document.cookie.split(';');
@@ -118,9 +118,9 @@ export class  Utils {
    * si occupa di creare un proxy object 
    * @param object 
    */
-     public static proxing<Object>(object:{})  {
+     public static proxing<T extends object>(object: T): any {
       return new Proxy(object, {
-        get: function (target, prop, receiver) {
+        get: function (target: any, prop: string | symbol) {
           if (Object.keys(target).indexOf(String(prop)) > -1) {
             return target[prop];
           } else {

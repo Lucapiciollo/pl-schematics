@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAngularJsonForBootstrap = void 0;
+exports.updateAngularJsonForBootstrap = updateAngularJsonForBootstrap;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function updateAngularJsonForBootstrap(options) {
@@ -22,8 +22,7 @@ function updateAngularJsonForBootstrap(options) {
         optionsJson.scripts = (0, json_utils_1.ensureArray)(optionsJson.scripts);
         optionsJson.styles = (0, json_utils_1.ensureArray)(optionsJson.styles);
         (0, json_utils_1.pushIfMissing)(optionsJson.scripts, 'node_modules/jquery/dist/jquery.slim.min.js');
-        (0, json_utils_1.pushIfMissing)(optionsJson.scripts, 'node_modules/popper.js/dist/umd/popper.min.js');
-        (0, json_utils_1.pushIfMissing)(optionsJson.scripts, 'node_modules/bootstrap/dist/js/bootstrap.min.js');
+        (0, json_utils_1.pushIfMissing)(optionsJson.scripts, 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
         (0, json_utils_1.pushIfMissing)(optionsJson.styles, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
         (0, json_utils_1.pushIfMissing)(optionsJson.styles, 'node_modules/@fortawesome/fontawesome-free/css/all.min.css');
         (0, json_utils_1.overwriteJsonFile)(host, 'angular.json', workspaceJson);
@@ -31,4 +30,3 @@ function updateAngularJsonForBootstrap(options) {
         return host;
     };
 }
-exports.updateAngularJsonForBootstrap = updateAngularJsonForBootstrap;

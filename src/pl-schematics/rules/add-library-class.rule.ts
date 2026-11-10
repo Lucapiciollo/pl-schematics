@@ -3,6 +3,7 @@
 import { strings } from '@angular-devkit/core';
 import {
   apply,
+  filter,
   mergeWith,
   MergeStrategy,
   move,
@@ -27,10 +28,12 @@ export function addLibraryClass(
   options: PlSchematicsOptions,
   urlFile: string,
   libraryRootDestPath: string,
+  skipFiles: string[] = [],
 ): Rule {
   return (_host: Tree, context: SchematicContext) => {
     const sourceTemplate = url(urlFile);
     const source = apply(sourceTemplate, [
+      filter((path) => !skipFiles.some((skip) => path.endsWith(skip))),
       template({
         ...options,
         name: options.namePackage,

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateIndexHtmlForMaterial = void 0;
+exports.updateIndexHtmlForMaterial = updateIndexHtmlForMaterial;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function getBuildOptions(project) {
@@ -46,4 +46,3 @@ function updateIndexHtmlForMaterial(options) {
         return host;
     };
 }
-exports.updateIndexHtmlForMaterial = updateIndexHtmlForMaterial;

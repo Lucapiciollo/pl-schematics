@@ -1,288 +1,124 @@
+import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import {
-  Rule,
-  SchematicContext,
-  Tree,
-} from '@angular-devkit/schematics';
-import {
-  addPackageJsonDependency,
-  NodeDependency,
-  NodeDependencyType,
-} from 'schematics-utilities';
+  addDependency,
+  DependencyType,
+  ExistingBehavior,
+  InstallBehavior,
+} from '@schematics/angular/utility';
 
 import { PlSchematicsOptions } from '../types/schema-options';
-import { readJsonFile } from '../utils/json.utils';
+import { getAngularVersion, getVersions } from '../utils/versions.utils';
 
-function hasHttpInterceptor(options: PlSchematicsOptions): boolean {
-  return options.http === 'interceptor-classic' ||
-    options.http === 'interceptor-functional';
+interface PlDependency {
+  type: DependencyType;
+  name: string;
+  version: string;
 }
 
 /**
  * @author l.piciollo
- * Legge la versione di @angular/core gia' installata nel progetto target per
- * derivare un range compatibile per i pacchetti che seguono lo stesso
- * versionamento major di Angular (Material, CDK, Animations, NgRx, ng-packagr).
- * Usare 'latest' per questi pacchetti e' pericoloso: se il progetto target e'
- * pinnato su una versione di Angular non piu' recentissima, 'latest' rischia
- * di risolvere una versione che richiede un @angular/core piu' nuovo di quello
- * installato, causando un conflitto ERESOLVE al primo 'npm install' (bug
- * riscontrato durante i test di validazione di questo schematic).
+ * Calcola la lista delle dipendenze da aggiungere al progetto target. Le versioni
+ * derivano da una tabella per major di Angular (utils/versions.utils.ts): nessun
+ * 'latest' e nessun accesso alla rete.
  */
-function getAngularMajorVersion(host: Tree): number | null {
-  const packageJson = readJsonFile(host, 'package.json');
-
-  if (!packageJson) {
-    return null;
-  }
-
-  const raw =
-    (packageJson.dependencies && packageJson.dependencies['@angular/core']) ||
-    (packageJson.devDependencies && packageJson.devDependencies['@angular/core']);
-
-  if (!raw) {
-    return null;
-  }
-
-  const match = String(raw).match(/(\d+)/);
-
-  if (!match) {
-    return null;
-  }
-
-  const major = parseInt(match[1], 10);
-
-  return isNaN(major) ? null : major;
-}
-
-/**
- * @author l.piciollo
- * Ritorna un range npm coerente con la major version di Angular rilevata
- * (es. '^17.0.0'), oppure 'latest' come fallback quando non e' stato
- * possibile determinarla (es. angular.json/package.json non standard).
- */
-function angularCompatibleRange(angularMajor: number | null): string {
-  return angularMajor ? '^' + angularMajor + '.0.0' : 'latest';
-}
-
-export function addPackageJsonDependencies(
+export function computeDependencies(
   options: PlSchematicsOptions,
-): Rule {
+  angularMajor: number,
+  angularMinor: number = 0,
+): PlDependency[] {
+  const v = getVersions(angularMajor, angularMinor);
+  const dependencies: PlDependency[] = [
+    { type: DependencyType.Default, name: 'pl-core-utils-library', version: v.plCoreUtilsLibrary },
+    /** Decorator `Unsubscribe` usato da GlobalService; e' anche peer di pl-core-utils-library. */
+    { type: DependencyType.Default, name: 'pl-decorator', version: v.plDecorator },
+    /** Loader grafico usato da app.component.html e dal modulo/provider di inizializzazione. */
+    { type: DependencyType.Default, name: 'ngx-ui-loader', version: v.ngxUiLoader },
+    /** Peer di pl-core-utils-library. */
+    { type: DependencyType.Default, name: 'bootstrap', version: v.bootstrap },
+    /** pl-core-utils-library importa NgbModule: @ng-bootstrap/ng-bootstrap richiede @angular/localize e Popper. */
+    { type: DependencyType.Default, name: '@ng-bootstrap/ng-bootstrap', version: v.ngBootstrap },
+    { type: DependencyType.Default, name: '@angular/localize', version: v.angularFramework },
+    { type: DependencyType.Default, name: '@popperjs/core', version: v.popperCore },
+    { type: DependencyType.Default, name: '@compodoc/compodoc', version: '^1.1.19' },
+    /** Necessario per compilare le librerie generate in projects/. */
+    { type: DependencyType.Dev, name: 'ng-packagr', version: v.angularAligned },
+  ];
+
+  if (options.i18n === 'ngx-translate') {
+    dependencies.push(
+      { type: DependencyType.Default, name: '@ngx-translate/core', version: v.ngxTranslateCore },
+      { type: DependencyType.Default, name: '@ngx-translate/http-loader', version: v.ngxTranslateHttpLoader },
+    );
+  }
+
+  if (options.ui === 'material') {
+    dependencies.push(
+      { type: DependencyType.Default, name: '@angular/material', version: v.angularAligned },
+      { type: DependencyType.Default, name: '@angular/cdk', version: v.angularAligned },
+      { type: DependencyType.Default, name: '@angular/animations', version: v.angularFramework },
+    );
+  }
+
+  if (options.ui === 'bootstrap') {
+    dependencies.push(
+      { type: DependencyType.Default, name: 'jquery', version: v.jquery },
+      { type: DependencyType.Default, name: '@fortawesome/fontawesome-free', version: v.fontawesome },
+    );
+  }
+
+  if (options.state === 'ngrx') {
+    ['@ngrx/store', '@ngrx/effects', '@ngrx/entity', '@ngrx/store-devtools'].forEach((name) =>
+      dependencies.push({ type: DependencyType.Default, name, version: v.angularAligned }),
+    );
+  }
+
+  if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
+    dependencies.push(
+      { type: DependencyType.Default, name: '@azure/msal-angular', version: v.msalAngular },
+      { type: DependencyType.Default, name: '@azure/msal-browser', version: v.msalBrowser },
+      /** Usato solo da AuthService/GlobalService (Microsoft Graph) quando il login Azure e' abilitato. */
+      { type: DependencyType.Default, name: '@microsoft/microsoft-graph-client', version: v.graphClient },
+    );
+  }
+
+  if (options.enableSonarQube === 'Y') {
+    dependencies.push({ type: DependencyType.Default, name: 'sonar-scanner', version: v.sonarScanner });
+  }
+
+  if (options.mockApi === 'node-express') {
+    dependencies.push(
+      { type: DependencyType.Dev, name: 'express', version: '^4.18.2' },
+      { type: DependencyType.Dev, name: 'cors', version: '^2.8.5' },
+      { type: DependencyType.Dev, name: 'ts-node', version: '^10.9.2' },
+      { type: DependencyType.Dev, name: 'ts-node-dev', version: '^2.0.0' },
+      { type: DependencyType.Dev, name: '@types/express', version: '^4.17.21' },
+      { type: DependencyType.Dev, name: '@types/cors', version: '^2.8.17' },
+    );
+  }
+
+  return dependencies;
+}
+
+export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const angularMajor = getAngularMajorVersion(host);
-    const angularRange = angularCompatibleRange(angularMajor);
+    const detected = options.angularMajor
+      ? { major: options.angularMajor, minor: options.angularMinor || 0 }
+      : getAngularVersion(host);
+    const angularMajor = detected.major;
+    const dependencies = computeDependencies(options, angularMajor, detected.minor);
 
-    if (angularMajor) {
-      context.logger.info(
-        'Angular v' + angularMajor + ' rilevato: Material/CDK/NgRx/ng-packagr saranno installati con range "' + angularRange + '".',
-      );
-    } else {
-      context.logger.warn(
-        'Impossibile rilevare la versione di @angular/core dal package.json del progetto target: Material/CDK/NgRx/ng-packagr useranno "latest" (rischio di conflitti di peer-dependency).',
-      );
-    }
+    context.logger.info(
+      'Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies with pinned ranges (no "latest").',
+    );
 
-    const dependencies: NodeDependency[] = [
-      {
-        type: NodeDependencyType.Default,
-        version: 'latest',
-        name: 'pl-core-utils-library',
-      },
-      /**
-       * @author l.piciollo
-       * ng-packagr e' richiesto per compilare le librerie Angular generate
-       * dallo schematic (projects/<namePackage>-shared, projects/<namePackage>-ngrx),
-       * tramite il builder '@angular-devkit/build-angular:ng-packagr'. Segue lo
-       * stesso versionamento major di Angular.
-       */
-      {
-        type: NodeDependencyType.Dev,
-        version: angularRange,
-        name: 'ng-packagr',
-      },
-    ];
-
-    if (options.i18n === 'ngx-translate') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: '^4.0.0',
-          name: '@ngx-translate/http-loader',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '11.0.1',
-          name: '@ngx-translate/core',
-        },
-      );
-    }
-
-    if (options.ui === 'material') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@angular/material',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@angular/cdk',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@angular/animations',
-        },
-      );
-    }
-
-    if (options.ui === 'bootstrap') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: 'latest',
-          name: 'popper.js',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: 'latest',
-          name: '@popperjs/core',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^3.4.0',
-          name: 'jquery',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^5.0.0',
-          name: 'bootstrap',
-        },
-      );
-    }
-
-    if (options.state === 'ngrx') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@ngrx/store',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@ngrx/effects',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@ngrx/entity',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: angularRange,
-          name: '@ngrx/store-devtools',
-        },
-      );
-    }
-
-    if (hasHttpInterceptor(options)) {
-      /**
-       * Per ora nessuna dipendenza extra necessaria.
-       * I token/provider HTTP usano solo Angular/RxJS.
-       */
-    }
-
-    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Default,
-          version: '^3.0.0-beta.0',
-          name: '@azure/msal-angular',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^3.0.0-beta.0',
-          name: '@azure/msal-browser',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^3.0.0',
-          name: '@microsoft/microsoft-graph-client',
-        },
-        {
-          type: NodeDependencyType.Default,
-          version: '^2.0.0',
-          name: '@microsoft/teams-js',
-        },
-      );
-    }
-
-    if (options.enableSonarQube === 'Y') {
-      dependencies.push({
-        type: NodeDependencyType.Default,
-        version: '^3.1.0',
-        name: 'sonar-scanner',
-      });
-    }
-
-    if (options.mockApi === 'node-express') {
-      dependencies.push(
-        {
-          type: NodeDependencyType.Dev,
-          version: '^4.18.2',
-          name: 'express',
-        },
-        {
-          type: NodeDependencyType.Dev,
-          version: '^2.8.5',
-          name: 'cors',
-        },
-        {
-          type: NodeDependencyType.Dev,
-          version: '^10.9.2',
-          name: 'ts-node',
-        },
-        {
-          type: NodeDependencyType.Dev,
-          version: '^2.0.0',
-          name: 'ts-node-dev',
-        },
-        {
-          type: NodeDependencyType.Dev,
-          version: '^4.17.21',
-          name: '@types/express',
-        },
-        {
-          type: NodeDependencyType.Dev,
-          version: '^2.8.17',
-          name: '@types/cors',
-        },
-      );
-    }
-
-    /**
-     * Dipendenze opzionali vecchio template.
-     * Le teniamo solo se servono davvero in futuro.
-     * Non vanno più installate sempre.
-     */
-    if (options.logging === 'advanced') {
-      /**
-       * Il logging avanzato attuale non richiede librerie esterne.
-       */
-    }
-
-    dependencies.forEach(function(dependency: NodeDependency): void {
-      addPackageJsonDependency(host, dependency);
-
-      context.logger.info(
-        'Library inserted: "' +
-          dependency.name +
-          '" into ' +
-          dependency.type,
-      );
-    });
-
-    return host;
+    return chain(
+      dependencies.map((dependency) =>
+        addDependency(dependency.name, dependency.version, {
+          type: dependency.type,
+          existing: ExistingBehavior.Replace,
+          install: InstallBehavior.Auto,
+        }),
+      ),
+    );
   };
 }

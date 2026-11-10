@@ -2,102 +2,65 @@
  * @author @l.piciollo
  * @email lucapiciolo@gmail.com
  * @create date 2019-12-21 12:30:36
- * @modify date 2026-05-24
+ * @modify date 2026-11-09
  * @desc [
  * Modulo comune a tutto l'applicativo.
- * Condivide moduli, pipe, componenti e funzionalità comuni.
+ * Condivide moduli, pipe, componenti e funzionalita' comuni.
+ *
+ * La configurazione (lingua, timeout HTTP, ...) NON viene letta dall'environment dell'app
+ * (una libreria non puo' dipendere dall'app): si passa con SharedModule.forRoot(config).
+ * Le app standalone usano providePlShared(config) (vedi config/shared-lib.config.ts).
  * ]
  */
 
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
- import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { environment } from 'src/environments/environment';
-
-import { PipeModule } from '../pipe/pipe.module';
-
-<% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-import { provideHttpInterceptor } from '../http/http-interceptor.provider';
+<% if (i18n === "ngx-translate") { %>
+import { TranslateModule } from '@ngx-translate/core';
 <% } %>
+
+import { SharedLibConfig, providePlShared } from '../config/shared-lib.config';
+import { PipeModule } from '../pipe/pipe.module';
 
 <% if (ui === "material") { %>
 import { MaterialModule } from '../material/material.module';
 <% } %>
 
-<% if (state === "ngrx") { %>
-import { StateModule } from '<%= ngrxLibName %>';
-<% } %>
-
-/** import { MAT_DATE_LOCALE } from '@angular/material/core'; */
-
- 
-
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     PipeModule,
-    TranslateModule.forRoot({
-      loader: provideTranslateHttpLoader({
-        prefix: './assets/i18n/',
-        suffix: '.json',
-      }),
-      fallbackLang: 'it',
-      lang: 'it',
-    }),
+    <% if (i18n === "ngx-translate") { %>
+    TranslateModule,
+    <% } %>
     <% if (ui === "material") { %>
     MaterialModule,
     <% } %>
-    <% if (state === "ngrx") { %>
-    StateModule,
-    <% } %>
-  ],
-  providers: [
-    /** { provide: MAT_DATE_LOCALE, useValue: 'it-IT' } */
   ],
   exports: [
     CommonModule,
-    HttpClientModule,
     FormsModule,
     PipeModule,
+    <% if (i18n === "ngx-translate") { %>
     TranslateModule,
+    <% } %>
     <% if (ui === "material") { %>
     MaterialModule,
-    <% } %>
-    <% if (state === "ngrx") { %>
-    StateModule,
     <% } %>
   ],
 })
 export class SharedModule {
-  constructor(
-    public readonly translate: TranslateService,
-  ) {
-    this.translate.setDefaultLang(environment.i18n.defaultLanguage);
-  }
-
-  static forRoot(): ModuleWithProviders<SharedModule> {
+  /**
+   * Da usare una sola volta nel root module (classic): registra HttpClient, gli
+   * interceptor<% if (i18n === "ngx-translate") { %> e ngx-translate<% } %>.
+   */
+  static forRoot(config: SharedLibConfig): ModuleWithProviders<SharedModule> {
     return {
       ngModule: SharedModule,
-      providers: [
-        <% if (http === "interceptor-classic" || http === "interceptor-functional") { %>
-        provideHttpInterceptor({
-          defaultTimeout: environment.http.timeout,
-          refreshUrlIncludes: environment.http.api.refreshToken,
-          enableExecutionTimeLog: environment.http.enableExecutionTimeLog,
-          reloadOnRefreshFailure: true,
-        }),
-        <% } %>
-      ],
+      providers: [providePlShared(config)],
     };
   }
 }

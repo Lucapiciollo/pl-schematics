@@ -18,9 +18,9 @@ import { inject, Inject } from '@angular/core';
 import { filter } from 'rxjs/operators';
 import { MsalBroadcastService, MSAL_GUARD_CONFIG, MSAL_INSTANCE } from '@azure/msal-angular';
 import { MsalGuardConfiguration, MsalInterceptorConfiguration } from '@azure/msal-angular';
-import { AccountInfo, AuthenticationResult, InteractionStatus, InteractionType, PublicClientApplication, LogLevel ,PopupRequest} from '@azure/msal-browser';
-import { Client, AuthCodeMSALBrowserAuthenticationProvider } from '@microsoft/microsoft-graph-client';
-import { environment } from '../../../../environments/environment';
+import { AccountInfo, AuthenticationResult, InteractionStatus, PopupRequest } from '@azure/msal-browser';
+import { AuthenticationProvider, Client } from '@microsoft/microsoft-graph-client';
+import { environment } from '../../../../<%= nsUp %>environments/environment';
 <% } %>
 
 
@@ -75,7 +75,7 @@ export abstract class  AuthStateAdapter {
 @Injectable({
   providedIn: 'root',
 })
-export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %> implements OnDestroy<% } %> {
+export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %> implements OnDestroy, AuthenticationProvider<% } %> {
 
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
   /** Imposta il runtime corrente: 'web' | 'teams'. */
@@ -154,7 +154,10 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
               const accounts: AccountInfo[] = this.msalInstance.getAllAccounts();
               this.msalInstance.setActiveAccount(accounts[0]);
               try {
-                response = await this.msalInstance.acquireTokenSilent(accounts[0]);
+                response = await this.msalInstance.acquireTokenSilent({
+                  account: accounts[0],
+                  scopes: environment.azure.scope.consentScopes,
+                });
               } catch {
                 try {
                   this.loginRedirect();
@@ -252,15 +255,25 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
 
     if (!activeAccount) return;
 
-    const authProvider = new AuthCodeMSALBrowserAuthenticationProvider(
-      this.msalInstance as PublicClientApplication,
-      {
-        account: activeAccount,
-        scopes: environment.azure.scope.consentScopes,
-        interactionType: InteractionType.Silent,
-      },
-    );
-    this.graphClient = Client.initWithMiddleware({ authProvider });
+    this.graphClient = Client.initWithMiddleware({ authProvider: this });
+  }
+
+  /***********************************************************************************************/
+
+  /**
+   * AuthenticationProvider di Microsoft Graph: restituisce un access token (silent) per gli scope
+   * configurati in environment.azure.scope.consentScopes.
+   */
+  public async getAccessToken(): Promise<string> {
+    const account: AccountInfo | undefined =
+      this.msalInstance.getActiveAccount() || this.msalInstance.getAllAccounts()[0];
+
+    const result: AuthenticationResult = await this.msalInstance.acquireTokenSilent({
+      account,
+      scopes: environment.azure.scope.consentScopes,
+    });
+
+    return result.accessToken;
   }
 
   <% } else { %>

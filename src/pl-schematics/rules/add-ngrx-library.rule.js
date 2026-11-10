@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNgrxLibrary = void 0;
+exports.addNgrxLibrary = addNgrxLibrary;
 const schematics_1 = require("@angular-devkit/schematics");
 const add_library_class_rule_1 = require("./add-library-class.rule");
 const library_utils_1 = require("../utils/library.utils");
@@ -16,4 +16,3 @@ function addNgrxLibrary(options) {
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/ngrx-lib', libSourceRoot),
     ]);
 }
-exports.addNgrxLibrary = addNgrxLibrary;

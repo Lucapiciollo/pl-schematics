@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scaffoldEmptyFolders = void 0;
+exports.scaffoldEmptyFolders = scaffoldEmptyFolders;
 const schematics_1 = require("@angular-devkit/schematics");
 const library_utils_1 = require("../utils/library.utils");
 const scaffold_schematics_rule_1 = require("./scaffold-schematics.rule");
@@ -16,4 +16,3 @@ function scaffoldEmptyFolders(options) {
         (0, scaffold_schematics_rule_1.scaffoldSchematics)(options, options.namePackage + '/component/section/tab'),
     ]);
 }
-exports.scaffoldEmptyFolders = scaffoldEmptyFolders;

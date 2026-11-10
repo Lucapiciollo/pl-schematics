@@ -1,6 +1,6 @@
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 import { InteractionType } from '@azure/msal-browser';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../<%= nsUp %>environments/environment';
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>([

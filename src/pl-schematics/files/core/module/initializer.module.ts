@@ -17,7 +17,7 @@ import { BASE_URL_API, APP_BOOTSTRAP_TASKS } from '<%= sharedLibName %>';
 import { UiLoaderConfig } from '../utils/UiLoaderConfig';
 import { UiLoaderHttpConfig } from '../utils/UiLoaderHttpConfig';
 import { UiLoaderRouterConfig } from '../utils/UiLoaderRouterConfig';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../<%= nsUp %>environments/environment';
 import { AuthService } from '../service/auth.service';
 import { GlobalService } from '../service/global.service';
 import AmbientModeProviderFactory from '../initializer/AmbientModeLoader';
@@ -33,7 +33,7 @@ import { HttpInterceptorFakeService } from '<%= sharedLibName %>';
   import { filter, takeUntil } from 'rxjs/operators';
   import { InteractionStatus } from '@azure/msal-browser';
   import { MsalBroadcastService, MsalInterceptor, MsalModule, MsalService } from '@azure/msal-angular';
-  import { MsalAuthModule } from './msal/msal-auth.module';
+  import { MsalAuthModule } from '../msal/msal-auth.module';
  /**Check if the application has been called for Teams or Web operation .. If Installing the MSAL interceptor for the token */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
   return  AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
@@ -77,7 +77,6 @@ export const myServiceFactory = (httpInterceptorFakeService: any, msalIntercepto
        * (vedi 'imports' sopra) tramite injection token PL_MSAL_*_FACTORY, sovrascrivibili dall'esterno.
        * MsalInterceptor va comunque dichiarato qui perche' usato come dipendenza in myServiceFactory.
        */
-      MsalInterceptor,
       <% if (http !== 'none') { %>
       HttpInterceptorFakeService,
       <% } %>

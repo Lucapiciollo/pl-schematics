@@ -1,3 +1,75 @@
+# pl-schematics 4.0 - novita' e compatibilita'
+
+> Versione **4.0.0** (vedi [CHANGELOG.md](./CHANGELOG.md), contiene le BREAKING CHANGE). Lo schematic ora genera un progetto che compila con `ng build` su **Angular 19, 20 e 21**, sia con app *classic* (NgModule) sia *standalone*.
+
+## Matrice di compatibilita'
+
+| pl-schematics | Angular | Node.js | Architetture | Note |
+|---|---|---|---|---|
+| **4.0.x** | **19, 20, 21** | ^20.19 / ^22.12 / >=24 | classic + standalone (rilevamento automatico) | verificato con `npm run test:e2e` (vedi sotto) |
+| 3.x e precedenti | non supportato | - | - | generavano progetti non compilabili su Angular 19+ |
+
+Versioni delle dipendenze aggiunte al progetto (tabella in `src/pl-schematics/utils/versions.utils.ts`, nessun `latest`):
+
+| Pacchetto | Angular 19 | Angular 20 | Angular 21 |
+|---|---|---|---|
+| `@angular/material`, `@angular/cdk`, `@angular/animations`, `@angular/localize`, `ng-packagr`, `@ngrx/*` | ^19.0.0 | ^20.0.0 | ^21.0.0 |
+| `@ng-bootstrap/ng-bootstrap` (richiesto da pl-core-utils-library) | ^18.0.0 | ^19.0.1 | ^20.0.0 |
+| `@ngx-translate/core`, `@ngx-translate/http-loader` (API `provideTranslateService`/`fallbackLang`) | ^17.0.0 | ^17.0.0 | ^17.0.0 |
+| `ngx-ui-loader` | ^19.0.0 | ^19.0.0 | ^19.0.0 |
+| `pl-core-utils-library` / `pl-decorator` | ~2.1.3 / ^1.4.28 | idem | idem |
+| `bootstrap` (peer di pl-core-utils-library ^5.1.3), `@popperjs/core` | ^5.3.0, ^2.11.8 | idem | idem |
+| `@azure/msal-angular` / `@azure/msal-browser` (solo login Azure) | ^6.3.0 / ^5.29.0 | idem | idem |
+| `@microsoft/microsoft-graph-client` (solo login Azure) | ^3.0.7 | idem | idem |
+
+## Uso
+
+```sh
+ng new my-app                        # classic (--standalone=false) o standalone: lo schematic lo rileva da main.ts
+cd my-app
+npm i -D pl-schematics@4
+npx schematics pl-schematics:pl-schematics --name-package=my-app --no-dry-run --no-debug
+```
+
+- Con `schematics-cli` 21 le opzioni vanno in **kebab-case** (`--name-package`, `--enable-sonar-qube`, ...) e, per scrivere su disco, servono `--no-dry-run --no-debug`.
+- `--architecture` vale `auto` (default: classic/standalone viene **rilevato** da `main.ts`: `bootstrapApplication` oppure `bootstrapModule`). Se si forza un valore diverso da quello rilevato lo schematic si ferma con un errore chiaro (non genera file inutilizzati).
+- **App classic**: modifica `app.module.ts` / `app-module.ts` (Angular 20+), crea/aggiorna il routing module, aggiunge `InitializerModule`, `SharedModule.forRoot(...)` e il provider `ErrorHandler`.
+- **App standalone**: modifica `app.config.ts` (`provideRouter(..., withHashLocation())`, `providePlShared(...)`, `provideCore()` con `provideAppInitializer`, `ErrorHandler`, `importProvidersFrom(StateModule)` se NgRx) e `app.routes.ts`, e importa `NgxUiLoaderModule`/`RouterOutlet` nel componente root. Non vengono generati NgModule inutilizzati.
+- I nomi reali dei file (Angular 19: `app.component.ts`, `app.module.ts`; Angular 20+: `app.ts`, `app.html`, `app-module.ts`) vengono letti dal progetto.
+
+### `namePackage` con percorso
+
+`--name-package=cloud/agic` e' ammesso: uno o piu' segmenti separati da `/` (lettere, numeri, `-`, `_`).
+- La cartella applicativa e' `src/app/cloud/agic/` (percorso invariato, come nella v3).
+- I nomi delle librerie derivano da una versione sanitizzata (minuscolo, `_` -> `-`, segmenti uniti con `-`): `cloud-agic-shared` e `cloud-agic-ngrx`.
+- Valori non validi (`a//b`, `../x`, spazi, ...) vengono rifiutati con un errore.
+
+### Libreria condivisa e configurazione
+
+La libreria `<nome>-shared` **non importa mai** l'environment dell'app (una libreria non puo' dipendere dall'app). La configurazione passa da `SharedModule.forRoot(config)` (classic) o `providePlShared(config)` (standalone); la `config` e' `appSharedConfig` (`<namePackage>/core/utils/shared.config.ts`, legge l'environment). `SharedModule` non importa piu' `StateModule`: lo store NgRx (`<nome>-ngrx`) viene registrato dall'app (`AppModule` / `app.config.ts`).
+
+### Opzione `tests`
+
+L'opzione `tests` (`none|jasmine|jest`) oggi influisce solo sugli script/CI generati (`ci:test`, step "Run tests"); non configura Jest. Gli spec generati compilano con il test runner di default di `ng new`.
+
+## Test
+
+```sh
+npm install
+npm test                       # build + unit test dello schematic (SchematicTestRunner, test/unit/*.spec.js)
+
+# E2E riproducibile: ng new -> schematic -> npm install -> ng build (app + librerie) -> compilazione spec
+npm run test:e2e               # tutte le righe: Angular 19/20/21 x classic/standalone x casi
+npm run test:e2e:19            # solo Angular 19 (anche :20, :21)
+node tools/e2e-matrix.js --list
+node tools/e2e-matrix.js --angular 19 --arch standalone --case azure --keep
+node tools/e2e-matrix.js --angular 21 --jobs 4 --run-tests      # --run-tests esegue anche `ng test` headless (richiede Chrome per Karma, Angular 19/20)
+```
+
+Casi (`--case`): `base` (default, provato anche con `ng new --strict false`), `full` (material+ngrx+interceptor+logging advanced), `bootstrap` (bootstrap, interceptor funzionale, jest, sonar, documentazione, mock-api, GitHub Actions), `azure` (MSAL + Azure DevOps), `minimal` (i18n/state/http/logging/tests none), `nested` (`cloud/agic`). Ogni riga riporta PASS/FAIL e il passo fallito; i log sono in `<work>/rows/<id>/e2e.log` (`--work`, default `<tmp>/pl-schematics-e2e`). La prima esecuzione e' lenta (installa le basi `ng new` per versione, poi riusate).
+
+---
+
 ### Continuous Integration: Azure DevOps & GitHub Actions
 
 - **CI Azure DevOps (`files/ci-azure-devops/`)**  
@@ -288,7 +360,7 @@ Questi package hanno funzionalità specifiche.
 ### Moduli e Inizializzatori
 
 - **SharedModule**  
-    Modulo comune che importa/espone CommonModule, HttpClientModule, FormsModule, PipeModule, TranslateModule, MaterialModule (opzionale), StateModule (opzionale).
+    Modulo comune che importa/espone CommonModule, FormsModule, PipeModule, TranslateModule (se i18n), MaterialModule (opzionale). `SharedModule.forRoot(config)` (classic) o `providePlShared(config)` (standalone) registrano HttpClient, interceptor e ngx-translate.
   
     _Esempio:_
     ```typescript

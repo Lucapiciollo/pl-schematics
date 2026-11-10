@@ -1,8 +1,8 @@
-import { AppEnvironment } from './environment';
+import { AppEnvironment } from './environment.model';
 
 export const environment: AppEnvironment = {
   production: true,
-  appName: '<%= dasherize(namePackage) %>',
+  appName: '<%= libBaseName %>',
   appVersion: '1.0.0',
 
   http: {

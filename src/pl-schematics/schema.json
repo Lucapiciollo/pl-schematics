@@ -6,7 +6,7 @@
   "properties": {
     "namePackage": {
       "type": "string",
-      "description": "Application package name",
+      "description": "Application package name: one or more \"/\"-separated segments (letters, numbers, - and _), e.g. \"my-app\" or \"cloud/agic\". Used as folder under src/app; library names are derived from a kebab-case join (cloud-agic-shared).",
       "x-prompt": "Nome del package applicativo?"
     },
     "nameCompany": {
@@ -96,7 +96,7 @@
           },
           {
             "value": "ngrx",
-            "label": "Sì, NgRx base con StateModule, actions, reducer e selectors"
+            "label": "SÃ¬, NgRx base con StateModule, actions, reducer e selectors"
           }
         ]
       }
@@ -120,11 +120,11 @@
           },
           {
             "value": "interceptor-classic",
-            "label": "Sì, interceptor classico"
+            "label": "SÃ¬, interceptor classico"
           },
           {
             "value": "interceptor-functional",
-            "label": "Sì, interceptor funzionale"
+            "label": "SÃ¬, interceptor funzionale"
           }
         ]
       }
@@ -147,7 +147,7 @@
           },
           {
             "value": "node-express",
-            "label": "Sì, Node Express"
+            "label": "SÃ¬, Node Express"
           }
         ]
       }
@@ -182,26 +182,13 @@
     },
     "architecture": {
       "type": "string",
-      "description": "Angular architecture",
-      "default": "classic",
+      "description": "Angular architecture. \"auto\" (default) detects it from main.ts of the target app; \"classic\" or \"standalone\" must match the detected one, otherwise the schematic stops with an error.",
+      "default": "auto",
       "enum": [
+        "auto",
         "classic",
         "standalone"
-      ],
-      "x-prompt": {
-        "message": "Che architettura Angular vuoi usare?",
-        "type": "list",
-        "items": [
-          {
-            "value": "classic",
-            "label": "Classic NgModule"
-          },
-          {
-            "value": "standalone",
-            "label": "Standalone"
-          }
-        ]
-      }
+      ]
     },
     "i18n": {
       "type": "string",
@@ -228,7 +215,7 @@
     },
     "tests": {
       "type": "string",
-      "description": "Test framework",
+      "description": "Test framework: \"jasmine\" = test runner di default di Angular (Karma/Jasmine su 19-20, Vitest su 21) con spec che compilano e passano; \"jest\" non e' supportato e viene rifiutato con un errore.",
       "default": "jasmine",
       "enum": [
         "none",
@@ -245,11 +232,7 @@
           },
           {
             "value": "jasmine",
-            "label": "Jasmine"
-          },
-          {
-            "value": "jest",
-            "label": "Jest"
+            "label": "Test runner di default di Angular"
           }
         ]
       }
@@ -333,7 +316,7 @@
           },
           {
             "value": "Y",
-            "label": "Sì"
+            "label": "SÃ¬"
           }
         ]
       }

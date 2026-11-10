@@ -9,8 +9,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  nodeVersion: '18.x'
-  appName: '<%= dasherize(namePackage) %>'
+  nodeVersion: '22.x'
+  appName: '<%= libBaseName %>'
 
 stages:
   - stage: Build

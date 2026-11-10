@@ -14,6 +14,7 @@
  * ]
  */
 
+import { HttpResponse } from '@angular/common/http';
 import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
@@ -21,12 +22,13 @@ import {
   CONTENT_TYPE,
   PlCoreUtils,
   PlHttpRequest,
-  PLUnsubscribe,
   RESPONSE_TYPE,
   TYPE_EVENT_NETWORK,
 } from 'pl-core-utils-library';
 
-import { environment } from '../../../../environments/environment';
+import { Unsubscribe } from 'pl-decorator';
+
+import { environment } from '../../../../<%= nsUp %>environments/environment';
 
 import { CORE_TYPE_EVENT } from '../type/type.event';
 
@@ -42,7 +44,7 @@ import { ErrorBean, ErrorCode<% if (logging === "advanced") { %>, LoggerFeature,
 @Injectable({
   providedIn: 'root',
 })
-@PLUnsubscribe()
+@Unsubscribe()
 export class  GlobalService implements OnDestroy {
   <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
   private graphClient: Client | null = null;
@@ -140,23 +142,17 @@ export class  GlobalService implements OnDestroy {
   callMock(p1: string, p2: string): Observable<ArrayBuffer> {
     return new Observable<ArrayBuffer>((observer) => {
       const request: PlHttpRequest = new PlHttpRequest(
-        environment.http.api.mock,
-        {
-          api: 'api',
-          files: 'files',
-        },
-        {
-          api: p1,
-          files: p2,
-        },
+        { url: environment.http.api.mock, mocked: true },
+        { api: 'api', files: 'files' } as unknown as JSON,
+        { api: p1, files: p2 } as unknown as JSON,
         null,
       );
 
       this.httpService
-        .GETFILE(request, RESPONSE_TYPE.ARRAYBUFFER, CONTENT_TYPE.JSON, null)
+        .GETFILE(request, RESPONSE_TYPE.ARRAYBUFFER, undefined, CONTENT_TYPE.JSON)
         .subscribe(
-          (response: ArrayBuffer) => {
-            observer.next(response);
+          (response: HttpResponse<ArrayBuffer>) => {
+            observer.next(response.body as ArrayBuffer);
             observer.complete();
           },
           (error: unknown) => {

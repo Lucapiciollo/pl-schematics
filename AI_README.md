@@ -2,7 +2,7 @@
 
 > **Prompt di contesto — incolla questo blocco a un LLM/agente AI prima di chiedergli di lavorare su questo repository o su un progetto generato con questo tool:**
 >
-> "Stai lavorando con (o su) **pl-schematics**, uno schematic per Angular CLI (`@angular-devkit/schematics`) che **standardizza l'architettura iniziale di un progetto Angular enterprise**. Non è una libreria di componenti UI e non genera business logic applicativa: applica un pattern di progetto (cartelle, moduli, servizi core, autenticazione, gestione errori, HTTP, state management) su un progetto Angular nuovo o esistente, tramite `schematics pl-schematics:pl-schematics --force`. Il risultato è: un layer applicativo `core` (autenticazione MSAL opzionale, interceptor HTTP con retry e refresh-token, servizio `GlobalService` come punto centrale di dispatch per le chiamate al BE) e due **librerie Angular reali** generate nel workspace (`projects/<nome>-shared`, e se richiesto `projects/<nome>-ngrx`), non semplici cartelle. Se ti viene chiesto di modificare il **sorgente dello schematic** (questo repo, cartella `src/pl-schematics/files/**`), ricorda che quei file sono **template EJS** (`<% if (...) { %> ... <% } %>`, `<%= variabile %>`), processati con le opzioni dello schema al momento della generazione: non sono codice TypeScript eseguito direttamente da questo repo, ma testo che diventerà codice TypeScript nel progetto target. Se ti viene chiesto di lavorare su un **progetto generato** da questo schematic, segui le convenzioni descritte più sotto (GlobalService come punto di dispatch HTTP, ErrorBean per gli errori, pattern NgRx in `projects/<nome>-ngrx/src/lib`, injection token per configurazione) invece di inventarne di nuove."
+> "Stai lavorando con (o su) **pl-schematics**, uno schematic per Angular CLI (`@angular-devkit/schematics`) che **standardizza l'architettura iniziale di un progetto Angular enterprise**. Non è una libreria di componenti UI e non genera business logic applicativa: applica un pattern di progetto (cartelle, moduli, servizi core, autenticazione, gestione errori, HTTP, state management) su un progetto Angular nuovo o esistente, tramite `schematics pl-schematics:pl-schematics --no-dry-run --no-debug` (opzioni in kebab-case). Versione 4.x: Angular 19/20/21, app classic (NgModule) e standalone, rilevate automaticamente. Il risultato è: un layer applicativo `core` (autenticazione MSAL opzionale, interceptor HTTP con retry e refresh-token, servizio `GlobalService` come punto centrale di dispatch per le chiamate al BE) e due **librerie Angular reali** generate nel workspace (`projects/<nome>-shared`, e se richiesto `projects/<nome>-ngrx`), non semplici cartelle. Se ti viene chiesto di modificare il **sorgente dello schematic** (questo repo, cartella `src/pl-schematics/files/**`), ricorda che quei file sono **template EJS** (`<% if (...) { %> ... <% } %>`, `<%= variabile %>`), processati con le opzioni dello schema al momento della generazione: non sono codice TypeScript eseguito direttamente da questo repo, ma testo che diventerà codice TypeScript nel progetto target. Se ti viene chiesto di lavorare su un **progetto generato** da questo schematic, segui le convenzioni descritte più sotto (GlobalService come punto di dispatch HTTP, ErrorBean per gli errori, pattern NgRx in `projects/<nome>-ngrx/src/lib`, injection token per configurazione) invece di inventarne di nuove."
 
 ---
 
@@ -11,27 +11,29 @@
 `pl-schematics` è un pacchetto npm (`schematics`) che, una volta installato in un progetto Angular CLI, applica un pattern architetturale enterprise tramite:
 
 ```sh
-ng new my-app                    # progetto Angular standard
-npm i pl-schematics@<versione>
-schematics pl-schematics:pl-schematics --force
+ng new my-app                    # progetto Angular standard (19/20/21, classic o standalone)
+npm i -D pl-schematics@4
+npx schematics pl-schematics:pl-schematics --name-package=my-app --no-dry-run --no-debug
 ```
 
-Non crea un'app da zero (serve `ng new` prima): **arricchisce/standardizza** un workspace Angular CLI esistente.
+L'architettura (classic/standalone) viene rilevata da `main.ts`: `bootstrapApplication` => standalone, `bootstrapModule` => classic. Non crea un'app da zero (serve `ng new` prima): **arricchisce/standardizza** un workspace Angular CLI esistente.
 
 ## 2. Cosa genera (in sintesi)
 
-- **`src/app/<namePackage>/core/`** — layer applicativo, sempre nel progetto (non libreria):
+- **`src/app/<namePackage>/core/`** — layer applicativo, sempre nel progetto (non libreria). `<namePackage>` puo' contenere `/` (es. `cloud/agic`); le librerie usano il nome kebab `cloud-agic-shared`:
   - `service/auth.service.ts` — login/logout, integrazione MSAL v3 (`@azure/msal-angular`) quando abilitata, altrimenti login "bypassata" (emula sempre successo, punto di innesto per SSO custom).
   - `service/http.service.ts` — wrapper tipizzato attorno a `PlHttpService` di `pl-core-utils-library` (GET/POST/PUT/DELETE/PATCH + varianti *BG non interrotte dal routing, STREAM, FORKJOIN, DOWNLOAD).
   - `service/global.service.ts` — **punto centrale di dispatch per le chiamate al BE**: espone `get/getBg/post/postBg/put/putBg/patch/patchBg/delete` che delegano a `HttpService`. I componenti feature dovrebbero iniettare `GlobalService`, non `HttpService` direttamente. Centralizza anche eventi broadcast (`pl-core-utils-library`), errori globali, redirect/re-login su 401.
   - `service/error.service.ts` — `ErrorHandler` globale Angular, converte errori in `ErrorBean` ed eventi broadcast.
   - `service/router.fake.guard.ts` — guard segnaposto (con MSAL diventa reale via `MsalGuard`, altrimenti lascia sempre passare).
-  - `module/initializer.module.ts` — modulo di bootstrap: registra `BASE_URL_API`, cache/log config, MSAL (se abilitato), e due `APP_INITIALIZER`: uno per l'ambient mode, uno per `AutenticationLoader` (login + task di bootstrap custom, vedi §5).
-  - `module/msal/` — wiring MSAL v3 (solo se login = Azure AD), con injection token dedicati per sovrascrivere le factory di default.
+  - `provide-core.ts` — **solo standalone**: `provideCore()`, equivalente dell'InitializerModule con `provideAppInitializer`, `ErrorHandler`, loader grafici, `importProvidersFrom(PlCoreModule, ...)`, MSAL.
+  - `module/initializer.module.ts` — **solo classic**: modulo di bootstrap: registra `BASE_URL_API`, cache/log config, MSAL (se abilitato), e due `APP_INITIALIZER`: uno per l'ambient mode, uno per `AutenticationLoader` (login + task di bootstrap custom, vedi §5).
+  - `msal/` — wiring MSAL (solo se login = Azure AD; `@azure/msal-angular` ^6): `providePlMsal()` (classic e standalone), `msal-auth.module.ts` (solo classic), injection token per sovrascrivere le factory.
+  - `utils/shared.config.ts` — `appSharedConfig`, la config della libreria shared ricavata dall'environment.
   - `initializer/`, `utils/`, `type/` — supporto.
 
 - **`projects/<namePackage>-shared/`** — **libreria Angular vera** (ng-packagr, non una cartella):
-  - `SharedModule` (CommonModule, HttpClientModule, FormsModule, PipeModule, TranslateModule, opzionalmente MaterialModule/StateModule).
+  - `SharedModule` (CommonModule, FormsModule, PipeModule, TranslateModule se i18n, opzionalmente MaterialModule) + `SharedModule.forRoot(config)` (classic) / `providePlShared(config)` (standalone, in `lib/config/shared-lib.config.ts`): registrano HttpClient, interceptor, ngx-translate. **La libreria non importa mai l'environment dell'app**: la config arriva da `appSharedConfig`. `StateModule` NON e' importato dalla shared: lo importa l'app.
   - Pipe riusabili (`comma-decimal`, `currency-format`, `localized-date`, `safe`, `truncate`, ecc.).
   - `Utils` e device-detector.
   - `ErrorBean`/`ErrorCode` (bean di errore generico, usato ovunque nel progetto).
@@ -49,7 +51,7 @@ Non crea un'app da zero (serve `ng new` prima): **arricchisce/standardizza** un 
 
 | Opzione | Valori | Effetto |
 |---|---|---|
-| `namePackage` | stringa (obbligatoria) | Nome cartella app sotto `src/app/`, e prefisso per i nomi delle librerie (`<namePackage>-shared`, `<namePackage>-ngrx`) |
+| `namePackage` | stringa (obbligatoria), uno o piu' segmenti `[A-Za-z0-9_-]` separati da `/` | Cartella app sotto `src/app/<namePackage>`; nomi librerie da `getLibBaseName` (minuscolo, `_`->`-`, `/`->`-`): `<base>-shared`, `<base>-ngrx` |
 | `nameCompany` | stringa | Metadato, default `mycompany` |
 | `ui` | `none`\|`material`\|`bootstrap` | Angular Material o Bootstrap 5 |
 | `state` | `none`\|`ngrx` | Genera `projects/<namePackage>-ngrx` |
@@ -61,9 +63,9 @@ Non crea un'app da zero (serve `ng new` prima): **arricchisce/standardizza** un 
 | `ci` | `none`\|`github-actions`\|`azure-devops` | Pipeline CI/CD |
 | `enableSonarQube` | `Y`\|`N` | |
 | `includeDocumentation` | boolean | |
-| `architecture` | `classic`\|`standalone` | *(supporto standalone non ancora completo)* |
-| `tests` | `none`\|`jasmine`\|`jest` | |
-| `strict` | boolean | |
+| `architecture` | `auto`\|`classic`\|`standalone` | Default `auto` (rilevata da `main.ts`). Un valore diverso da quello rilevato => errore chiaro |
+| `tests` | `none`\|`jasmine`\|`jest` | Influisce solo su script/CI generati (`ci:test`, step test); non configura Jest |
+| `strict` | boolean | Riservata: il codice generato compila sia con `ng new --strict` (default) sia `--strict false` (verificato in e2e) |
 
 ## 4. Interceptor HTTP e retry (quando `http != 'none'`)
 
@@ -103,7 +105,15 @@ Se non registri nessun task, il comportamento resta identico alla sola login.
 
 ## 7. Note per chi modifica il sorgente dello schematic (questo repo)
 
+- **Flusso** (`index.ts`): `normalizeOptionsSync()` (sincrona, nessun Tree) -> una Rule che esegue `resolveWorkspaceOptions()` (progetto, prefix, major Angular, architettura rilevata da `utils/workspace.utils.ts::detectApp`) e solo DOPO costruisce la `chain([...])` con le opzioni definitive.
+- **Shell dell'app** (`rules/update-app-shell.rule.ts`): non sovrascrive `app.module.ts`/`app.config.ts`; li *modifica* (`utils/ts-edit.utils.ts`: `addImports`, `addToArrayProperty`, idempotenti) cosi' si preservano le scelte di `ng new` (es. `provideZoneChangeDetection` vs zoneless in Angular 21). I file di destinazione hanno i nomi reali del progetto (Angular 19: `app.component.ts`/`app.module.ts`; 20+: `app.ts`/`app.html`/`app-module.ts`). Template di shell: `files/shell` (html root), `files/shell-classic`, `files/shell-standalone`.
+- Template per architettura: `files/core/module` e `files/core/msal-classic`, `files/home-classic` solo classic; `files/core/standalone` solo standalone (vedi `add-template-files.rule.ts`). Nessun file generato deve restare inutilizzato.
+- Versioni: tabella per major in `utils/versions.utils.ts` (**mai** `latest`, nessun accesso alla rete). Per una nuova major di Angular: aggiungerla a `SUPPORTED_ANGULAR_MAJORS`, verificare i peer (`npm view <pkg>@<v> peerDependencies`) ed eseguire la matrice e2e.
+- JSON: usare sempre `readJsonFile`/`overwriteJsonFile` (`utils/json.utils.ts`): JSONC-aware (il `tsconfig.json` di `ng new` ha commenti), la scrittura tocca solo le chiavi cambiate.
+- **Test**: `npm test` (build + `test/unit/*.spec.js`, `SchematicTestRunner`); `npm run test:e2e[:19|:20|:21]` (`tools/e2e-matrix.js`: `ng new` -> schematic -> `npm install` -> `ng build` app + librerie -> compilazione spec). Gli errori nei template EJS emergono solo cosi': i `.ts` sotto `files/**` non sono compilati dal `tsc` del pacchetto.
+- Editing dei template con encoding misto (alcuni file contengono byte cp1252): modificare preservando i byte (niente riscritture complete con encoding diverso).
+
 - I file sotto `src/pl-schematics/files/**` sono **template EJS**, esclusi dalla compilazione TypeScript del pacchetto stesso (`tsconfig.json` → `exclude: ["src/*/files/**/*"]`): `npm run build` **non** li valida. Per validarli bisogna generare davvero un progetto di test (vedi `npm run test:schematic:full` o creare un workspace sintetico ed eseguire `schematics ../src/collection.json:pl-schematics ...`) e compilare l'output con `tsc`.
 - Il flag CLI `--force` **non basta più** (a seconda della versione di `@angular-devkit/schematics` installata) a far sovrascrivere file già esistenti nel Tree: `add-class.rule.ts`/`add-library-class.rule.ts` usano esplicitamente `MergeStrategy.Overwrite`.
-- `normalizeOptionsSync(options)` (in `normalize-options.rule.ts`) va chiamata **in modo sincrono, prima** di costruire l'array passato a `chain([...])` in `index.ts`: diverse rule (es. `addSharedLibrary`/`addNgrxLibrary`) leggono `options.sharedLibName`/`options.ngrxLibName` in modo sincrono al momento della creazione della chain, **prima** che qualunque Rule (lazy per definizione) abbia potuto eseguire il proprio corpo.
-- Le dipendenze npm dei pacchetti legati alla major version di Angular (`@angular/material`, `@angular/cdk`, `@angular/animations`, `@ngrx/*`, `ng-packagr`) **non usano mai `"latest"`**: la versione viene derivata dalla `@angular/core` già presente nel `package.json` del progetto target (`getAngularMajorVersion` in `add-package-json-dependencies.rule.ts`), per evitare conflitti di peer-dependency al primo `npm install`.
+- `normalizeOptionsSync(options)` (in `normalize-options.rule.ts`) va chiamata **in modo sincrono, prima** di costruire qualunque Rule: `addSharedLibrary`/`addNgrxLibrary` leggono `options.sharedLibName`/`options.ngrxLibName` alla creazione. Le rule che dipendono da architettura/versione di Angular sono costruite dopo `resolveWorkspaceOptions()`.
+- Le dipendenze npm dei pacchetti legati alla major version di Angular (`@angular/material`, `@angular/cdk`, `@angular/animations`, `@ngrx/*`, `ng-packagr`) **non usano mai `"latest"`**: la versione deriva dalla major di `@angular/core` del progetto target (`getAngularMajorVersion`/`getVersions` in `utils/versions.utils.ts`); major non supportata o non determinabile => errore.

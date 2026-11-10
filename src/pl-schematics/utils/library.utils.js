@@ -1,19 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerLibrary = exports.addLibraryTsConfigPath = exports.addLibraryProjectToWorkspace = exports.getLibrarySourceDir = exports.getLibrarySourceRoot = exports.getLibraryRoot = void 0;
+exports.getNgPackagrBuilder = getNgPackagrBuilder;
+exports.getLibraryRoot = getLibraryRoot;
+exports.getLibrarySourceRoot = getLibrarySourceRoot;
+exports.getLibrarySourceDir = getLibrarySourceDir;
+exports.addLibraryProjectToWorkspace = addLibraryProjectToWorkspace;
+exports.addLibraryTsConfigPath = addLibraryTsConfigPath;
+exports.registerLibrary = registerLibrary;
 const json_utils_1 = require("./json.utils");
+function getNgPackagrBuilder(host) {
+    const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json') || {};
+    const hasBuildAngular = (packageJson.devDependencies && packageJson.devDependencies['@angular-devkit/build-angular']) ||
+        (packageJson.dependencies && packageJson.dependencies['@angular-devkit/build-angular']);
+    return hasBuildAngular
+        ? '@angular-devkit/build-angular:ng-packagr'
+        : '@angular/build:ng-packagr';
+}
 function getLibraryRoot(libName) {
     return 'projects/' + libName;
 }
-exports.getLibraryRoot = getLibraryRoot;
 function getLibrarySourceRoot(libName) {
     return getLibraryRoot(libName) + '/src/lib';
 }
-exports.getLibrarySourceRoot = getLibrarySourceRoot;
 function getLibrarySourceDir(libName) {
     return getLibraryRoot(libName) + '/src';
 }
-exports.getLibrarySourceDir = getLibrarySourceDir;
 function addLibraryProjectToWorkspace(host, context, libName, prefix) {
     const workspaceJson = (0, json_utils_1.readJsonFile)(host, 'angular.json');
     if (!workspaceJson) {
@@ -35,7 +46,7 @@ function addLibraryProjectToWorkspace(host, context, libName, prefix) {
         prefix: prefix || 'lib',
         architect: {
             build: {
-                builder: '@angular-devkit/build-angular:ng-packagr',
+                builder: getNgPackagrBuilder(host),
                 options: {
                     tsConfig: projectRoot + '/tsconfig.lib.json',
                     project: projectRoot + '/ng-package.json',
@@ -55,7 +66,6 @@ function addLibraryProjectToWorkspace(host, context, libName, prefix) {
     (0, json_utils_1.overwriteJsonFile)(host, 'angular.json', workspaceJson);
     context.logger.info('Library project "' + libName + '" registered in angular.json.');
 }
-exports.addLibraryProjectToWorkspace = addLibraryProjectToWorkspace;
 function addLibraryTsConfigPath(host, context, libName) {
     const tsConfigPath = 'tsconfig.json';
     const tsConfig = (0, json_utils_1.readJsonFile)(host, tsConfigPath);
@@ -67,14 +77,13 @@ function addLibraryTsConfigPath(host, context, libName) {
     }
     tsConfig.compilerOptions = tsConfig.compilerOptions || {};
     tsConfig.compilerOptions.paths = tsConfig.compilerOptions.paths || {};
-    const entryPoint = getLibraryRoot(libName) + '/src/public-api.ts';
+    const entryPoint = './' + getLibraryRoot(libName) + '/src/public-api.ts';
     if (!tsConfig.compilerOptions.paths[libName]) {
         tsConfig.compilerOptions.paths[libName] = [entryPoint];
     }
     (0, json_utils_1.overwriteJsonFile)(host, tsConfigPath, tsConfig);
     context.logger.info('Path mapping "' + libName + '" -> "' + entryPoint + '" added to tsconfig.json.');
 }
-exports.addLibraryTsConfigPath = addLibraryTsConfigPath;
 function registerLibrary(options, libName) {
     return (host, context) => {
         addLibraryProjectToWorkspace(host, context, libName, options.prefix || 'lib');
@@ -82,4 +91,3 @@ function registerLibrary(options, libName) {
         return host;
     };
 }
-exports.registerLibrary = registerLibrary;

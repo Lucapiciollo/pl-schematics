@@ -1,21 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateOptions = void 0;
+exports.validateOptions = validateOptions;
+const normalize_options_rule_1 = require("./normalize-options.rule");
 function validateOptions(options) {
     return (host, context) => {
-        if (!options.namePackage) {
-            throw new Error('Option "namePackage" is required.');
-        }
-        if (!/^[a-zA-Z0-9-_]+$/.test(options.namePackage)) {
-            throw new Error('Option "namePackage" can contain only letters, numbers, dash and underscore.');
-        }
-        if (options.architecture === 'standalone' && options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
-            context.logger.warn('Standalone architecture with legacy Azure MSAL is not fully supported yet. It will be handled in a future rule.');
-        }
-        if (options.http === 'interceptor-functional' && options.architecture === 'classic') {
-            context.logger.warn('Functional interceptor is designed for modern standalone/hybrid Angular. Classic mode will keep compatibility for now.');
+        (0, normalize_options_rule_1.validateNamePackage)(options.namePackage);
+        if (options.http === 'interceptor-functional' && !options.standalone) {
+            context.logger.info('http=interceptor-functional on a classic (NgModule) app: the interceptor is registered through HTTP_INTERCEPTORS (class based); the functional form is used on standalone apps.');
         }
         return host;
     };
 }
-exports.validateOptions = validateOptions;

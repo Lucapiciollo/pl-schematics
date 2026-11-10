@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scaffoldLibrarySchematics = exports.scaffoldSchematics = void 0;
+exports.scaffoldSchematics = scaffoldSchematics;
+exports.scaffoldLibrarySchematics = scaffoldLibrarySchematics;
 const workspace_utils_1 = require("../utils/workspace.utils");
 function scaffoldSchematics(options, destPath) {
     return (host, context) => {
@@ -18,7 +19,6 @@ function scaffoldSchematics(options, destPath) {
         return host;
     };
 }
-exports.scaffoldSchematics = scaffoldSchematics;
 function scaffoldLibrarySchematics(libraryAbsoluteDestPath) {
     return (host, context) => {
         const filePath = libraryAbsoluteDestPath + '/.gitkeep';
@@ -31,4 +31,3 @@ function scaffoldLibrarySchematics(libraryAbsoluteDestPath) {
         return host;
     };
 }
-exports.scaffoldLibrarySchematics = scaffoldLibrarySchematics;

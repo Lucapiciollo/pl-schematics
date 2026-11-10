@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAngularJsonForMaterial = void 0;
+exports.updateAngularJsonForMaterial = updateAngularJsonForMaterial;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function updateAngularJsonForMaterial(options) {
@@ -29,4 +29,3 @@ function updateAngularJsonForMaterial(options) {
         return host;
     };
 }
-exports.updateAngularJsonForMaterial = updateAngularJsonForMaterial;

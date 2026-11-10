@@ -41,8 +41,8 @@ export function updateAngularJsonForBootstrap(
     optionsJson.styles = ensureArray<string>(optionsJson.styles);
 
     pushIfMissing(optionsJson.scripts, 'node_modules/jquery/dist/jquery.slim.min.js');
-    pushIfMissing(optionsJson.scripts, 'node_modules/popper.js/dist/umd/popper.min.js');
-    pushIfMissing(optionsJson.scripts, 'node_modules/bootstrap/dist/js/bootstrap.min.js');
+    // Bootstrap 5 usa Popper v2 (incluso in bootstrap.bundle): popper.js 1.x non serve.
+    pushIfMissing(optionsJson.scripts, 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js');
 
     pushIfMissing(optionsJson.styles, 'node_modules/bootstrap/dist/css/bootstrap.min.css');
     pushIfMissing(

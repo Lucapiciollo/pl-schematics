@@ -13,7 +13,10 @@ export type PlHttpOption =
   | 'interceptor-classic'
   | 'interceptor-functional';
 
+import { AppInfo } from '../utils/workspace.utils';
+
 export type PlArchitectureOption =
+  | 'auto'
   | 'classic'
   | 'standalone';
 
@@ -135,6 +138,39 @@ export interface PlSchematicsOptions {
    * Strict mode.
    */
   strict?: boolean | string;
+
+  /**
+   * true se l'app target e' standalone (derivato dal rilevamento).
+   */
+  standalone?: boolean;
+
+  /**
+   * Major di Angular rilevata dal package.json del progetto target.
+   */
+  angularMajor?: number;
+  angularMinor?: number;
+
+  /**
+   * Nome base kebab-case per le librerie (da namePackage, '/' -> '-').
+   */
+  libBaseName?: string;
+
+  /**
+   * Prefisso di '../' extra per i path relativi verso src/environments quando
+   * namePackage ha piu' segmenti (es. 'cloud/agic' -> '../').
+   */
+  nsUp?: string;
+
+  /**
+   * Classe e specifier (relativo ad appDir) del componente root dell'app.
+   */
+  rootComponentClass?: string;
+  rootComponentImport?: string;
+
+  /**
+   * Dettagli dell'app rilevata (uso interno delle rule).
+   */
+  appInfo?: AppInfo;
 
   /**
    * Nome del progetto libreria Angular 'shared' (calcolato in normalize-options,

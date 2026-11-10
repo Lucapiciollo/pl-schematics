@@ -15,10 +15,11 @@ import { RootState } from './root.state';
     EffectsModule.forRoot(rootEffects),
     /**
      * @author l.piciollo
-     * Redux DevTools va abilitato solo in sviluppo: in produzione appesantisce
-     * inutilmente il bundle/runtime e puo' esporre lo stato applicativo.
+     * Redux DevTools: in produzione (logOnly) non espone lo stato applicativo. La
+     * chiamata resta statica (non condizionale) perche' il compilatore AOT deve poter
+     * analizzare staticamente l'array 'imports' del modulo.
      */
-    ...(isDevMode() ? [StoreDevtoolsModule.instrument({ maxAge: 25 })] : []),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   exports: [
     StoreModule,

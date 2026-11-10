@@ -16,3 +16,8 @@ yarn-error.log*
 # Mac OSX Finder files.
 **/.DS_Store
 .DS_Store
+
+# Artefatti di test/packaging
+*.tgz
+!pl-schematics-2.4.14.tgz
+dist-rt/

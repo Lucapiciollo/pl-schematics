@@ -54,6 +54,7 @@ export function addSharedLibrary(options: PlSchematicsOptions): Rule {
       options,
       './files/shared-lib/pipe',
       libSourceRoot + '/pipe',
+      options.i18n === 'ngx-translate' ? [] : ['/translate-async.pipe.ts'],
     ),
     addLibraryClass(
       options,
@@ -64,6 +65,11 @@ export function addSharedLibrary(options: PlSchematicsOptions): Rule {
       options,
       './files/shared-lib/bean',
       libSourceRoot + '/bean',
+    ),
+    addLibraryClass(
+      options,
+      './files/shared-lib/config',
+      libSourceRoot + '/config',
     ),
     addLibraryClass(
       options,

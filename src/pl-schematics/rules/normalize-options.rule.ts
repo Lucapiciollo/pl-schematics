@@ -1,7 +1,22 @@
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 
-import { PlSchematicsOptions } from '../types/schema-options';
+import {
+  PlArchitectureOption,
+  PlBrowserSupported,
+  PlCiOption,
+  PlHttpOption,
+  PlI18nOption,
+  PlLoggingOption,
+  PlLoginSupportConfiguration,
+  PlMockApiOption,
+  PlSchematicsOptions,
+  PlStateOption,
+  PlTestsOption,
+  PlUiOption,
+} from '../types/schema-options';
 import { readJsonFile } from '../utils/json.utils';
+import { getAngularVersion } from '../utils/versions.utils';
+import { detectApp, getDefaultProjectName, resolveArchitecture } from '../utils/workspace.utils';
 
 function normalizeString(
   value: string | undefined,
@@ -25,63 +40,61 @@ function normalizeBoolean(value: unknown): boolean {
 
   const normalized = String(value || '').toLowerCase();
 
-  return normalized === 'true' ||
-    normalized === 'y' ||
-    normalized === 'yes' ||
-    normalized === 's' ||
-    normalized === 'si' ||
-    normalized === 'sì' ||
-    normalized === '1';
+  return ['true', 'y', 'yes', 's', 'si', 'sì', '1'].indexOf(normalized) >= 0;
 }
 
 function normalizeYesNo(value: unknown): 'Y' | 'N' {
-  if (value === true) {
-    return 'Y';
-  }
-
-  if (value === false) {
-    return 'N';
-  }
-
-  const normalized = String(value || '').toUpperCase();
-
-  return normalized === 'Y' ||
-    normalized === 'YES' ||
-    normalized === 'TRUE' ||
-    normalized === '1' ||
-    normalized === 'S' ||
-    normalized === 'SI' ||
-    normalized === 'SÌ'
-    ? 'Y'
-    : 'N';
+  return normalizeBoolean(value) ? 'Y' : 'N';
 }
 
-function normalizeOptionValue(
+function normalizeOptionValue<T extends string>(
   value: string | undefined,
-  defaultValue: string,
-  allowedValues: string[],
-): string {
+  defaultValue: NoInfer<T>,
+  allowedValues: T[],
+): T {
   const normalized = normalizeString(value, defaultValue);
 
-  return allowedValues.indexOf(normalized) >= 0
-    ? normalized
+  return allowedValues.indexOf(normalized as T) >= 0
+    ? (normalized as T)
     : defaultValue;
 }
 
-function getDefaultProjectName(host: Tree): string {
-  const workspace = readJsonFile(host, 'angular.json');
+/**
+ * @author l.piciollo
+ * namePackage: uno o piu' segmenti separati da '/' (es. 'cloud/agic'), ogni
+ * segmento composto da lettere, numeri, '-' e '_'. Il percorso viene usato cosi'
+ * com'e' per la cartella applicativa (src/app/<namePackage>), mentre i nomi
+ * delle librerie derivano da una versione sanitizzata (vedi getLibBaseName).
+ */
+export const NAME_PACKAGE_SEGMENT = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
 
-  if (!workspace || !workspace.projects) {
-    return '';
+export function validateNamePackage(namePackage: unknown): string {
+  if (typeof namePackage !== 'string' || namePackage.trim() === '') {
+    throw new SchematicsException('Option "namePackage" is required.');
   }
 
-  if (workspace.defaultProject) {
-    return workspace.defaultProject;
+  const value = namePackage.trim();
+  const segments = value.split('/');
+
+  if (!segments.every((segment) => NAME_PACKAGE_SEGMENT.test(segment))) {
+    throw new SchematicsException(
+      'Option "namePackage" ("' + value + '") is invalid: use one or more segments separated by "/", ' +
+        'each made of letters, numbers, dash and underscore (e.g. "my-app" or "cloud/agic").',
+    );
   }
 
-  const projectNames = Object.keys(workspace.projects);
+  return value;
+}
 
-  return projectNames.length > 0 ? projectNames[0] : '';
+/**
+ * Nome base kebab-case per le librerie: segmenti uniti con '-', minuscolo,
+ * '_' -> '-' ('cloud/agic' -> 'cloud-agic', 'My_App' -> 'my-app').
+ */
+export function getLibBaseName(namePackage: string): string {
+  return namePackage
+    .split('/')
+    .map((segment) => segment.toLowerCase().replace(/_/g, '-'))
+    .join('-');
 }
 
 function getProjectPrefix(host: Tree, projectName: string): string {
@@ -100,207 +113,127 @@ function getProjectPrefix(host: Tree, projectName: string): string {
 
 /**
  * @author l.piciollo
- * Normalizza tutte le opzioni che NON richiedono accesso al Tree (angular.json),
- * cioe' tutte tranne 'project'/'prefix'. E' FONDAMENTALE che questa funzione sia
- * sincrona e venga chiamata PRIMA di costruire l'array passato a chain([...]) in
- * index.ts: le rule che leggono options in modo sincrono al momento della loro
- * creazione (es. addSharedLibrary/addNgrxLibrary, che leggono options.sharedLibName/
- * options.ngrxLibName; oppure i ternari su options.addSupportBootstrap/
- * options.enableSonarQube in index.ts) vedrebbero altrimenti valori ancora
- * 'undefined' o non normalizzati, perche' una Rule di @angular-devkit/schematics
- * e' "lazy": il suo corpo viene eseguito solo quando il motore esegue davvero la
- * chain, non quando la funzione factory (es. normalizeOptions(options)) viene
- * invocata per costruire l'array.
+ * Normalizza tutte le opzioni che NON richiedono accesso al Tree. E' sincrona e
+ * viene invocata PRIMA di costruire qualunque Rule: le factory delle rule
+ * leggono i valori derivati (nomi delle librerie, ecc.) al momento della
+ * creazione. Le opzioni che dipendono dal workspace (progetto, prefix,
+ * architettura, major di Angular) sono risolte da resolveWorkspaceOptions().
  */
 export function normalizeOptionsSync(options: PlSchematicsOptions): void {
-  options.nameCompany = normalizeString(
-    options.nameCompany,
-    'mycompany',
-  );
+  options.namePackage = validateNamePackage(options.namePackage);
 
-  options.ui = normalizeOptionValue(
-    options.ui as any,
+  options.nameCompany = normalizeString(options.nameCompany, 'mycompany');
+  options.ui = normalizeOptionValue<PlUiOption>(options.ui, 'none', ['none', 'material', 'bootstrap']);
+  options.state = normalizeOptionValue<PlStateOption>(options.state, 'none', ['none', 'ngrx']);
+  options.logging = normalizeOptionValue<PlLoggingOption>(options.logging, 'console', ['none', 'console', 'advanced']);
+  options.mockApi = normalizeOptionValue<PlMockApiOption>(options.mockApi, 'none', ['none', 'node-express']);
+  options.ci = normalizeOptionValue<PlCiOption>(options.ci, 'none', ['none', 'github-actions', 'azure-devops']);
+  options.http = normalizeOptionValue<PlHttpOption>(options.http, 'none', [
     'none',
-    [
-      'none',
-      'material',
-      'bootstrap',
-    ],
-  ) as any;
-
-  options.state = normalizeOptionValue(
-    options.state as any,
-    'none',
-    [
-      'none',
-      'ngrx',
-    ],
-  ) as any;
-
-  options.logging = normalizeOptionValue(
-    options.logging as any,
-    'console',
-    [
-      'none',
-      'console',
-      'advanced',
-    ],
-  ) as any;
-
-  options.mockApi = normalizeOptionValue(
-    options.mockApi as any,
-    'none',
-    [
-      'none',
-      'node-express',
-    ],
-  ) as any;
-
-  options.ci = normalizeOptionValue(
-    options.ci as any,
-    'none',
-    [
-      'none',
-      'github-actions',
-      'azure-devops',
-    ],
-  ) as any;
-
-  options.http = normalizeOptionValue(
-    options.http as any,
-    'none',
-    [
-      'none',
-      'interceptor-classic',
-      'interceptor-functional',
-    ],
-  ) as any;
-
-  options.architecture = normalizeOptionValue(
-    options.architecture as any,
+    'interceptor-classic',
+    'interceptor-functional',
+  ]);
+  options.architecture = normalizeOptionValue<PlArchitectureOption>(options.architecture, 'auto', [
+    'auto',
     'classic',
-    [
-      'classic',
-      'standalone',
-    ],
-  ) as any;
+    'standalone',
+  ]);
+  options.i18n = normalizeOptionValue<PlI18nOption>(options.i18n, 'ngx-translate', ['none', 'ngx-translate']);
+  if ((options.tests as string) === 'jest') {
+    throw new SchematicsException(
+      'Option --tests=jest is not supported: pl-schematics does not generate a Jest setup. Use --tests=jasmine (Angular default test runner: Karma/Jasmine on 19-20, Vitest on 21) or --tests=none.',
+    );
+  }
 
-  options.i18n = normalizeOptionValue(
-    options.i18n as any,
-    'ngx-translate',
-    [
-      'none',
-      'ngx-translate',
-    ],
-  ) as any;
-
-  options.tests = normalizeOptionValue(
-    options.tests as any,
-    'jasmine',
-    [
-      'none',
-      'jasmine',
-      'jest',
-    ],
-  ) as any;
-
-  options.loginSupportConfiguration = normalizeOptionValue(
-    options.loginSupportConfiguration as any,
+  options.tests = normalizeOptionValue<PlTestsOption>(options.tests, 'jasmine', ['none', 'jasmine', 'jest']);
+  options.loginSupportConfiguration = normalizeOptionValue<PlLoginSupportConfiguration>(options.loginSupportConfiguration, 'NONE', [
     'NONE',
-    [
-      'NONE',
-      'AZURE-ACTIVE-DIRECT',
-    ],
-  ) as any;
+    'AZURE-ACTIVE-DIRECT',
+  ]);
 
   /**
    * @author l.piciollo
-   * Il supporto MSAL si appoggia al sistema di interceptor HTTP del template (per l'inserimento
-   * automatico del token e per lo switch fake/msal in contesto Teams). Se l'utente ha scelto
-   * 'Azure Active Directory' come login ma ha disabilitato l'interceptor HTTP ('none'), forziamo
-   * l'interceptor classico per evitare un progetto generato che non compila: la decisione se
-   * abilitare o meno MSAL resta comunque libera, qui garantiamo solo la coerenza tra le due opzioni.
+   * Il supporto MSAL si appoggia al sistema di interceptor HTTP del template (per
+   * l'inserimento automatico del token e per lo switch fake/msal in contesto
+   * Teams). Con login Azure e http 'none' forziamo l'interceptor classico.
    */
-  if (
-    options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT' &&
-    options.http === 'none'
-  ) {
-    options.http = 'interceptor-classic' as any;
+  if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT' && options.http === 'none') {
+    options.http = 'interceptor-classic';
   }
 
-  /**
-   * Necessario perché alcuni template legacy usano ancora browserSupported.
-   */
-  options.browserSupported = normalizeOptionValue(
-    options.browserSupported as any,
+  options.browserSupported = normalizeOptionValue<PlBrowserSupported>(options.browserSupported, 'BROWSER.ALL', [
     'BROWSER.ALL',
-    [
-      'BROWSER.ALL',
-      'BROWSER.CHROME',
-      'BROWSER.FIREFOX',
-      'BROWSER.EDGE',
-      'BROWSER.SAFARI',
-    ],
-  ) as any;
+    'BROWSER.CHROME',
+    'BROWSER.FIREFOX',
+    'BROWSER.EDGE',
+    'BROWSER.SAFARI',
+  ]);
 
-  options.includeDocumentation = normalizeBoolean(
-    options.includeDocumentation,
-  );
-
-  options.strict = normalizeBoolean(
-    options.strict,
-  );
-
-  options.enableSonarQube = normalizeYesNo(
-    options.enableSonarQube as any,
-  ) as any;
+  options.includeDocumentation = normalizeBoolean(options.includeDocumentation);
+  options.strict = normalizeBoolean(options.strict);
+  options.enableSonarQube = normalizeYesNo(options.enableSonarQube);
+  options.addSupportBootstrap = options.ui === 'bootstrap' ? 'Y' : 'N';
 
   /**
-   * Bootstrap deriva solo dalla scelta UI.
+   * Nomi delle librerie derivati da una versione sanitizzata di namePackage.
    */
-  if (options.ui === 'bootstrap') {
-    options.addSupportBootstrap = 'Y';
-  } else {
-    options.addSupportBootstrap = 'N';
-  }
+  const libBaseName = getLibBaseName(options.namePackage);
+  const segments = options.namePackage.split('/').length;
 
-  /**
-   * @author l.piciollo
-   * Nomi dei progetti libreria Angular generati dallo schematic ('shared' e, se
-   * abilitato, 'ngrx'). Calcolati una sola volta qui cosi' da essere disponibili
-   * in modo coerente in tutte le rule e in tutti i template (namePackage e'
-   * gia' validato da validateOptions con la regex /^[a-zA-Z0-9-_]+$/, quindi e'
-   * gia' un identificatore sicuro da usare in un nome di progetto/percorso).
-   */
-  const dasherizedPackageName = options.namePackage.toLowerCase();
-
-  options.sharedLibName = dasherizedPackageName + '-shared';
-  options.ngrxLibName = dasherizedPackageName + '-ngrx';
+  options.libBaseName = libBaseName;
+  options.sharedLibName = libBaseName + '-shared';
+  options.ngrxLibName = libBaseName + '-ngrx';
+  options.nsUp = new Array(segments).join('../');
 }
 
 /**
  * @author l.piciollo
- * Normalizza SOLO 'project'/'prefix', che richiedono di leggere angular.json dal
- * Tree e quindi vanno necessariamente eseguiti come Rule (lazy) dentro la chain,
- * a differenza di normalizeOptionsSync() che va chiamata eager PRIMA della chain.
+ * Risolve (leggendo il Tree) progetto, prefix, major di Angular e architettura
+ * effettiva (rilevata da main.ts e confrontata con --architecture). Va eseguita
+ * come prima Rule della chain; le rule successive vengono costruite DOPO, con le
+ * opzioni gia' definitive (vedi index.ts).
+ */
+export function resolveWorkspaceOptions(host: Tree, options: PlSchematicsOptions, context?: SchematicContext): void {
+  const workspace = readJsonFile(host, 'angular.json');
+
+  if (!workspace) {
+    throw new SchematicsException('angular.json not found: run the schematic inside an Angular CLI workspace.');
+  }
+
+  options.project = normalizeString(options.project, getDefaultProjectName(workspace, options));
+  options.prefix = normalizeString(options.prefix, getProjectPrefix(host, options.project));
+  const angularVersion = getAngularVersion(host);
+
+  options.angularMajor = angularVersion.major;
+  options.angularMinor = angularVersion.minor;
+
+  const app = detectApp(host, options);
+  const architecture = resolveArchitecture(options.architecture, app.architecture);
+
+  options.architecture = architecture;
+  options.standalone = architecture === 'standalone';
+  options.appInfo = app;
+
+  const rootComponentPath = app.rootComponent.file.replace(/\.ts$/, '');
+  const relative = rootComponentPath.substring(app.appDir.length + 1);
+
+  options.rootComponentClass = app.rootComponent.className;
+  options.rootComponentImport = './' + relative;
+
+  if (context) {
+    context.logger.info(
+      'Detected Angular ' + options.angularMajor + ' ' + architecture + ' application "' + options.project +
+        '" (root component: ' + app.rootComponent.className + ').',
+    );
+  }
+}
+
+/**
+ * Rule di compatibilita' storica (rimane per i chiamanti): normalizza solo project/prefix.
  */
 export function normalizeProjectAndPrefix(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {
-    const resolvedProject = normalizeString(
-      options.project,
-      getDefaultProjectName(host),
-    );
-
-    options.project = resolvedProject;
-
-    options.prefix = normalizeString(
-      options.prefix,
-      getProjectPrefix(host, resolvedProject),
-    );
-
-    context.logger.info(
-      'Options normalized for project: "' + options.project + '"',
-    );
+    resolveWorkspaceOptions(host, options, context);
 
     return host;
   };

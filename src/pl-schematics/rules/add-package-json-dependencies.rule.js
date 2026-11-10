@@ -1,183 +1,58 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPackageJsonDependencies = void 0;
-const schematics_utilities_1 = require("schematics-utilities");
-const json_utils_1 = require("../utils/json.utils");
-function hasHttpInterceptor(options) {
-    return options.http === 'interceptor-classic' ||
-        options.http === 'interceptor-functional';
-}
-function getAngularMajorVersion(host) {
-    const packageJson = (0, json_utils_1.readJsonFile)(host, 'package.json');
-    if (!packageJson) {
-        return null;
+exports.computeDependencies = computeDependencies;
+exports.addPackageJsonDependencies = addPackageJsonDependencies;
+const schematics_1 = require("@angular-devkit/schematics");
+const utility_1 = require("@schematics/angular/utility");
+const versions_utils_1 = require("../utils/versions.utils");
+function computeDependencies(options, angularMajor, angularMinor = 0) {
+    const v = (0, versions_utils_1.getVersions)(angularMajor, angularMinor);
+    const dependencies = [
+        { type: utility_1.DependencyType.Default, name: 'pl-core-utils-library', version: v.plCoreUtilsLibrary },
+        { type: utility_1.DependencyType.Default, name: 'pl-decorator', version: v.plDecorator },
+        { type: utility_1.DependencyType.Default, name: 'ngx-ui-loader', version: v.ngxUiLoader },
+        { type: utility_1.DependencyType.Default, name: 'bootstrap', version: v.bootstrap },
+        { type: utility_1.DependencyType.Default, name: '@ng-bootstrap/ng-bootstrap', version: v.ngBootstrap },
+        { type: utility_1.DependencyType.Default, name: '@angular/localize', version: v.angularFramework },
+        { type: utility_1.DependencyType.Default, name: '@popperjs/core', version: v.popperCore },
+        { type: utility_1.DependencyType.Default, name: '@compodoc/compodoc', version: '^1.1.19' },
+        { type: utility_1.DependencyType.Dev, name: 'ng-packagr', version: v.angularAligned },
+    ];
+    if (options.i18n === 'ngx-translate') {
+        dependencies.push({ type: utility_1.DependencyType.Default, name: '@ngx-translate/core', version: v.ngxTranslateCore }, { type: utility_1.DependencyType.Default, name: '@ngx-translate/http-loader', version: v.ngxTranslateHttpLoader });
     }
-    const raw = (packageJson.dependencies && packageJson.dependencies['@angular/core']) ||
-        (packageJson.devDependencies && packageJson.devDependencies['@angular/core']);
-    if (!raw) {
-        return null;
+    if (options.ui === 'material') {
+        dependencies.push({ type: utility_1.DependencyType.Default, name: '@angular/material', version: v.angularAligned }, { type: utility_1.DependencyType.Default, name: '@angular/cdk', version: v.angularAligned }, { type: utility_1.DependencyType.Default, name: '@angular/animations', version: v.angularFramework });
     }
-    const match = String(raw).match(/(\d+)/);
-    if (!match) {
-        return null;
+    if (options.ui === 'bootstrap') {
+        dependencies.push({ type: utility_1.DependencyType.Default, name: 'jquery', version: v.jquery }, { type: utility_1.DependencyType.Default, name: '@fortawesome/fontawesome-free', version: v.fontawesome });
     }
-    const major = parseInt(match[1], 10);
-    return isNaN(major) ? null : major;
-}
-function angularCompatibleRange(angularMajor) {
-    return angularMajor ? '^' + angularMajor + '.0.0' : 'latest';
+    if (options.state === 'ngrx') {
+        ['@ngrx/store', '@ngrx/effects', '@ngrx/entity', '@ngrx/store-devtools'].forEach((name) => dependencies.push({ type: utility_1.DependencyType.Default, name, version: v.angularAligned }));
+    }
+    if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
+        dependencies.push({ type: utility_1.DependencyType.Default, name: '@azure/msal-angular', version: v.msalAngular }, { type: utility_1.DependencyType.Default, name: '@azure/msal-browser', version: v.msalBrowser }, { type: utility_1.DependencyType.Default, name: '@microsoft/microsoft-graph-client', version: v.graphClient });
+    }
+    if (options.enableSonarQube === 'Y') {
+        dependencies.push({ type: utility_1.DependencyType.Default, name: 'sonar-scanner', version: v.sonarScanner });
+    }
+    if (options.mockApi === 'node-express') {
+        dependencies.push({ type: utility_1.DependencyType.Dev, name: 'express', version: '^4.18.2' }, { type: utility_1.DependencyType.Dev, name: 'cors', version: '^2.8.5' }, { type: utility_1.DependencyType.Dev, name: 'ts-node', version: '^10.9.2' }, { type: utility_1.DependencyType.Dev, name: 'ts-node-dev', version: '^2.0.0' }, { type: utility_1.DependencyType.Dev, name: '@types/express', version: '^4.17.21' }, { type: utility_1.DependencyType.Dev, name: '@types/cors', version: '^2.8.17' });
+    }
+    return dependencies;
 }
 function addPackageJsonDependencies(options) {
     return (host, context) => {
-        const angularMajor = getAngularMajorVersion(host);
-        const angularRange = angularCompatibleRange(angularMajor);
-        if (angularMajor) {
-            context.logger.info('Angular v' + angularMajor + ' rilevato: Material/CDK/NgRx/ng-packagr saranno installati con range "' + angularRange + '".');
-        }
-        else {
-            context.logger.warn('Impossibile rilevare la versione di @angular/core dal package.json del progetto target: Material/CDK/NgRx/ng-packagr useranno "latest" (rischio di conflitti di peer-dependency).');
-        }
-        const dependencies = [
-            {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
-                name: 'pl-core-utils-library',
-            },
-            {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: angularRange,
-                name: 'ng-packagr',
-            },
-        ];
-        if (options.i18n === 'ngx-translate') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^4.0.0',
-                name: '@ngx-translate/http-loader',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '11.0.1',
-                name: '@ngx-translate/core',
-            });
-        }
-        if (options.ui === 'material') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@angular/material',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@angular/cdk',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@angular/animations',
-            });
-        }
-        if (options.ui === 'bootstrap') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
-                name: 'popper.js',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: 'latest',
-                name: '@popperjs/core',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.4.0',
-                name: 'jquery',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^5.0.0',
-                name: 'bootstrap',
-            });
-        }
-        if (options.state === 'ngrx') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@ngrx/store',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@ngrx/effects',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@ngrx/entity',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: angularRange,
-                name: '@ngrx/store-devtools',
-            });
-        }
-        if (hasHttpInterceptor(options)) {
-        }
-        if (options.loginSupportConfiguration === 'AZURE-ACTIVE-DIRECT') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.0.0-beta.0',
-                name: '@azure/msal-angular',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.0.0-beta.0',
-                name: '@azure/msal-browser',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.0.0',
-                name: '@microsoft/microsoft-graph-client',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^2.0.0',
-                name: '@microsoft/teams-js',
-            });
-        }
-        if (options.enableSonarQube === 'Y') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Default,
-                version: '^3.1.0',
-                name: 'sonar-scanner',
-            });
-        }
-        if (options.mockApi === 'node-express') {
-            dependencies.push({
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^4.18.2',
-                name: 'express',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^2.8.5',
-                name: 'cors',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^10.9.2',
-                name: 'ts-node',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^2.0.0',
-                name: 'ts-node-dev',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^4.17.21',
-                name: '@types/express',
-            }, {
-                type: schematics_utilities_1.NodeDependencyType.Dev,
-                version: '^2.8.17',
-                name: '@types/cors',
-            });
-        }
-        if (options.logging === 'advanced') {
-        }
-        dependencies.forEach(function (dependency) {
-            (0, schematics_utilities_1.addPackageJsonDependency)(host, dependency);
-            context.logger.info('Library inserted: "' +
-                dependency.name +
-                '" into ' +
-                dependency.type);
-        });
-        return host;
+        const detected = options.angularMajor
+            ? { major: options.angularMajor, minor: options.angularMinor || 0 }
+            : (0, versions_utils_1.getAngularVersion)(host);
+        const angularMajor = detected.major;
+        const dependencies = computeDependencies(options, angularMajor, detected.minor);
+        context.logger.info('Angular v' + angularMajor + ': adding ' + dependencies.length + ' dependencies with pinned ranges (no "latest").');
+        return (0, schematics_1.chain)(dependencies.map((dependency) => (0, utility_1.addDependency)(dependency.name, dependency.version, {
+            type: dependency.type,
+            existing: utility_1.ExistingBehavior.Replace,
+            install: utility_1.InstallBehavior.Auto,
+        })));
     };
 }
-exports.addPackageJsonDependencies = addPackageJsonDependencies;

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateAngularJsonForEnvironments = void 0;
+exports.updateAngularJsonForEnvironments = updateAngularJsonForEnvironments;
 const json_utils_1 = require("../utils/json.utils");
 const workspace_utils_1 = require("../utils/workspace.utils");
 function getBuildTarget(project) {
@@ -71,4 +71,3 @@ function updateAngularJsonForEnvironments(options) {
         return host;
     };
 }
-exports.updateAngularJsonForEnvironments = updateAngularJsonForEnvironments;

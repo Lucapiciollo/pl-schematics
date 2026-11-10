@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addSharedLibrary = void 0;
+exports.addSharedLibrary = addSharedLibrary;
 const schematics_1 = require("@angular-devkit/schematics");
 const add_library_class_rule_1 = require("./add-library-class.rule");
 const library_utils_1 = require("../utils/library.utils");
@@ -24,9 +24,10 @@ function addSharedLibrary(options) {
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib-scaffold', libRoot),
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib-entrypoint', libSrcDir),
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/module', libSourceRoot + '/module'),
-        (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/pipe', libSourceRoot + '/pipe'),
+        (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/pipe', libSourceRoot + '/pipe', options.i18n === 'ngx-translate' ? [] : ['/translate-async.pipe.ts']),
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/utils', libSourceRoot + '/utils'),
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/bean', libSourceRoot + '/bean'),
+        (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/config', libSourceRoot + '/config'),
         (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/tokens', libSourceRoot + '/tokens'),
         hasAdvancedLogging(options)
             ? (0, add_library_class_rule_1.addLibraryClass)(options, './files/shared-lib/logging', libSourceRoot + '/logging')
@@ -42,4 +43,3 @@ function addSharedLibrary(options) {
             : (0, schematics_1.noop)(),
     ]);
 }
-exports.addSharedLibrary = addSharedLibrary;

@@ -1,5 +1,5 @@
 import { IPublicClientApplication, PublicClientApplication, LogLevel } from '@azure/msal-browser';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../../../<%= nsUp %>environments/environment';
 
 export function MSALInstanceFactory(): IPublicClientApplication {
   return new PublicClientApplication({
@@ -11,7 +11,6 @@ export function MSALInstanceFactory(): IPublicClientApplication {
     },
     cache: {
       cacheLocation: 'localStorage',
-      storeAuthStateInCookie: false,
     },
     system: {
       loggerOptions: {

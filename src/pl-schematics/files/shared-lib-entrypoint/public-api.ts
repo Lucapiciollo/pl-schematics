@@ -6,6 +6,7 @@
  */
 
 export * from './lib/module/shared.module';
+export * from './lib/config/shared-lib.config';
 
 export * from './lib/pipe/pipe.module';
 export * from './lib/pipe/comma-decimal.pipe';
@@ -22,7 +23,9 @@ export * from './lib/pipe/remove-leading-zeros.pipe';
 export * from './lib/pipe/round-pipe';
 export * from './lib/pipe/safe.pipe';
 export * from './lib/pipe/sort.pipe';
+<% if (i18n === "ngx-translate") { %>
 export * from './lib/pipe/translate-async.pipe';
+<% } %>
 export * from './lib/pipe/truncate-name-file.pipe';
 export * from './lib/pipe/truncate.pipe';
 
