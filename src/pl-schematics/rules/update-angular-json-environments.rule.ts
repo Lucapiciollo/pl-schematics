@@ -1,3 +1,10 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita subito dopo addTemplateFiles. Configura in
+ * angular.json le sostituzioni dei file di environment per la build di produzione
+ * (i file environment.* sono creati dai template di addTemplateFiles).
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 
 import { PlSchematicsOptions } from '../types/schema-options';
@@ -8,6 +15,12 @@ import {
 } from '../utils/json.utils';
 import { getDefaultProjectName } from '../utils/workspace.utils';
 
+/**
+ * @author l.piciollo
+ * Restituisce il target di build di un progetto (architect.build o targets.build).
+ * @param project  :oggetto progetto di angular.json
+ * @returns il target di build, oppure null se assente
+ */
 function getBuildTarget(project: any): any {
   if (project.architect && project.architect.build) {
     return project.architect.build;
@@ -20,6 +33,14 @@ function getBuildTarget(project: any): any {
   return null;
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Restituisce (creandolo se manca) l'oggetto configurations del target di build.
+ * @param project  :oggetto progetto di angular.json
+ * @returns l'oggetto configurations, oppure null se il target di build non esiste
+ */
 function getBuildConfigurations(project: any): any {
   const buildTarget = getBuildTarget(project);
 
@@ -32,6 +53,15 @@ function getBuildConfigurations(project: any): any {
   return buildTarget.configurations;
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Aggiunge una voce fileReplacements solo se la stessa coppia replace/with non e' gia' presente.
+ * @param fileReplacements  :array fileReplacements della configurazione, modificato in place
+ * @param replacePath       :file da sostituire (es. environment.ts)
+ * @param withPath          :file sostitutivo (es. environment.prod.ts)
+ */
 function pushFileReplacementIfMissing(
   fileReplacements: any[],
   replacePath: string,
@@ -51,6 +81,16 @@ function pushFileReplacementIfMissing(
   }
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Configura in angular.json la sostituzione environment.ts -> environment.prod.ts per la
+ * configurazione production e assicura l'esistenza della configurazione development.
+ * Se angular.json, il progetto o il target di build mancano, registra un warning e non modifica nulla.
+ * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
+ * @returns Rule che aggiorna angular.json e restituisce il Tree
+ */
 export function updateAngularJsonForEnvironments(
   options: PlSchematicsOptions,
 ): Rule {

@@ -21,6 +21,11 @@ import { TranslateAsyncPipe } from './translate-async.pipe';
 import { TruncateNameFilePipe } from './truncate-name-file.pipe';
 import { TruncatePipe } from './truncate.pipe';
 
+/**
+ * @author l.piciollo
+ * Elenco delle pipe condivise dichiarate ed esportate da PipeModule.
+ * La TranslateAsyncPipe e' inclusa solo quando la libreria e' generata con ngx-translate.
+ */
 const PIPES = [
   CommaDecimalPipe,
   ConvertMbPipe,
@@ -44,6 +49,12 @@ const PIPES = [
   TruncatePipe,
 ];
 
+/**
+ * @author l.piciollo
+ * Modulo che raccoglie e riesporta tutte le pipe condivise dell'applicazione.
+ * Fornisce CurrencyPipe e DatePipe di Angular, necessari alle pipe CurrencyFormatPipe e LocalizedDatePipe.
+ * Va importato dai moduli che usano le pipe nei template.
+ */
 @NgModule({
   declarations: PIPES,
   exports: PIPES,

@@ -11,6 +11,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home.component';
 
+/**
+ * @author l.piciollo
+ * Rotte del modulo home: la rotta vuota carica HomeComponent (breadcrumb 'Home'), senza guard aggiuntivi.
+ */
 const routes: Routes = [{
   path: "",
   data: { breadcrumb: 'Home'},

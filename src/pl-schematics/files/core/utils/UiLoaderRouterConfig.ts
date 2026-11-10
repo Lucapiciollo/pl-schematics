@@ -12,5 +12,6 @@ import { NgxUiLoaderRouterConfig } from 'ngx-ui-loader';
  * configurazione per la progressione di chiamate al cambio rotta
  */
 export const UiLoaderRouterConfig: NgxUiLoaderRouterConfig = {
+    /** id del loader associato ai cambi di rotta; showForeground true: mostrato in primo piano */
     loaderId: "routerLoader", showForeground: true
 }

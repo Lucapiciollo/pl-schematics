@@ -35,17 +35,25 @@ import { StorageService } from './storage.service';
 export class StorageEffects {
   /** inject(): i campi effect sono inizializzati prima delle parameter property del costruttore. */
   private readonly actions$ = inject(Actions);
+  /** store NgRx, usato per leggere lo slice storage da persistere. */
   private readonly store = inject(Store);
+  /** servizio che incapsula la lettura/scrittura su localStorage. */
   private readonly storageService = inject(StorageService);
 
-  /** Alla dispatch di storageHydrate, legge lo stato persistito e lo ripubblica. */
+  /**
+   * @author l.piciollo
+   * Effect: alla dispatch di storageHydrate, legge lo stato persistito e lo ripubblica (storageHydrateSuccess).
+   */
   hydrate$ = createEffect(() => this.actions$.pipe(
     ofType(storageHydrate),
     map(() => storageHydrateSuccess(this.storageService.load())),
   ));
 
+  /************************************************************************************************************************/
+
   /**
-   * Ad ogni modifica dello slice 'storage' (token/language/theme), persiste lo
+   * @author l.piciollo
+   * Effect (senza dispatch): ad ogni modifica dello slice 'storage' (token/language/theme), persiste lo
    * stato aggiornato. Non e' agganciato a hydrate/hydrateSuccess/clear per
    * evitare di ri-salvare cio' che e' appena stato letto o appena cancellato.
    */
@@ -55,7 +63,12 @@ export class StorageEffects {
     tap(([, state]: [unknown, StorageState]) => this.storageService.save(state)),
   ), { dispatch: false });
 
-  /** Alla dispatch di storageClear, rimuove lo stato persistito. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Effect (senza dispatch): alla dispatch di storageClear, rimuove lo stato persistito.
+   */
   clear$ = createEffect(() => this.actions$.pipe(
     ofType(storageClear),
     tap(() => this.storageService.clear()),

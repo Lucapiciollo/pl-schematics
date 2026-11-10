@@ -1,3 +1,11 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita subito dopo validateOptions e prima di
+ * logOptions. Calcola e registra in package.json le dipendenze (versioni pinnate per
+ * major di Angular, tabella in utils/versions.utils.ts) tramite addDependency, che
+ * schedula una sola installazione finale.
+ */
+
 import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import {
   addDependency,
@@ -9,17 +17,30 @@ import {
 import { PlSchematicsOptions } from '../types/schema-options';
 import { getAngularVersion, getVersions } from '../utils/versions.utils';
 
+/**
+ * @author l.piciollo
+ * Descrive una singola dipendenza da aggiungere a package.json.
+ */
 interface PlDependency {
+  /** Sezione di package.json di destinazione (dependencies o devDependencies). */
   type: DependencyType;
+  /** Nome del pacchetto npm. */
   name: string;
+  /** Range di versione da scrivere in package.json. */
   version: string;
 }
+
+/********************************************************************************************************************/
 
 /**
  * @author l.piciollo
  * Calcola la lista delle dipendenze da aggiungere al progetto target. Le versioni
  * derivano da una tabella per major di Angular (utils/versions.utils.ts): nessun
  * 'latest' e nessun accesso alla rete.
+ * @param options        :opzioni normalizzate; ui, state, i18n, login, Sonar e mockApi attivano gruppi di dipendenze
+ * @param angularMajor   :major di Angular del progetto target, usata per scegliere le versioni
+ * @param angularMinor   :minor di Angular del progetto target (default 0)
+ * @returns elenco delle dipendenze (nome, versione, tipo) da installare
  */
 export function computeDependencies(
   options: PlSchematicsOptions,
@@ -99,6 +120,16 @@ export function computeDependencies(
   return dependencies;
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Rule che aggiunge a package.json tutte le dipendenze calcolate da computeDependencies,
+ * sovrascrivendo eventuali versioni presenti (ExistingBehavior.Replace) e lasciando
+ * che l'installazione parta automaticamente (InstallBehavior.Auto).
+ * @param options  :opzioni normalizzate; se angularMajor non e' valorizzata la versione e' letta dal Tree
+ * @returns Rule che registra le dipendenze nel Tree
+ */
 export function addPackageJsonDependencies(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {
     const detected = options.angularMajor

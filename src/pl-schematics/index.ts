@@ -1,5 +1,15 @@
 // src/pl-schematics/index.ts
 
+/**
+ * @author l.piciollo
+ * Entry point dello schematic "pl-schematics" (registrato in collection.json).
+ * Costruisce la chain di rule che, nell'ordine: valida le opzioni, aggiunge le dipendenze
+ * a package.json, crea le librerie shared/ngrx, copia i template applicativi, aggiorna
+ * angular.json (environments, assets, localize, budgets, Material, Bootstrap), index.html,
+ * gli script di package.json (Sonar/build), crea le cartelle vuote e infine configura
+ * l'app shell (modulo/config root, routing, componente root).
+ */
+
 import { chain, noop, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 
 import { addNgrxLibrary } from './rules/add-ngrx-library.rule';
@@ -21,6 +31,13 @@ import { updatePackageJsonForBuild, updatePackageJsonForSonar } from './rules/up
 import { validateOptions } from './rules/validate-options.rule';
 import { PlSchematicsOptions } from './types/schema-options';
 
+/**
+ * @author l.piciollo
+ * Factory dello schematic: normalizza le opzioni e restituisce la Rule che, al momento
+ * dell'esecuzione, risolve le opzioni dipendenti dal workspace e compone la chain di rule.
+ * @param options  :opzioni ricevute dalla CLI (schema.json), modificate in place dalle fasi di normalizzazione
+ * @returns Rule che esegue l'intera generazione sul Tree
+ */
 export default function plSchematics(options: PlSchematicsOptions): Rule {
   /**
    * @author l.piciollo

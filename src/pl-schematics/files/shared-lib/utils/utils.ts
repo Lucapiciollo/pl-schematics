@@ -17,6 +17,7 @@ export class  Utils {
    * genera un UUID da assegnare a componenti grafici come ID o altro.
    * Utilizza l'API nativa crypto.randomUUID() (supportata da tutti i browser moderni e da Node.js 16.7+),
    * evitando cosi' la dipendenza da librerie esterne non piu' mantenute.
+   * @returns stringa UUID v4 generata casualmente (lancia ErrorBean in caso di errore)
    */
   public static UUIDCODE(): any {
     try {
@@ -26,10 +27,13 @@ export class  Utils {
     }
   }
 
+  /************************************************************************************************************************/
+
    /**
    * @author l.piciollo
    * crea un nome alfabetico stile xls, passare un valore numerico per riceverlo in formato testo
-   * @param lenght Numero che indica la lunghezza dell'alfabeto
+   * @param lenght :indice numerico (base 0) da convertire: 0 = A, 25 = Z, 26 = AA, ...
+   * @returns il nome alfabetico corrispondente (es. "A", "B", ... "AA")
    */
   public static alphaName(lenght:number):string {
     try {
@@ -47,10 +51,13 @@ export class  Utils {
     }
   }
 
+  /************************************************************************************************************************/
+
   /**
    * @author l.piciollo
    * funzionalità utile a reperire cookie
-   * @param nameCookie 
+   * @param nameCookie :nome del cookie da leggere
+   * @returns il valore del cookie, oppure null se non presente
    */
   public static getCookie(nameCookie: string): string | null {
     try {
@@ -71,12 +78,14 @@ export class  Utils {
     }
   }
 
+  /************************************************************************************************************************/
+
   /**
    * @author l.piciollo
    * funzionalità utile alla creazione dei cookie
-   * @param nameCookie 
-   * @param valueCookie
-   * @param time
+   * @param nameCookie   :nome del cookie da creare
+   * @param valueCookie  :valore da assegnare al cookie
+   * @param time         :durata di validita' del cookie espressa in minuti
    */
   public static setCookie(nameCookie: string, valueCookie: string, time:number) {
     try {
@@ -89,10 +98,12 @@ export class  Utils {
     }
   }
 
+  /************************************************************************************************************************/
+
     /**
    * @author l.piciollo
    * funzionalità utile ad invalidare un cookie
-   * @param nameCookie 
+   * @param nameCookie :nome del cookie da invalidare (viene riscritto con scadenza immediata)
    */
   public static deleteCookie(nameCookie: string) {
     try {
@@ -102,7 +113,15 @@ export class  Utils {
     }
   }
 
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Decodifica il payload (seconda parte) di un token JWT: normalizza il base64url, lo decodifica gestendo i caratteri UTF-8
+   * e lo converte da JSON. Non verifica la firma del token.
+   * @param token  :token JWT nel formato header.payload.signature
+   * @returns oggetto con il contenuto (claim) del payload
+   */
   public static decodeJwtToken(token: string): object {
     let base64Url = token.split('.')[1];
     let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -113,10 +132,14 @@ export class  Utils {
     return JSON.parse(jsonPayload);
   }
 
+  /************************************************************************************************************************/
+
     /**
    * @author l.piciollo
    * si occupa di creare un proxy object 
-   * @param object 
+   * restituisce un Proxy che in lettura ritorna la proprieta' solo se e' presente tra le chiavi dell'oggetto, altrimenti null.
+   * @param object :oggetto da incapsulare nel proxy
+   * @returns il proxy dell'oggetto
    */
      public static proxing<T extends object>(object: T): any {
       return new Proxy(object, {
@@ -130,4 +153,5 @@ export class  Utils {
       })
     }
 }
+// riesporta i tipi e le funzioni di rilevamento del dispositivo cosi' da importarli da un unico punto
 export * from './device-detector.constants';

@@ -1,5 +1,12 @@
 // src/pl-schematics/rules/add-ngrx-library.rule.ts
 
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo addPackageJsonDependencies e
+ * logOptions, SOLO se options.state === 'ngrx' (altrimenti noop), e prima di
+ * addSharedLibrary. Registra e popola la libreria Angular "ngrx" del workspace.
+ */
+
 import { chain, Rule } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { addLibraryClass } from './add-library-class.rule';
@@ -16,6 +23,8 @@ import {
  * root reducers/effects/selectors, feature 'app' e 'storage') gia' pronto e
  * riutilizzabile. Il modulo StateModule esportato viene importato dalla
  * libreria "shared" quando lo stato NgRx e' abilitato.
+ * @param options  :opzioni normalizzate; richiede ngrxLibName valorizzato da normalize-options
+ * @returns Rule che registra la libreria nel workspace e copia i template ngrx-lib*
  */
 export function addNgrxLibrary(options: PlSchematicsOptions): Rule {
   const libName = options.ngrxLibName as string;

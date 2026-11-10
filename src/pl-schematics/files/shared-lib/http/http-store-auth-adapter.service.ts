@@ -1,3 +1,5 @@
+// Esempio (commentato) di adapter di autenticazione basato su NgRx Store: legge e salva il token nello store,
+// rinnova il token tramite il servizio API di autenticazione ed esegue il logout svuotando lo storage.
 // @Injectable({
 //   providedIn: 'root',
 // })

@@ -9,6 +9,11 @@ import { rootEffects } from './root.effects';
 import { rootReducers } from './root.reducers';
 import { RootState } from './root.state';
 
+/**
+ * @author l.piciollo
+ * NgModule che configura lo stato applicativo NgRx: store radice, effects e Redux DevTools.
+ * Va importato una sola volta nella root dell'applicazione.
+ */
 @NgModule({
   imports: [
     StoreModule.forRoot(rootReducers),
@@ -41,6 +46,8 @@ export class StateModule {
    *
    * Aggiungendo una nuova feature NgRx, valuta se le serve un bootstrap
    * analogo e dispatchalo qui.
+   *
+   * @param store :store NgRx radice su cui vengono dispatchate le action di bootstrap
    */
   constructor(private readonly store: Store<RootState>) {
     this.store.dispatch(storageHydrate());

@@ -27,6 +27,12 @@ import { PipeModule } from '../pipe/pipe.module';
 import { MaterialModule } from '../material/material.module';
 <% } %>
 
+/**
+ * @author l.piciollo
+ * Modulo condiviso a tutto l'applicativo (versione classic basata su NgModule): ri-esporta CommonModule, FormsModule,
+ * PipeModule e, in base alle opzioni scelte, TranslateModule e MaterialModule.
+ * La configurazione si passa con SharedModule.forRoot(config).
+ */
 @NgModule({
   declarations: [],
   imports: [
@@ -54,8 +60,11 @@ import { MaterialModule } from '../material/material.module';
 })
 export class SharedModule {
   /**
+   * @author l.piciollo
    * Da usare una sola volta nel root module (classic): registra HttpClient, gli
    * interceptor<% if (i18n === "ngx-translate") { %> e ngx-translate<% } %>.
+   * @param config   :configurazione della libreria condivisa (lingua, timeout HTTP, logging)
+   * @returns modulo con i provider calcolati da providePlShared
    */
   static forRoot(config: SharedLibConfig): ModuleWithProviders<SharedModule> {
     return {

@@ -1,3 +1,9 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo updateAngularJsonForLocalize e prima
+ * delle rule di UI (Material/Bootstrap). Alza i budget di dimensione del bundle.
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { overwriteJsonFile, readJsonFile } from '../utils/json.utils';
@@ -9,6 +15,8 @@ import { getProjectObject } from '../utils/workspace.utils';
  * ng-bootstrap, ngx-ui-loader, ...) supera il budget di default di `ng new`
  * (500kB warning / 1MB error) e farebbe fallire `ng build`. Alza i limiti del budget
  * "initial" della configurazione production a 2MB (warning) / 4MB (error).
+ * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
+ * @returns Rule che aggiorna angular.json (se necessario) e restituisce il Tree
  */
 export function updateAngularJsonForBudgets(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {

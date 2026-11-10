@@ -17,10 +17,12 @@ import { APP_BOOTSTRAP_TASKS, AppBootstrapTask } from '<%= sharedLibName %>';
 
 /**
  * @author l.piciollo
- * Esegue in sequenza tutte le funzioni di bootstrap custom registrate (se presenti).
+ * Esegue tutte le funzioni di bootstrap custom registrate (se presenti).
  * Ogni funzione puo' restituire un Observable o una Promise<boolean>: in entrambi i
  * casi viene normalizzata ad Observable prima di essere eseguita in parallelo con le
  * altre tramite forkJoin (se una fallisce, l'intero bootstrap fallisce).
+ * @param tasks :elenco delle funzioni di bootstrap (APP_BOOTSTRAP_TASKS), null o vuoto se non ce ne sono
+ * @returns Observable che emette true quando tutte le funzioni sono terminate (true subito se non ce ne sono)
  */
 function runBootstrapTasks(
   tasks: AppBootstrapTask[] | null,
@@ -38,18 +40,27 @@ function runBootstrapTasks(
   return forkJoin(tasks$).pipe(switchMap(() => of(true)));
 }
 
+/************************************************************************************************************************/
+
 /**
 * @author l.piciollo
 * funzionalità per l'intercettazione della creazione del portale e obbligare
 * in caso non lo fosse, l'autenticazione da parte dell'utente, oltre ad eventuali
 * funzioni di bootstrap custom opzionali (APP_BOOTSTRAP_TASKS).
  * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
-
+ * @param authService :servizio di autenticazione applicativo che esegue la login
+ * @param bootstrapTasks :funzioni di bootstrap custom (APP_BOOTSTRAP_TASKS), null se non fornite
+ * @returns funzione di inizializzazione (APP_INITIALIZER) che restituisce una Promise, risolta a login e bootstrap riusciti
  */
 export default function  AutenticationLoader(
     authService:  AuthService,
     bootstrapTasks: AppBootstrapTask[] | null,
 ) {
+    /**
+     * @author l.piciollo
+     * Funzione di inizializzazione restituita dalla factory: esegue login e bootstrap tasks e risolve o rifiuta la Promise.
+     * @returns Promise risolta con l'esito della login, rifiutata se login o bootstrap falliscono
+     */
     return (): Promise<any> => {
         return new Promise((resolve, reject) => {
             /**

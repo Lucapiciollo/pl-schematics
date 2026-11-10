@@ -48,13 +48,27 @@ import { HttpInterceptorFakeService } from '<%= sharedLibName %>';
 <% } %>
 
 <% if (http !== 'none') { %>
-/** Se l'app gira in Teams non si usa l'interceptor MSAL ma quello "fake"; su web si usa MSAL. */
+/**
+ * @author l.piciollo
+ * Se l'app gira in Teams non si usa l'interceptor MSAL ma quello "fake"; su web si usa MSAL.
+ * @param httpInterceptorFakeService :interceptor fittizio da usare quando l'app gira in Teams
+ * @param msalInterceptor            :interceptor MSAL da usare quando l'app gira sul web
+ * @returns l'interceptor da registrare in base al tipo di applicazione
+ */
 export const myServiceFactory = (httpInterceptorFakeService: any, msalInterceptor: any) => {
   return AuthService.applicationType.type === 'teams' ? httpInterceptorFakeService : msalInterceptor;
 };
 <% } %>
 <% } %>
 
+/**
+ * @author l.piciollo
+ * Provider di avvio applicativo per l'architettura STANDALONE (equivalente dell'InitializerModule delle app classic).
+ * Registra loader grafico, base url del BE, configurazione della pl-library, gestione errori, processo di login,
+ * rilevamento del browser, istanziazione eager di GlobalService e, se abilitato, MSAL.
+ * Va aggiunto una sola volta ai providers di app.config.ts: provideCore().
+ * @returns gli EnvironmentProviders da registrare nel bootstrap dell'applicazione
+ */
 export function provideCore(): EnvironmentProviders {
   return makeEnvironmentProviders([
     /**

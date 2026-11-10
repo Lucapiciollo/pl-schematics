@@ -12,8 +12,21 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { MsalGuard } from '@azure/msal-angular';
 <% } %>
 import {  AuthService } from './auth.service';
+
+/**
+ * @author l.piciollo
+ * Guardia di rotta (CanActivate) di default dell'applicazione: con login Azure delega alla MsalGuard (solo runtime web),
+ * altrimenti e' un placeholder che consente sempre la navigazione. Da sostituire con la logica di protezione rotte desiderata.
+ */
 @Injectable({ providedIn: "root" })
 export class  RouteFakeGuard implements CanActivate {
+    /**
+     * @author l.piciollo
+     * Costruttore: inietta i servizi usati dalla guardia.
+     * @param auth :servizio di autenticazione applicativo
+     * @param router :router Angular
+     * @param msalGuard :guardia MSAL (presente solo con login Azure)
+     */
     constructor(
       public auth:  AuthService,
       public router: Router,
@@ -21,6 +34,16 @@ export class  RouteFakeGuard implements CanActivate {
       private msalGuard: MsalGuard,
       <% } %>
     ) { }
+
+    /************************************************************************************************************************/
+
+    /**
+     * @author l.piciollo
+     * Decide se la rotta e' attivabile: con login Azure e runtime web delega alla MsalGuard, altrimenti consente la navigazione.
+     * @param route :snapshot della rotta richiesta
+     * @param state :snapshot dello stato del router
+     * @returns esito della MsalGuard (con login Azure e runtime web) oppure true
+     */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
         return  AuthService.applicationType.type == "web" ?   this.msalGuard.canActivate(route, state) : true;

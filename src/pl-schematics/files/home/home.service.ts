@@ -18,5 +18,9 @@ import { Injectable } from '@angular/core';
 })
 export class HomeService {
 
+  /**
+   * @author l.piciollo
+   * Costruttore vuoto: il servizio non ha dipendenze.
+   */
   constructor() { }
 }

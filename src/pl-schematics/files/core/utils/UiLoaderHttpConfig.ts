@@ -12,9 +12,13 @@ import { NgxUiLoaderHttpConfig } from 'ngx-ui-loader';
  * configurazione per la progressione di chiamate alla rete
  */
 export const UiLoaderHttpConfig: NgxUiLoaderHttpConfig ={
+    /** url esclusi dalla progressione */
     exclude : [],
+    /** espressioni regolari degli url esclusi dalla progressione */
     excludeRegexp:[],
+    /** id del loader associato alle chiamate di rete */
     loaderId: "httpLoader",
+    /** se false il loader delle chiamate HTTP non viene mostrato in primo piano */
     showForeground: false
     
 }

@@ -1,5 +1,13 @@
 // src/pl-schematics/rules/update-app-shell.rule.ts
 
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: e' l'ULTIMA della chain, dopo scaffoldEmptyFolders.
+ * Adatta i file "shell" dell'app esistente (modulo o config root, routing, componente
+ * root) per integrare shared library, state, UI e loader, in modalita' classic
+ * (NgModule) o standalone a seconda dell'architettura rilevata.
+ */
+
 import {
   apply,
   chain,
@@ -19,6 +27,13 @@ import { PlSchematicsOptions } from '../types/schema-options';
 import { addImports, addToArrayProperty, ImportRequest } from '../utils/ts-edit.utils';
 import { AppInfo } from '../utils/workspace.utils';
 
+/**
+ * @author l.piciollo
+ * Calcola lo specifier di import relativo da un file a un altro (senza estensione).
+ * @param fromFile     :percorso del file che contiene l'import
+ * @param toFileNoExt  :percorso del file importato, senza estensione .ts
+ * @returns specifier relativo che inizia con './' o '../'
+ */
 function relativeSpecifier(fromFile: string, toFileNoExt: string): string {
   const fromParts = fromFile.split('/').slice(0, -1);
   const toParts = toFileNoExt.split('/');
@@ -35,10 +50,17 @@ function relativeSpecifier(fromFile: string, toFileNoExt: string): string {
   return spec.charAt(0) === '.' ? spec : './' + spec;
 }
 
+/********************************************************************************************************************/
+
 /**
+ * @author l.piciollo
  * Renderizza la (unica) template contenuta in `sourceDir` e la scrive in `targetPath`
  * (sovrascrivendo), cosi' il nome del file di destinazione puo' adattarsi alla
  * convenzione del progetto (app.html vs app.component.html, app-module.ts vs app.module.ts).
+ * @param options     :opzioni normalizzate, usate come contesto del template
+ * @param sourceDir   :cartella della template da renderizzare
+ * @param targetPath  :percorso del file di destinazione nel Tree
+ * @returns Rule che genera il file e lo unisce al Tree sovrascrivendo
  */
 function renderTo(options: PlSchematicsOptions, sourceDir: string, targetPath: string): Rule {
   return (_host: Tree, context: SchematicContext) => {
@@ -53,6 +75,17 @@ function renderTo(options: PlSchematicsOptions, sourceDir: string, targetPath: s
   };
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Legge un file TypeScript dal Tree, applica una trasformazione e lo riscrive solo se
+ * il contenuto e' cambiato. Lancia SchematicsException se il file non esiste.
+ * @param host     :Tree del workspace
+ * @param path     :percorso del file da modificare
+ * @param context  :contesto dello schematic, usato per il log
+ * @param edit     :funzione che riceve il contenuto originale e restituisce quello aggiornato
+ */
 function editTsFile(
   host: Tree,
   path: string,
@@ -74,14 +107,33 @@ function editTsFile(
   }
 }
 
+/********************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Applica in sequenza una lista di richieste di import al contenuto di un file.
+ * @param content  :contenuto TypeScript di partenza
+ * @param imports  :richieste di import da aggiungere (simboli e modulo di provenienza)
+ * @returns contenuto con gli import aggiunti (senza duplicati, vedi addImports)
+ */
 function applyImports(content: string, imports: ImportRequest[]): string {
   return imports.reduce((acc, request) => addImports(acc, request), content);
 }
+
+/********************************************************************************************************************/
 
 /**
  * ---------------------------------------------------------------------------
  * CLASSIC: app.module.ts + routing module
  * ---------------------------------------------------------------------------
+ *
+ * @author l.piciollo
+ * Per le app classic genera il modulo di routing da template e aggiorna app.module.ts:
+ * import e imports di SharedModule, AppRoutingModule, InitializerModule (piu' StateModule
+ * con ngrx e BrowserAnimationsModule con Material) e provider ErrorHandler.
+ * @param options  :opzioni normalizzate (namePackage, sharedLibName, ngrxLibName, state, ui)
+ * @param app      :informazioni sull'app rilevata (file del modulo, del routing, cartella app)
+ * @returns Rule che genera il routing e modifica il modulo root
  */
 function updateClassicShell(options: PlSchematicsOptions, app: AppInfo): Rule {
   const ns = options.namePackage;
@@ -151,10 +203,20 @@ function updateClassicShell(options: PlSchematicsOptions, app: AppInfo): Rule {
   ]);
 }
 
+/********************************************************************************************************************/
+
 /**
  * ---------------------------------------------------------------------------
  * STANDALONE: app.config.ts + app.routes.ts + componente root
  * ---------------------------------------------------------------------------
+ *
+ * @author l.piciollo
+ * Per le app standalone genera app.routes.ts da template e aggiorna app.config.ts:
+ * provider di routing con location a hash, providePlShared, provideCore (piu' StateModule
+ * con ngrx e provideAnimationsAsync con Material). Lancia un'eccezione se app.config.ts manca.
+ * @param options  :opzioni normalizzate (namePackage, sharedLibName, ngrxLibName, state, ui)
+ * @param app      :informazioni sull'app rilevata (file di config e di routes)
+ * @returns Rule che genera le routes e modifica la config applicativa
  */
 function updateStandaloneShell(options: PlSchematicsOptions, app: AppInfo): Rule {
   const ns = options.namePackage;
@@ -220,10 +282,20 @@ function updateStandaloneShell(options: PlSchematicsOptions, app: AppInfo): Rule
   ]);
 }
 
+/********************************************************************************************************************/
+
 /**
  * ---------------------------------------------------------------------------
  * Componente root: template con i loader e, per standalone, i relativi import
  * ---------------------------------------------------------------------------
+ *
+ * @author l.piciollo
+ * Sostituisce il template HTML del componente root con quello dello schematic (loader),
+ * riscrive lo spec se esiste e, per le app standalone, importa RouterOutlet e
+ * NgxUiLoaderModule nel componente. Lancia un'eccezione se il template e' inline.
+ * @param options  :opzioni normalizzate (standalone)
+ * @param app      :informazioni sull'app rilevata (componente root, file di template)
+ * @returns Rule che aggiorna template, spec e decoratore del componente root
  */
 function updateRootComponent(options: PlSchematicsOptions, app: AppInfo): Rule {
   const root = app.rootComponent;
@@ -269,9 +341,14 @@ function updateRootComponent(options: PlSchematicsOptions, app: AppInfo): Rule {
   ]);
 }
 
+/********************************************************************************************************************/
+
 /**
+ * @author l.piciollo
  * Adatta i file di "shell" dell'applicazione (modulo/config, routing, componente root)
  * all'architettura rilevata (classic o standalone) e ai nomi reali del progetto.
+ * @param options  :opzioni normalizzate; richiede appInfo risolto da resolveWorkspaceOptions
+ * @returns Rule composta (chain) della shell classic/standalone e del componente root
  */
 export function updateAppShell(options: PlSchematicsOptions): Rule {
   const app = options.appInfo as AppInfo;

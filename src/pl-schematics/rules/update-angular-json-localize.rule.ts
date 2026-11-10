@@ -1,3 +1,9 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo updateAngularJsonForAssets e prima di
+ * updateAngularJsonForBudgets. Aggiunge il polyfill di @angular/localize richiesto da ng-bootstrap.
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import { ensureArray, overwriteJsonFile, pushIfMissing, readJsonFile } from '../utils/json.utils';
@@ -8,6 +14,8 @@ import { getProjectObject } from '../utils/workspace.utils';
  * pl-core-utils-library importa @ng-bootstrap/ng-bootstrap (NgbModule), che per i testi
  * localizzati richiede @angular/localize: il polyfill `@angular/localize/init`
  * (equivalente di `ng add @angular/localize`) va caricato nei polyfills del build.
+ * @param options  :opzioni normalizzate, usate per individuare il progetto in angular.json
+ * @returns Rule che aggiorna angular.json (se il polyfill manca) e restituisce il Tree
  */
 export function updateAngularJsonForLocalize(options: PlSchematicsOptions): Rule {
   return (host: Tree, context: SchematicContext) => {

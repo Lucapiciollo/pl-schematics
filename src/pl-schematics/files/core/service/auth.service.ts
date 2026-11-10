@@ -31,6 +31,7 @@ import { LoggerService } from '<%= sharedLibName %>';
 
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
 /**
+ * @author l.piciollo
  * Abstract adapter che disaccoppia  AuthService da qualsiasi libreria di state management.
  *
  * Implementa questa classe e forniscila via DI per integrare  AuthService
@@ -50,10 +51,20 @@ export abstract class  AuthStateAdapter {
   /** Observable del token di autenticazione corrente. */
   abstract readonly token$: Observable<string | null>;
 
-  /** Chiamato quando il login MSAL va a buon fine. */
+  /**
+   * @author l.piciollo
+   * Chiamato quando il login MSAL va a buon fine: permette di propagare utente e token allo store scelto.
+   * @param account :account MSAL autenticato
+   * @param result  :risultato completo dell'autenticazione (token, scope, ecc.)
+   */
   abstract onUserAuthenticated(account: AccountInfo, result: AuthenticationResult): void;
 
-  /** Chiamato quando viene avviato il logout. */
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Chiamato quando viene avviato il logout: permette di ripulire lo stato utente nello store scelto.
+   */
   abstract onUserLoggedOut(): void;
 }
 <% } %>
@@ -70,7 +81,7 @@ export abstract class  AuthStateAdapter {
  * Inserire qui un SSO custom se necessario.
  * <% } %>
  *
- * @author @l.piciollo
+ * @author l.piciollo
  */
 @Injectable({
   providedIn: 'root',
@@ -81,16 +92,30 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
   /** Imposta il runtime corrente: 'web' | 'teams'. */
   static readonly applicationType: { type: string } = { type: '' };
 
+  /** client Microsoft Graph, inizializzato quando esiste un account attivo */
   public graphClient!: Client;
+  /** Subject emesso al logout per interrompere le operazioni in corso */
   public interrupt = new Subject<void>();
+  /** token di autenticazione corrente, aggiornato dall'eventuale AuthStateAdapter */
   public token: string | null = null;
 
+  /** servizio MSAL che notifica lo stato delle interazioni di login */
   public readonly broadcastService: MsalBroadcastService = inject(MsalBroadcastService);
+  /** insieme delle sottoscrizioni da chiudere in ngOnDestroy */
   private readonly subscriptions = new Subscription();
+  /** adapter opzionale verso lo state management (NgRx, Signals, ecc.) */
   private readonly stateAdapter:  AuthStateAdapter | null = inject( AuthStateAdapter, { optional: true });
   <% if (logging === "advanced") { %>
+    /** logger applicativo avanzato */
     private readonly logger:  LoggerService  = inject( LoggerService);
    <% } %>
+  /**
+   * @author l.piciollo
+   * Costruttore (login Azure): collega il token dell'eventuale adapter, abilita la sincronizzazione account tra tab e,
+   * a interazione MSAL conclusa, imposta l'account attivo e inizializza il client Graph.
+   * @param msalInstance :istanza MSAL (token MSAL_INSTANCE)
+   * @param msalGuardConfig :configurazione della guard MSAL (token MSAL_GUARD_CONFIG), usata per authRequest
+   */
   constructor(
     @Inject(MSAL_INSTANCE) private readonly msalInstance: any,
     @Inject(MSAL_GUARD_CONFIG) private readonly msalGuardConfig: MsalGuardConfiguration,
@@ -111,13 +136,24 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     );
   }
 
+  /************************************************************************************************************************/
+
+  /**
+   * @author l.piciollo
+   * Rilascia le sottoscrizioni e completa il Subject interrupt alla distruzione del servizio.
+   */
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     this.interrupt.complete();
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Avvia il flusso di login MSAL (tentativo silent, poi redirect o popup).
+   * @returns Observable<boolean> che emette true se l'utente risulta autenticato e poi completa; propaga l'errore in caso di KO
+   */
   public login(): Observable<boolean> {
     return new Observable<boolean>(observer => {
       const sub = this.loginEffect(observer).subscribe({
@@ -127,14 +163,25 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     });
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Esegue il logout MSAL delegando a logoutEffect.
+   * @param popup :se true usa il logout in finestra popup, altrimenti redirect (default false)
+   */
   public logout(popup: boolean = false): void {
     this.logoutEffect(popup);
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Logout MSAL: interrompe le operazioni in corso (interrupt), notifica l'adapter e avvia il logout popup o redirect.
+   * @param popup :se true usa il logout in finestra popup, altrimenti redirect (default false)
+   * @returns risultato della chiamata MSAL di logout (popup o redirect)
+   */
   logoutEffect(popup: boolean = false): Observable<any> {
     this.interrupt.next();
     this.stateAdapter?.onUserLoggedOut();
@@ -143,8 +190,15 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
       : this.msalInstance.logoutRedirect();
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Flusso di autenticazione MSAL: initialize, gestione del redirect, token silent e, in caso di fallimento, login redirect o popup.
+   * Notifica l'esito sia sull'Observable restituito sia sul subscriber ricevuto.
+   * @param obs :subscriber esterno su cui viene notificato l'esito (true/false) del login
+   * @returns Observable che emette il risultato di autenticazione MSAL e poi completa
+   */
   loginEffect(obs: Subscriber<any>): Observable<any> {
     return new Observable<any>(ob => {
       this.msalInstance.initialize().then(() => {
@@ -191,8 +245,12 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     });
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Avvia il login tramite redirect, usando authRequest della configurazione della guard quando presente.
+   */
   private loginRedirect(): void {
     if (this.msalGuardConfig.authRequest) {
       this.msalInstance
@@ -216,8 +274,13 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     }
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Avvia il login tramite popup, usando authRequest della configurazione della guard quando presente.
+   * @param obs :subscriber notificato con true se il login riesce, false se fallisce
+   */
   private loginPopup(obs: Subscriber<any>): void {
     const popup$: Observable<AuthenticationResult> = this.msalGuardConfig.authRequest
       ? this.msalInstance.loginPopup({ ...this.msalGuardConfig.authRequest } as PopupRequest)
@@ -243,8 +306,12 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     );
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Se non c'e' un account attivo ma ne esistono di autenticati, imposta il primo come attivo; con un account attivo inizializza il client Graph.
+   */
   private checkAndSetActiveAccount(): void {
     let activeAccount: AccountInfo | null = this.msalInstance.getActiveAccount();
 
@@ -259,11 +326,13 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     this.graphClient = Client.initWithMiddleware({ authProvider: this });
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
   /**
+   * @author l.piciollo
    * AuthenticationProvider di Microsoft Graph: restituisce un access token (silent) per gli scope
    * configurati in environment.azure.scope.consentScopes.
+   * @returns Promise con l'access token dell'account attivo (o del primo account disponibile)
    */
   public async getAccessToken(): Promise<string> {
     const account: AccountInfo | undefined =
@@ -279,14 +348,24 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
 
   <% } else { %>
 
+  /**
+   * @author l.piciollo
+   * Costruttore (login disabilitata): inietta il logger quando e' attivo il logging advanced.
+   * @param logger :logger applicativo (presente solo con logging advanced)
+   */
   constructor(
     <% if (logging === "advanced") { %>
     private readonly logger:  LoggerService,
     <% } %>
   ) {}
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Login disabilitata: emula l'utente autenticato e consente l'avvio applicativo. Punto in cui inserire un eventuale SSO custom.
+   * @returns Observable<boolean> che emette sempre true e poi completa
+   */
   public login(): Observable<boolean> {
     return new Observable<boolean>((observer: Subscriber<boolean>) => {
       /**
@@ -305,8 +384,12 @@ export class  AuthService<% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRE
     });
   }
 
-  /***********************************************************************************************/
+  /************************************************************************************************************************/
 
+  /**
+   * @author l.piciollo
+   * Logout senza provider di autenticazione: non esegue alcuna operazione (solo log in modalita' advanced).
+   */
   public logout(): void {
     <% if (logging === "advanced") { %>
     this.logger.debug( LoggerFeature.AUTH, 'Logout called without authentication provider');

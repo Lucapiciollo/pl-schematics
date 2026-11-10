@@ -1,3 +1,9 @@
+/**
+ * @author l.piciollo
+ * Rule della chain di index.ts: viene eseguita dopo updateAngularJsonForBudgets, nel
+ * blocco UI, prima di updateIndexHtmlForMaterial. Agisce solo con ui === 'material'.
+ */
+
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { PlSchematicsOptions } from '../types/schema-options';
 import {
@@ -8,6 +14,13 @@ import {
 } from '../utils/json.utils';
 import { getDefaultProjectName } from '../utils/workspace.utils';
 
+/**
+ * @author l.piciollo
+ * Aggiunge a angular.json il tema precompilato di Angular Material (indigo-pink) agli
+ * stili di build. Non fa nulla se la UI scelta non e' 'material'.
+ * @param options  :opzioni normalizzate (ui e progetto)
+ * @returns Rule che aggiorna angular.json e restituisce il Tree
+ */
 export function updateAngularJsonForMaterial(
   options: PlSchematicsOptions,
 ): Rule {

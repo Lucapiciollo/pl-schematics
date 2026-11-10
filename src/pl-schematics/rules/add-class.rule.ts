@@ -1,5 +1,13 @@
 // src/pl-schematics/rules/add-class.rule.ts
 
+/**
+ * @author l.piciollo
+ * Rule di basso livello (non e' un passo diretto della chain di index.ts): copia una
+ * cartella di template EJS dentro il progetto applicativo target (cartella sorgente
+ * dell'app). E' invocata da addTemplateFiles() (add-template-files.rule.ts) per ogni
+ * voce del manifest dei template applicativi.
+ */
+
 import { strings } from '@angular-devkit/core';
 import {
   apply,
@@ -15,6 +23,16 @@ import {
 import { PlSchematicsOptions } from '../types/schema-options';
 import { getProjectDefaultPath } from '../utils/workspace.utils';
 
+/**
+ * @author l.piciollo
+ * Copia i template di una cartella sorgente nel progetto target, applicando le opzioni
+ * come variabili EJS e le utility di naming di @angular-devkit/core (strings).
+ * Se il percorso di default del progetto non e' risolvibile non fa nulla.
+ * @param options    :opzioni normalizzate dello schematic, usate come contesto dei template
+ * @param urlFile    :percorso relativo della cartella template (es. './files/...')
+ * @param destPath   :sottocartella di destinazione, relativa al percorso di default del progetto
+ * @returns Rule che unisce i template generati al Tree sovrascrivendo i file gia' presenti
+ */
 export function addClass(
   options: PlSchematicsOptions,
   urlFile: string,

@@ -3,6 +3,10 @@
  * File generico, senza dipendenze esterne.
  */
 
+/**
+ * @author l.piciollo
+ * Enumerazione delle tipologie di dispositivo rilevabili: mobile, tablet, desktop oppure sconosciuto.
+ */
 export enum DeviceType {
   MOBILE = 'mobile',
   TABLET = 'tablet',
@@ -10,6 +14,10 @@ export enum DeviceType {
   UNKNOWN = 'unknown',
 }
 
+/**
+ * @author l.piciollo
+ * Enumerazione dei sistemi operativi rilevabili dallo user agent (Windows, macOS, iOS, Android, Linux) o sconosciuto.
+ */
 export enum OperatingSystem {
   WINDOWS = 'windows',
   MAC_OS = 'mac-os',
@@ -19,6 +27,10 @@ export enum OperatingSystem {
   UNKNOWN = 'unknown',
 }
 
+/**
+ * @author l.piciollo
+ * Enumerazione dei browser rilevabili dallo user agent (Edge, Chrome, Firefox, Safari, Opera, IE) o sconosciuto.
+ */
 export enum BrowserType {
   EDGE = 'edge',
   CHROME = 'chrome',
@@ -29,41 +41,87 @@ export enum BrowserType {
   UNKNOWN = 'unknown',
 }
 
+/**
+ * @author l.piciollo
+ * Informazioni sul dispositivo corrente ricavate da user agent e larghezza della finestra.
+ * E' il risultato delle funzioni detectDeviceInfo e detectCurrentDeviceInfo.
+ */
 export interface DeviceInfo {
+  /** tipologia di dispositivo (mobile, tablet, desktop, sconosciuto) */
   type: DeviceType;
+  /** sistema operativo rilevato */
   os: OperatingSystem;
+  /** browser rilevato */
   browser: BrowserType;
+  /** true se il dispositivo e' di tipo mobile */
   isMobile: boolean;
+  /** true se il dispositivo e' di tipo tablet */
   isTablet: boolean;
+  /** true se il dispositivo e' di tipo desktop */
   isDesktop: boolean;
+  /** stringa user agent da cui sono state ricavate le informazioni */
   userAgent: string;
+  /** larghezza in pixel della finestra al momento del rilevamento */
   width: number;
 }
 
+/**
+ * @author l.piciollo
+ * Costante di configurazione con le soglie di larghezza (in pixel) usate per distinguere mobile, tablet e desktop.
+ */
 export const DEVICE_BREAKPOINTS = {
+  /** larghezza massima (inclusa) per considerare il dispositivo mobile */
   mobileMaxWidth: 767,
+  /** larghezza minima (inclusa) per considerare il dispositivo tablet */
   tabletMinWidth: 768,
+  /** larghezza massima (inclusa) per considerare il dispositivo tablet */
   tabletMaxWidth: 1024,
 };
 
+/**
+ * @author l.piciollo
+ * Costante di configurazione con le espressioni regolari applicate allo user agent per riconoscere tipo di
+ * dispositivo, sistema operativo e browser. L'ordine di applicazione e' deciso dalle funzioni detect*.
+ */
 export const DEVICE_USER_AGENT_PATTERNS = {
+  /** riconoscimento dei dispositivi mobile */
   mobile: /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i,
+  /** riconoscimento dei tablet */
   tablet: /iPad|Tablet|PlayBook|Silk/i,
 
+  /** sistema operativo Windows */
   windows: /Windows NT/i,
+  /** sistema operativo macOS */
   macOs: /Macintosh|Mac OS X/i,
+  /** sistema operativo iOS */
   ios: /iPhone|iPad|iPod/i,
+  /** sistema operativo Android */
   android: /Android/i,
+  /** sistema operativo Linux */
   linux: /Linux/i,
 
+  /** browser Microsoft Edge (basato su Chromium) */
   edge: /Edg\//i,
+  /** browser Opera */
   opera: /OPR|Opera/i,
+  /** browser Firefox (inclusa la versione iOS) */
   firefox: /Firefox|FxiOS/i,
+  /** browser Internet Explorer */
   ie: /MSIE|Trident/i,
+  /** browser Chrome (inclusa la versione iOS); va escluso Edge e Opera che lo contengono nello user agent */
   chrome: /Chrome|CriOS/i,
+  /** browser Safari; va escluso Chrome che lo contiene nello user agent */
   safari: /Safari/i,
 };
 
+/**
+ * @author l.piciollo
+ * Determina il tipo di dispositivo: prima controlla lo user agent (tablet, poi mobile), poi usa la larghezza
+ * della finestra con le soglie di DEVICE_BREAKPOINTS; se nulla corrisponde restituisce desktop.
+ * @param userAgent  :stringa user agent del browser (se vuota viene trattata come stringa vuota)
+ * @param width      :larghezza in pixel della finestra
+ * @returns la tipologia di dispositivo rilevata
+ */
 export function detectDeviceType(
   userAgent: string,
   width: number,
@@ -92,6 +150,14 @@ export function detectDeviceType(
   return DeviceType.DESKTOP;
 }
 
+/************************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Determina il sistema operativo dallo user agent (l'ordine dei controlli conta: iOS prima di macOS, Android prima di Linux).
+ * @param userAgent  :stringa user agent del browser
+ * @returns il sistema operativo rilevato oppure UNKNOWN
+ */
 export function detectOperatingSystem(userAgent: string): OperatingSystem {
   const normalizedUserAgent = userAgent || '';
 
@@ -118,6 +184,14 @@ export function detectOperatingSystem(userAgent: string): OperatingSystem {
   return OperatingSystem.UNKNOWN;
 }
 
+/************************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Determina il browser dallo user agent (l'ordine dei controlli conta perche' Edge, Opera e Chrome condividono parti dello user agent).
+ * @param userAgent  :stringa user agent del browser
+ * @returns il browser rilevato oppure UNKNOWN
+ */
 export function detectBrowser(userAgent: string): BrowserType {
   const normalizedUserAgent = userAgent || '';
 
@@ -155,6 +229,15 @@ export function detectBrowser(userAgent: string): BrowserType {
   return BrowserType.UNKNOWN;
 }
 
+/************************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Compone l'oggetto DeviceInfo completo (tipo, sistema operativo, browser e flag) a partire da user agent e larghezza.
+ * @param userAgent  :stringa user agent del browser
+ * @param width      :larghezza in pixel della finestra
+ * @returns le informazioni sul dispositivo
+ */
 export function detectDeviceInfo(
   userAgent: string,
   width: number,
@@ -173,6 +256,14 @@ export function detectDeviceInfo(
   };
 }
 
+/************************************************************************************************************************/
+
+/**
+ * @author l.piciollo
+ * Rileva le informazioni del dispositivo corrente leggendo navigator.userAgent e window.innerWidth.
+ * Se l'oggetto window non esiste (es. rendering lato server) restituisce valori sconosciuti.
+ * @returns le informazioni sul dispositivo corrente
+ */
 export function detectCurrentDeviceInfo(): DeviceInfo {
   if (typeof window === 'undefined') {
     return {
