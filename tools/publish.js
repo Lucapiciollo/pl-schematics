@@ -190,7 +190,10 @@ function buildChangelogSection(version, date, commits, schema) {
  */
 function run(cmd, args, opts) {
   // git senza shell: gli argomenti (messaggi di commit, -S"...") restano intatti; npm su Windows e' un .cmd e vuole la shell
-  const r = spawnSync(cmd, args, Object.assign({ cwd: REPO, shell: cmd !== 'git', encoding: 'utf8' }, opts || {}));
+  const useShell = cmd !== 'git';
+  const r = useShell
+    ? spawnSync([cmd].concat(args).join(' '), Object.assign({ cwd: REPO, shell: true, encoding: 'utf8' }, opts || {}))
+    : spawnSync(cmd, args, Object.assign({ cwd: REPO, shell: false, encoding: 'utf8' }, opts || {}));
   return { ok: r.status === 0, out: (r.stdout || '').trim(), err: (r.stderr || '').trim(), status: r.status };
 }
 
