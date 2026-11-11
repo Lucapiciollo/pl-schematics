@@ -39,3 +39,7 @@
 - README 472 righe + docs/GUIDA.md (10 esempi); AI_README/CHANGELOG aggiornati; documentazione compodoc rigenerata (117 file, 3 MB; vecchia 4,4 MB rimossa); metadati package.json (repository/homepage/bugs); JSDoc/commenti corretti.
 - Pacchetto 4.0.0: 317 file, 0,73 MB compressi. npm whoami = lucapiciollo. Publish NON eseguito: versione da confermare.
 - Da decidere: LICENSE mancante; src/pl-schematics/tools/* nel tarball; ChromeHeadless in ci:test/CI su Angular 21; console.log in HttpInterceptorFakeService; typedoc -n Portable-Schematics; rischio pl-core-utils-library 'latest' (3.x locale con PlHttpRequest diverso).
+
+## 2026-11-11 - correzioni pre-publish
+- ci:test senza --browsers su Angular 21 (provato: vecchio exit 1, nuovo exit 0); CI chiamano npm run ci:test; fake interceptor senza console.log; LICENSE MIT; tools dev-only esclusi dal tarball. Unit test 35/35.
+- Pacchetto 4.0.0 pronto; publish in attesa di conferma versione.

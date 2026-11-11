@@ -40,7 +40,7 @@ jobs:
 
       <% if (tests !== "none") { %>
       - name: Run tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+        run: npm run ci:test
       <% } %>
 
       - name: Upload dist artifact

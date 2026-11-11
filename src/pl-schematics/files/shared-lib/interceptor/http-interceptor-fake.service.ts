@@ -9,7 +9,6 @@
  import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
  import { Injectable } from '@angular/core';
  import { Observable } from 'rxjs';
- import { tap } from 'rxjs/operators';
  import {  ErrorBean,  ErrorCode } from '../bean/error-bean';
   
  
@@ -35,7 +34,7 @@
 
    /**
     * @author l.piciollo
-    * Inoltra la richiesta al prossimo handler senza modificarla e scrive in console un messaggio di tracciamento.
+    * Inoltra la richiesta al prossimo handler senza modificarla (nessuna scrittura in console).
     * Eventuali eccezioni sincrone vengono rilanciate come ErrorBean con codice NETWORKERROR.
     * @param request   :richiesta HTTP in uscita
     * @param next   :handler successivo della catena di intercettori
@@ -43,7 +42,7 @@
     */
    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
      try {
-       return next.handle(request).pipe(tap(()=>console.log("fake interceptor")));
+       return next.handle(request);
      } catch (error:any) {
       throw new   ErrorBean(error.message,  ErrorCode.NETWORKERROR)
      }

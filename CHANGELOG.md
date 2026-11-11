@@ -24,6 +24,9 @@ Rilascio di compatibilita' con **Angular 19, 20 e 21** (classic e standalone). L
 
 ### Corretto
 
+- CI generate (GitHub Actions e Azure DevOps): chiamano `npm run ci:test`. Lo script usa `--browsers=ChromeHeadless` solo con Angular 19 e 20 (Karma); su Angular 21 (Vitest) quel flag non e' valido e non viene passato.
+- `HttpInterceptorFakeService` non scrive piu' "fake interceptor" in console a ogni risposta.
+- Pacchetto npm: aggiunto il file `LICENSE` (MIT); esclusi dal tarball gli script dev-only in `src/pl-schematics/tools`.
 - `readJsonFile` accetta JSONC (commenti e trailing comma del `tsconfig.json` di `ng new`); la scrittura modifica solo le chiavi cambiate e preserva commenti e formattazione.
 - Rilevamento dei nomi reali dei file Angular 19 (`app.component.ts`, `app.module.ts`) vs 20+ (`app.ts`, `app.html`, `app-module.ts`).
 - `environment.prod.ts` importava `AppEnvironment` da `./environment` (sostituito da `fileReplacements` in produzione): l'interfaccia vive in `environment.model.ts`.

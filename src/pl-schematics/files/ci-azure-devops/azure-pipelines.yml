@@ -31,7 +31,7 @@ stages:
             displayName: Build application
 
           <% if (tests !== "none") { %>
-          - script: npm test -- --watch=false --browsers=ChromeHeadless
+          - script: npm run ci:test
             displayName: Run tests
           <% } %>
 

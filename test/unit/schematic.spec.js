@@ -241,4 +241,28 @@ describe('pl-schematics (SchematicTestRunner)', () => {
     expect((config.match(/provideCore\(\)/g) || []).length).toBe(1);
     expect((config.match(/importProvidersFrom\(StateModule\)/g) || []).length).toBe(1);
   });
+
+  it('CI: ci:test passes --browsers=ChromeHeadless only on Karma (Angular 19/20), never on Vitest (Angular 21); the CI templates call npm run ci:test', async () => {
+    const ciTest = async (major) => {
+      const tree = await run({ namePackage: 'my-app', ci: 'github-actions', tests: 'jasmine' }, createWorkspace({ major, standalone: true }));
+      return readJsonFile(tree, 'package.json').scripts['ci:test'];
+    };
+    expect(await ciTest(19)).toBe('npm test -- --watch=false --browsers=ChromeHeadless');
+    expect(await ciTest(20)).toBe('npm test -- --watch=false --browsers=ChromeHeadless');
+    expect(await ciTest(21)).toBe('npm test -- --watch=false');
+
+    const gh = await run({ namePackage: 'my-app', ci: 'github-actions', tests: 'jasmine' }, createWorkspace({ major: 21, standalone: true }));
+    expect(gh.readContent('.github/workflows/build.yml')).toContain('npm run ci:test');
+    expect(gh.readContent('.github/workflows/build.yml')).not.toContain('ChromeHeadless');
+    const az = await run({ namePackage: 'my-app', ci: 'azure-devops', tests: 'jasmine' }, createWorkspace({ major: 21, standalone: true }));
+    expect(az.readContent('azure-pipelines.yml')).toContain('npm run ci:test');
+    expect(az.readContent('azure-pipelines.yml')).not.toContain('ChromeHeadless');
+  });
+
+  it('the fake HTTP interceptor does not write to the console', async () => {
+    const tree = await run({ namePackage: 'my-app', http: 'interceptor-classic' }, createWorkspace({ major: 19, standalone: false }));
+    const fake = files(tree).find((f) => f.indexOf('http-interceptor-fake.service.ts') >= 0);
+    expect(fake).toBeDefined();
+    expect(tree.readContent(fake)).not.toContain('console.log');
+  });
 });

@@ -217,10 +217,18 @@ export function updatePackageJsonForBuild(
       );
 
       if (options.tests !== 'none') {
+        /**
+         * @author l.piciollo
+         * Angular 19 e 20 usano Karma e richiedono il browser headless esplicito. Da Angular 21 il runner predefinito
+         * e' Vitest (jsdom): il flag --browsers=ChromeHeadless e' un nome Karma e non e' valido, quindi non si passa.
+         */
+        const karmaRunner = (options.angularMajor || 0) < 21;
         setScriptIfMissing(
           scripts,
           'ci:test',
-          'npm test -- --watch=false --browsers=ChromeHeadless',
+          karmaRunner
+            ? 'npm test -- --watch=false --browsers=ChromeHeadless'
+            : 'npm test -- --watch=false',
         );
       }
     }

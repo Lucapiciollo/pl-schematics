@@ -60,7 +60,10 @@ function updatePackageJsonForBuild(options) {
             setScriptIfMissing(scripts, 'ci:install', 'npm ci');
             setScriptIfMissing(scripts, 'ci:build', 'npm run build-prod');
             if (options.tests !== 'none') {
-                setScriptIfMissing(scripts, 'ci:test', 'npm test -- --watch=false --browsers=ChromeHeadless');
+                const karmaRunner = (options.angularMajor || 0) < 21;
+                setScriptIfMissing(scripts, 'ci:test', karmaRunner
+                    ? 'npm test -- --watch=false --browsers=ChromeHeadless'
+                    : 'npm test -- --watch=false');
             }
         }
         (0, json_utils_1.overwriteJsonFile)(host, 'package.json', packageJson);
