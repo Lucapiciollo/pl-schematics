@@ -3,19 +3,85 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Schematics</title>
+        <title>pl-schematics - progetto generato</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/Postmark.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/postmark.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Schematics</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">pl-schematics - progetto generato</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
@@ -24,7 +90,7 @@
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -41,45 +107,56 @@
 
 
 
+
+
+
+
+
 <ol class="breadcrumb">
-  <li>Classes</li>
-  <li>ErrorBean</li>
+  <li class="breadcrumb-item">Classes</li>
+  <li class="breadcrumb-item" >ErrorBean</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
-        </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/home/configuration/core/bean/error-bean.ts</code>
+            <code>projects/app-shared/src/lib/bean/error-bean.ts</code>
         </p>
 
+
+            <p class="comment">
+                <h3>Description</h3>
+            </p>
+            <p class="comment">
+                <p>bean di trasporto per l&#39;errore.
+Estende Error e aggiunge il codice di errore (ErrorCode) e due flag che indicano se l&#39;applicazione deve
+reindirizzare alla pagina di errore e/o mostrare una modale. Viene lanciato nei blocchi try/catch dei servizi
+e delle utility e gestito in modo centralizzato (es. error.service).</p>
+
+            </p>
 
             <p class="comment">
                 <h3>Extends</h3>
             </p>
             <p class="comment">
-                    <code>Error</code>
+                        <code>Error</code>
             </p>
 
 
-            <p class="comment">
-                <h3>Example</h3>
-            </p>
-            <div class="io-description">
-            </div>
 
-            <section>
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -93,19 +170,20 @@
                         <ul class="index-list">
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#dialog">dialog</a>
+                                <a href="#dialog" >dialog</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#eCode">eCode</a>
+                                <a href="#eCode" >eCode</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#message">message</a>
+                                    <span class="modifier"></span>
+                                <a href="#message" >message</a>
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
-                                <a href="#redirect">redirect</a>
+                                <a href="#redirect" >redirect</a>
                             </li>
                         </ul>
                     </td>
@@ -120,7 +198,7 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
@@ -129,14 +207,11 @@
 <code>constructor(message: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, eCode: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, redirect: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>, dialog: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank">boolean</a>)</code>
                     </td>
                 </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="26" class="link-to-prism">src/app/home/configuration/core/bean/error-bean.ts:26</a></div>
-                            </td>
-                        </tr>
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>Costruttore: crea l&#39;errore valorizzando messaggio, codice e flag di gestione (redirect e dialog).</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -161,8 +236,8 @@
                                                     </td>
                                                     
                                                         <td>
-                                                                <code><p>:messaggio di errore </p>
-</code>
+                                                                <p>:messaggio di errore</p>
+
                                                         </td>
                                                 </tr>
                                                 <tr>
@@ -177,8 +252,8 @@
                                                     </td>
                                                     
                                                         <td>
-                                                                <code><p>:codice di errore</p>
-</code>
+                                                                <p>:codice di errore</p>
+
                                                         </td>
                                                 </tr>
                                                 <tr>
@@ -193,8 +268,8 @@
                                                     </td>
                                                     
                                                         <td>
-                                                                <code><p>:valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)</p>
-</code>
+                                                                <p>:valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)</p>
+
                                                         </td>
                                                 </tr>
                                                 <tr>
@@ -209,8 +284,8 @@
                                                     </td>
                                                     
                                                         <td>
-                                                                <code><p>:valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)</p>
-</code>
+                                                                <p>:valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)</p>
+
                                                         </td>
                                                 </tr>
                                         </tbody>
@@ -222,158 +297,120 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-properties">
     
-        <h3 id="inputs">
-            Properties
-        </h3>
-        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dialog"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>dialog</b></span>
+                        <a href="#dialog"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="dialog"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Public</span>
-                            dialog</b>
-                            <a href="#dialog"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>false</code>
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/home/configuration/core/bean/error-bean.ts:35</a></div>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <div class="io-description">:valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)</div>
                     </td>
                 </tr>
 
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">:valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="eCode"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>eCode</b></span>
+                        <a href="#eCode"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="eCode"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Public</span>
-                            eCode</b>
-                            <a href="#eCode"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>ErrorCode.SYSTEMERRORCODE</code>
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/home/configuration/core/bean/error-bean.ts:35</a></div>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <div class="io-description">:codice di errore</div>
                     </td>
                 </tr>
 
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">:codice di errore</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="message"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier"></span>
+                        <span ><b>message</b></span>
+                        <a href="#message"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="message"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Public</span>
-                            message</b>
-                            <a href="#message"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
 
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/home/configuration/core/bean/error-bean.ts:35</a></div>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <div class="io-description">:messaggio di errore </div>
                     </td>
                 </tr>
 
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">:messaggio di errore</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="redirect"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                        <span ><b>redirect</b></span>
+                        <a href="#redirect"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="redirect"></a>
-                        <span class="name">
-                            <b>
-                                <span class="modifier">Public</span>
-                            redirect</b>
-                            <a href="#redirect"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>false</code>
-                        </td>
-                    </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                    <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/app/home/configuration/core/bean/error-bean.ts:35</a></div>
-                            </td>
-                        </tr>
-
-                <tr>
-                    <td class="col-md-4">
-                        <div class="io-description">:valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)</div>
                     </td>
                 </tr>
 
-            </tbody>
-        </table>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description">:valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
 </section>
 
 
@@ -385,45 +422,19 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">export enum ErrorCode {
-      SYSTEMERRORCODE &#x3D; &quot;SYSTEMERROR&quot;,
-      NETWORKERROR &#x3D; &quot;NETWORKERROR&quot;
-}
-
-/**
- * @author l.piciollo
- * bean di trasporto per l&#x27;errore.
- */
-export class ErrorBean extends Error {
-
-      /**
-       * @author l.piciollo
-       * @param message  :messaggio di errore 
-       * @param eCode    :codice di errore
-       * @param redirect :valore che indica se necessario andare in pagina di errore o meno (da centralizzare in error.service)
-       * @param dialog   :valore che indica se necessario fare apparire una modale di errore o meno (da centralizzare in error.service)
-       */
-      constructor(public message: string, public eCode: string &#x3D; ErrorCode.SYSTEMERRORCODE, public redirect: boolean &#x3D; false, public dialog: boolean &#x3D; false) {
-            super();
-      }
-
-
-}
-</code></pre>
-    </div>
 </div>
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -435,6 +446,15 @@ export class ErrorBean extends Error {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'class';
@@ -442,18 +462,30 @@ export class ErrorBean extends Error {
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

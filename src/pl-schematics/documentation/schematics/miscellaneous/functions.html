@@ -3,19 +3,85 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Schematics</title>
+        <title>pl-schematics - progetto generato</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/Postmark.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/postmark.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Schematics</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">pl-schematics - progetto generato</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
@@ -24,7 +90,7 @@
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -44,14 +110,20 @@
 
 
 
-                   
+
+
+
+
+
+
+
 
 <ol class="breadcrumb">
-  <li>Miscellaneous</li>
-  <li>Functions</li>
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Functions</li>
 </ol>
 
-<section>
+<section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -59,13 +131,55 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#AmbientModeProviderFactory" title="src/app/home/configuration/core/initializer/AmbientModeLoader.ts"><b>AmbientModeProviderFactory</b>&nbsp;&nbsp;&nbsp;(src/.../AmbientModeLoader.ts)</a>
+                            <a href="#AmbientModeProviderFactory" title="src/app/app/core/initializer/AmbientModeLoader.ts" ><b>AmbientModeProviderFactory</b>&nbsp;&nbsp;&nbsp;(src/.../AmbientModeLoader.ts)</a>
                         </li>
                         <li>
-                            <a href="#AutenticationLoader" title="src/app/home/configuration/core/initializer/AutenticationLoader.ts"><b>AutenticationLoader</b>&nbsp;&nbsp;&nbsp;(src/.../AutenticationLoader.ts)</a>
+                            <a href="#AutenticationLoader" title="src/app/app/core/initializer/AutenticationLoader.ts" ><b>AutenticationLoader</b>&nbsp;&nbsp;&nbsp;(src/.../AutenticationLoader.ts)</a>
                         </li>
                         <li>
-                            <a href="#option" title="src/app/home/configuration/shared/component/http-graphic-speed/http-graphic-config.ts"><b>option</b>&nbsp;&nbsp;&nbsp;(src/.../http-graphic-config.ts)</a>
+                            <a href="#detectBrowser" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>detectBrowser</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#detectCurrentDeviceInfo" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>detectCurrentDeviceInfo</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#detectDeviceInfo" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>detectDeviceInfo</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#detectDeviceType" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>detectDeviceType</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#detectOperatingSystem" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>detectOperatingSystem</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#MSALGuardConfigFactory" title="src/app/app/core/msal/MSALGuardConfigFactory.ts" ><b>MSALGuardConfigFactory</b>&nbsp;&nbsp;&nbsp;(src/.../MSALGuardConfigFactory.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#MSALInstanceFactory" title="src/app/app/core/msal/MSALInstanceFactory.ts" ><b>MSALInstanceFactory</b>&nbsp;&nbsp;&nbsp;(src/.../MSALInstanceFactory.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#MSALInterceptorConfigFactory" title="src/app/app/core/msal/MSALInterceptorConfigFactory.ts" ><b>MSALInterceptorConfigFactory</b>&nbsp;&nbsp;&nbsp;(src/.../MSALInterceptorConfigFactory.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#provideHttpInterceptor" title="projects/app-shared/src/lib/http/http-interceptor.provider.ts" ><b>provideHttpInterceptor</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#provideHttpInterceptorConfig" title="projects/app-shared/src/lib/http/http-interceptor.provider.ts" ><b>provideHttpInterceptorConfig</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#provideLogger" title="projects/app-shared/src/lib/logging/logger-provider.ts" ><b>provideLogger</b>&nbsp;&nbsp;&nbsp;(projects/.../logger-provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#providePlMsal" title="src/app/app/core/msal/msal-providers.ts" ><b>providePlMsal</b>&nbsp;&nbsp;&nbsp;(src/.../msal-providers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#providePlShared" title="projects/app-shared/src/lib/config/shared-lib.config.ts" ><b>providePlShared</b>&nbsp;&nbsp;&nbsp;(projects/.../shared-lib.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#runBootstrapTasks" title="src/app/app/core/initializer/AutenticationLoader.ts" ><b>runBootstrapTasks</b>&nbsp;&nbsp;&nbsp;(src/.../AutenticationLoader.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#toDate" title="projects/app-shared/src/lib/pipe/count-years.pipe.ts" ><b>toDate</b>&nbsp;&nbsp;&nbsp;(projects/.../count-years.pipe.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -74,24 +188,22 @@
     </table>
 </section>
 
-    <h3>src/app/home/configuration/core/initializer/AmbientModeLoader.ts</h3>
-    <section>
+    <h3>src/app/app/core/initializer/AmbientModeLoader.ts</h3>
+    <section data-compodoc="block-methods">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
                     <a name="AmbientModeProviderFactory"></a>
                     <span class="name">
-                        <b>
-                            AmbientModeProviderFactory
-                        </b>
+                        <span ><b>AmbientModeProviderFactory</b></span>
                         <a href="#AmbientModeProviderFactory"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>AmbientModeProviderFactory(ambientModeService)</code>
+<code>AmbientModeProviderFactory(ambientModeService: PlAmbientModeLoaderService)</code>
                 </td>
             </tr>
 
@@ -101,52 +213,58 @@
             <tr>
                 <td class="col-md-4">
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>ambientModeService</td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>ambientModeService</td>
+                                            <td>
+                                                        <code>PlAmbientModeLoaderService</code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
+                                            <td>
+                                                    <p>:servizio della libreria pl-core-utils-library che rileva ambiente e tipo di browser</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/app/home/configuration/core/initializer/AutenticationLoader.ts</h3>
-    <section>
+</section>    <h3>src/app/app/core/initializer/AutenticationLoader.ts</h3>
+    <section data-compodoc="block-methods">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
                     <a name="AutenticationLoader"></a>
                     <span class="name">
-                        <b>
-                            AutenticationLoader
-                        </b>
+                        <span ><b>AutenticationLoader</b></span>
                         <a href="#AutenticationLoader"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>AutenticationLoader(authService)</code>
+<code>AutenticationLoader(authService: <a href="../injectables/AuthService.html" target="_self">AuthService</a>, bootstrapTasks)</code>
                 </td>
             </tr>
 
@@ -155,59 +273,978 @@
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>authService</td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>authService</td>
+                                            <td>
+                                                            <code><a href="../injectables/AuthService.html" target="_self" >AuthService</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
+                                        </tr>
+                                        <tr>
+                                                <td>bootstrapTasks</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/app/home/configuration/shared/component/http-graphic-speed/http-graphic-config.ts</h3>
-    <section>
-    <h3></h3>    <table class="table table-sm table-bordered">
+    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="option"></a>
+                    <a name="runBootstrapTasks"></a>
                     <span class="name">
-                        <b>
-                            option
-                        </b>
-                        <a href="#option"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>runBootstrapTasks</b></span>
+                        <a href="#runBootstrapTasks"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>option()</code>
+<code>runBootstrapTasks(tasks)</code>
                 </td>
             </tr>
 
 
 
 
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>tasks</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:elenco delle funzioni di bootstrap (APP_BOOTSTRAP_TASKS), null o vuoto se non ce ne sono</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Observable&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Observable che emette true quando tutte le funzioni sono terminate (true subito se non ce ne sono)</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>projects/app-shared/src/lib/utils/device-detector.constants.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="detectBrowser"></a>
+                    <span class="name">
+                        <span ><b>detectBrowser</b></span>
+                        <a href="#detectBrowser"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>detectBrowser(userAgent: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userAgent</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/enumerations.html#BrowserType" target="_self" >BrowserType</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="detectCurrentDeviceInfo"></a>
+                    <span class="name">
+                        <span ><b>detectCurrentDeviceInfo</b></span>
+                        <a href="#detectCurrentDeviceInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>detectCurrentDeviceInfo()</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/DeviceInfo.html" target="_self" >DeviceInfo</a></code>
+
+                        </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="detectDeviceInfo"></a>
+                    <span class="name">
+                        <span ><b>detectDeviceInfo</b></span>
+                        <a href="#detectDeviceInfo"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>detectDeviceInfo(userAgent: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, width: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userAgent</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>width</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../interfaces/DeviceInfo.html" target="_self" >DeviceInfo</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="detectDeviceType"></a>
+                    <span class="name">
+                        <span ><b>detectDeviceType</b></span>
+                        <a href="#detectDeviceType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>detectDeviceType(userAgent: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, width: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userAgent</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:stringa user agent del browser (se vuota viene trattata come stringa vuota)</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>width</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:larghezza in pixel della finestra</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/enumerations.html#DeviceType" target="_self" >DeviceType</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>la tipologia di dispositivo rilevata</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="detectOperatingSystem"></a>
+                    <span class="name">
+                        <span ><b>detectOperatingSystem</b></span>
+                        <a href="#detectOperatingSystem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>detectOperatingSystem(userAgent: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>userAgent</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/enumerations.html#OperatingSystem" target="_self" >OperatingSystem</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/app/app/core/msal/MSALGuardConfigFactory.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="MSALGuardConfigFactory"></a>
+                    <span class="name">
+                        <span ><b>MSALGuardConfigFactory</b></span>
+                        <a href="#MSALGuardConfigFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>MSALGuardConfigFactory()</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>MsalGuardConfiguration</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>la configurazione MsalGuardConfiguration usata dal guard MSAL</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/app/app/core/msal/MSALInstanceFactory.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="MSALInstanceFactory"></a>
+                    <span class="name">
+                        <span ><b>MSALInstanceFactory</b></span>
+                        <a href="#MSALInstanceFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>MSALInstanceFactory()</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../components/App.html" target="_self" >IPublicClientApplication</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>l&#39;istanza MSAL (IPublicClientApplication) usata per l&#39;autenticazione Azure AD</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/app/app/core/msal/MSALInterceptorConfigFactory.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="MSALInterceptorConfigFactory"></a>
+                    <span class="name">
+                        <span ><b>MSALInterceptorConfigFactory</b></span>
+                        <a href="#MSALInterceptorConfigFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>MSALInterceptorConfigFactory()</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>MsalInterceptorConfiguration</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>la configurazione MsalInterceptorConfiguration usata dall&#39;interceptor MSAL</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>projects/app-shared/src/lib/http/http-interceptor.provider.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="provideHttpInterceptor"></a>
+                    <span class="name">
+                        <span ><b>provideHttpInterceptor</b></span>
+                        <a href="#provideHttpInterceptor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>provideHttpInterceptor(config?: Partial, authAdapterProvider?: <a href="https://angular.io/api/core/Provider" target="_blank">Provider</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><hr>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                        <code>Partial</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>authAdapterProvider</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/core/Provider" target="_blank" >Provider</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Provider[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="provideHttpInterceptorConfig"></a>
+                    <span class="name">
+                        <span ><b>provideHttpInterceptorConfig</b></span>
+                        <a href="#provideHttpInterceptorConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>provideHttpInterceptorConfig(config?: Partial, authAdapterProvider?: <a href="https://angular.io/api/core/Provider" target="_blank">Provider</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                        <code>Partial</code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:configurazione parziale dell&#39;intercettore, unita ai valori di default</p>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>authAdapterProvider</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/core/Provider" target="_blank" >Provider</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:provider alternativo per HTTP_AUTH_ADAPTER; se omesso si usa LocalStorageAuthAdapterService</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Provider[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>elenco di provider Angular da registrare</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>projects/app-shared/src/lib/logging/logger-provider.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="provideLogger"></a>
+                    <span class="name">
+                        <span ><b>provideLogger</b></span>
+                        <a href="#provideLogger"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>provideLogger(config: <a href="../interfaces/LoggerConfig.html" target="_self">LoggerConfig</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../interfaces/LoggerConfig.html" target="_self" >LoggerConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:configurazione del logger (livello, feature abilitate, formato)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Provider[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>elenco di provider Angular da registrare</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/app/app/core/msal/msal-providers.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providePlMsal"></a>
+                    <span class="name">
+                        <span ><b>providePlMsal</b></span>
+                        <a href="#providePlMsal"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>providePlMsal(config: <a href="../interfaces/MsalAuthConfig.html" target="_self">MsalAuthConfig</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../interfaces/MsalAuthConfig.html" target="_self" >MsalAuthConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                            <td>
+                                                    <p>:factory opzionali per sovrascrivere i default (se omesso si usano le factory di default)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Provider[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>array di Provider da registrare nell&#39;injector applicativo</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>projects/app-shared/src/lib/config/shared-lib.config.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="providePlShared"></a>
+                    <span class="name">
+                        <span ><b>providePlShared</b></span>
+                        <a href="#providePlShared"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>providePlShared(config: <a href="../interfaces/SharedLibConfig.html" target="_self">SharedLibConfig</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>config</td>
+                                            <td>
+                                                            <code><a href="../interfaces/SharedLibConfig.html" target="_self" >SharedLibConfig</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:configurazione della libreria condivisa (lingua, timeout HTTP, logging)</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>EnvironmentProviders</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>provider di ambiente Angular da registrare nel bootstrap</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>projects/app-shared/src/lib/pipe/count-years.pipe.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="toDate"></a>
+                    <span class="name">
+                        <span ><b>toDate</b></span>
+                        <a href="#toDate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>toDate(value)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <p>:data come stringa, timestamp numerico o oggetto Date</p>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Date | null</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>la data valida oppure null se il valore non e&#39; convertibile</p>
+
+                            </div>
+                </td>
+            </tr>
         </tbody>
     </table>
 </section>
@@ -215,7 +1252,7 @@
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -227,6 +1264,15 @@
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-functions';
@@ -234,18 +1280,30 @@
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

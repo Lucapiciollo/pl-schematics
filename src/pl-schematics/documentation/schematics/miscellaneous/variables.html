@@ -3,19 +3,85 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Schematics</title>
+        <title>pl-schematics - progetto generato</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/Postmark.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/postmark.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Schematics</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">pl-schematics - progetto generato</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
@@ -24,7 +90,7 @@
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -44,14 +110,20 @@
 
 
 
-                   
+
+
+
+
+
+
+
 
 <ol class="breadcrumb">
-  <li>Miscellaneous</li>
-  <li>Variables</li>
+  <li class="breadcrumb-item">Miscellaneous</li>
+  <li class="breadcrumb-item">Variables</li>
 </ol>
 
-<section>
+<section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -59,31 +131,145 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#BASE_URL_API" title="src/app/home/configuration/core/service/http.service.ts"><b>BASE_URL_API</b>&nbsp;&nbsp;&nbsp;(src/.../http.service.ts)</a>
+                            <a href="#APP_BOOTSTRAP_TASKS" title="projects/app-shared/src/lib/tokens/app-bootstrap-task.token.ts" ><b>APP_BOOTSTRAP_TASKS</b>&nbsp;&nbsp;&nbsp;(projects/.../app-bootstrap-task.token.ts)</a>
                         </li>
                         <li>
-                            <a href="#context" title="src/test.ts"><b>context</b>&nbsp;&nbsp;&nbsp;(src/.../test.ts)</a>
+                            <a href="#appClearError" title="projects/app-ngrx/src/lib/app/app.actions.ts" ><b>appClearError</b>&nbsp;&nbsp;&nbsp;(projects/.../app.actions.ts)</a>
                         </li>
                         <li>
-                            <a href="#DEFAULT_TIMEOUT" title="src/app/home/configuration/core/interceptor/http-interceptor.service.ts"><b>DEFAULT_TIMEOUT</b>&nbsp;&nbsp;&nbsp;(src/.../http-interceptor.service.ts)</a>
+                            <a href="#appFeatureKey" title="projects/app-ngrx/src/lib/app/app.reducer.ts" ><b>appFeatureKey</b>&nbsp;&nbsp;&nbsp;(projects/.../app.reducer.ts)</a>
                         </li>
                         <li>
-                            <a href="#environment" title="src/environments/environment.prod.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.prod.ts)</a>
+                            <a href="#appInit" title="projects/app-ngrx/src/lib/app/app.actions.ts" ><b>appInit</b>&nbsp;&nbsp;&nbsp;(projects/.../app.actions.ts)</a>
                         </li>
                         <li>
-                            <a href="#environment" title="src/environments/environment.ts"><b>environment</b>&nbsp;&nbsp;&nbsp;(src/.../environment.ts)</a>
+                            <a href="#appInitFailure" title="projects/app-ngrx/src/lib/app/app.actions.ts" ><b>appInitFailure</b>&nbsp;&nbsp;&nbsp;(projects/.../app.actions.ts)</a>
                         </li>
                         <li>
-                            <a href="#require" title="src/test.ts"><b>require</b>&nbsp;&nbsp;&nbsp;(src/.../test.ts)</a>
+                            <a href="#appInitSuccess" title="projects/app-ngrx/src/lib/app/app.actions.ts" ><b>appInitSuccess</b>&nbsp;&nbsp;&nbsp;(projects/.../app.actions.ts)</a>
                         </li>
                         <li>
-                            <a href="#UiLoaderConfig" title="src/app/home/configuration/core/utils/UiLoaderConfig.ts"><b>UiLoaderConfig</b>&nbsp;&nbsp;&nbsp;(src/.../UiLoaderConfig.ts)</a>
+                            <a href="#appReducer" title="projects/app-ngrx/src/lib/app/app.reducer.ts" ><b>appReducer</b>&nbsp;&nbsp;&nbsp;(projects/.../app.reducer.ts)</a>
                         </li>
                         <li>
-                            <a href="#UiLoaderHttpConfig" title="src/app/home/configuration/core/utils/UiLoaderHttpConfig.ts"><b>UiLoaderHttpConfig</b>&nbsp;&nbsp;&nbsp;(src/.../UiLoaderHttpConfig.ts)</a>
+                            <a href="#appSetLoading" title="projects/app-ngrx/src/lib/app/app.actions.ts" ><b>appSetLoading</b>&nbsp;&nbsp;&nbsp;(projects/.../app.actions.ts)</a>
                         </li>
                         <li>
-                            <a href="#UiLoaderRouterConfig" title="src/app/home/configuration/core/utils/UiLoaderRouterConfig.ts"><b>UiLoaderRouterConfig</b>&nbsp;&nbsp;&nbsp;(src/.../UiLoaderRouterConfig.ts)</a>
+                            <a href="#appSharedConfig" title="src/app/app/core/utils/shared.config.ts" ><b>appSharedConfig</b>&nbsp;&nbsp;&nbsp;(src/.../shared.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#BASE_URL_API" title="projects/app-shared/src/lib/tokens/base-url-api.token.ts" ><b>BASE_URL_API</b>&nbsp;&nbsp;&nbsp;(projects/.../base-url-api.token.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DEFAULT_HTTP_INTERCEPTOR_CONFIG" title="projects/app-shared/src/lib/http/http-interceptor.tokens.ts" ><b>DEFAULT_HTTP_INTERCEPTOR_CONFIG</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DEFAULT_LOGGER_CONFIG" title="projects/app-shared/src/lib/logging/logger.service.ts" ><b>DEFAULT_LOGGER_CONFIG</b>&nbsp;&nbsp;&nbsp;(projects/.../logger.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DEVICE_BREAKPOINTS" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>DEVICE_BREAKPOINTS</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#DEVICE_USER_AGENT_PATTERNS" title="projects/app-shared/src/lib/utils/device-detector.constants.ts" ><b>DEVICE_USER_AGENT_PATTERNS</b>&nbsp;&nbsp;&nbsp;(projects/.../device-detector.constants.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#HTTP_AUTH_ADAPTER" title="projects/app-shared/src/lib/http/http-interceptor.tokens.ts" ><b>HTTP_AUTH_ADAPTER</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#HTTP_INTERCEPTOR_CONFIG" title="projects/app-shared/src/lib/http/http-interceptor.tokens.ts" ><b>HTTP_INTERCEPTOR_CONFIG</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#httpInterceptorFn" title="projects/app-shared/src/lib/http/http-interceptor.provider.ts" ><b>httpInterceptorFn</b>&nbsp;&nbsp;&nbsp;(projects/.../http-interceptor.provider.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#initialAppState" title="projects/app-ngrx/src/lib/app/app.state.ts" ><b>initialAppState</b>&nbsp;&nbsp;&nbsp;(projects/.../app.state.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#initialStorageState" title="projects/app-ngrx/src/lib/storage/storage.state.ts" ><b>initialStorageState</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.state.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#LOGGER_CONFIG" title="projects/app-shared/src/lib/logging/logger.service.ts" ><b>LOGGER_CONFIG</b>&nbsp;&nbsp;&nbsp;(projects/.../logger.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#LOGGER_PORT" title="projects/app-shared/src/lib/logging/logger.service.ts" ><b>LOGGER_PORT</b>&nbsp;&nbsp;&nbsp;(projects/.../logger.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#myServiceFactory" title="src/app/app/core/module/initializer.module.ts" ><b>myServiceFactory</b>&nbsp;&nbsp;&nbsp;(src/.../initializer.module.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PIPES" title="projects/app-shared/src/lib/pipe/pipe.module.ts" ><b>PIPES</b>&nbsp;&nbsp;&nbsp;(projects/.../pipe.module.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PL_MSAL_GUARD_CONFIG_FACTORY" title="src/app/app/core/msal/msal-auth.tokens.ts" ><b>PL_MSAL_GUARD_CONFIG_FACTORY</b>&nbsp;&nbsp;&nbsp;(src/.../msal-auth.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PL_MSAL_INSTANCE_FACTORY" title="src/app/app/core/msal/msal-auth.tokens.ts" ><b>PL_MSAL_INSTANCE_FACTORY</b>&nbsp;&nbsp;&nbsp;(src/.../msal-auth.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PL_MSAL_INTERCEPTOR_CONFIG_FACTORY" title="src/app/app/core/msal/msal-auth.tokens.ts" ><b>PL_MSAL_INTERCEPTOR_CONFIG_FACTORY</b>&nbsp;&nbsp;&nbsp;(src/.../msal-auth.tokens.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#plLoadingTraceOptions" title="src/app/app/core/utils/pl-loading.config.ts" ><b>plLoadingTraceOptions</b>&nbsp;&nbsp;&nbsp;(src/.../pl-loading.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#rootEffects" title="projects/app-ngrx/src/lib/root.effects.ts" ><b>rootEffects</b>&nbsp;&nbsp;&nbsp;(projects/.../root.effects.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#rootReducers" title="projects/app-ngrx/src/lib/root.reducers.ts" ><b>rootReducers</b>&nbsp;&nbsp;&nbsp;(projects/.../root.reducers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectAppError" title="projects/app-ngrx/src/lib/app/app.selectors.ts" ><b>selectAppError</b>&nbsp;&nbsp;&nbsp;(projects/.../app.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectAppInitialized" title="projects/app-ngrx/src/lib/app/app.selectors.ts" ><b>selectAppInitialized</b>&nbsp;&nbsp;&nbsp;(projects/.../app.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectAppLoading" title="projects/app-ngrx/src/lib/app/app.selectors.ts" ><b>selectAppLoading</b>&nbsp;&nbsp;&nbsp;(projects/.../app.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectAppState" title="projects/app-ngrx/src/lib/app/app.selectors.ts" ><b>selectAppState</b>&nbsp;&nbsp;&nbsp;(projects/.../app.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectStorageLanguage" title="projects/app-ngrx/src/lib/storage/storage.selectors.ts" ><b>selectStorageLanguage</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectStorageState" title="projects/app-ngrx/src/lib/storage/storage.selectors.ts" ><b>selectStorageState</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectStorageTheme" title="projects/app-ngrx/src/lib/storage/storage.selectors.ts" ><b>selectStorageTheme</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#selectStorageToken" title="projects/app-ngrx/src/lib/storage/storage.selectors.ts" ><b>selectStorageToken</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.selectors.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#SHARED_LIB_CONFIG" title="projects/app-shared/src/lib/config/shared-lib.config.ts" ><b>SHARED_LIB_CONFIG</b>&nbsp;&nbsp;&nbsp;(projects/.../shared-lib.config.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#STORAGE_KEY" title="projects/app-ngrx/src/lib/storage/storage.service.ts" ><b>STORAGE_KEY</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.service.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageClear" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageClear</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageFeatureKey" title="projects/app-ngrx/src/lib/storage/storage.reducer.ts" ><b>storageFeatureKey</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.reducer.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageHydrate" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageHydrate</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageHydrateSuccess" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageHydrateSuccess</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageReducer" title="projects/app-ngrx/src/lib/storage/storage.reducer.ts" ><b>storageReducer</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.reducer.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageSetLanguage" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageSetLanguage</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageSetTheme" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageSetTheme</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#storageSetToken" title="projects/app-ngrx/src/lib/storage/storage.actions.ts" ><b>storageSetToken</b>&nbsp;&nbsp;&nbsp;(projects/.../storage.actions.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -92,425 +278,1561 @@
     </table>
 </section>
 
-    <h3>src/app/home/configuration/core/service/http.service.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3>projects/app-shared/src/lib/tokens/app-bootstrap-task.token.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="APP_BOOTSTRAP_TASKS"></a>
+                    <span class="name">
+                        <span ><b>APP_BOOTSTRAP_TASKS</b></span>
+                        <a href="#APP_BOOTSTRAP_TASKS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="BASE_URL_API"></a>
-                        <span class="name">
-                            <b>
-                            BASE_URL_API</b>
-                            <a href="#BASE_URL_API"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>    <code>unknown</code>
+
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>new InjectionToken&lt;any&gt;(&quot;Puntamento all&#x27;indirizzo del BE&quot;)</code>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;AppBootstrapTask[]&gt;(
+  &#x27;APP_BOOTSTRAP_TASKS&#x27;,
+)</code>
+                    </td>
+                </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 </section>
-    <h3>src/test.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3>projects/app-ngrx/src/lib/app/app.actions.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appClearError"></a>
+                    <span class="name">
+                        <span ><b>appClearError</b></span>
+                        <a href="#appClearError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="context"></a>
-                        <span class="name">
-                            <b>
-                            context</b>
-                            <a href="#context"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>    <code>unknown</code>
+
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>require.context(&#x27;./&#x27;, true, /\.spec\.ts$/)</code>
-                        </td>
-                    </tr>
-
-
-            </tbody>
-        </table>
-        <table class="table table-sm table-bordered">
-            <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="require"></a>
-                        <span class="name">
-                            <b>
-                            require</b>
-                            <a href="#require"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Default value : </i><code>createAction(
+  &#x27;[App] Clear Error&#x27;,
+)</code>
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
-
-                        </td>
-                    </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appInit"></a>
+                    <span class="name">
+                        <span ><b>appInit</b></span>
+                        <a href="#appInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[App] Init&#x27;,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appInitFailure"></a>
+                    <span class="name">
+                        <span ><b>appInitFailure</b></span>
+                        <a href="#appInitFailure"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[App] Init Failure&#x27;,
+  props&lt;{ error: string }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appInitSuccess"></a>
+                    <span class="name">
+                        <span ><b>appInitSuccess</b></span>
+                        <a href="#appInitSuccess"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[App] Init Success&#x27;,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appSetLoading"></a>
+                    <span class="name">
+                        <span ><b>appSetLoading</b></span>
+                        <a href="#appSetLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[App] Set Loading&#x27;,
+  props&lt;{ loading: boolean }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
 </section>
-    <h3>src/app/home/configuration/core/interceptor/http-interceptor.service.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3>projects/app-ngrx/src/lib/app/app.reducer.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appFeatureKey"></a>
+                    <span class="name">
+                        <span ><b>appFeatureKey</b></span>
+                        <a href="#appFeatureKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="DEFAULT_TIMEOUT"></a>
-                        <span class="name">
-                            <b>
-                            DEFAULT_TIMEOUT</b>
-                            <a href="#DEFAULT_TIMEOUT"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>new InjectionToken&lt;number&gt;(&#x27;DefaulTimeOut for http request&#x27;)</code>
-                        </td>
-                    </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;app&#x27;</code>
+                    </td>
+                </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appReducer"></a>
+                    <span class="name">
+                        <span ><b>appReducer</b></span>
+                        <a href="#appReducer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createReducer(
+  initialAppState,
+
+
+  on(appInit, (state): AppState &#x3D;&gt; ({
+    ...state,
+    loading: true,
+    error: null,
+  })),
+
+
+  on(appInitSuccess, (state): AppState &#x3D;&gt; ({
+    ...state,
+    initialized: true,
+    loading: false,
+    error: null,
+  })),
+
+
+  on(appInitFailure, (state, action): AppState &#x3D;&gt; ({
+    ...state,
+    loading: false,
+    error: action.error,
+  })),
+
+
+  on(appSetLoading, (state, action): AppState &#x3D;&gt; ({
+    ...state,
+    loading: action.loading,
+  })),
+
+  on(appClearError, (state): AppState &#x3D;&gt; ({
+    ...state,
+    error: null,
+  })),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
 </section>
-    <h3>src/environments/environment.prod.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3>src/app/app/core/utils/shared.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="appSharedConfig"></a>
+                    <span class="name">
+                        <span ><b>appSharedConfig</b></span>
+                        <a href="#appSharedConfig"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="environment"></a>
-                        <span class="name">
-                            <b>
-                            environment</b>
-                            <a href="#environment"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>        <code><a href="../interfaces/SharedLibConfig.html" target="_self" >SharedLibConfig</a></code>
+
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-  production: true,
-  /**
-   * @author l.piciollo
-   * chiave preimpostata, da valorizzare con il puntamento al BE.. ne fa uso il cor applicativo
-   * E.S http://localhost:8080/
-   */
-  baseUrlRemoteApi: &quot;&quot;,
-  
-    /**
-     * @author l.piciollo
-     * configurazione per autenticazione con active directory di microsoft azure.
-     * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
-     * a causa dell&#x27;abilitazione al supposrto login.
-     */
-    azure: {
-      clientID: null,
-      authority: null,
-      redirectUri: null,
-      validateAuthority: true,
-      storeAuthStateInCookie: true,
-      cacheLocation: &quot;localStorage&quot;,
-      isAngular: true,
-      navigateToLoginRequestUrl : true,
-      popUp: false,
-      level: LogLevel.Verbose,
-      piiLoggingEnabled: true,
-      api_key: null
-    },
-      
-  http: {
-    /**
-     * @author l.piciollo
-     * inserire qui le chiamate al BE, è possibile effettuare delle sotto categorie 
-     */
-    api: {
-      /**
-       *  @author l.piciollo
-       *  si riporta un esempio di una api riconosciuta come storable, grazie al tag @cachable@ presente nella URL.
-       *  si nota come i parametri sono passati con {0} e {1}.. il sistema è equipagiato da una funzionalita che specializza
-       *  le stringhe ad avere il format function.. quindi .. è possibile formattare la url richimandola in questo modo:
-       *  E.S. 
-       *    let url &#x3D; environment.exampleApi.format(&quot;P1&quot;,&quot;P2&quot;)
-       *    quindi avviene una formattazione per posizione dei paraetri..
-       *  
-       *  exampleApi: &#x60;@cachable@/example/cacable/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;
-       */
-      exampleApi: &#x60;@cachable@/example/cacable/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;,
-      exampleApeNoCache: &#x60;example/no/cache/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;,
-      /**
-       *  @author l.piciollo
-       *  è possibile dichiarare una chiamata ad un mock, si consiglia di rispettare il seguente formato dichiarativo
-       *  E.S. 
-       *    mock:{
-       *            url: &quot;/example/no/cache/api/122?param1&#x3D;{0}&amp;param2&#x3D;{1}&quot; ,
-       *            mock: true
-       *    }  
-       *    il mock a true, impone al sistema di risalire alla folder assets/public/mock/example/no/cache/api/122 e prelevare il 
-       *    json relativo al metodo utilizzato.. quindi post||get||put||delete||patch .json
-       *  
-       */
-      mock: {
-        url: &quot;/example/:api/:files&quot;,
-        mocked: true,
-        method:&quot;GET&quot;
-      }
-    }
-  }
-}</code>
-                        </td>
-                    </tr>
-
-
-            </tbody>
-        </table>
-</section>
-    <h3>src/environments/environment.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="environment"></a>
-                        <span class="name">
-                            <b>
-                            environment</b>
-                            <a href="#environment"><span class="icon ion-ios-link"></span></a>
-                        </span>
-                    </td>
-                </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-  production: false,
-  /**
-   * @author l.piciollo
-   * chiave preimpostata, da valorizzare con il puntamento al BE.. ne fa uso il cor applicativo
-   * E.S http://localhost:8080/
-   */
-  baseUrlRemoteApi: &quot;&quot;,
-   
-  /**
-   * @author l.piciollo
-   * configurazione per autenticazione con active directory di microsoft azure.
-   * valorizzare le properties secondo il propio caso. queste sono automaticamente prelevate dal sistema
-   * a causa dell&#x27;abilitazione al supposrto login.
-   */
-  azure: {
-    clientID: null,
-    authority: null,
-    redirectUri: null,
-    validateAuthority: true,
-    storeAuthStateInCookie: true,
-    cacheLocation: &quot;localStorage&quot;,
-    isAngular: true,
-    navigateToLoginRequestUrl : true,
-    popUp: false,
-    level: LogLevel.Verbose,
-    piiLoggingEnabled: true,
-    api_key: null
+                        <i>Default value : </i><code>{
+  /** configurazione i18n: lingua di default e percorso dei file di traduzione */
+  i18n: {
+    defaultLanguage: environment.i18n.defaultLanguage,
+    assetsPath: environment.i18n.assetsPath,
   },
-  
+  /** configurazione HTTP: timeout, url di refresh del token e log dei tempi di esecuzione */
   http: {
-    /**
-     * @author l.piciollo
-     * inserire qui le chiamate al BE, è possibile effettuare delle sotto categorie 
-     */
-    api: {
-      /**
-       *  @author l.piciollo
-       *  si riporta un esempio di una api riconosciuta come storable, grazie al tag @cachable@ presente nella URL.
-       *  si nota come i parametri sono passati con {0} e {1}.. il sistema è equipagiato da una funzionalita che specializza
-       *  le stringhe ad avere il format function.. quindi .. è possibile formattare la url richimandola in questo modo:
-       *  E.S. 
-       *    let url &#x3D; environment.exampleApi.format(&quot;P1&quot;,&quot;P2&quot;)
-       *    quindi avviene una formattazione per posizione dei paraetri..
-       *  
-       *  exampleApi: &#x60;@cachable@/example/cacable/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;
-       */
-      exampleApi: &#x60;@cachable@/example/cache/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;,
-      exampleApeNoCache: &#x60;example/no/cache/api?param1&#x3D;{0}&amp;param2&#x3D;{1}&#x60;,
-      /**
-       *  @author l.piciollo
-       *  è possibile dichiarare una chiamata ad un mock, si consiglia di rispettare il seguente formato dichiarativo
-       *  E.S. 
-       *    mock:{
-       *            url: &quot;/example/no/cache/api/122?param1&#x3D;{0}&amp;param2&#x3D;{1}&quot; ,
-       *            mock: true
-       *    }  
-       *    il mock a true, impone al sistema di risalire alla folder assets/public/mock/example/no/cache/api/122 e prelevare il 
-       *    json relativo al metodo utilizzato.. quindi post||get||put||delete||patch .json
-       *  
-       */
-      mock: {
-        url: &quot;/example/:api/:files&quot;,
-        mocked: true,
-        method:&quot;GET&quot;
-      }
-    }
-  }
+    timeout: environment.http.timeout,
+    refreshToken: environment.http.api.refreshToken,
+    enableExecutionTimeLog: environment.http.enableExecutionTimeLog,
+  },
+  /** configurazione del logging: abilitazione e livello minimo */
+  logging: {
+    enabled: environment.logging.enabled,
+    level: environment.logging.level,
+  },
 }</code>
-                        </td>
-                    </tr>
-
-
-            </tbody>
-        </table>
-</section>
-    <h3>src/app/home/configuration/core/utils/UiLoaderConfig.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
-                <tr>
-                    <td class="col-md-4">
-                        <a name="UiLoaderConfig"></a>
-                        <span class="name">
-                            <b>
-                            UiLoaderConfig</b>
-                            <a href="#UiLoaderConfig"><span class="icon ion-ios-link"></span></a>
-                        </span>
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#UiLoaderConfig" target="_self" >NgxUiLoaderConfig</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-  &quot;bgsColor&quot;: &quot;rgba(252,0,0,0.75)&quot;,
-  &quot;bgsOpacity&quot;: 1,
-  &quot;bgsPosition&quot;: &quot;bottom-right&quot;,
-  &quot;bgsSize&quot;: 120,
-  &quot;bgsType&quot;: &quot;ball-scale-multiple&quot;,
-  &quot;blur&quot;: 4,
-  &quot;fgsColor&quot;: &quot;rgba(252,0,0,0.75)&quot;,
-  &quot;fgsPosition&quot;: &quot;center-center&quot;,
-  &quot;fgsSize&quot;: 120,
-  &quot;fgsType&quot;: &quot;ball-scale-multiple&quot;,
-  &quot;gap&quot;: 10,
-  &quot;logoPosition&quot;: &quot;center-center&quot;,
-  &quot;logoSize&quot;: 120,
-  &quot;masterLoaderId&quot;: &quot;master&quot;,
-  &quot;overlayBorderRadius&quot;: &quot;0&quot;,
-  &quot;overlayColor&quot;: &quot;rgba(40,40,40,0.39)&quot;,
-  &quot;pbColor&quot;: &quot;#00c116&quot;,
-  &quot;pbDirection&quot;: &quot;ltr&quot;,
-  &quot;pbThickness&quot;: 3,
-  &quot;hasProgressBar&quot;: false,
-  &quot;text&quot;: &quot;&quot;,
-  &quot;textColor&quot;: &quot;#FFFFFF&quot;,
-  &quot;textPosition&quot;: &quot;center-center&quot;,
-  &quot;threshold&quot;: 50
-}</code>
-                        </td>
-                    </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 </section>
-    <h3>src/app/home/configuration/core/utils/UiLoaderHttpConfig.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
+    <h3>projects/app-shared/src/lib/tokens/base-url-api.token.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="BASE_URL_API"></a>
+                    <span class="name">
+                        <span ><b>BASE_URL_API</b></span>
+                        <a href="#BASE_URL_API"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
                 <tr>
                     <td class="col-md-4">
-                        <a name="UiLoaderHttpConfig"></a>
-                        <span class="name">
-                            <b>
-                            UiLoaderHttpConfig</b>
-                            <a href="#UiLoaderHttpConfig"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Type : </i>    <code>unknown</code>
+
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#UiLoaderHttpConfig" target="_self" >NgxUiLoaderHttpConfig</a></code>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-    exclude : [],
-    excludeRegexp:[],
-    loaderId: &quot;httpLoader&quot;,
-    showForeground: false
-    
-}</code>
-                        </td>
-                    </tr>
-
-
-            </tbody>
-        </table>
-</section>
-    <h3>src/app/home/configuration/core/utils/UiLoaderRouterConfig.ts</h3>
-    <section>
-    <h3></h3>        <table class="table table-sm table-bordered">
-            <tbody>
                 <tr>
                     <td class="col-md-4">
-                        <a name="UiLoaderRouterConfig"></a>
-                        <span class="name">
-                            <b>
-                            UiLoaderRouterConfig</b>
-                            <a href="#UiLoaderRouterConfig"><span class="icon ion-ios-link"></span></a>
-                        </span>
+                        <i>Default value : </i><code>new InjectionToken&lt;any&gt;(
+  &quot;Puntamento all&#x27;indirizzo del BE&quot;,
+)</code>
                     </td>
                 </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#UiLoaderRouterConfig" target="_self" >NgxUiLoaderRouterConfig</a></code>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="col-md-4">
-                            <i>Default value : </i><code>{
-    loaderId: &quot;routerLoader&quot;, showForeground: true
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/http/http-interceptor.tokens.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DEFAULT_HTTP_INTERCEPTOR_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>DEFAULT_HTTP_INTERCEPTOR_CONFIG</b></span>
+                        <a href="#DEFAULT_HTTP_INTERCEPTOR_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/HttpInterceptorConfig.html" target="_self" >HttpInterceptorConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  defaultTimeout: 30000,
+  authorizationHeaderName: &#x27;Authorization&#x27;,
+  authorizationPrefix: &#x27;Bearer&#x27;,
+  timeoutHeaderName: &#x27;timeout&#x27;,
+  refreshUrlIncludes: &#x27;/Authentication/Refresh&#x27;,
+  skipAuthHeaderName: &#x27;x-skip-auth&#x27;,
+  enableExecutionTimeLog: true,
+  reloadOnRefreshFailure: true,
+
+  enableRetry: true,
+  maxRetryAttempts: 2,
+  retryDelayMs: 500,
+  retryBackoffMultiplier: 2,
+  maxRetryDelayMs: 8000,
+  retryableStatusCodes: [408, 429, 500, 502, 503, 504],
+  retryOnNetworkError: true,
+  retryOnTimeoutError: true,
+  retryOnlyIdempotentMethods: true,
+  retrySkipHeaderName: &#x27;x-skip-retry&#x27;,
 }</code>
-                        </td>
-                    </tr>
+                    </td>
+                </tr>
 
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="HTTP_AUTH_ADAPTER"></a>
+                    <span class="name">
+                        <span ><b>HTTP_AUTH_ADAPTER</b></span>
+                        <a href="#HTTP_AUTH_ADAPTER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;HttpAuthAdapter&gt;(&#x27;HTTP_AUTH_ADAPTER&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="HTTP_INTERCEPTOR_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>HTTP_INTERCEPTOR_CONFIG</b></span>
+                        <a href="#HTTP_INTERCEPTOR_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;HttpInterceptorConfig&gt;(&#x27;HTTP_INTERCEPTOR_CONFIG&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/logging/logger.service.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DEFAULT_LOGGER_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>DEFAULT_LOGGER_CONFIG</b></span>
+                        <a href="#DEFAULT_LOGGER_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/LoggerConfig.html" target="_self" >LoggerConfig</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+	enabled: true,
+	level: LoggerLevel.DEBUG,
+	features: {
+		APP: true,
+		AUTH: true,
+		HTTP: true,
+		ROUTING: true,
+		STATE: true,
+		UI: true,
+		FORM: true,
+		STORAGE: true,
+		PERFORMANCE: true,
+	},
+	showTimestamp: true,
+	showFeature: true,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="LOGGER_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>LOGGER_CONFIG</b></span>
+                        <a href="#LOGGER_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;LoggerConfig&gt;(&#x27;LOGGER_CONFIG&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="LOGGER_PORT"></a>
+                    <span class="name">
+                        <span ><b>LOGGER_PORT</b></span>
+                        <a href="#LOGGER_PORT"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;LoggerPort&gt;(&#x27;LOGGER_PORT&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/utils/device-detector.constants.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DEVICE_BREAKPOINTS"></a>
+                    <span class="name">
+                        <span ><b>DEVICE_BREAKPOINTS</b></span>
+                        <a href="#DEVICE_BREAKPOINTS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  /** larghezza massima (inclusa) per considerare il dispositivo mobile */
+  mobileMaxWidth: 767,
+  /** larghezza minima (inclusa) per considerare il dispositivo tablet */
+  tabletMinWidth: 768,
+  /** larghezza massima (inclusa) per considerare il dispositivo tablet */
+  tabletMaxWidth: 1024,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="DEVICE_USER_AGENT_PATTERNS"></a>
+                    <span class="name">
+                        <span ><b>DEVICE_USER_AGENT_PATTERNS</b></span>
+                        <a href="#DEVICE_USER_AGENT_PATTERNS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  /** riconoscimento dei dispositivi mobile */
+  mobile: /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i,
+  /** riconoscimento dei tablet */
+  tablet: /iPad|Tablet|PlayBook|Silk/i,
+
+  /** sistema operativo Windows */
+  windows: /Windows NT/i,
+  /** sistema operativo macOS */
+  macOs: /Macintosh|Mac OS X/i,
+  /** sistema operativo iOS */
+  ios: /iPhone|iPad|iPod/i,
+  /** sistema operativo Android */
+  android: /Android/i,
+  /** sistema operativo Linux */
+  linux: /Linux/i,
+
+  /** browser Microsoft Edge (basato su Chromium) */
+  edge: /Edg\//i,
+  /** browser Opera */
+  opera: /OPR|Opera/i,
+  /** browser Firefox (inclusa la versione iOS) */
+  firefox: /Firefox|FxiOS/i,
+  /** browser Internet Explorer */
+  ie: /MSIE|Trident/i,
+  /** browser Chrome (inclusa la versione iOS); va escluso Edge e Opera che lo contengono nello user agent */
+  chrome: /Chrome|CriOS/i,
+  /** browser Safari; va escluso Chrome che lo contiene nello user agent */
+  safari: /Safari/i,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/http/http-interceptor.provider.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="httpInterceptorFn"></a>
+                    <span class="name">
+                        <span ><b>httpInterceptorFn</b></span>
+                        <a href="#httpInterceptorFn"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>HttpInterceptorFn</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(request, next) &#x3D;&gt;
+  inject(HttpInterceptorService).intercept(request, { handle: (req) &#x3D;&gt; next(req) })</code>
+                    </td>
+                </tr>
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><hr>
+</div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/app/app.state.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initialAppState"></a>
+                    <span class="name">
+                        <span ><b>initialAppState</b></span>
+                        <a href="#initialAppState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/AppState.html" target="_self" >AppState</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  initialized: false,
+  loading: false,
+  error: null,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/storage/storage.state.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initialStorageState"></a>
+                    <span class="name">
+                        <span ><b>initialStorageState</b></span>
+                        <a href="#initialStorageState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/StorageState.html" target="_self" >StorageState</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  token: null,
+  language: &#x27;it&#x27;,
+  theme: &#x27;light&#x27;,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app/core/module/initializer.module.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="myServiceFactory"></a>
+                    <span class="name">
+                        <span ><b>myServiceFactory</b></span>
+                        <a href="#myServiceFactory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>(httpInterceptorFakeService: any, msalInterceptor: any) &#x3D;&gt; {
+  return  AuthService.applicationType.type &#x3D;&#x3D;&#x3D; &#x27;teams&#x27; ? httpInterceptorFakeService : msalInterceptor;
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/pipe/pipe.module.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PIPES"></a>
+                    <span class="name">
+                        <span ><b>PIPES</b></span>
+                        <a href="#PIPES"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[
+  CommaDecimalPipe,
+  ConvertMbPipe,
+  CountDayPipe,
+  CountYearsPipe,
+  CurrencyFormatPipe,
+  DecimalFixPipe,
+  EnumToDescPipe,
+  ExpiredDatePipe,
+  FirstCharPipe,
+  LocalizedDatePipe,
+  NormalizePipe,
+  RemoveLeadingZerosPipe,
+  RoundPipe,
+  SafePipe,
+  SortPipe,
+  
+  TranslateAsyncPipe,
+  
+  TruncateNameFilePipe,
+  TruncatePipe,
+]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app/core/msal/msal-auth.tokens.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PL_MSAL_GUARD_CONFIG_FACTORY"></a>
+                    <span class="name">
+                        <span ><b>PL_MSAL_GUARD_CONFIG_FACTORY</b></span>
+                        <a href="#PL_MSAL_GUARD_CONFIG_FACTORY"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;() &#x3D;&gt; MsalGuardConfiguration&gt;(
+  &#x27;PL_MSAL_GUARD_CONFIG_FACTORY&#x27;
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PL_MSAL_INSTANCE_FACTORY"></a>
+                    <span class="name">
+                        <span ><b>PL_MSAL_INSTANCE_FACTORY</b></span>
+                        <a href="#PL_MSAL_INSTANCE_FACTORY"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;() &#x3D;&gt; IPublicClientApplication&gt;(
+  &#x27;PL_MSAL_INSTANCE_FACTORY&#x27;
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PL_MSAL_INTERCEPTOR_CONFIG_FACTORY"></a>
+                    <span class="name">
+                        <span ><b>PL_MSAL_INTERCEPTOR_CONFIG_FACTORY</b></span>
+                        <a href="#PL_MSAL_INTERCEPTOR_CONFIG_FACTORY"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;() &#x3D;&gt; MsalInterceptorConfiguration&gt;(
+  &#x27;PL_MSAL_INTERCEPTOR_CONFIG_FACTORY&#x27;
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/app/app/core/utils/pl-loading.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="plLoadingTraceOptions"></a>
+                    <span class="name">
+                        <span ><b>plLoadingTraceOptions</b></span>
+                        <a href="#plLoadingTraceOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>PlLoadingTraceOptions</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  /** valori comuni a tutti gli overlay: debounceMs evita il lampeggio per le richieste piu&#x27; brevi di 200 ms */
+  shared: { debounceMs: 200 },
+  /** chiamate di rete: spinner centrale con sfondo semi-trasparente che blocca l&#x27;interazione (modal) */
+  http: { animationType: &#x27;spinner&#x27;, modal: true },
+  /** cambio di rotta: barra di avanzamento in cima alla pagina */
+  router: { animationType: &#x27;bar&#x27; },
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/root.effects.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rootEffects"></a>
+                    <span class="name">
+                        <span ><b>rootEffects</b></span>
+                        <a href="#rootEffects"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>[]</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>[AppEffects, StorageEffects]</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/root.reducers.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="rootReducers"></a>
+                    <span class="name">
+                        <span ><b>rootReducers</b></span>
+                        <a href="#rootReducers"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/RootState.html" target="_self" >ActionReducerMap&lt;RootState&gt;</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  [appFeatureKey]: appReducer,
+  [storageFeatureKey]: storageReducer,
+}</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/app/app.selectors.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectAppError"></a>
+                    <span class="name">
+                        <span ><b>selectAppError</b></span>
+                        <a href="#selectAppError"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectAppState,
+  (state: AppState): string | null &#x3D;&gt; state.error,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectAppInitialized"></a>
+                    <span class="name">
+                        <span ><b>selectAppInitialized</b></span>
+                        <a href="#selectAppInitialized"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectAppState,
+  (state: AppState): boolean &#x3D;&gt; state.initialized,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectAppLoading"></a>
+                    <span class="name">
+                        <span ><b>selectAppLoading</b></span>
+                        <a href="#selectAppLoading"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectAppState,
+  (state: AppState): boolean &#x3D;&gt; state.loading,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectAppState"></a>
+                    <span class="name">
+                        <span ><b>selectAppState</b></span>
+                        <a href="#selectAppState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createFeatureSelector&lt;AppState&gt;(appFeatureKey)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/storage/storage.selectors.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectStorageLanguage"></a>
+                    <span class="name">
+                        <span ><b>selectStorageLanguage</b></span>
+                        <a href="#selectStorageLanguage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectStorageState,
+  (state: StorageState): string &#x3D;&gt; state.language,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectStorageState"></a>
+                    <span class="name">
+                        <span ><b>selectStorageState</b></span>
+                        <a href="#selectStorageState"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createFeatureSelector&lt;StorageState&gt;(storageFeatureKey)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectStorageTheme"></a>
+                    <span class="name">
+                        <span ><b>selectStorageTheme</b></span>
+                        <a href="#selectStorageTheme"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectStorageState,
+  (state: StorageState): &#x27;light&#x27; | &#x27;dark&#x27; &#x3D;&gt; state.theme,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="selectStorageToken"></a>
+                    <span class="name">
+                        <span ><b>selectStorageToken</b></span>
+                        <a href="#selectStorageToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createSelector(
+  selectStorageState,
+  (state: StorageState): string | null &#x3D;&gt; state.token,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-shared/src/lib/config/shared-lib.config.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="SHARED_LIB_CONFIG"></a>
+                    <span class="name">
+                        <span ><b>SHARED_LIB_CONFIG</b></span>
+                        <a href="#SHARED_LIB_CONFIG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>new InjectionToken&lt;SharedLibConfig&gt;(&#x27;SHARED_LIB_CONFIG&#x27;)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/storage/storage.service.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="STORAGE_KEY"></a>
+                    <span class="name">
+                        <span ><b>STORAGE_KEY</b></span>
+                        <a href="#STORAGE_KEY"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;app_storage_state&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/storage/storage.actions.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageClear"></a>
+                    <span class="name">
+                        <span ><b>storageClear</b></span>
+                        <a href="#storageClear"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Clear&#x27;,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageHydrate"></a>
+                    <span class="name">
+                        <span ><b>storageHydrate</b></span>
+                        <a href="#storageHydrate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Hydrate&#x27;,
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageHydrateSuccess"></a>
+                    <span class="name">
+                        <span ><b>storageHydrateSuccess</b></span>
+                        <a href="#storageHydrateSuccess"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Hydrate Success&#x27;,
+  props&lt;{
+    token: string | null;
+    language: string;
+    theme: &#x27;light&#x27; | &#x27;dark&#x27;;
+  }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageSetLanguage"></a>
+                    <span class="name">
+                        <span ><b>storageSetLanguage</b></span>
+                        <a href="#storageSetLanguage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Set Language&#x27;,
+  props&lt;{ language: string }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageSetTheme"></a>
+                    <span class="name">
+                        <span ><b>storageSetTheme</b></span>
+                        <a href="#storageSetTheme"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Set Theme&#x27;,
+  props&lt;{ theme: &#x27;light&#x27; | &#x27;dark&#x27; }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageSetToken"></a>
+                    <span class="name">
+                        <span ><b>storageSetToken</b></span>
+                        <a href="#storageSetToken"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createAction(
+  &#x27;[Storage] Set Token&#x27;,
+  props&lt;{ token: string | null }&gt;(),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>projects/app-ngrx/src/lib/storage/storage.reducer.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageFeatureKey"></a>
+                    <span class="name">
+                        <span ><b>storageFeatureKey</b></span>
+                        <a href="#storageFeatureKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;storage&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="storageReducer"></a>
+                    <span class="name">
+                        <span ><b>storageReducer</b></span>
+                        <a href="#storageReducer"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>createReducer(
+  initialStorageState,
+
+  on(storageHydrateSuccess, (state, action): StorageState &#x3D;&gt; ({
+    ...state,
+    token: action.token,
+    language: action.language,
+    theme: action.theme,
+  })),
+
+  on(storageSetToken, (state, action): StorageState &#x3D;&gt; ({
+    ...state,
+    token: action.token,
+  })),
+
+  on(storageSetLanguage, (state, action): StorageState &#x3D;&gt; ({
+    ...state,
+    language: action.language,
+  })),
+
+  on(storageSetTheme, (state, action): StorageState &#x3D;&gt; ({
+    ...state,
+    theme: action.theme,
+  })),
+
+  on(storageClear, (): StorageState &#x3D;&gt; initialStorageState),
+)</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
 </section>
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -522,6 +1844,15 @@
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'miscellaneous-variables';
@@ -529,18 +1860,30 @@
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

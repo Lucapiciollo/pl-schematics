@@ -34,3 +34,8 @@
 - Matrice ng21: 12/14 (standalone-bootstrap = timeout vitest, passa da sola; classic-azure = interaction_in_progress intermittente, causa non chiarita). ng19/ng20 parziali.
 - npm publish BLOCCATO: nessun token valido (401). Serve Granular Access Token con 2FA bypass.
 - Aperto: documentation/ (4,4 MB obsoleti) ancora nel pacchetto; problemi di codice elencati nel report del technical-writer.
+
+## 2026-11-11 - documentazione pre-publish
+- README 472 righe + docs/GUIDA.md (10 esempi); AI_README/CHANGELOG aggiornati; documentazione compodoc rigenerata (117 file, 3 MB; vecchia 4,4 MB rimossa); metadati package.json (repository/homepage/bugs); JSDoc/commenti corretti.
+- Pacchetto 4.0.0: 317 file, 0,73 MB compressi. npm whoami = lucapiciollo. Publish NON eseguito: versione da confermare.
+- Da decidere: LICENSE mancante; src/pl-schematics/tools/* nel tarball; ChromeHeadless in ci:test/CI su Angular 21; console.log in HttpInterceptorFakeService; typedoc -n Portable-Schematics; rischio pl-core-utils-library 'latest' (3.x locale con PlHttpRequest diverso).

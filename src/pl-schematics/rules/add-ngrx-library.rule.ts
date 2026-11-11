@@ -21,8 +21,10 @@ import {
  * @author l.piciollo
  * Genera la libreria Angular "<namePackage>-ngrx": store NgRx (state module,
  * root reducers/effects/selectors, feature 'app' e 'storage') gia' pronto e
- * riutilizzabile. Il modulo StateModule esportato viene importato dalla
- * libreria "shared" quando lo stato NgRx e' abilitato.
+ * riutilizzabile. La libreria e' indipendente da "shared": lo StateModule
+ * esportato dalla public-api viene importato dall'app (da update-app-shell:
+ * imports di app.module.ts nelle app classic, importProvidersFrom(StateModule)
+ * nei provider di app.config.ts nelle app standalone) quando lo stato NgRx e' abilitato.
  * @param options  :opzioni normalizzate; richiede ngrxLibName valorizzato da normalize-options
  * @returns Rule che registra la libreria nel workspace e copia i template ngrx-lib*
  */

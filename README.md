@@ -10,6 +10,21 @@ Si rivolge ai team che avviano (o allineano) piu' applicazioni Angular con la st
 
 > Versione **4.0.0**. Il pacchetto e' stato riscritto per Angular 19-21: le versioni 3.x e precedenti non sono supportate. L'elenco delle modifiche e delle BREAKING CHANGE e' in [CHANGELOG.md](./CHANGELOG.md); le convenzioni per assistenti AI/LLM sono in [AI_README.md](./AI_README.md).
 
+## Indice
+
+- [Requisiti](#requisiti)
+- [Installazione e uso](#installazione-e-uso)
+- [Guida rapida: primo avvio](#guida-rapida-primo-avvio)
+- [Opzioni](#opzioni)
+- [Cosa viene generato](#cosa-viene-generato) (albero commentato, librerie `shared` e `ngrx`)
+- [Il codice generato](#il-codice-generato) (bootstrap, `GlobalService`, interceptor, MSAL, loader, NgRx, guard)
+- [Esempi passo passo](#esempi-passo-passo) (backend, NgRx, rotte lazy, bootstrap, interceptor, loader, MSAL, libreria shared)
+- [Test e build del progetto generato](#test-e-build-del-progetto-generato)
+- [Domande frequenti e problemi comuni](#domande-frequenti-e-problemi-comuni)
+- [Matrice di compatibilita'](#matrice-di-compatibilita)
+- [Sviluppo del pacchetto](#sviluppo-del-pacchetto) e [Versioning e rilascio](#versioning-e-rilascio)
+- [Limiti noti](#limiti-noti) e [Documentazione correlata](#documentazione-correlata)
+
 ## Requisiti
 
 | Elemento | Versione |
@@ -60,6 +75,38 @@ Note sull'esecuzione:
 
 `--name-package=cloud/agic` e' ammesso: uno o piu' segmenti separati da `/` (lettere, numeri, `-`, `_`, primo carattere alfanumerico). La cartella applicativa e' `src/app/cloud/agic/`; i nomi delle librerie derivano da una versione kebab-case (minuscolo, `_` => `-`, segmenti uniti con `-`): `cloud-agic-shared` e `cloud-agic-ngrx`. Valori non validi (`a//b`, `../x`, spazi, ...) sono rifiutati.
 
+## Guida rapida: primo avvio
+
+**Obiettivo**: da zero a un'applicazione che parte in locale con `core`, librerie, NgRx, interceptor e backend di prova. Si usa `--name-package=demo`, quindi la cartella applicativa e' `src/app/demo/` e le librerie sono `demo-shared` e `demo-ngrx`. Prerequisiti: i [Requisiti](#requisiti) (Node e Angular CLI).
+
+```sh
+# 1. workspace Angular (classic; per un'app standalone ometti --standalone false)
+ng new demo --skip-git --routing --style css --ssr false --defaults --standalone false
+cd demo
+
+# 2. installa lo schematic e generalo
+npm install -D pl-schematics@4
+ng generate pl-schematics:pl-schematics --name-package=demo --ui=material --state=ngrx \
+  --http=interceptor-classic --logging=advanced --mock-api=node-express --no-interactive
+
+# 3. installa le dipendenze aggiunte al package.json
+npm install
+
+# 4. avvio: backend di prova (terminale 1, porta 3001) e applicazione (terminale 2, porta 4200)
+npm run mock-api
+ng serve
+```
+
+Aprendo **`http://localhost:4200/#/home`** si vede:
+
+- il testo `home works! (Home)` (il secondo `Home` arriva da `HOME.TITLE` in `src/assets/public/i18n/it.json`: la pipe `translate` e' attiva, ngx-translate e' il default);
+- **la sola home e' raggiungibile**: su `http://localhost:4200/` (senza `#/home`) non compare nessuna pagina, perche' lo schematic non genera un redirect dalla rotta vuota (aggiungilo in `app-routing-module.ts` / `app.routes.ts` con `{ path: '', redirectTo: 'home', pathMatch: 'full' }` se serve);
+- il **loader**: barra in cima al cambio di rotta e spinner modale per le chiamate di rete, mostrati solo se superano il debounce di 200 ms (`core/utils/pl-loading.config.ts`); all'avvio non c'e' nessuna chiamata lenta, per vederlo vedi l'[esempio 7](./docs/GUIDA.md#7-configurare-il-loader-pl-loading-trace);
+- nella console i log del `LoggerService` (`--logging=advanced`, livello `DEBUG` in `environment.ts`), compresi i tempi delle chiamate dell'interceptor;
+- con NgRx, in Redux DevTools (estensione del browser) lo stato `app` (`initialized: true` dopo `[App] Init Success`) e `storage`; con `npm run mock-api` attivo, `http://localhost:3001/api/workers` risponde con 3 lavoratori.
+
+Se qualcosa non parte, vedi [Domande frequenti](#domande-frequenti-e-problemi-comuni). Il passo successivo e' l'[esempio 2](./docs/GUIDA.md#2-chiamare-il-backend-con-globalservice): leggere quei 3 lavoratori dalla home.
+
 ## Opzioni
 
 Tutte le opzioni sono definite in [`src/pl-schematics/schema.json`](./src/pl-schematics/schema.json).
@@ -82,50 +129,72 @@ Tutte le opzioni sono definite in [`src/pl-schematics/schema.json`](./src/pl-sch
 | `loginSupportConfiguration` (`--login-support-configuration`) | `NONE`, `AZURE-ACTIVE-DIRECT` | `NONE` | Abilita MSAL (vedi [Autenticazione](#autenticazione-msal-opzionale)) |
 | `browserSupported` (`--browser-supported`) | `BROWSER.ALL`, `BROWSER.CHROME`, `BROWSER.FIREFOX`, `BROWSER.EDGE`, `BROWSER.SAFARI` | `BROWSER.ALL` | Valore di `BROWSER_VALID` passato a `pl-core-utils-library` (browser su cui il portale parte) |
 | `enableSonarQube` (`--enable-sonar-qube`) | `Y`, `N` | `N` | `sonar-project.properties`, dipendenza `sonar-scanner` e script `sonar` |
-| `includeDocumentation` (`--include-documentation`) | booleano | `false` | Copia nel progetto la cartella `documentation/` del pacchetto in `pl-schematics/document/` (documentazione storica, non aggiornata alla 4.x) |
+| `includeDocumentation` (`--include-documentation`) | booleano | `false` | Copia nel progetto, in `pl-schematics/document/`, la documentazione compodoc dell'applicazione generata (aggiornata ai commenti JSDoc del codice dello schematic) |
 | `strict` (`--strict`) | booleano | `false` | Oggi non produce effetti: il codice generato compila sia con `ng new --strict` sia con `--strict false` |
 
 `addSupportBootstrap` e' un'opzione interna (derivata da `ui`, non visibile): non va passata.
 
 ## Cosa viene generato
 
-Esempio per `--name-package=my-app --state=ngrx` (le parti opzionali sono indicate):
+Albero commentato per `--name-package=demo --state=ngrx` con login Azure, Material, interceptor e logging avanzato (le parti opzionali sono indicate; `my-app` o altri nomi cambiano solo il prefisso di cartelle e librerie):
 
 ```
 <workspace>/
-├── angular.json                         # + progetti my-app-shared / my-app-ngrx, budget, assets, polyfill @angular/localize, fileReplacements
-├── tsconfig.json                        # + path mapping my-app-shared / my-app-ngrx
-├── package.json                         # + dipendenze e script (build-dev, build-prod, deps:check, ...)
-├── azure-pipelines.yml | .github/workflows/build.yml   # ci
-├── sonar-project.properties             # enable-sonar-qube=Y
-├── mock-api/                            # mock-api=node-express
-├── tools/check-dependencies-on-install.js
-├── pl-schematics/document/              # include-documentation=true
+├── angular.json                  # + progetti demo-shared / demo-ngrx; build dell'app: fileReplacements, budget initial 3MB/5MB,
+│                                 #   polyfill @angular/localize/init, assets src/assets => /assets, tema Material (ui) o Bootstrap
+├── tsconfig.json                 # + paths "demo-shared" / "demo-ngrx" verso projects/<lib>/src/public-api.ts (sorgente, niente build in sviluppo)
+├── package.json                  # + dipendenze e script: build-dev, build-prod, typedoc, deps:check, deps:update, postinstall,
+│                                 #   mock-api, ci:install/ci:build/ci:test, sonar (in base alle opzioni)
+├── azure-pipelines.yml | .github/workflows/build.yml   # --ci
+├── sonar-project.properties      # --enable-sonar-qube=Y
+├── mock-api/                     # --mock-api=node-express: Express su :3001 (src/index.ts, routes/workers.routes.ts, data/workers.mock.json)
+├── tools/check-dependencies-on-install.js   # controllo dipendenze interattivo (postinstall)
+├── pl-schematics/document/       # --include-documentation=true
 ├── projects/
-│   ├── my-app-shared/                   # libreria Angular (ng-packagr)
-│   │   └── src/{public-api.ts, lib/{module,config,pipe,utils,bean,tokens, logging*, http*, interceptor*, material*}}
-│   └── my-app-ngrx/                     # solo state=ngrx
-│       └── src/{public-api.ts, lib/{state.module.ts, root.*.ts, app/, storage/}}
+│   ├── demo-shared/              # libreria Angular (ng-packagr), si importa come 'demo-shared'
+│   │   ├── ng-package.json, package.json, tsconfig.lib.json, tsconfig.lib.prod.json
+│   │   └── src/
+│   │       ├── public-api.ts     # tutto cio' che l'app puo' importare va riesportato qui
+│   │       └── lib/
+│   │           ├── module/       # SharedModule (forRoot)
+│   │           ├── config/       # SharedLibConfig, SHARED_LIB_CONFIG, providePlShared
+│   │           ├── pipe/         # PipeModule e una ventina di pipe (comma-decimal, currency-format, localized-date, safe, truncate, ...)
+│   │           ├── utils/        # Utils, costanti di device detection
+│   │           ├── bean/         # ErrorBean, ErrorCode
+│   │           ├── tokens/       # BASE_URL_API, APP_BOOTSTRAP_TASKS
+│   │           ├── logging/      # solo logging=advanced: LoggerService, LoggerFeature, provideLogger, ...
+│   │           ├── http/, interceptor/   # solo http != none: HttpInterceptorService, token/config, adapter di autenticazione
+│   │           ├── material/     # solo ui=material: MaterialModule
+│   │           └── component/{header,footer,menu}/, directive/   # cartelle vuote (.gitkeep)
+│   └── demo-ngrx/                # solo state=ngrx
+│       └── src/
+│           ├── public-api.ts
+│           └── lib/
+│               ├── state.module.ts      # StateModule: StoreModule.forRoot, EffectsModule.forRoot, StoreDevtools; emette storageHydrate() e appInit()
+│               ├── root.{state,reducers,effects,selectors}.ts   # RootState, rootReducers, rootEffects, barrel dei selector
+│               ├── app/                 # slice app: state, actions, reducer, selectors, effects
+│               └── storage/             # slice storage (token, lingua, tema in localStorage) + storage.service.ts
 └── src/
-    ├── assets/public/{i18n/it.json, mock/example/api/files/get.json}
-    ├── environments/{environment.ts, environment.prod.ts, environment.model.ts}
+    ├── index.html, main.ts, styles.css
+    ├── assets/public/{i18n/it.json, mock/example/api/files/get.json}   # traduzioni e file mock (DEFAULT_PATH_MOCK)
+    ├── environments/{environment.ts, environment.prod.ts, environment.model.ts}   # AppEnvironment: http, i18n, logging, features, azure
     └── app/
-        ├── app.module.ts + app-routing.module.ts   (classic)   |   app.config.ts + app.routes.ts   (standalone)
-        └── my-app/
+        ├── app-module.ts + app-routing-module.ts   (classic)  |  app.config.ts + app.routes.ts   (standalone);  app.ts + app.html (root)
+        └── demo/                                  # src/app/<namePackage>
             ├── core/
-            │   ├── service/{auth, error, global, http}.service.ts, router.fake.guard.ts
-            │   ├── initializer/{AmbientModeLoader.ts, AutenticationLoader.ts}
-            │   ├── module/{initializer.module.ts, pl-loading.module.ts}   # solo classic
-            │   ├── provide-core.ts                                        # solo standalone
-            │   ├── msal/                                                  # solo login Azure
-            │   ├── type/type.event.ts
-            │   └── utils/{shared.config.ts, pl-loading.config.ts}
+            │   ├── service/       # auth.service, global.service, http.service, error.service, router.fake.guard
+            │   ├── initializer/   # AutenticationLoader (login + APP_BOOTSTRAP_TASKS), AmbientModeLoader (browser)
+            │   ├── module/        # solo classic: initializer.module.ts, pl-loading.module.ts
+            │   ├── provide-core.ts   # solo standalone: equivalente di InitializerModule
+            │   ├── msal/          # solo login Azure: factory MSAL, token PL_MSAL_*, providePlMsal (classic: + msal-auth.module.ts)
+            │   ├── type/type.event.ts   # CORE_TYPE_EVENT: eventi broadcast del core
+            │   └── utils/         # shared.config.ts (appSharedConfig), pl-loading.config.ts (plLoadingTraceOptions)
             └── component/
-                ├── page/home/                # HomeComponent (+ HomeModule e routing se classic), spec inclusi
-                └── section/{filter,tab}/     # cartelle vuote (.gitkeep)
+                ├── page/home/     # HomeComponent + HomeService + spec (classic: + home.module.ts e home-routing.module.ts)
+                └── section/{filter,tab}/    # cartelle vuote (.gitkeep)
 ```
 
-`*` = solo se l'opzione corrispondente e' attiva (`logging=advanced`, `http != none`, `ui=material`). Con `i18n=none` la pipe `translate-async` non viene generata. I nomi reali dei file dell'app sono letti dal progetto (Angular 19: `app.component.ts`, `app.module.ts`; Angular 20+: `app.ts`, `app.html`, `app-module.ts`).
+Le voci con "solo ..." dipendono dall'opzione indicata (`logging=advanced`, `http != none`, `ui=material`, `state=ngrx`, login Azure, architettura). Con `i18n=none` la pipe `translate-async` non viene generata. I file della shell (`app*.ts`, `index.html`, `main.ts`, `styles.css`) sono quelli di `ng new`, modificati o sostituiti come descritto in [Modifiche ai file esistenti](#modifiche-ai-file-esistenti); i nomi reali sono letti dal progetto (Angular 19: `app.component.ts`, `app.module.ts`, `app-routing.module.ts`; Angular 20+: `app.ts`, `app.html`, `app-module.ts`, `app-routing-module.ts`).
 
 ### Librerie `shared` e `ngrx`
 
@@ -239,6 +308,69 @@ La libreria `<nome>-ngrx` contiene un esempio completo e funzionante:
 - `ci`: Node 22.x; `npm ci`, `npm run build-dev` e, se `tests != none`, `npm test -- --watch=false --browsers=ChromeHeadless`, poi pubblicazione dell'artefatto `dist`.
 - `enable-sonar-qube=Y`: `sonar-project.properties` in radice e script `sonar`.
 
+## Esempi passo passo
+
+La guida [`docs/GUIDA.md`](./docs/GUIDA.md) contiene gli esempi 2-9 (obiettivo, prerequisiti, file da creare o modificare, codice, risultato atteso, problemi comuni), scritti sul progetto del [primo avvio](#guida-rapida-primo-avvio); il primo avvio e la sezione test e build sono in questo README. Valgono per applicazioni classic e standalone (dove differiscono e' mostrato entrambi):
+
+| # | Esempio | Contenuto |
+|---|---|---|
+| 1 | [Primo avvio](#guida-rapida-primo-avvio) | `ng new`, generazione, `npm run mock-api`, `ng serve` |
+| 2 | [Chiamare il backend](./docs/GUIDA.md#2-chiamare-il-backend-con-globalservice) | `GlobalService` (`get`/`post`, varianti `*Bg`), `PlHttpRequest`, `ErrorBean`, `baseUrl` e token `BASE_URL_API` |
+| 3 | [Feature NgRx](./docs/GUIDA.md#3-aggiungere-una-feature-ngrx) | slice completo (state, actions, reducer, selectors, effects) registrato in `root.*`; nota su `forFeature` / lazy |
+| 4 | [Rotta lazy con `RouteFakeGuard`](./docs/GUIDA.md#4-aggiungere-una-rotta-lazy-con-routefakeguard) | `canMatch` / `canActivate`, classic e standalone, `applicationType.type` |
+| 5 | [Codice prima dell'avvio](./docs/GUIDA.md#5-task-di-bootstrap-con-app_bootstrap_tasks) | `APP_BOOTSTRAP_TASKS`: caricamento di una config remota |
+| 6 | [Interceptor HTTP](./docs/GUIDA.md#6-interceptor-http-retry-timeout-e-401) | retry/backoff, `HTTP_INTERCEPTOR_CONFIG`, adapter con refresh, cosa succede su 401 |
+| 7 | [Loader `pl-loading-trace`](./docs/GUIDA.md#7-configurare-il-loader-pl-loading-trace) | `pl-loading.config.ts`: debounce, animazioni, esclusione url |
+| 8 | [Login Azure MSAL](./docs/GUIDA.md#8-configurare-il-login-azure-msal) | `environment.azure`, `protectedResourceMap`, verifica in locale, limiti |
+| 9 | [Libreria shared](./docs/GUIDA.md#9-aggiungere-una-pipe-o-una-utility-alla-libreria-shared) | nuova pipe e utility in `projects/demo-shared`, `public-api` |
+| 10 | [Test e build](#test-e-build-del-progetto-generato) | `ng build` (app e librerie), `ng test`, matrice e2e |
+
+## Test e build del progetto generato
+
+```sh
+ng build                                  # applicazione, configurazione "production" (default di ng new: fileReplacements, budget 3MB/5MB)
+ng build --configuration development      # build di sviluppo
+npm run build-prod                        # = ng build --configuration production (build-dev = ng build)
+ng build demo-shared                      # libreria shared => dist/demo-shared/ (non e' inclusa in "ng build")
+ng build demo-ngrx                        # libreria ngrx (solo --state=ngrx) => dist/demo-ngrx/
+ng test --watch=false                     # Angular 21: Vitest (runner di default di ng new)
+ng test --watch=false --browsers=ChromeHeadless   # Angular 19/20: Karma + Jasmine, serve Chrome
+```
+
+- Gli spec generati sono quelli di `HomeComponent`, `HomeService` e del componente root; le librerie hanno solo il target `build`, non `test`.
+- In sviluppo le librerie non vanno compilate: `tsconfig.json` le mappa sul sorgente (`ng serve` e `ng build` dell'app le compilano insieme all'app). `ng build demo-shared` serve a verificare che la libreria compili da sola (ng-packagr) e a produrre il pacchetto in `dist/`.
+- Per verificare lo **schematic** (non il tuo progetto) esiste la matrice e2e del pacchetto: `npm run test:e2e` (richiede ore, vedi [Matrice e2e](#matrice-e2e)).
+
+## Domande frequenti e problemi comuni
+
+**`ng generate` risponde che la collezione non esiste.** Lo schematic va installato nel workspace (`npm install -D pl-schematics@4`) e il comando lanciato dalla radice del workspace. Altri errori espliciti: Angular minore di 19 o maggiore di 21, `--architecture` diversa da quella rilevata, componente root con template inline, `--tests=jest`.
+
+**`npm install` fallisce con `ERESOLVE`.** Il conflitto riguarda le peer dependency tra pacchetti gia' presenti nel progetto e quelli aggiunti dallo schematic (`@angular/material`, `@angular/cdk`, `@ngrx/*`, `ng-packagr` pinnati sul major di Angular; `@angular/localize` e `@angular/animations` sulla stessa minor di `@angular/core`). Leggi l'albero dell'errore, allinea il pacchetto indicato al major di Angular del progetto (ad esempio `@angular/material` ^19 in un progetto Angular 20 va portato a ^20) e rilancia. `npm install --legacy-peer-deps` e' l'ultima risorsa: ignora il controllo e puo' nascondere incompatibilita' reali. Nella matrice e2e `npm install` su un `ng new` pulito riesce senza flag.
+
+**`npm install` resta in attesa di una risposta.** E' il controllo interattivo delle dipendenze (`postinstall`): rispondi, oppure imposta `PL_DEPS_CHECK=false` (e' gia' saltato in CI e in terminali non interattivi).
+
+**`ng build` fallisce con "bundle initial exceeded maximum budget".** Lo schematic porta i budget `initial` della build production a 3MB (warning) / 5MB (error) perche' `pl-core-utils-library` e `pl-loading-trace` superano il default. Se non basta, riduci il bundle (lazy loading, dipendenze inutili) oppure alza `maximumWarning` / `maximumError` in `angular.json` > `projects.<app>.architect.build.configurations.production.budgets`.
+
+**`ng test`: cosa cambia tra Angular 19 e 21.** Su 19/20 il runner e' Karma + Jasmine: servono Chrome e `--browsers=ChromeHeadless`, e senza `--watch=false` il comando resta in ascolto. Su 21 il runner di default e' Vitest: `ng test --watch=false`. Lo script generato `ci:test` usa `npm test -- --watch=false --browsers=ChromeHeadless`: su Angular 21 il flag `--browsers` non e' stato verificato (Vitest senza provider browser potrebbe rifiutarlo); in caso di errore usa `ng test --watch=false`, come la matrice e2e.
+
+**`NullInjectorError` (NG0201) su un servizio di `pl-loading-trace` nei test.** Il componente testato contiene `<pl-loading-overlay>` (il componente root standalone) e il `TestBed` non ha i provider del loader: aggiungi `providePlLoadingTrace()` (da `pl-loading-trace`) ai `providers`, come fa lo spec generato del componente root. Nelle app classic lo spec del root usa `schemas: [NO_ERRORS_SCHEMA]`; in un test di integrazione importa `PlLoadingModule` (`core/module/pl-loading.module.ts`), che fornisce anche `PlLoadingRegistryService`.
+
+**Login Azure in locale: `BrowserAuthError: interaction_in_progress`.** MSAL ha gia' un'interazione (redirect) in corso e ne viene avviata un'altra: capita se un login e' stato interrotto (tab chiusa o ricarica a meta'), con piu' tab aperte sulla stessa origine o quando piu' flussi partono insieme (`APP_INITIALIZER`, `InitializerModule` / `provideCore()`, `MsalGuard`). Rimedio: DevTools > Application > *Clear site data* per `localhost:4200` (oppure cancella le chiavi `msal.*` da `localStorage` / `sessionStorage`), chiudi le altre tab e ripeti un solo login. La causa non e' ancora chiarita (vedi [Limiti noti](./CHANGELOG.md#limiti-noti)); con `redirectUri` diverso dall'URI registrata come SPA su Azure l'errore e' invece `AADSTS50011` ([esempio 8](./docs/GUIDA.md#8-configurare-il-login-azure-msal)).
+
+**La pagina e' bianca su `http://localhost:4200/`.** La rotta vuota non ha un redirect: la home e' su `/#/home` (il routing usa l'hash).
+
+**Ogni richiesta HTTP parte due volte.** L'interceptor della libreria shared e' registrato due volte (ad esempio chiamando di nuovo `provideHttpInterceptor` o `SharedModule.forRoot`): deve essere registrato una sola volta; per cambiare la configurazione usa `provideHttpInterceptorConfig` ([esempio 6](./docs/GUIDA.md#6-interceptor-http-retry-timeout-e-401)).
+
+**Su un 401 la pagina si ricarica in continuazione.** L'adapter di default (`LocalStorageAuthAdapterService`) non implementa il refresh: su un 401 cancella i token e ricarica la pagina. Fornisci un `HttpAuthAdapter` con `refreshToken()` ([esempio 6](./docs/GUIDA.md#6-interceptor-http-retry-timeout-e-401)).
+
+**`SyntaxError ... "undefined" is not valid JSON` creando una `PlHttpRequest`, oppure url errato.** Path param, query param e body non possono essere `undefined` (usa `{}` / `null`) e l'url deve essere relativo a `BASE_URL_API` ([esempio 2](./docs/GUIDA.md#2-chiamare-il-backend-con-globalservice)).
+
+**`Cannot find module 'demo-shared'` / `'demo-ngrx'`.** Controlla che `tsconfig.json` abbia i `paths` verso `projects/<lib>/src/public-api.ts` e che l'import sia il nome della libreria (non un percorso relativo); un simbolo nuovo deve essere riesportato da `public-api.ts`. Riavvia il TypeScript server dell'IDE se necessario.
+
+**La vista non si aggiorna dopo una chiamata.** Le applicazioni Angular senza `zone.js` (zoneless) non rilevano le semplici assegnazioni a campi dentro `subscribe`: usa `signal` o la pipe `async`.
+
+**Ho rieseguito lo schematic e le mie modifiche sono sparite.** I template di `core/`, `environment` e delle librerie (`public-api.ts`, `pipe.module.ts`, `root.*.ts`, ...) vengono sovrascritti: committa prima di rigenerare e riapplica le tue modifiche con `git diff`.
+
 ## Matrice di compatibilita'
 
 | pl-schematics | Angular | Node.js | Architetture | Verifica |
@@ -329,9 +461,11 @@ L'elenco aggiornato e dettagliato e' nel [CHANGELOG](./CHANGELOG.md#limiti-noti)
 
 ## Documentazione correlata
 
+- [docs/GUIDA.md](./docs/GUIDA.md): esempi passo passo sul progetto generato (backend, NgRx, rotte lazy, bootstrap, interceptor, loader, MSAL, libreria shared).
 - [CHANGELOG.md](./CHANGELOG.md): modifiche e BREAKING CHANGE della 4.0.0, limiti noti.
 - [AI_README.md](./AI_README.md): contesto e convenzioni per assistenti AI/LLM (prompt di contesto, architettura, regole per chi modifica lo schematic).
-- Le funzionalita' di runtime (cache di rete, decoratori, mock HTTP, `PlBaseComponent`, utility su `String`/`Array`/`JSON`) appartengono a `pl-core-utils-library`, non a questo pacchetto: vanno consultate nella documentazione di quella libreria.
+- Documentazione del codice generato: con `--include-documentation` viene copiata in `pl-schematics/document/` la documentazione compodoc dell'applicazione generata; nel progetto lo script `npm run typedoc` (compodoc, aggiunto in `package.json` con `@compodoc/compodoc` tra le dipendenze) la genera in `pl-schematics/document/schematics`.
+- Librerie esterne usate dal codice generato: [`pl-loading-trace`](https://www.npmjs.com/package/pl-loading-trace) (demo online <https://lucapiciollo.github.io/loadingTrace-demo/>), `pl-core-utils-library` (cache di rete, decoratori, mock HTTP, `PlBaseComponent`, utility su `String`/`Array`/`JSON`: non appartengono a questo pacchetto, vanno consultate nella documentazione di quella libreria) e `pl-decorator`.
 
 ## Autore e licenza
 

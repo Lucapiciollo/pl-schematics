@@ -3,19 +3,85 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Portable-Schematics</title>
+        <title>pl-schematics - progetto generato</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
-	      <link rel="stylesheet" href="../styles/style.css">
-        <link rel="stylesheet" href="../styles/Postmark.css">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
+        <link rel="stylesheet" href="../styles/postmark.css">
     </head>
     <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
 
-        <div class="navbar navbar-default navbar-fixed-top visible-xs">
-            <a href="../" class="navbar-brand">Portable-Schematics</a>
-            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="../" class="navbar-brand">pl-schematics - progetto generato</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
         </div>
 
         <div class="xs-menu menu" id="mobile-menu">
@@ -24,7 +90,7 @@
 
         <div class="container-fluid main">
            <div class="row main">
-               <div class="hidden-xs menu">
+               <div class="d-none d-md-block menu">
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
@@ -38,37 +104,48 @@
 
 
 
+
+
+
+
+
 <ol class="breadcrumb">
-  <li>Interceptors</li>
-  <li>HttpInterceptorService</li>
+  <li class="breadcrumb-item">Interceptors</li>
+  <li class="breadcrumb-item" >HttpInterceptorService</li>
 </ol>
 
 <ul class="nav nav-tabs" role="tablist">
-        <li class="active">
-            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
-        </li>
-        <li >
-            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        <li class="nav-item">
+            <a href="#info" 
+                class="nav-link"
+                class="nav-link active"
+                role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane fade active in" id="c-info">
+    <div class="tab-pane fade active in" id="info">
         <p class="comment">
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/app/home/configuration/core/interceptor/http-interceptor.service.ts</code>
+            <code>projects/app-shared/src/lib/interceptor/http-interceptor.service.ts</code>
         </p>
 
 
             <p class="comment">
-                <h3>Example</h3>
+                <h3>Description</h3>
             </p>
-            <div class="io-description">
-            </div>
+            <p class="comment">
+                <p>Intercettore HTTP applicativo: aggiunge l&#39;header di autorizzazione alle richieste, applica timeout (anche per singola
+richiesta tramite header dedicato), retry con backoff esponenziale sugli errori ritentabili e gestione del refresh del
+token in caso di 401 (le richieste concorrenti restano in attesa del nuovo token). Si appoggia a HttpAuthAdapter e
+HttpInterceptorConfig, forniti tramite i token HTTP_AUTH_ADAPTER e HTTP_INTERCEPTOR_CONFIG.</p>
 
-            <section>
+            </p>
+
+
+            <section data-compodoc="block-index">
     <h3 id="index">Index</h3>
     <table class="table table-sm table-bordered index-table">
         <tbody>
@@ -82,7 +159,7 @@
                     <td class="col-md-4">
                         <ul class="index-list">
                             <li>
-                                <a href="#intercept">intercept</a>
+                                <a href="#intercept" >intercept</a>
                             </li>
                         </ul>
                     </td>
@@ -96,24 +173,19 @@
     </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-constructor">
     <h3 id="constructor">Constructor</h3>
         <table class="table table-sm table-bordered">
             <tbody>
                 <tr>
                     <td class="col-md-4">
-<code>constructor(cache: PlCacheMapService, tagCache: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, defaultTimeout: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, injector: <a href="https://angular.io/api/core/Injector" target="_blank">Injector</a>)</code>
+<code>constructor(config: <a href="../interfaces/HttpInterceptorConfig.html" target="_self">HttpInterceptorConfig | null</a>, authAdapter: <a href="../interfaces/HttpAuthAdapter.html" target="_self">HttpAuthAdapter | null</a>, logger: <a href="../injectables/LoggerService.html" target="_self">LoggerService</a>)</code>
                     </td>
                 </tr>
-                        <tr>
-                            <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/home/configuration/core/interceptor/http-interceptor.service.ts:46</a></div>
-                            </td>
-                        </tr>
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><hr>
+                            <div class="io-description"><p>Costruttore: unisce la configurazione di default con quella fornita e riceve l&#39;adapter di autenticazione opzionale.</p>
 </div>
                             <div>
                                     <b>Parameters :</b>
@@ -123,56 +195,57 @@
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
+                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
                                                 <tr>
-                                                        <td>cache</td>
+                                                        <td>config</td>
                                                   
                                                         <td>
-                                                                    <code>PlCacheMapService</code>
+                                                                        <code><a href="../interfaces/HttpInterceptorConfig.html" target="_self" >HttpInterceptorConfig | null</a></code>
                                                         </td>
                                                   
                                                     <td>
                                                             No
                                                     </td>
                                                     
+                                                        <td>
+                                                                <p>:configurazione parziale dell&#39;intercettore, null per usare solo i valori di default</p>
+
+                                                        </td>
                                                 </tr>
                                                 <tr>
-                                                        <td>tagCache</td>
+                                                        <td>authAdapter</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                                                        <code><a href="../interfaces/HttpAuthAdapter.html" target="_self" >HttpAuthAdapter | null</a></code>
                                                         </td>
                                                   
                                                     <td>
                                                             No
                                                     </td>
                                                     
+                                                        <td>
+                                                                <p>:adapter per lettura/scrittura token, refresh e logout, null se non configurato</p>
+
+                                                        </td>
                                                 </tr>
                                                 <tr>
-                                                        <td>defaultTimeout</td>
+                                                        <td>logger</td>
                                                   
                                                         <td>
-                                                                        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                                                        <code><a href="../injectables/LoggerService.html" target="_self" >LoggerService</a></code>
                                                         </td>
                                                   
                                                     <td>
                                                             No
                                                     </td>
                                                     
-                                                </tr>
-                                                <tr>
-                                                        <td>injector</td>
-                                                  
                                                         <td>
-                                                                        <code><a href="https://angular.io/api/core/Injector" target="_blank" >Injector</a></code>
+                                                                <p>:servizio di logging (presente solo con logging avanzato)</p>
+
                                                         </td>
-                                                  
-                                                    <td>
-                                                            No
-                                                    </td>
-                                                    
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -183,7 +256,7 @@
         </table>
 </section>
 
-            <section>
+            <section data-compodoc="block-methods">
     
     <h3 id="methods">
         Methods
@@ -194,80 +267,73 @@
                 <td class="col-md-4">
                     <a name="intercept"></a>
                     <span class="name">
-                        <b>
-                            intercept
-                        </b>
+                        <span ><b>intercept</b></span>
                         <a href="#intercept"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>intercept(request: HttpRequest<any>, next: <a href="https://angular.io/api/common/http/HttpHandler" target="_blank">HttpHandler</a>)</code>
+<code>intercept(request: <a href="../miscellaneous/typealiases.html#GenericHttpRequest" target="_self">GenericHttpRequest</a>, next: <a href="https://angular.io/api/common/http/HttpHandler" target="_blank">HttpHandler</a>)</code>
                 </td>
             </tr>
 
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-line">Defined in <a href="" data-line="74"
-                            class="link-to-prism">src/app/home/configuration/core/interceptor/http-interceptor.service.ts:74</a></div>
-                </td>
-            </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                    <div class="io-description"><hr>
+                        <div class="io-description"><p>Punto di ingresso dell&#39;intercettore: applica header di autorizzazione, timeout e retry; se la richiesta fallisce con 401
+(e non e&#39; la richiesta di refresh) avvia o attende il refresh del token e ripete la richiesta. Le richieste con header di skip auth
+non vengono autenticate.</p>
 </div>
 
-                    <div class="io-description">
-                        <b>Parameters :</b>
-                        <table class="params">
-                            <thead>
-                                <tr>
-                                    <td>Name</td>
-                                    <td>Type</td>
-                                    <td>Optional</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>request</td>
-                                    <td>
-                                            <code>HttpRequest&lt;any&gt;</code>
-                                    </td>
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>request</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#GenericHttpRequest" target="_self" >GenericHttpRequest</a></code>
+                                            </td>
 
-                                    <td>
-                                        No
-                                    </td>
-
-
-                                </tr>
-                                <tr>
-                                    <td>next</td>
-                                    <td>
-                                                <code><a href="https://angular.io/api/common/http/HttpHandler" target="_blank" >HttpHandler</a></code>
-                                    </td>
-
-                                    <td>
-                                        No
-                                    </td>
+                                            <td>
+                                                    No
+                                            </td>
 
 
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div>
-                    </div>
-                    <div class="io-description">
-                        <b>Returns : </b>    <code>Observable&lt;HttpEvent&lt;any&gt;&gt;</code>
+                                        </tr>
+                                        <tr>
+                                                <td>next</td>
+                                            <td>
+                                                            <code><a href="https://angular.io/api/common/http/HttpHandler" target="_blank" >HttpHandler</a></code>
+                                            </td>
 
-                    </div>
-                    <div class="io-description">
-                        
-                    </div>
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Observable&lt;HttpEvent&lt;unknown&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
                 </td>
             </tr>
         </tbody>
@@ -277,125 +343,6 @@
     </div>
 
 
-    <div class="tab-pane fade  tab-source-code" id="c-source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from &#x27;@angular/common/http&#x27;;
-import { Inject, Injectable, InjectionToken, Injector } from &#x27;@angular/core&#x27;;
-import { CACHE_TAG, PlCacheMapService,PlCoreUtils } from &#x27;pl-core-utils-library&#x27;;
-import { Observable, of } from &#x27;rxjs&#x27;;
-import { finalize, tap, timeout } from &#x27;rxjs/operators&#x27;;
-import { ErrorBean, ErrorCode } from &#x27;src/app/home/configuration/core/bean/error-bean&#x27;;
-import { CORE_TYPE_EVENT } from &#x27;src/app/home/configuration/core/type/type.event&#x27;;
-import { environment } from &#x27;src/environments/environment&#x27;;
-import { Utils  } from &#x27;src/app/home/configuration/shared/utils/utils&#x27;;
-
-/** 
- * @author l.piciollo
- * token per la valorizzazione dell&#x27;attesa prima di terminare in timeout la richiesta al BE 
- */
-export const DEFAULT_TIMEOUT &#x3D; new InjectionToken&lt;number&gt;(&#x27;DefaulTimeOut for http request&#x27;);
-
-/**
- * @author l.piciollo
-*  Intercettore di rete, inizializzazione di base per la centralizzazione delel chiamate al BE
- * qui è possibile arrichire le chiamate con Token di autenticazione o altro, richiesto dal BE
- * è possibile inibire anche le chiamate
- * 
- * ATTENZIONE, NON SI CONSIGLIA LA MODIFICA DI QUESTA CLASSE A CAUSA DI OSSERVATORI ESTERNI CHE NE FANNO USO SPECIFICO.
- * LA CLASSE SI INNESCA AUTOMATICAMENTE E SI OCCUPA DELLA GESTIONE DELLA CACHE CENTRLALIZZATA, SI OCCUPA DI CONTROLLARE LA PROFILAZIONE
- * UTENTE, PASSANDO IN HEADER I DATI AUTENTICAZIONE E VIENE GESTITA IN FINE LA CHIAMATA DI RETE.
- * IN CASO FOSSE NECESSARIO INSERIRE UN ALTR INTERCETTORE.. E&#x27; POSSIBLE FARLO NELLA PARTE SHARED INSERENDOLO NEL MODULO SHARED
- */
-@Injectable({
-  providedIn: &#x27;root&#x27;
-})
-export class HttpInterceptorService implements HttpInterceptor {
-
-  /***************************************************************************************************************************** */
-  constructor(private cache: PlCacheMapService, @Inject(CACHE_TAG) protected tagCache: string, @Inject(DEFAULT_TIMEOUT) protected defaultTimeout: number, private injector: Injector) {
-
-  }
-  /***************************************************************************************************************************** */
-
-  /**
-   * @author l.piciollo
-   * Funzionalita di controllo per l&#x27;abilitazione della cache per le chiamate di rete.. 
-   * di default sono abilitate alla cache solo le chiamate GET
-   * @param method : metodo utilizzato per la chiamata POST,GET,DELETE ....
-   * @param url    : url di chiamata al BE, deve contenere il tagCache per essere messo in cache
-   * @returns valore buleano true|false per indicare se la chiamata puo essere messa in cache o meno
-   */
-  private isRequestCachable(method, url): boolean {
-    return ([&quot;GET&quot;].indexOf(method) &gt; -1 &amp;&amp; url.indexOf(this.tagCache) &gt; -1)
-  }
-
-  /***************************************************************************************************************************** */
-  /**
-   * @author l.piciollo
-   * intercettore per le chiamate di tere.. tutte le chiamate passano da questo intercettore per poterne poi eventualmente
-   * modificarne i parametri di ritorno e di andata, è possibile qui modificare header ed altro
-   * @param request
-   * @param next
-   */
-  intercept(request: HttpRequest&lt;any&gt;, next: HttpHandler): Observable&lt;HttpEvent&lt;any&gt;&gt; {
-    try {
-      let startTime &#x3D; Date.now();
-      /**
-       * si procede a verificare se la chiamata è in cache, in caso i dati vengono prelevati dalla cache e la chiamata 
-       * al be non viene effettuata
-       */
-      if (this.isRequestCachable(request.method, request.url)) {
-        let cachedResponse &#x3D; this.cache.get(request);
-        if (cachedResponse !&#x3D;&#x3D; null) {
-         /**in caso sia presente in cache la chimata, viene ritornato il suo valore */
-          PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_CACHE, request.url);
-          return of(cachedResponse);
-        }
-      }
-      /***************************************************************************************************************************** */
-      let timeoutValue &#x3D; Number(request.headers.get(&#x27;timeout&#x27;)) || this.defaultTimeout;
-      let uuid &#x3D;  Utils.UUIDCODE(); 
-      
-      let storage &#x3D; window[&quot;localStorage&quot;];
-      let token &#x3D; storage[&quot;msal.idtoken&quot;];
-      let headers &#x3D; { &quot;api_key&quot;: environment.azure.api_key, &quot;Authorization&quot;: &#x60;Bearer ${token}&#x60;, &#x27;TransactionID&#x27;: uuid };
-        
-      let urlApp &#x3D; request.url;
-      let url &#x3D; request.url;
-      try { url &#x3D; urlApp.truncateUrlCache(this.tagCache) } catch (e) { console.debug(url + &quot; not in storable...&quot;);}
-      request &#x3D; request.clone({ setHeaders: headers, url: url });
-      return next.handle(request).pipe(
-        timeout(timeoutValue),
-        tap(
-          event &#x3D;&gt; {
-            if (event instanceof HttpResponse) {
-              /**in caso di esito positivo della chiamata al BE, si verifica se o meno è possibile storicizzare la response */
-              if (this.isRequestCachable(request.method, urlApp))
-                this.cache.put(request, event);
-              /**è possibile aggiungere qui chiamate ad altri servizi o modali di allerta della buon uscita dell&#x27;operazione */
-            }
-          }, (err: any) &#x3D;&gt; {
-            if (err instanceof HttpErrorResponse) {
-            /**l&#x27;errore vienre rediretto nell&#x27;intercettore di eccezione, è possibile specializzarne l&#x27;operazione di gestione */
-              PlCoreUtils.Broadcast().execEvent(CORE_TYPE_EVENT.CORE_HTTP_AJAX_ERROR, err);
-              throw new  ErrorBean(err.message, ErrorCode.NETWORKERROR)
-            }
-          }
-        ),
-        finalize(() &#x3D;&gt; {
-          /**viene monitorizzato il temp di esecuzione di una chiamata al BE, per verificarne le prestazioni */
-          let elapsedTime &#x3D; Date.now() - startTime;
-          console.debug(request.method + &quot; &quot; + request.urlWithParams + &quot; in &quot; + elapsedTime + &quot;ms&quot;);
-        })
-      );
-    } catch (error) {
-      throw new  ErrorBean(error.message, ErrorCode.SYSTEMERRORCODE);
-    }
-  };
-  /***************************************************************************************************************************** */
-
-}
-</code></pre>
-    </div>
 </div>
 
 
@@ -403,14 +350,15 @@ export class HttpInterceptorService implements HttpInterceptor {
 
 
 
-                   
+
+
 
 
 
 
                    </div><div class="search-results">
     <div class="has-results">
-        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
         <ul class="search-results-list"></ul>
     </div>
     <div class="no-results">
@@ -422,6 +370,15 @@ export class HttpInterceptorService implements HttpInterceptor {
            </div>
        </div>
 
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'interceptor';
@@ -429,18 +386,30 @@ export class HttpInterceptorService implements HttpInterceptor {
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
        <script src="../js/libs/custom-elements.min.js"></script>
        <script src="../js/libs/lit-html.js"></script>
-       <!-- Required to polyfill modern browsers as code is ES5 for IE... -->
-       <script src="../js/libs/custom-elements-es5-adapter.js" charset="utf-8" defer></script>
+
        <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
        <script src="../js/libs/bootstrap-native.js"></script>
 
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

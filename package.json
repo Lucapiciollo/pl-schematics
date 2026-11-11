@@ -12,6 +12,14 @@
   ],
   "author": "@l.piciollo",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lucapiciollo/pl-schematics.git"
+  },
+  "homepage": "https://github.com/Lucapiciollo/pl-schematics#readme",
+  "bugs": {
+    "url": "https://github.com/Lucapiciollo/pl-schematics/issues"
+  },
   "files": [
     "src",
     "README.md",

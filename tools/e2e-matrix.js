@@ -19,11 +19,14 @@
  *   node tools/e2e-matrix.js --angular 19 --arch standalone --case azure
  *   node tools/e2e-matrix.js --list                   # elenca casi e righe senza eseguire
  *   node tools/e2e-matrix.js --jobs 3 --keep          # righe in parallelo, mantiene le cartelle
- *   node tools/e2e-matrix.js --run-tests              # esegue anche `ng test` headless (richiede Chrome per Karma)
+ *   node tools/e2e-matrix.js --skip-tests-run         # salta `ng test` (di default i test girano: Karma+ChromeHeadless su Angular 19/20, runner predefinito vitest su 21)
+ *   node tools/e2e-matrix.js --skip-runtime           # salta la verifica runtime (headless Chrome)
  *
  * Opzioni: --angular <19|20|21|all> --arch <classic|standalone|both> --case <nome|all>
  *          --strict <true|false|both> (flag di `ng new`, default both solo per il caso "base", true altrove)
- *          --work <dir> (default: <tmp>/pl-schematics-e2e) --jobs <n> --keep --run-tests --list --fresh
+ *          --work <dir> (default: <tmp>/pl-schematics-e2e) --jobs <n> --keep --list --fresh
+ *          --skip-tests-run (non esegue `ng test`; `--run-tests` e' accettato ma ridondante: e' il default)
+ *          --skip-runtime (non esegue la verifica runtime)
  */
 const { spawnSync } = require('child_process');
 const fs = require('fs');

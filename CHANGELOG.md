@@ -47,7 +47,7 @@ Rilascio di compatibilita' con **Angular 19, 20 e 21** (classic e standalone). L
 - Loader `pl-loading-trace` (vedi BREAKING CHANGE): config `core/utils/pl-loading.config.ts`; il check runtime e2e cerca `<pl-loading-overlay>`.
 - Workaround nel classic: `PlLoadingModule` fornisce `PlLoadingRegistryService`, perche' `PlLoadingTraceModule.forRoot` di pl-loading-trace 1.2.x non lo registra (senza, l'overlay darebbe NullInjectorError).
 - Matrice e2e riproducibile `tools/e2e-matrix.js` (`npm run test:e2e[:19|:20|:21]`): `ng new` => schematic => `npm install` => `ng build` (app + librerie) => spec => `ng test` => verifica runtime (`tools/e2e-runtime.js`, Chrome headless, porte 3001/4300). Script `npm run test:e2e:pack` (`tools/e2e-pack.js`): installazione "da utente" (`npm pack`, `ng new`, installazione del tarball, `ng generate pl-schematics:pl-schematics`, `ng build`).
-- `README.md` riscritto per la 4.0 (requisiti, uso, opzioni, struttura generata, MSAL, interceptor, loader, NgRx, sviluppo e rilascio) e `AI_README.md` allineato; `CHANGELOG.md`.
+- `README.md` riscritto per la 4.0 (requisiti, uso, opzioni, struttura generata, MSAL, interceptor, loader, NgRx, sviluppo e rilascio) con indice, guida rapida di primo avvio, albero commentato, test e build e FAQ; nuova guida con esempi passo passo `docs/GUIDA.md` (GlobalService, NgRx, rotte lazy, bootstrap tasks, interceptor, loader, MSAL, libreria shared); `AI_README.md` allineato; `CHANGELOG.md`.
 
 ### Rimosso
 
@@ -69,4 +69,4 @@ Stato della verifica al momento del rilascio, descritto senza arrotondamenti.
 - `AuthService.applicationType.type` non e' valorizzato dal codice generato (default `''`): con login Azure `RouteFakeGuard.canActivate` delega a `MsalGuard` solo se l'applicazione lo imposta a `'web'`; la login all'avvio e' comunque imposta dall'`APP_INITIALIZER`.
 - Le opzioni `nameCompany` e `strict` sono accettate ma non hanno effetti sul codice generato. `logging=none` e `logging=console` sono equivalenti.
 - `pl-core-utils-library`, `pl-decorator` e `pl-loading-trace` sono `latest`: le versioni verificate sono `pl-core-utils-library` 2.1.3 e `pl-loading-trace` 1.2.x; versioni successive non sono coperte dalla matrice.
-- `includeDocumentation=true` copia nel progetto la cartella `documentation/` del pacchetto (HTML compodoc e PDF di una versione precedente), che non descrive la 4.x.
+- `includeDocumentation=true` copia nel progetto la cartella `documentation/` del pacchetto (documentazione compodoc dell'applicazione generata, in `pl-schematics/document/`).
