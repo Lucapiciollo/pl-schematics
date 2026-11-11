@@ -361,6 +361,10 @@ function main() {
   if (!args.skipTests) {
     console.log('\n> npm test');
     if (!run('npm', ['test'], { stdio: 'inherit' }).ok) fail('i test non passano');
+  } else {
+    // i .d.ts del pacchetto non sono nel repo: senza i test (che compilano) vanno comunque generati
+    console.log('\n> npm run build (test saltati)');
+    if (!run('npm', ['run', 'build'], { stdio: 'inherit' }).ok) fail('la compilazione non riesce');
   }
 
   const bumped = p.version !== p.local;
