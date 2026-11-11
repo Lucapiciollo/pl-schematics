@@ -16,18 +16,17 @@ import {
   Route,
   RouterStateSnapshot,
   UrlSegment,
-  UrlTree,
 } from '@angular/router';
 <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-import { Observable } from 'rxjs';
 import { MsalGuard } from '@azure/msal-angular';
 <% } %>
 import {  AuthService } from './auth.service';
 
 /**
  * @author l.piciollo
- * Guardia di rotta di default dell'applicazione (CanMatch, CanActivate e CanActivateChild): con login Azure delega alla
- * MsalGuard (solo runtime web), altrimenti e' un placeholder che consente sempre la navigazione (ritorna true).
+ * Guardia di rotta di default dell'applicazione (CanMatch, CanActivate e CanActivateChild). Con login Azure e runtime web
+ * il login e la protezione della rotta sono affidati a canActivate (delega alla MsalGuard); canMatch e canActivateChild
+ * sono placeholder che ritornano true, per non avviare piu' login MSAL contemporanei.
  * Da sostituire con la logica di protezione rotte desiderata. Si usa nelle rotte con `canMatch`, `canActivate` e `canActivateChild`.
  */
 @Injectable({ providedIn: "root" })
@@ -57,17 +56,14 @@ export class  RouteFakeGuard implements CanMatch, CanActivate, CanActivateChild 
      * @param segments :segmenti dell'url non ancora consumati
      * @returns esito della MsalGuard (con login Azure e runtime web) oppure true
      */
-    canMatch(route: Route, segments: UrlSegment[]): <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>Observable<boolean | UrlTree> | boolean<% } else { %>boolean<% } %> {
-        <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-        /** MsalGuard.canMatch (msal-angular v3+) non riceve parametri: legge la navigazione corrente dal router. */
-        return  AuthService.applicationType.type == "web" ?   this.msalGuard.canMatch() : true;
-        <% } else { %>
+    canMatch(route: Route, segments: UrlSegment[]): boolean {
         /**
          * @author l.piciollo
-         * Nessun provider di login configurato: placeholder che non blocca la corrispondenza della rotta.
+         * Placeholder: la rotta corrisponde sempre. Anche con login Azure NON si delega alla MsalGuard: la protezione
+         * della rotta e' affidata a canActivate, cosi' c'e' un solo punto che avvia il login MSAL per la rotta.
+         * Inserire qui la propria logica (es. selezione della rotta in base al ruolo) se necessario.
          */
         return true;
-        <% } %>
     }
 
     /************************************************************************************************************************/
@@ -80,12 +76,12 @@ export class  RouteFakeGuard implements CanMatch, CanActivate, CanActivateChild 
      * @param state :snapshot dello stato del router
      * @returns esito della MsalGuard (con login Azure e runtime web) oppure true
      */
-    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>Observable<boolean | UrlTree> | boolean<% } else { %>boolean<% } %> {
-        <% if (loginSupportConfiguration === "AZURE-ACTIVE-DIRECT") { %>
-        return  AuthService.applicationType.type == "web" ?   this.msalGuard.canActivateChild(childRoute, state) : true;
-        <% } else { %>
+    canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        /**
+         * @author l.piciollo
+         * Placeholder: le rotte figlie sono sempre attivabili. Con login Azure il login MSAL e' avviato solo da canActivate.
+         */
         return true;
-        <% } %>
     }
 
     /************************************************************************************************************************/

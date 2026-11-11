@@ -140,7 +140,7 @@ describe('pl-schematics (SchematicTestRunner)', () => {
     expect(files(tree).some((f) => f.indexOf('/core/msal/') >= 0)).toBe(false);
   });
 
-  it('routes use canMatch with RouteFakeGuard (true by default) and, with Azure, the guard delegates to MsalGuard', async () => {
+  it('routes use canMatch with RouteFakeGuard (true by default); with Azure only canActivate delegates to MsalGuard', async () => {
     const standalone = await run({ namePackage: 'my-app', http: 'interceptor-functional' }, createWorkspace({ major: 19, standalone: true }));
     expect(standalone.readContent('src/app/app.routes.ts')).toContain('canMatch: [RouteFakeGuard]');
     const classic = await run({ namePackage: 'my-app' }, createWorkspace({ major: 19, standalone: false }));
@@ -153,12 +153,13 @@ describe('pl-schematics (SchematicTestRunner)', () => {
     expect(plain).not.toContain('@azure/msal-angular');
     expect(plain).not.toContain('this.msalGuard');
 
-    // con Azure: canMatch/canActivateChild delegano alla MsalGuard solo nel runtime web
+    // con Azure: solo canActivate delega alla MsalGuard (runtime web); canMatch e canActivateChild restano true
     const azure = await run({ namePackage: 'my-app', loginSupportConfiguration: 'AZURE-ACTIVE-DIRECT' }, createWorkspace({ major: 19, standalone: true }));
     const guard = azure.readContent('src/app/my-app/core/service/router.fake.guard.ts');
-    expect(guard).toContain('this.msalGuard.canMatch()');
-    expect(guard).toContain('this.msalGuard.canActivateChild(childRoute, state)');
     expect(guard).toContain('this.msalGuard.canActivate(route, state)');
+    expect(guard).not.toContain('this.msalGuard.canMatch');
+    expect(guard).not.toContain('this.msalGuard.canActivateChild');
+    expect(guard).toContain('canMatch(route: Route, segments: UrlSegment[]): boolean');
   });
 
   it('Azure: the MSAL interceptor is registered exactly once (classic and standalone, every http mode) and never without Azure', async () => {

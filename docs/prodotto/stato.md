@@ -23,3 +23,14 @@
 - Verifica sul codice finale: build + npm test 33/33; app classic/standalone con e senza Azure: ng build + ng test OK (log %TEMP%\opencode\v3 per standalone Azure).
 - NON eseguita la matrice e2e completa sul codice finale (runG in corso = codice precedente al loader; porte 3001/4300 occupate). Da rilanciare prima di release/publish.
 - Aperti: compodoc obsoleto (documentation/**), http-store-auth-adapter commentato, interceptor MSAL con http=interceptor-functional non provato a runtime.
+
+## 2026-11-11 - matrice finale
+- runG: 38 FAIL falsi (app generate col codice pre-loader, controllo runtime post-merge). Non valido.
+- Avviata runH (42 righe, jobs 3, --fresh) sul codice finale main ee3cfce; work dir %TEMP%\opencode\plmx\w3, log runH.log. Esito: in attesa.
+
+## 2026-11-11 14:50 - documentazione e rilascio
+- README (1313 -> 339 righe), AI_README, CHANGELOG riscritti dal technical-writer e verificati (19/19 opzioni, default coerenti, script esistenti, nessun link rotto).
+- Guard: canMatch/canActivateChild sempre true; con Azure solo canActivate delega a MsalGuard (ma applicationType.type e' '' di default: la delega e' attiva solo se l'app lo imposta a 'web').
+- Matrice ng21: 12/14 (standalone-bootstrap = timeout vitest, passa da sola; classic-azure = interaction_in_progress intermittente, causa non chiarita). ng19/ng20 parziali.
+- npm publish BLOCCATO: nessun token valido (401). Serve Granular Access Token con 2FA bypass.
+- Aperto: documentation/ (4,4 MB obsoleti) ancora nel pacchetto; problemi di codice elencati nel report del technical-writer.
