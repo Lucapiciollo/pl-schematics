@@ -40,6 +40,8 @@
     "release-patch": "npm --no-git-tag-version version patch && npm run build",
     "release-minor": "npm --no-git-tag-version version minor && npm run build",
     "release-major": "npm --no-git-tag-version version major && npm run build",
+    "release:plan": "node tools/publish.js",
+    "release": "node tools/publish.js --yes",
     "deps:check": "node src/pl-schematics/tools/update-dependencies.interactive.js",
     "deps:update": "node src/pl-schematics/tools/update-dependencies.interactive.js && npm install"
   },

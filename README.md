@@ -433,19 +433,33 @@ Cose da sapere prima di lanciarla:
 
 ## Versioning e rilascio
 
-Il numero di versione e' in `package.json` (e nel `CHANGELOG.md`). Gli script **non creano tag ne' commit** (`--no-git-tag-version`) e ricompilano:
+Il rilascio e' automatico: `tools/publish.js` decide da solo il tipo di aumento di versione, esegue i test, aggiorna `package.json` e `CHANGELOG.md`, pubblica su npm, crea il tag e fa il push.
 
 ```sh
-npm run release-patch          # 4.0.0 => 4.0.1
-npm run release-minor          # 4.0.0 => 4.1.0
-npm run release-major          # 4.0.0 => 5.0.0
+npm run release:plan           # mostra il piano (versione, motivi, controlli) e NON pubblica
+npm run release                # esegue davvero: test, versione, changelog, commit, npm publish, tag, push
+node tools/publish.js --yes --dry-run   # prova completa con `npm publish --dry-run`, senza tag ne' push
 ```
 
-Prima di pubblicare: aggiornare `CHANGELOG.md`, eseguire `npm test` e la matrice `npm run test:e2e`, poi verificare il contenuto del pacchetto e pubblicare:
+**Come sceglie la versione**, guardando i commit (Conventional Commits) e lo `schema.json` dall'ultima versione rilasciata:
+
+| Cosa trova | Aumento |
+|---|---|
+| commit con `!` (es. `feat!:`) o con `BREAKING CHANGE`; opzione, valore di enum o default tolti/cambiati nello schema | **major** |
+| commit `feat`; nuova opzione o nuovo valore nello schema | **minor** |
+| `fix`, `perf`, `refactor`, `docs`, `build`, `ci`, `test`, `chore` o messaggi non convenzionali | **patch** |
+| nessun commit nuovo | si ferma, non pubblica |
+
+Se la versione di `package.json` non e' ancora sul registry (es. la prima 4.0.0), viene pubblicata cosi' com'e', senza aumento. Si puo' forzare il livello con `--bump major|minor|patch`.
+
+Prima di pubblicare lo script controlla: albero git pulito, branch `main`, `npm whoami` (token valido, vedi sotto) e `npm test`. Opzioni: `--yes`, `--bump`, `--dry-run`, `--no-push`, `--skip-tests`, `--tag <dist-tag>`, `--allow-branch`.
+
+Il token npm deve essere un Granular Access Token con permesso di scrittura sul pacchetto e 2FA bypass: `npm config set //registry.npmjs.org/:_authToken <TOKEN>` (non usare `npm login`).
+
+Gli script `release-patch|minor|major` restano per un aumento manuale e **non creano tag ne' commit** (`--no-git-tag-version`). Consigliato prima di un major o minor: la matrice `npm run test:e2e`.
 
 ```sh
-npm pack --dry-run             # oppure: npm pack  (elenco/tarball del pacchetto)
-npm publish
+npm pack --dry-run             # elenco del pacchetto
 ```
 
 Il pacchetto pubblica (`files`) `src/` (collection, schema, `.js`/`.d.ts` compilati, template `files/**`), `README.md` e `CHANGELOG.md`. I `.js` compilati devono essere aggiornati (`npm run build`) prima della pubblicazione.
